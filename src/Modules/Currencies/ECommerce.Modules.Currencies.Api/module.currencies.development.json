@@ -1,0 +1,8 @@
+{
+  "currencies": {
+    "module": {
+      "name": "Currencies",
+      "enabled": true
+    }
+  }
+}
