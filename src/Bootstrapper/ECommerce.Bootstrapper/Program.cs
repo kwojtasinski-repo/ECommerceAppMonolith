@@ -13,7 +13,10 @@ public class Program
         var modules = ModuleLoader.LoadModules(assemblies);
         // Add services to the container.
         builder.Services.AddInfrastructure(assemblies, modules);
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        foreach (var module in modules)
+        {
+            module.Register(builder.Services);
+        }
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
@@ -29,6 +32,11 @@ public class Program
         app.Logger.LogInformation($"Modules {string.Join(",", modules.Select(m => m.Name))}");
 
         app.UseInfrastructure();
+
+        foreach (var module in modules)
+        {
+            module.Use(app);
+        }
 
         assemblies.Clear();
         modules.Clear();

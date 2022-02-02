@@ -4,5 +4,8 @@
       "name": "Currencies",
       "enabled": true
     }
+  },
+  "externalClient": {
+    "baseUrl": "http://api.nbp.pl"
   }
 }

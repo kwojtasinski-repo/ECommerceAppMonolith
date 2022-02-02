@@ -1,5 +1,6 @@
 ﻿using ECommerce.Shared.Abstractions.Modules;
 using ECommerce.Shared.Infrastructure.Api;
+using ECommerce.Shared.Infrastructure.Modules;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
@@ -39,6 +40,7 @@ namespace ECommerce.Shared.Infrastructure
                 }
             }
 
+            services.AddModuleInfo(modules);
             services.AddControllers()
                 .ConfigureApplicationPartManager(manager =>
                 {
@@ -68,6 +70,20 @@ namespace ECommerce.Shared.Infrastructure
             app.MapControllers();
             app.MapGet("/", context => context.Response.WriteAsync("E-Commerce API!"));
             return app;
+        }
+
+        public static T GetOptions<T>(this IServiceCollection services, string sectionName) where T : new()
+        {
+            using var serviceProvider = services.BuildServiceProvider();
+            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            return configuration.GetOptions<T>(sectionName);
+        }
+
+        public static T GetOptions<T>(this IConfiguration configuration, string sectionName) where T : new()
+        {
+            var options = new T();
+            configuration.GetSection(sectionName).Bind(options);
+            return options;
         }
 
         internal static IHostBuilder ConfigureModules(this IHostBuilder builder)
