@@ -21,6 +21,8 @@ namespace ECommerce.Modules.Currencies.Core.Services
 
         public async Task AddAsync(CurrencyDto dto)
         {
+            dto.Id = Guid.NewGuid();
+            dto.Code = dto.Code.ToUpper();
             var currency = dto.AsEntity();
             await _currencyRepository.AddAsync(currency);
         }
@@ -34,7 +36,7 @@ namespace ECommerce.Modules.Currencies.Core.Services
                 throw new CurrencyNotFoundException(id);
             }
 
-            if (currency.CurrencyRates.Any())
+            if (currency.CurrencyRates is not null && currency.CurrencyRates.Any())
             {
                 throw new CannotDeleteCurrencyException(id);
             }
@@ -52,13 +54,7 @@ namespace ECommerce.Modules.Currencies.Core.Services
         public async Task<CurrencyDetailsDto> GetAsync(Guid id)
         {
             var currency = await _currencyRepository.GetAsync(id);
-
-            if (currency is null)
-            {
-                throw new CurrencyNotFoundException(id);
-            }
-
-            var dto = currency.AsDetailsDto();
+            var dto = currency?.AsDetailsDto();
             return dto;
         }
 
@@ -71,7 +67,7 @@ namespace ECommerce.Modules.Currencies.Core.Services
                 throw new CurrencyNotFoundException(dto.Id);
             }
 
-            currency.Code = dto.Code;
+            currency.Code = dto.Code.ToUpper();
             currency.Description = dto.Description;
             await _currencyRepository.UpdateAsync(currency);
         }

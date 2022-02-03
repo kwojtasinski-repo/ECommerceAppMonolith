@@ -1,0 +1,40 @@
+@url = http://localhost:5000/currencies-module 
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5YzgxN2EwOC05OTIxLTRmYWEtYTU2NC0wMTExN2JlMmNkNDkiLCJ1bmlxdWVfbmFtZSI6IjljODE3YTA4LTk5MjEtNGZhYS1hNTY0LTAxMTE3YmUyY2Q0OSIsImp0aSI6ImFmMjM0MGU0LWI5NDAtNGE0ZC04MjA5LTk4NmUyMTNhZGE3NCIsImlhdCI6IjE2NDM0MDQyODU5MDUiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOlsiY29uZmVyZW5jZXMiLCJob3N0cyIsInNwZWFrZXJzIiwidXNlcnMiLCJjZnAiLCJhZ2VuZGFzIl0sIm5iZiI6MTY0MzQwNDI4NSwiZXhwIjoxNjQzNDA3ODg1LCJpc3MiOiJjb25mYWIifQ.RlJGiiH4drTj_Bgst37DhypC82xWTbTSq8R42bZDmjs
+@currencyId = 250fff16-46d6-4e98-bbba-340e1f80e928
+@date = 2022-02-03
+
+### 
+GET {{url}}
+
+### Get currencies
+GET {{url}}/currencies
+
+### Get currency
+GET {{url}}/currencies/{{currencyId}}
+
+### Add currency
+POST {{url}}/currencies
+Content-Type: application/json
+
+{
+    "code": "EUR",
+    "description": "euro"
+}
+
+### Update currency
+PUT {{url}}/currencies/{{currencyId}}
+Content-Type: application/json
+
+{
+    "code": "EUR",
+    "description": "euro waluta Europrejska"
+}
+
+### Delete currency
+DELETE {{url}}/currencies/{{currencyId}}
+
+### Get latest rate for currency
+GET {{url}}/currencyrates/{{currencyId}}
+
+### Get rate for currency and date
+GET {{url}}/currencyrates/?currencyId={{currencyId}}&date={{date}}

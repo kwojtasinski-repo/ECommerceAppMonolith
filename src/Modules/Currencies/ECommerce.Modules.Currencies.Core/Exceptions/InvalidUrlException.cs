@@ -9,12 +9,11 @@ namespace ECommerce.Modules.Currencies.Core.Exceptions
 {
     internal class InvalidUrlException : ECommerceException
     {
-        public InvalidUrlException() : base("Given invalid url. Check appsettings.")
-        { 
-        }
-        
-        public InvalidUrlException(Exception exception) : base("Given invalid url. Check appsettings.", exception)
-        { 
+        public string Url { get; set; }
+
+        public InvalidUrlException(string url) : base("Given invalid url. Check appsettings.")
+        {
+            Url = url;
         }
     }
 }

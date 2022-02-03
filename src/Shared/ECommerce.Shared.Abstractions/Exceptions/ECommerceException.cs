@@ -10,10 +10,6 @@ namespace ECommerce.Shared.Abstractions.Exceptions
     {
         protected ECommerceException(string message) : base(message)
         {
-        }
-        
-        protected ECommerceException(string message, Exception exception) : base(message, exception)
-        {
-        }
+        }        
     }
 }

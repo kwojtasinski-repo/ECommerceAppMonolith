@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Currencies.Core.Exceptions
 {
-    internal class CannotDeleteCurrencyException : ECommerceException
+    internal class ServerNotAvailableException : ECommerceException
     {
-        public Guid CurrencyId { get; }
+        public string Url { get; set; }
 
-        public CannotDeleteCurrencyException(Guid id) : base($"Currency with id '{id}' cannot be deleted.")
+        public ServerNotAvailableException(string url) : base($"Server at address '{url}' is not available.")
         {
-            CurrencyId = id;
+            Url = url;
         }
     }
 }

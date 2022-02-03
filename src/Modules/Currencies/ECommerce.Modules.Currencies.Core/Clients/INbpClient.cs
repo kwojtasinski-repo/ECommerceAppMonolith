@@ -8,7 +8,7 @@ namespace ECommerce.Modules.Currencies.Core.Clients
 {
     internal interface INbpClient
     {
-        Task<string> GetCurrency(string currencyCode);
-        Task<string> GetCurrencyRateOnDate(string currencyCode, DateTime dateTime);
+        Task<ExchangeRate> GetCurrencyAsync(string currencyCode);
+        Task<ExchangeRate> GetCurrencyRateOnDateAsync(string currencyCode, DateOnly dateTime);
     }
 }

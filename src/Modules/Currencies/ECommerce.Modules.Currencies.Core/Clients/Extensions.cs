@@ -13,9 +13,9 @@ namespace ECommerce.Modules.Currencies.Core.Clients
 {
     internal static class Extensions
     {
-        internal static IServiceCollection AddExternalClient(this IServiceCollection services)
+        internal static IServiceCollection AddNbpClient(this IServiceCollection services)
         {
-            var options = services.GetOptions<ClientOptions>("externalClient");
+            var options = services.GetOptions<NbpClientOptions>("nbpClient");
 
             Validate(options);
 
@@ -24,26 +24,27 @@ namespace ECommerce.Modules.Currencies.Core.Clients
                 options.Timeout = 10;
             }
 
-            services.Configure<ClientOptions>(config =>
+            services.Configure<NbpClientOptions>(config =>
             {
                 config.BaseUrl = options.BaseUrl;
                 config.Timeout = options.Timeout;
             });
 
-            FlurlHttp.ConfigureClient("", config => config.Configure(settings => 
+            var timeout = TimeSpan.FromSeconds(options.Timeout);
+
+            // http client
+            services.AddHttpClient("NBPClient", options =>
             {
-                var timeout = TimeSpan.FromSeconds(options.Timeout);
-                settings.Timeout = timeout;
-                
-            }).WithHeaders(new
-            {
-                Accept = "application/json"
-            }));
+                options.Timeout = timeout;
+                options.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            }).ConfigurePrimaryHttpMessageHandler(sp => new HttpClientHandler());
+
+            services.AddScoped<INbpClient, NbpClient>();
 
             return services;
         }
 
-        private static void Validate(ClientOptions clientOptions)
+        private static void Validate(NbpClientOptions clientOptions)
         {
             if (clientOptions is null)
             {

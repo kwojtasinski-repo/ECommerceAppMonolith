@@ -13,5 +13,14 @@ namespace ECommerce.Modules.Currencies.Api.Controllers
     [ProducesDefaultContentType]
     internal class BaseController : ControllerBase
     {
+        protected ActionResult<T> OkOrNotFound<T>(T model)
+        {
+            if (model is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(model);
+        }
     }
 }

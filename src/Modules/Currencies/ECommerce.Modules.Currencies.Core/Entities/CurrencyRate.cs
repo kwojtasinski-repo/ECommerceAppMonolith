@@ -12,6 +12,6 @@ namespace ECommerce.Modules.Currencies.Core.Entities
         public Guid CurrencyId { get; set; }
         public Currency Currency { get; set; }
         public decimal Rate { get; set; }
-        public DateTime CurrencyDate { get; set; }
+        public DateOnly CurrencyDate { get; set; }
     }
 }

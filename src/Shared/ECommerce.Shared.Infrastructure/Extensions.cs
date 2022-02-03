@@ -1,6 +1,9 @@
 ﻿using ECommerce.Shared.Abstractions.Modules;
+using ECommerce.Shared.Abstractions.Time;
 using ECommerce.Shared.Infrastructure.Api;
+using ECommerce.Shared.Infrastructure.Exceptions;
 using ECommerce.Shared.Infrastructure.Modules;
+using ECommerce.Shared.Infrastructure.Time;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
@@ -9,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 
 [assembly: InternalsVisibleTo("ECommerce.Bootstrapper")]
 namespace ECommerce.Shared.Infrastructure
@@ -41,7 +45,9 @@ namespace ECommerce.Shared.Infrastructure
             }
 
             services.AddModuleInfo(modules);
-            services.AddControllers()
+            services.AddErrorHandling();
+            services.AddSingleton<IClock, UtcClock>();
+            services.AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
                 .ConfigureApplicationPartManager(manager =>
                 {
                     var removedParts = new List<ApplicationPart>();
@@ -58,13 +64,15 @@ namespace ECommerce.Shared.Infrastructure
                     }
 
                     manager.FeatureProviders.Add(new InternalControllerFeatureProvider()); // zmiana definicji wykrywania controller
-                });
+                })
+                .AddJsonOptions(options => SetDefaultJsonSerializerOptions(options.JsonSerializerOptions));
 
             return services;
         }
 
         public static WebApplication UseInfrastructure(this WebApplication app)
         {
+            app.UseErrorHandling();
             app.UseRouting();
             app.UseAuthorization();
             app.MapControllers();
@@ -153,6 +161,21 @@ namespace ECommerce.Shared.Infrastructure
             }
 
             return type.Namespace.StartsWith("ECommerce.Modules") ? type.Namespace.Split(".")[2].ToLowerInvariant() : string.Empty;
+        }
+
+        private static void SetDefaultJsonSerializerOptions(JsonSerializerOptions options)
+        {
+            var globalOptions = (JsonSerializerOptions?)typeof(JsonSerializerOptions)
+                .GetField(
+                    "s_defaultOptions",
+                    BindingFlags.Static | BindingFlags.NonPublic
+                )?.GetValue(null);
+
+            if (globalOptions == null)
+                throw new Exception("Could not find property for global JsonSerializerOptions");
+
+            globalOptions.Converters.Add(new DateOnlyJsonConverter());
+            globalOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         }
     }
 }

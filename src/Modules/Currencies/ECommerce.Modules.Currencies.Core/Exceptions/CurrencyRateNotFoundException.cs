@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Currencies.Core.Exceptions
 {
-    internal class CannotDeleteCurrencyException : ECommerceException
+    internal class CurrencyRateNotFoundException : ECommerceException
     {
-        public Guid CurrencyId { get; }
+        public Guid CurrencyRateId { get; }
 
-        public CannotDeleteCurrencyException(Guid id) : base($"Currency with id '{id}' cannot be deleted.")
+        public CurrencyRateNotFoundException(Guid id) : base($"CurrencyRate with id: '{id}' was not found.")
         {
-            CurrencyId = id;
+            CurrencyRateId = id;
         }
     }
 }

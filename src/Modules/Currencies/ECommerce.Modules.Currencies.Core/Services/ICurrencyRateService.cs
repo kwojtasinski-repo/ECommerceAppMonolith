@@ -11,5 +11,7 @@ namespace ECommerce.Modules.Currencies.Core.Services
     {
         Task<CurrencyRateDto> GetAsync(Guid id);
         Task<IReadOnlyList<CurrencyRateDto>> GetAllAsync();
+        Task<CurrencyRateDto> GetCurrencyForDateAsync(Guid currencyId, DateOnly date);
+        Task<CurrencyRateDto> GetLatestRateAsync(Guid currencyId);
     }
 }

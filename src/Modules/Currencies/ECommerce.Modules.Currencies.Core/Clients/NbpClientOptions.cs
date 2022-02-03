@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Currencies.Core.Clients
 {
-    internal class ClientOptions
+    internal class NbpClientOptions
     {
         public string BaseUrl { get; set; }
         public int Timeout { get; set; }

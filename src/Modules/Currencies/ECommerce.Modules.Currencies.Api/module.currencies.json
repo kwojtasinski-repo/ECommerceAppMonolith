@@ -5,7 +5,7 @@
       "enabled": true
     }
   },
-  "externalClient": {
+  "nbpClient": {
     "baseUrl": "http://api.nbp.pl"
   }
 }
