@@ -21,16 +21,7 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
-
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
-
         app.Logger.LogInformation($"Modules {string.Join(",", modules.Select(m => m.Name))}");
-
         app.UseInfrastructure();
 
         foreach (var module in modules)

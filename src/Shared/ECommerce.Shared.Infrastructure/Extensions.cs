@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
@@ -43,6 +44,15 @@ namespace ECommerce.Shared.Infrastructure
                     }   
                 }
             }
+            services.AddSwaggerGen(swagger =>
+            {
+                swagger.CustomSchemaIds(s => s.FullName);
+                swagger.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "ECommerce API",
+                    Version = "v1"
+                });
+            });
 
             services.AddModuleInfo(modules);
             services.AddErrorHandling();
@@ -72,7 +82,14 @@ namespace ECommerce.Shared.Infrastructure
 
         public static WebApplication UseInfrastructure(this WebApplication app)
         {
-            app.UseErrorHandling();
+            app.UseErrorHandling(); 
+            app.UseSwagger();
+            app.UseReDoc(reDoc =>
+            {
+                reDoc.RoutePrefix = "docs";
+                reDoc.SpecUrl("/swagger/v1/swagger.json");
+                reDoc.DocumentTitle = "ECommerce API";
+            });
             app.UseRouting();
             app.UseAuthorization();
             app.MapControllers();
