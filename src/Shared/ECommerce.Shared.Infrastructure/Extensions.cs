@@ -4,6 +4,8 @@ using ECommerce.Shared.Infrastructure.Api;
 using ECommerce.Shared.Infrastructure.Conventions;
 using ECommerce.Shared.Infrastructure.Exceptions;
 using ECommerce.Shared.Infrastructure.Modules;
+using ECommerce.Shared.Infrastructure.Postgres;
+using ECommerce.Shared.Infrastructure.Services;
 using ECommerce.Shared.Infrastructure.Time;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -58,7 +60,9 @@ namespace ECommerce.Shared.Infrastructure
 
             services.AddModuleInfo(modules);
             services.AddErrorHandling();
+            services.AddPostgres();
             services.AddSingleton<IClock, UtcClock>();
+            services.AddHostedService<AppInitializer>();
             services.AddControllers(options => 
             {
                 options.UseDateOnlyTimeOnlyStringConverters();

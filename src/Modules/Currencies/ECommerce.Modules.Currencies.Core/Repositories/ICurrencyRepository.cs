@@ -11,7 +11,8 @@ namespace ECommerce.Modules.Currencies.Core.Repositories
     {
         Task AddAsync(Currency currency);
         Task<Currency> GetAsync(Guid id);
-        Task<IEnumerable<Currency>> GetAllAsync();
+        Task<Currency> GetDetailsAsync(Guid id);
+        Task<IReadOnlyList<Currency>> GetAllAsync();
         Task UpdateAsync(Currency currency);
         Task DeleteAsync(Currency currency);
     }

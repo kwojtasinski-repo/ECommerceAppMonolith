@@ -24,12 +24,18 @@ namespace ECommerce.Modules.Currencies.Core.Repositories
             return Task.CompletedTask;
         }
 
-        public Task<IEnumerable<Currency>> GetAllAsync()
+        public Task<IReadOnlyList<Currency>> GetAllAsync()
         {
-            return Task.FromResult(_currencies.Values.AsEnumerable());
+            return Task.FromResult<IReadOnlyList<Currency>> (_currencies.Values.ToList());
         }
 
         public Task<Currency> GetAsync(Guid id)
+        {
+            _currencies.TryGetValue(id, out var currency);
+            return Task.FromResult<Currency>(currency);
+        }
+
+        public Task<Currency> GetDetailsAsync(Guid id)
         {
             _currencies.TryGetValue(id, out var currency);
             return Task.FromResult<Currency>(currency);

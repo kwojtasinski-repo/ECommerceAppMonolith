@@ -12,6 +12,6 @@ namespace ECommerce.Modules.Currencies.Core.Entities
         public string Code { get; set; }
         public string Description { get; set; }
 
-        public ICollection<CurrencyRate> CurrencyRates { get; set; }
+        public ICollection<CurrencyRate>? CurrencyRates { get; set; }
     }
 }

@@ -18,9 +18,9 @@ namespace ECommerce.Modules.Currencies.Core.Repositories
             return Task.CompletedTask;
         }
 
-        public Task<IEnumerable<CurrencyRate>> GetAllAsync()
+        public Task<IReadOnlyList<CurrencyRate>> GetAllAsync()
         {
-            return Task.FromResult(_currencyRates.Values.AsEnumerable());
+            return Task.FromResult<IReadOnlyList<CurrencyRate>>(_currencyRates.Values.ToList());
         }
 
         public Task<CurrencyRate> GetAsync(Guid id)
