@@ -29,7 +29,7 @@ namespace ECommerce.Modules.Currencies.Core.Services
 
         public async Task DeleteAsync(Guid id)
         {
-            var currency = await _currencyRepository.GetAsync(id);
+            var currency = await _currencyRepository.GetDetailsAsync(id);
 
             if (currency is null)
             {

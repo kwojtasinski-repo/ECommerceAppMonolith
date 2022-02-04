@@ -47,6 +47,28 @@ namespace ECommerce.Modules.Currencies.Core.Mappings
             return currencyDto;
         }
 
+        public static Currency AsEntity(this CurrencyDetailsDto currencyDto)
+        {
+            var currency = new Currency
+            {
+                Id = currencyDto.Id,
+                Code = currencyDto.Code,
+                Description = currencyDto.Description,
+                CurrencyRates = currencyDto.CurrencyRates
+                .Select(cr => new CurrencyRate 
+                              { 
+                                    Id = cr.Id, 
+                                    CurrencyId = cr.CurrencyId, 
+                                    CurrencyDate = cr.CurrencyDate, 
+                                    Rate = cr.Rate 
+                              }
+                        ).ToList()
+            };
+
+            return currency;
+        }
+
+
         public static CurrencyRateDto AsDto(this CurrencyRate currencyRate)
         {
             var dto = new CurrencyRateDto
