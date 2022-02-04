@@ -1,11 +1,13 @@
 ﻿using ECommerce.Shared.Abstractions.Modules;
 using ECommerce.Shared.Abstractions.Time;
 using ECommerce.Shared.Infrastructure.Api;
+using ECommerce.Shared.Infrastructure.Conventions;
 using ECommerce.Shared.Infrastructure.Exceptions;
 using ECommerce.Shared.Infrastructure.Modules;
 using ECommerce.Shared.Infrastructure.Time;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -57,7 +59,11 @@ namespace ECommerce.Shared.Infrastructure
             services.AddModuleInfo(modules);
             services.AddErrorHandling();
             services.AddSingleton<IClock, UtcClock>();
-            services.AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
+            services.AddControllers(options => 
+            {
+                options.UseDateOnlyTimeOnlyStringConverters();
+                options.Conventions.Add(new RouteTokenTransformerConvention(new DashedConvention()));
+            })
                 .ConfigureApplicationPartManager(manager =>
                 {
                     var removedParts = new List<ApplicationPart>();
@@ -75,7 +81,7 @@ namespace ECommerce.Shared.Infrastructure
 
                     manager.FeatureProviders.Add(new InternalControllerFeatureProvider()); // zmiana definicji wykrywania controller
                 })
-                .AddJsonOptions(options => SetDefaultJsonSerializerOptions(options.JsonSerializerOptions));
+                .AddJsonOptions(jsonOptions => SetDefaultJsonSerializerOptions());
 
             return services;
         }
@@ -84,6 +90,12 @@ namespace ECommerce.Shared.Infrastructure
         {
             app.UseErrorHandling(); 
             app.UseSwagger();
+            app.UseSwaggerUI(swaggerUI =>
+            {
+                swaggerUI.RoutePrefix = "swagger";
+                swaggerUI.SwaggerEndpoint("/swagger/v1/swagger.json", "ECommerce API v1");
+                swaggerUI.DocumentTitle = "ECommerce API";
+            });
             app.UseReDoc(reDoc =>
             {
                 reDoc.RoutePrefix = "docs";
@@ -180,7 +192,7 @@ namespace ECommerce.Shared.Infrastructure
             return type.Namespace.StartsWith("ECommerce.Modules") ? type.Namespace.Split(".")[2].ToLowerInvariant() : string.Empty;
         }
 
-        private static void SetDefaultJsonSerializerOptions(JsonSerializerOptions options)
+        private static void SetDefaultJsonSerializerOptions()
         {
             var globalOptions = (JsonSerializerOptions?)typeof(JsonSerializerOptions)
                 .GetField(
@@ -189,7 +201,7 @@ namespace ECommerce.Shared.Infrastructure
                 )?.GetValue(null);
 
             if (globalOptions == null)
-                throw new Exception("Could not find property for global JsonSerializerOptions");
+                throw new InvalidOperationException("Could not find property for global JsonSerializerOptions");
 
             globalOptions.Converters.Add(new DateOnlyJsonConverter());
             globalOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;

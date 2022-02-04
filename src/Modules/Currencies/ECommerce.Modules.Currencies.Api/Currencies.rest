@@ -34,7 +34,7 @@ Content-Type: application/json
 DELETE {{url}}/currencies/{{currencyId}}
 
 ### Get latest rate for currency
-GET {{url}}/currencyrates/{{currencyId}}
+GET {{url}}/currency-rates/{{currencyId}}
 
 ### Get rate for currency and date
-GET {{url}}/currencyrates/?currencyId={{currencyId}}&date={{date}}
+GET {{url}}/currency-rates/?currencyId={{currencyId}}&date={{date}}
