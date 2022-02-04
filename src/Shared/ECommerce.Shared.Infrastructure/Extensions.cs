@@ -1,6 +1,8 @@
 ﻿using ECommerce.Shared.Abstractions.Modules;
 using ECommerce.Shared.Abstractions.Time;
 using ECommerce.Shared.Infrastructure.Api;
+using ECommerce.Shared.Infrastructure.Auth;
+using ECommerce.Shared.Infrastructure.Contexts;
 using ECommerce.Shared.Infrastructure.Conventions;
 using ECommerce.Shared.Infrastructure.Exceptions;
 using ECommerce.Shared.Infrastructure.Modules;
@@ -58,7 +60,11 @@ namespace ECommerce.Shared.Infrastructure
                 });
             });
 
+            services.AddSingleton<IContextFactory, ContextFactory>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient(sp => sp.GetRequiredService<IContextFactory>().Create());
             services.AddModuleInfo(modules);
+            services.AddAuth(modules);
             services.AddErrorHandling();
             services.AddPostgres();
             services.AddSingleton<IClock, UtcClock>();
@@ -106,6 +112,7 @@ namespace ECommerce.Shared.Infrastructure
                 reDoc.SpecUrl("/swagger/v1/swagger.json");
                 reDoc.DocumentTitle = "ECommerce API";
             });
+            app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
             app.MapControllers();

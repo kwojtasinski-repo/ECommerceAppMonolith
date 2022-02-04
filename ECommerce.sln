@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Users.Api
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Users.Core", "src\Modules\Users\ECommerce.Modules.Users.Core\ECommerce.Modules.Users.Core.csproj", "{D8B6E36F-2453-4634-A231-6B5B74370291}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Currencies.Tests.Unit", "tests\Modules\Currencies\ECommerce.Modules.Currencies.Tests.Unit\ECommerce.Modules.Currencies.Tests.Unit.csproj", "{B5038DBB-F77D-41F5-A372-5B97160F0FB6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{D8B6E36F-2453-4634-A231-6B5B74370291}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8B6E36F-2453-4634-A231-6B5B74370291}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8B6E36F-2453-4634-A231-6B5B74370291}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5038DBB-F77D-41F5-A372-5B97160F0FB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5038DBB-F77D-41F5-A372-5B97160F0FB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5038DBB-F77D-41F5-A372-5B97160F0FB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5038DBB-F77D-41F5-A372-5B97160F0FB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{87E44BC2-A76C-4D07-9BE2-E08093DCA4C1} = {65ED8912-3851-49EB-A588-822FEBE0E8E7}
 		{39CD4571-632E-4A39-B60A-DE1E7C25AD40} = {87E44BC2-A76C-4D07-9BE2-E08093DCA4C1}
 		{D8B6E36F-2453-4634-A231-6B5B74370291} = {87E44BC2-A76C-4D07-9BE2-E08093DCA4C1}
+		{B5038DBB-F77D-41F5-A372-5B97160F0FB6} = {B1106311-C381-4699-8DA7-7A9BBAB8A8A1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {40EE01B2-8BCD-4EB1-A86E-8CD4F43596B8}

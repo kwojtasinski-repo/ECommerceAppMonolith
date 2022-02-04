@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Modules\Currencies\ECommerce.Modules.Currencies.Api\ECommerce.Modules.Currencies.Api.csproj" />
+    <ProjectReference Include="..\..\Modules\Users\ECommerce.Modules.Users.Api\ECommerce.Modules.Users.Api.csproj" />
     <ProjectReference Include="..\..\Shared\ECommerce.Shared.Infrastructure\ECommerce.Shared.Infrastructure.csproj" />
   </ItemGroup>
 

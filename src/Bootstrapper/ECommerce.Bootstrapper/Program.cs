@@ -17,7 +17,6 @@ public class Program
         {
             module.Register(builder.Services);
         }
-        builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
