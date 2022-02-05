@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="EF\DAL\Configurations\" />
     <Folder Include="EF\DAL\Repositories\" />
   </ItemGroup>
 
