@@ -2,6 +2,7 @@
 using ECommerce.Shared.Abstractions.Time;
 using ECommerce.Shared.Infrastructure.Api;
 using ECommerce.Shared.Infrastructure.Auth;
+using ECommerce.Shared.Infrastructure.Commands;
 using ECommerce.Shared.Infrastructure.Contexts;
 using ECommerce.Shared.Infrastructure.Conventions;
 using ECommerce.Shared.Infrastructure.Exceptions;
@@ -66,6 +67,7 @@ namespace ECommerce.Shared.Infrastructure
             services.AddModuleInfo(modules);
             services.AddAuth(modules);
             services.AddErrorHandling();
+            services.AddCommands(assemblies);
             services.AddPostgres();
             services.AddSingleton<IClock, UtcClock>();
             services.AddHostedService<AppInitializer>();
