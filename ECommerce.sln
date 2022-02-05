@@ -43,7 +43,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{D498AFA5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Items.Api", "src\Modules\Items\ECommerce.Modules.Items.Api\ECommerce.Modules.Items.Api.csproj", "{B8A265C0-8DD7-4047-9585-2FF49B714396}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Items.Core", "ECommerce.Modules.Items.Core\ECommerce.Modules.Items.Core.csproj", "{681F0D00-EC32-49D6-9E20-EC93DA8B8BC0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Items.Core", "src\Modules\Items\ECommerce.Modules.Items.Core\ECommerce.Modules.Items.Core.csproj", "{681F0D00-EC32-49D6-9E20-EC93DA8B8BC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

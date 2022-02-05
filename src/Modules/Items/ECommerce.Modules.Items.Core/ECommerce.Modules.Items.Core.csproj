@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Shared\ECommerce.Shared.Abstractions\ECommerce.Shared.Abstractions.csproj" />
-    <ProjectReference Include="..\src\Shared\ECommerce.Shared.Infrastructure\ECommerce.Shared.Infrastructure.csproj" />
+	  <ProjectReference Include="..\..\..\Shared\ECommerce.Shared.Abstractions\ECommerce.Shared.Abstractions.csproj" />
+	  <ProjectReference Include="..\..\..\Shared\ECommerce.Shared.Infrastructure\ECommerce.Shared.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
