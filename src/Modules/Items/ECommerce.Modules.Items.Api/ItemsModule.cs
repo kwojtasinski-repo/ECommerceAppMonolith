@@ -1,4 +1,4 @@
-﻿using ECommerce.Modules.Items.Core;
+﻿using ECommerce.Modules.Items.Infrastructure;
 using ECommerce.Shared.Abstractions.Modules;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +14,7 @@ namespace ECommerce.Modules.Items.Api
 
         public void Register(IServiceCollection services)
         {
-            services.AddCore();
+            services.AddInfrastructure();
         }
 
         public void Use(IApplicationBuilder app)
