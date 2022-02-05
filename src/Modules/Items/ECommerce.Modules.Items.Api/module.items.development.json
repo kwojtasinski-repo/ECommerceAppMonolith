@@ -1,0 +1,8 @@
+{
+  "items": {
+    "module": {
+      "name": "Items",
+      "enabled": true
+    }
+  }
+}
