@@ -11,4 +11,8 @@ namespace ECommerce.Shared.Abstractions.Commands
     public interface ICommand : IMessage
     {
     }
+
+    public interface ICommand<T> : ICommand
+    {
+    }
 }

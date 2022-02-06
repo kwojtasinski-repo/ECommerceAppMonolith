@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Domain.Repositories
 {
-    internal interface IItemRepository
+    public interface IItemRepository
     {
         Task<IReadOnlyList<Item>> GetAllAsync();
         Task<Item> GetAsync(Guid id);

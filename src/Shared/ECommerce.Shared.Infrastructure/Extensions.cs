@@ -8,6 +8,7 @@ using ECommerce.Shared.Infrastructure.Conventions;
 using ECommerce.Shared.Infrastructure.Exceptions;
 using ECommerce.Shared.Infrastructure.Modules;
 using ECommerce.Shared.Infrastructure.Postgres;
+using ECommerce.Shared.Infrastructure.Queries;
 using ECommerce.Shared.Infrastructure.Services;
 using ECommerce.Shared.Infrastructure.Time;
 using Microsoft.AspNetCore.Builder;
@@ -67,6 +68,7 @@ namespace ECommerce.Shared.Infrastructure
             services.AddModuleInfo(modules);
             services.AddAuth(modules);
             services.AddErrorHandling();
+            services.AddQueries(assemblies);
             services.AddCommands(assemblies);
             services.AddPostgres();
             services.AddSingleton<IClock, UtcClock>();

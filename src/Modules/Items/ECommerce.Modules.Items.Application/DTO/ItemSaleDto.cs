@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerce.Modules.Items.Core.Application
+namespace ECommerce.Modules.Items.Application.DTO
 {
-    internal class ItemSaleDto
+    public class ItemSaleDto
     {
         public Guid Id { get; set; }
         public ItemDto Item { get; set; }

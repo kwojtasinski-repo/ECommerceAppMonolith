@@ -13,6 +13,10 @@ namespace ECommerce.Shared.Infrastructure.Commands
                                 .AddClasses(c => c.AssignableTo(typeof(ICommandHandler<>)))
                                 .AsImplementedInterfaces()
                                 .WithScopedLifetime());
+            services.Scan(s => s.FromAssemblies(assemblies)
+                                .AddClasses(c => c.AssignableTo(typeof(ICommandHandler<,>)))
+                                .AsImplementedInterfaces()
+                                .WithScopedLifetime());
             return services;
         }
     }

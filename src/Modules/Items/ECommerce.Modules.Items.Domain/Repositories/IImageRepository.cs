@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Domain.Repositories
 {
-    internal interface IImageRepository
+    public interface IImageRepository
     {
-        Task<Image> GetAllAsync();
-        Task<Image> GetAllAsync(Guid itemId);
+        Task<IReadOnlyList<Image>> GetAllAsync();
         Task<Image> GetAsync(Guid id);
         Task AddAsync(Image image);
         Task UpdateAsync(Image image);

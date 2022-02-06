@@ -1,4 +1,5 @@
-﻿using ECommerce.Shared.Abstractions.Kernel.Types;
+﻿using ECommerce.Modules.Items.Domain.Exceptions;
+using ECommerce.Shared.Abstractions.Kernel.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,30 +11,31 @@ namespace ECommerce.Modules.Items.Domain.Entities
     public class ItemSale : AggregateRoot
     {
         public Item Item { get; private set; }
-        public Guid ItemId { get; private set; }
         public decimal Cost { get; private set; }
-        public bool Active { get; private set; }
+        public bool? Active { get; private set; }
 
-        public ItemSale(AggregateId id, Item item, decimal cost, bool active = true)
+        public ItemSale(AggregateId id, Item item, decimal cost, bool active, int version = 0)
         {
+            ValidItem(item);
             Id = id;
             Item = item;
-            ItemId = item.Id;
             Cost = cost;
             Active = active;
+            Version = version;
         }
 
-        private ItemSale(AggregateId id, Item item)
+        private ItemSale(AggregateId id)
         {
             Id = id;
-            Item = item;
         }
 
         public static ItemSale Create(AggregateId id, Item item, decimal cost)
         {
-            var itemSale = new ItemSale(id, item);
+            var itemSale = new ItemSale(id);
+            ValidItem(item);
+            itemSale.Item = item;
             itemSale.ChangeCost(cost);
-            itemSale.Active = true;
+            itemSale.ChangeActive(true);
 
             itemSale.ClearEvents();
             itemSale.Version = 0;
@@ -51,6 +53,14 @@ namespace ECommerce.Modules.Items.Domain.Entities
         {
             Active = active;
             IncrementVersion();
+        }
+
+        private static void ValidItem(Item item)
+        {
+            if (item is null)
+            {
+                throw new ItemCannotBeNullException();
+            }
         }
     }
 }

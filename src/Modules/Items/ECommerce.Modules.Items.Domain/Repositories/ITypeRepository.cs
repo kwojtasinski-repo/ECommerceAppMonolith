@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Domain.Repositories
 {
-    internal interface ITypeRepository
+    public interface ITypeRepository
     {
         Task<IReadOnlyList<Entities.Type>> GetAllAsync();
         Task<Entities.Type> GetAsync(Guid id);

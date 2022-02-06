@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Domain.Repositories
 {
-    internal interface IBrandRepository
+    public interface IBrandRepository
     {
         Task<IReadOnlyList<Brand>> GetAllAsync();
         Task<Brand> GetAsync(Guid id);

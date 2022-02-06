@@ -28,5 +28,22 @@ namespace ECommerce.Shared.Infrastructure.Commands
             var handler = scope.ServiceProvider.GetRequiredService<ICommandHandler<TCommand>>();
             await handler.HandleAsync(command);
         }
+
+        public async Task<TResult> SendAsync<TResult>(ICommand<TResult> command)
+        {
+            if (command is null)
+            {
+                throw new ArgumentException("Command cannot be null.");
+            }
+
+            using var scope = _serviceProvider.CreateScope();
+            var handlerType = typeof(ICommandHandler<,>).MakeGenericType(command.GetType(), typeof(TResult));
+            var handler = scope.ServiceProvider.GetRequiredService(handlerType);
+            var result = await (Task<TResult>)handlerType
+                .GetMethod(nameof(ICommandHandler<ICommand<TResult>, TResult>.HandleAsync))
+                ?.Invoke(handler, new[] { command });
+
+            return result;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ECommerce.Modules.Items.Domain.Entities;
+using ECommerce.Modules.Items.Domain.Entities.ValueObjects;
 using ECommerce.Shared.Abstractions.Kernel.Types;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -43,12 +44,12 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.DAL.Configurations
 
             // zapis do tabeli jako json i deserializacja jako kolekcja
             builder.Property(u => u.ImagesUrl)
-                .HasConversion(c => JsonSerializer.Serialize(c, SerializerOptions),
-                 c => JsonSerializer.Deserialize<Dictionary<string, IEnumerable<string>>>(c, SerializerOptions));
+                .HasConversion(u => JsonSerializer.Serialize(u, SerializerOptions),
+                    u => JsonSerializer.Deserialize<Dictionary<string, IEnumerable<ItemImage>>>(u, SerializerOptions));
 
             // okreslenie jak maja byc porownywane wartosci w polu ImagesUrl
             builder.Property(u => u.ImagesUrl).Metadata.SetValueComparer(
-                new ValueComparer<Dictionary<string, IEnumerable<string>>>(
+                new ValueComparer<Dictionary<string, IEnumerable<ItemImage>>>(
                     (c1, c2) => c1.SequenceEqual(c2),
                     c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
                     c => c.ToDictionary(x => x.Key, x => x.Value)));

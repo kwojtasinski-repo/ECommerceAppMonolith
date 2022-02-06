@@ -12,39 +12,30 @@ namespace ECommerce.Modules.Items.Domain.Entities
     {
         public string SourcePath { get; private set; }
         public string ImageName { get; private set; }
-        public bool? MainImage { get; private set; }
-        public Guid? ItemId { get; private set; }
 
-        public Image(AggregateId id, string sourcePath, string imageName, bool mainImage = false, Guid? itemId = null)
+        public Image(AggregateId id, string sourcePath, string imageName, int version = 0)
         {
             Id = id;
             SourcePath = sourcePath;
             ImageName = imageName;
-            MainImage = mainImage;
-            ItemId = itemId;
+            Version = version;
         }
 
-        private Image(AggregateId id, string sourcePath, Guid? itemId = null)
+        private Image(AggregateId id, string sourcePath)
         {
             Id = id;
             SourcePath = sourcePath;
-            ItemId = itemId;
         }
 
-        internal static Image Create(Guid id, string sourcePath, string imageName, bool mainImage = false, Guid? itemId = null)
+        public static Image Create(Guid id, string sourcePath, string imageName)
         {
             if (string.IsNullOrWhiteSpace(sourcePath))
             {
                 throw new SourcePathCannotBeNullException();
             }
 
-            var image = new Image(id, sourcePath, itemId);
+            var image = new Image(id, sourcePath);
             image.ChangeName(imageName);
-
-            if (mainImage) 
-            {
-                image.SetMainImage();
-            }
 
             image.ClearEvents();
             image.Version = 0;
@@ -60,12 +51,6 @@ namespace ECommerce.Modules.Items.Domain.Entities
             }
 
             ImageName = imageName;
-            IncrementVersion();
-        }
-
-        public void SetMainImage()
-        {
-            MainImage = true;
             IncrementVersion();
         }
     }
