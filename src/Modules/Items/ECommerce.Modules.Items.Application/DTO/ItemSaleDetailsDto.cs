@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Application.DTO
 {
-    public class ItemDto
+    public class ItemSaleDetailsDto
     {
         public Guid Id { get; set; }
-        public string ItemName { get; set; }
-        public BrandDto Brand { get; set; }
-        public TypeDto Type { get; set; }
-        public ImageUrl ImagesUrl { get; set; }
+        public ItemDetailsDto Item { get; set; }
+        public decimal Cost { get; set; }
+        public bool Active { get; set; }
     }
 }

@@ -49,7 +49,7 @@ namespace ECommerce.Modules.Items.Domain.Entities
             Id = id;
         }
 
-        public static Item Create(AggregateId id, string itemName, Brand brand, Type type, string description, IEnumerable<string> tags, Dictionary<string, IEnumerable<ItemImage>> imagesUrl)
+        public static Item Create(AggregateId id, string itemName, Brand brand, Type type, string description, IEnumerable<string>? tags = null, Dictionary<string, IEnumerable<ItemImage>>? imagesUrl = null)
         {
             var item = new Item(id);
             item.ChangeName(itemName);
@@ -99,24 +99,14 @@ namespace ECommerce.Modules.Items.Domain.Entities
             IncrementVersion();
         }
 
-        public void ChangeTags(IEnumerable<string> tags)
+        public void ChangeTags(IEnumerable<string>? tags)
         {
-            if (tags is null || !tags.Any())
-            {
-                throw new EmptyItemTagsException(Id);
-            }
-
             Tags = tags;
             IncrementVersion();
         }
 
-        public void ChangeImagesUrl(Dictionary<string, IEnumerable<ItemImage>> imagesUrl)
+        public void ChangeImagesUrl(Dictionary<string, IEnumerable<ItemImage>>? imagesUrl)
         {
-            if (imagesUrl is null || !imagesUrl.Any())
-            {
-                throw new EmptyItemImagesUrlException(Id);
-            }
-
             ImagesUrl = imagesUrl;
             IncrementVersion();
         }
