@@ -11,6 +11,8 @@ namespace ECommerce.Modules.Items.Domain.Entities
 {
     public class Item : AggregateRoot
     {
+        public const string IMAGES = "Images";
+
         public string ItemName { get; private set; }
         public string? Description { get; private set; }
         public Brand Brand { get; private set; }

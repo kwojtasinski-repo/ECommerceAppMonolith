@@ -9,6 +9,6 @@ namespace ECommerce.Modules.Items.Application.Commands.Types
 {
     public record CreateType(string Name) : ICommand
     {
-        public Guid Id { get; } = Guid.NewGuid();
+        public Guid TypeId { get; } = Guid.NewGuid();
     };
 }

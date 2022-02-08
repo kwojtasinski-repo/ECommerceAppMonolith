@@ -30,7 +30,7 @@ namespace ECommerce.Modules.Items.Api.Controllers
             return Ok(brandDtos);
         }
 
-
+        [ActionName("GetAsync")] // blad z metoda GetAsync (nie moze jej znalezc podczas CrateAtAction())
         [HttpGet("{brandId:guid}")]
         public async Task<ActionResult<BrandDto>> GetAsync(Guid brandId)
         {
@@ -42,7 +42,7 @@ namespace ECommerce.Modules.Items.Api.Controllers
         public async Task<ActionResult> AddAsync(CreateBrand command)
         {
             await _commandDispatcher.SendAsync(command);
-            return Ok();
+            return CreatedAtAction(nameof(GetAsync), new { brandId = command.BrandId }, null);
         }
 
         [HttpPut]

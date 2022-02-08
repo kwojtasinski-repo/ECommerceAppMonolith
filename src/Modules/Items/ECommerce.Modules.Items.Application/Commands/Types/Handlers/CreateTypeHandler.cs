@@ -22,7 +22,7 @@ namespace ECommerce.Modules.Items.Application.Commands.Types.Handlers
         public async Task HandleAsync(CreateType command)
         {
             Validate(command);
-            var entity = Domain.Entities.Type.Create(command.Id, command.Name);
+            var entity = Domain.Entities.Type.Create(command.TypeId, command.Name);
             await _typeRepository.AddAsync(entity);
         }
 

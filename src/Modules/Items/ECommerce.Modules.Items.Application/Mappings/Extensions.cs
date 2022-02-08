@@ -15,7 +15,7 @@ namespace ECommerce.Modules.Items.Application.Mappings
         public static Dictionary<string, IEnumerable<ItemImage>>? ToImageDictionary(this IEnumerable<ImageUrl> imagesUrl)
         {
             Dictionary<string, IEnumerable<ItemImage>>? urls = imagesUrl is not null ? new Dictionary<string, IEnumerable<ItemImage>>
-                (new List<KeyValuePair<string, IEnumerable<ItemImage>>>() { new KeyValuePair<string, IEnumerable<ItemImage>>("Images",
+                (new List<KeyValuePair<string, IEnumerable<ItemImage>>>() { new KeyValuePair<string, IEnumerable<ItemImage>>(Item.IMAGES,
                 imagesUrl.Select(im=> new ItemImage{ Url = im.Url, MainImage = im.MainImage})) }) : null;
 
             return urls;
@@ -28,7 +28,7 @@ namespace ECommerce.Modules.Items.Application.Mappings
                 return Enumerable.Empty<ImageUrl>();
             }
 
-            images.TryGetValue("Images", out var enumerableImages);
+            images.TryGetValue(Item.IMAGES, out var enumerableImages);
             return enumerableImages?.Select(im => im.AsImageUrl());
         }
 
