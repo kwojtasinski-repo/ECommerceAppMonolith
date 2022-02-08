@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerce.Modules.Items.Application.Queries.Images
+namespace ECommerce.Modules.Items.Application.Queries.Types
 {
-    public record GetImage(Guid ImageId) : IQuery<ImageDto>;
+    public record GetTypes : IQuery<IEnumerable<TypeDto>>;
 }

@@ -15,6 +15,7 @@ namespace ECommerce.Modules.Items.Domain.Entities
         public string? Description { get; private set; }
         public Brand Brand { get; private set; }
         public Type Type { get; private set; }
+        public ItemSale? ItemSale { get; private set; }
 
         public IEnumerable<string>? Tags { get; private set; }
         public Dictionary<string, IEnumerable<ItemImage>>? ImagesUrl { get; private set; }
@@ -67,6 +68,11 @@ namespace ECommerce.Modules.Items.Domain.Entities
 
         public void ChangeName(string name)
         {
+            if (ItemName == name)
+            {
+                return;
+            }
+
             ItemName = name;
             IncrementVersion();
         }
@@ -76,6 +82,11 @@ namespace ECommerce.Modules.Items.Domain.Entities
             if (brand is null)
             {
                 throw new BrandCannotBeNullException();
+            }
+
+            if (Brand.Id == brand.Id)
+            {
+                return;
             }
 
             Brand = brand;
@@ -89,12 +100,22 @@ namespace ECommerce.Modules.Items.Domain.Entities
                 throw new TypeCannotBeNullException();
             }
 
+            if (Type.Id == type.Id)
+            {
+                return;
+            }
+
             Type = type;
             IncrementVersion();
         }
 
-        public void ChangeDescription(string description)
+        public void ChangeDescription(string? description)
         {
+            if (Description == description)
+            {
+                return;
+            }
+
             Description = description;
             IncrementVersion();
         }

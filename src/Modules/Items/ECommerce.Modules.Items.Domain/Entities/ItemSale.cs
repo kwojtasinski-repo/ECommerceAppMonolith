@@ -11,6 +11,7 @@ namespace ECommerce.Modules.Items.Domain.Entities
     public class ItemSale : AggregateRoot
     {
         public Item Item { get; private set; }
+        public AggregateId ItemId { get; private set; }
         public decimal Cost { get; private set; }
         public bool? Active { get; private set; }
 
@@ -19,6 +20,7 @@ namespace ECommerce.Modules.Items.Domain.Entities
             ValidItem(item);
             Id = id;
             Item = item;
+            ItemId = item.Id;
             Cost = cost;
             Active = active;
             Version = version;

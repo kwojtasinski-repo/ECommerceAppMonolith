@@ -10,6 +10,7 @@ namespace ECommerce.Modules.Items.Domain.Repositories
     public interface IBrandRepository
     {
         Task<IReadOnlyList<Brand>> GetAllAsync();
+        Task<bool> ExistsAsync(Guid id);
         Task<Brand> GetAsync(Guid id);
         Task<Brand> GetDetailsAsync(Guid id);
         Task AddAsync(Brand brand);

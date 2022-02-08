@@ -30,6 +30,12 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.DAL.Repositories
             return types;
         }
 
+        public async Task<bool> ExistsAsync(Guid id)
+        {
+            var type = await _dbContext.Types.Where(t => t.Id == id).AsNoTracking().SingleOrDefaultAsync();
+            return type != null;
+        }
+
         public async Task<Domain.Entities.Type> GetAsync(Guid id)
         {
             var type = await _dbContext.Types.Where(t => t.Id == id).SingleOrDefaultAsync();

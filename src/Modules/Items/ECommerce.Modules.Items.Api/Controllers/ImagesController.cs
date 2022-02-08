@@ -23,12 +23,12 @@ namespace ECommerce.Modules.Items.Api.Controllers
             _queryDispatcher = queryDispatcher;
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<ActionResult<string>> Get(Guid id)
+        [HttpGet("{imageId:guid}")]
+        public async Task<ActionResult<string>> Get(Guid imageId)
         {
-            var imageSrc = await _queryDispatcher.QueryAsync(new GetImage { ImageId = id });
+            var imageSrc = await _queryDispatcher.QueryAsync(new GetImage(imageId));
             var extension = imageSrc.Extension.Split('.')[1];
-            return $"data:image/{extension};base64,{imageSrc.ImageSource}";
+            return OkOrNotFound($"data:image/{extension};base64,{imageSrc.ImageSource}");
         }
 
         [HttpPost]

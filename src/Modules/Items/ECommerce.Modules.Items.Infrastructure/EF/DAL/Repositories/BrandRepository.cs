@@ -31,6 +31,12 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.DAL.Repositories
             return brands;
         }
 
+        public async Task<bool> ExistsAsync(Guid id)
+        {
+            var brand = await _dbContext.Brands.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
+            return brand != null;
+        }
+
         public async Task<Brand> GetAsync(Guid id)
         {
             var brand = await _dbContext.Brands.Where(b => b.Id == id).SingleOrDefaultAsync();

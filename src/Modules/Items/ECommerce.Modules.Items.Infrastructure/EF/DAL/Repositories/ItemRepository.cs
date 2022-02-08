@@ -27,7 +27,9 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.DAL.Repositories
 
         public async Task<IReadOnlyList<Item>> GetAllAsync()
         {
-            var items = await _dbContext.Items.ToListAsync();
+            var items = await _dbContext.Items.Include(b => b.Brand)
+                                              .Include(t => t.Type)
+                                              .ToListAsync();
             return items;
         }
 
@@ -35,6 +37,7 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.DAL.Repositories
         {
             var item = await _dbContext.Items.Include(b => b.Brand)
                                              .Include(t => t.Type)
+                                             .Include(i => i.ItemSale)
                                              .Where(i => i.Id == id)
                                              .SingleOrDefaultAsync();
             return item;
