@@ -2,7 +2,7 @@
 
 namespace ECommerce.Shared.Infrastructure.Time
 {
-    public class UtcClock : IClock
+    internal class UtcClock : IClock
     {
         public DateTime CurrentDate() => DateTime.UtcNow;
     }

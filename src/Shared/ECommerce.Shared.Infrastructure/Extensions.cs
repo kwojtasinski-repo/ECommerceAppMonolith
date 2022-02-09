@@ -24,6 +24,7 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 
 [assembly: InternalsVisibleTo("ECommerce.Bootstrapper")]
+[assembly: InternalsVisibleTo("ECommerce.Shared.Tests")]
 namespace ECommerce.Shared.Infrastructure
 {
     internal static class Extensions
