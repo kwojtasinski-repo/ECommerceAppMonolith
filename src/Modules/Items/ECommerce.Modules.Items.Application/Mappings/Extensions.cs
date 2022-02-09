@@ -89,5 +89,30 @@ namespace ECommerce.Modules.Items.Application.Mappings
             };
             return typeDto;
         }
+
+        public static ItemSaleDto AsDto(this ItemSale itemSale)
+        {
+            var itemSaleDto = new ItemSaleDto
+            {
+                Id = itemSale.Id,
+                Cost = itemSale.Cost,
+                Active = itemSale.Active.Value != null && itemSale.Active.Value is true,
+                Item = new ItemToSaleDto(itemSale.Item.Id, itemSale.Item.ItemName,
+                        itemSale.Item.ImagesUrl.ToImagesEnumerable().Where(i => i.MainImage == true).SingleOrDefault())
+            };
+            return itemSaleDto;
+        }
+
+        public static ItemSaleDetailsDto AsDetailsDto(this ItemSale itemSale)
+        {
+            var itemSaleDto = new ItemSaleDetailsDto
+            {
+                Id = itemSale.Id,
+                Cost = itemSale.Cost,
+                Active = itemSale.Active.Value != null && itemSale.Active.Value is true,
+                Item = itemSale.Item.AsDetailsDto()
+            };
+            return itemSaleDto;
+        }
     }
 }

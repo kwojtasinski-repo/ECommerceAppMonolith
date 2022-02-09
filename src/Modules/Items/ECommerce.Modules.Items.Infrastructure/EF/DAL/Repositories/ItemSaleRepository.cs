@@ -27,7 +27,8 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.DAL.Repositories
 
         public async Task<IReadOnlyList<ItemSale>> GetAllAsync()
         {
-            var itemSales = await _dbContext.ItemSales.ToListAsync();
+            var itemSales = await _dbContext.ItemSales.Include(i => i.Item)
+                                                      .ToListAsync();
             return itemSales;
         }
 

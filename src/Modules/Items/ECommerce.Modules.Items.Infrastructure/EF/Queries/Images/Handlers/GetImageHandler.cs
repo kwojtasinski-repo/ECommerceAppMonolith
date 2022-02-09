@@ -1,25 +1,27 @@
 ﻿using ECommerce.Modules.Items.Application.DTO;
 using ECommerce.Modules.Items.Application.Files.Interfaces;
 using ECommerce.Modules.Items.Application.Queries.Images;
-using ECommerce.Modules.Items.Domain.Repositories;
+using ECommerce.Modules.Items.Domain.Entities;
+using ECommerce.Modules.Items.Infrastructure.EF.DAL;
 using ECommerce.Shared.Abstractions.Queries;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Modules.Items.Infrastructure.EF.Queries.Images.Handlers
 {
     internal sealed class GetImageHandler : IQueryHandler<GetImage, ImageDto>
     {
-        private readonly IImageRepository _imageRepository;
+        private readonly DbSet<Image> _images;
         private readonly IFileStore _fileStore;
 
-        public GetImageHandler(IImageRepository imageRepository, IFileStore fileStore)
+        public GetImageHandler(ItemsDbContext itemsDbContext, IFileStore fileStore)
         {
-            _imageRepository = imageRepository;
+            _images = itemsDbContext.Images;
             _fileStore = fileStore;
         }
 
         public async Task<ImageDto> HandleAsync(GetImage query)
         {
-            var image = await _imageRepository.GetAsync(query.ImageId);
+            var image = await _images.Where(i => i.Id == query.ImageId).AsNoTracking().SingleOrDefaultAsync();
 
             if (image is null)
             {

@@ -9,8 +9,10 @@ namespace ECommerce.Modules.Items.Application.DTO
     public class ItemSaleDto
     {
         public Guid Id { get; set; }
-        public ItemDto Item { get; set; }
+        public ItemToSaleDto Item { get; set; }
         public decimal Cost { get; set; }
         public bool Active { get; set; }
     }
+
+    public record ItemToSaleDto(Guid Id, string ItemName, ImageUrl ImageUrl);
 }
