@@ -74,7 +74,7 @@ namespace ECommerce.Shared.Infrastructure
             services.AddPostgres();
             services.AddSingleton<IClock, UtcClock>();
             services.AddHostedService<AppInitializer>();
-            services.AddControllers(options => 
+            services.AddControllers(options =>
             {
                 options.UseDateOnlyTimeOnlyStringConverters();
                 options.Conventions.Add(new RouteTokenTransformerConvention(new DashedConvention()));
@@ -95,8 +95,7 @@ namespace ECommerce.Shared.Infrastructure
                     }
 
                     manager.FeatureProviders.Add(new InternalControllerFeatureProvider()); // zmiana definicji wykrywania controller
-                })
-                .AddJsonOptions(jsonOptions => SetDefaultJsonSerializerOptions());
+                });
 
             return services;
         }

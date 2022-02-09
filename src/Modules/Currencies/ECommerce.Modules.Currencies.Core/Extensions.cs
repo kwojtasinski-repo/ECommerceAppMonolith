@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("ECommerce.Modules.Currencies.Api")]
 [assembly: InternalsVisibleTo("ECommerce.Modules.Currencies.Tests.Unit")]
+[assembly: InternalsVisibleTo("ECommerce.Modules.Currencies.Tests.Integration")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]  //dodane dla generowania mockow do internali
 namespace ECommerce.Modules.Currencies.Core
 {

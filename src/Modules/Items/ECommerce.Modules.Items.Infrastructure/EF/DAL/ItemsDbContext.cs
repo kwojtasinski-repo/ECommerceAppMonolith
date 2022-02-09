@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Infrastructure.EF.DAL
 {
-    internal class ItemsDbContext : DbContext
+    public sealed class ItemsDbContext : DbContext
     {
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Image> Images { get; set; }
