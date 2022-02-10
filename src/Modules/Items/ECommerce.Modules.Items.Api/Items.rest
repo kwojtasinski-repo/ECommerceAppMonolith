@@ -1,0 +1,171 @@
+@url = http://localhost:5000/items-module 
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5YzgxN2EwOC05OTIxLTRmYWEtYTU2NC0wMTExN2JlMmNkNDkiLCJ1bmlxdWVfbmFtZSI6IjljODE3YTA4LTk5MjEtNGZhYS1hNTY0LTAxMTE3YmUyY2Q0OSIsImp0aSI6ImFmMjM0MGU0LWI5NDAtNGE0ZC04MjA5LTk4NmUyMTNhZGE3NCIsImlhdCI6IjE2NDM0MDQyODU5MDUiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOlsiY29uZmVyZW5jZXMiLCJob3N0cyIsInNwZWFrZXJzIiwidXNlcnMiLCJjZnAiLCJhZ2VuZGFzIl0sIm5iZiI6MTY0MzQwNDI4NSwiZXhwIjoxNjQzNDA3ODg1LCJpc3MiOiJjb25mYWIifQ.RlJGiiH4drTj_Bgst37DhypC82xWTbTSq8R42bZDmjs
+@itemId = d0c6a410-2a28-4cef-8fef-2539b352b321
+@brandId = 251516e0-03af-4688-b388-c427e2200a81
+@typeId = 702e7fa1-1ea0-41ec-8fce-e968e7dbf5be
+@imageId = f21cef1e-456a-4ccc-afb3-c4175fa9ccf4
+@itemSaleId = fad497da-3e70-4112-9fa1-64039ffb9f0c
+@itemCost = 5000
+@date = 2022-02-03
+
+### 
+GET {{url}}
+
+### Get items
+GET {{url}}/items
+
+### Get item
+GET {{url}}/items/{{itemId}}
+
+### Add brand
+POST {{url}}/brands
+Content-Type: application/json
+
+{
+    "name": "Samsung"
+}
+
+### Get brands
+GET {{url}}/brands
+
+### Get brand
+GET {{url}}/brands/{{brandId}}
+
+### Add type
+POST {{url}}/types
+Content-Type: application/json
+
+{
+    "name": "Electric"
+}
+
+### Get types
+GET {{url}}/types
+
+### Get type
+GET {{url}}/types/{{typeId}}
+
+### Add image
+POST {{url}}/images
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="text"
+
+title
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"; filename="Samsung.jpg"
+Content-Type: image/jpeg
+
+< ./Samsung.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+
+
+### Get image
+GET {{url}}/images/{{imageId}}
+
+### Add item
+POST {{url}}/items
+Content-Type: application/json
+
+{
+    "itemName": "Samsung S22",
+    "brandId": "{{brandId}}",
+    "typeId": "{{typeId}}",
+    "tags": [ "samsung", "S22" ], 
+    "imagesUrl": [
+        {
+            "url": "https://ithardware.pl/admin/ckeditor/filemanager/userfiles/DanielGorecki/2022/Stycze%C5%84/galaxy_s22.jpg?time=1643274614771",
+            "mainImage": true
+        },
+        {
+            "url": "https://files.mgsm.pl//news/15953/samsung-galaxy-s22-ultra-large.jpg",
+            "mainImage": false
+        },
+        {
+            "url": "https://i.wpimg.pl/O/730x0/m.komorkomania.pl/obraz-2021-09-27-130821-afe03036.png",
+            "mainImage": false
+        }
+    ]
+}
+
+### Update item
+PUT {{url}}/items
+Content-Type: application/json
+
+{
+    "itemId": "{{itemId}}",
+    "itemName": "Samsung S22",
+    "description": "Wyświetlacz \"6.8\", 3080 x 1440px, Dynamic AMOLED 2X; Pamięć wbudowana [GB] 128; Pamięć RAM 8 GB",
+    "brandId": "{{brandId}}",
+    "typeId": "{{typeId}}",
+    "tags": [ "Samsung", "S22" ], 
+    "imagesUrl": [
+        {
+            "url": "https://ithardware.pl/admin/ckeditor/filemanager/userfiles/DanielGorecki/2022/Stycze%C5%84/galaxy_s22.jpg?time=1643274614771",
+            "mainImage": true
+        },
+        {
+            "url": "https://files.mgsm.pl//news/15953/samsung-galaxy-s22-ultra-large.jpg",
+            "mainImage": false
+        },
+        {
+            "url": "https://i.wpimg.pl/O/730x0/m.komorkomania.pl/obraz-2021-09-27-130821-afe03036.png",
+            "mainImage": false
+        }
+    ]
+}
+
+### Get items sale
+GET {{url}}/items-sale
+
+### Get item sale
+GET {{url}}/items-sale/{{itemSaleId}}
+
+### Add item sale
+POST {{url}}/items-sale
+Content-Type: application/json
+
+{
+    "itemId": "{{itemId}}",
+    "itemCost": "{{itemCost}}"
+}
+
+### Update item sale
+PUT {{url}}/items-sale
+Content-Type: application/json
+
+{
+    "itemSaleId": "{{itemSaleId}}",
+    "itemCost": "{{itemCost}}"
+}
+
+### DELETE item sale
+DELETE {{url}}/items-sale/{{itemSaleId}}
+
+### DELETE item
+DELETE {{url}}/items/{{itemId}}
+
+### Update brand
+PUT {{url}}/brands
+Content-Type: application/json
+
+{
+    "brandId": "{{brandId}}",
+    "name": ""
+}
+
+### DELETE brand
+DELETE {{url}}/brands/{{brandId}}
+
+### Update type
+PUT {{url}}/types
+Content-Type: application/json
+
+{
+    "brandId": "{{typeId}}",
+    "name": ""
+}
+
+### DELETE brand
+DELETE {{url}}/types/{{typeId}}

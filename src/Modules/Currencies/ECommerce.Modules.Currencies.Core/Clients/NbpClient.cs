@@ -44,35 +44,28 @@ namespace ECommerce.Modules.Currencies.Core.Clients
         {
             try
             {
-                using (var request = new HttpRequestMessage())
-                {
-                    request.Method = new HttpMethod("GET");
-                    var url = urlBuilder;
-                    request.RequestUri = new Uri(url, UriKind.RelativeOrAbsolute);
-                    var response = await _flurlClient.HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                var response = await _flurlClient.Request(urlBuilder).GetAsync(completionOption: HttpCompletionOption.ResponseHeadersRead);
 
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        var responseData = response.Content == null ? string.Empty : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                        var exchangeRate = string.IsNullOrEmpty(responseData) ? null : JsonSerializer.Deserialize<ExchangeRate>(responseData);
-                        return exchangeRate;
-                    }
-                    else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                    {
-                        return null;
-                    }
-                    else if ((int) response.StatusCode >= 400 && (int) response.StatusCode < 500)
-                    {
-                        throw new InvalidUrlException(url);
-                    }
-                    else if((int) response.StatusCode >= 500 && (int) response.StatusCode < 600)
-                    {
-                        throw new ServerNotAvailableException(url);
-                    }
-                    else
-                    {
-                        throw new InvalidUrlException(url);
-                    }
+                if (response.StatusCode == (int) System.Net.HttpStatusCode.OK)
+                {
+                    var exchangeRate = await response.GetJsonAsync<ExchangeRate>();
+                    return exchangeRate;
+                }
+                else if (response.StatusCode == (int) System.Net.HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+                else if ((int) response.StatusCode >= 400 && (int) response.StatusCode < 500)
+                {
+                    throw new ClientException(urlBuilder, response.StatusCode);
+                }
+                else if((int) response.StatusCode >= 500 && (int) response.StatusCode < 600)
+                {
+                    throw new ServerNotAvailableException(urlBuilder, response.StatusCode);
+                }
+                else
+                {
+                    throw new InvalidUrlException(urlBuilder);
                 }
             }
             catch (Exception)

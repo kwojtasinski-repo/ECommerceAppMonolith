@@ -86,7 +86,7 @@ namespace ECommerce.Modules.Items.Domain.Entities
                 throw new BrandCannotBeNullException();
             }
 
-            if (Brand.Id == brand.Id)
+            if (Brand?.Id == brand.Id)
             {
                 return;
             }
@@ -102,7 +102,7 @@ namespace ECommerce.Modules.Items.Domain.Entities
                 throw new TypeCannotBeNullException();
             }
 
-            if (Type.Id == type.Id)
+            if (Type?.Id == type.Id)
             {
                 return;
             }

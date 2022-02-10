@@ -7,16 +7,15 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Currencies.Core.Exceptions
 {
-    internal class ServerNotAvailableException : ECommerceException
+    internal class ClientException : ECommerceException
     {
         public string Url { get; }
         public int StatusCode { get; }
 
-        public ServerNotAvailableException(string url, int statusCode) : base($"Server at address '{url}' is not available. Response status code '{statusCode}'.")
+        public ClientException(string url, int statusCode) : base($"Client requested address '{url}' has response with status '{statusCode}'. Please check your url and verify integration.")
         {
             Url = url;
             StatusCode = statusCode;
-            
         }
     }
 }

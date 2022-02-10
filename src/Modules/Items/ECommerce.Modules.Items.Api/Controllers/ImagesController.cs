@@ -3,6 +3,7 @@ using ECommerce.Modules.Items.Application.DTO;
 using ECommerce.Modules.Items.Application.Queries.Images;
 using ECommerce.Shared.Abstractions.Commands;
 using ECommerce.Shared.Abstractions.Queries;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -32,9 +33,9 @@ namespace ECommerce.Modules.Items.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<string>>> AddImagesAsync([FromForm] CreateImages createImages)
+        public async Task<ActionResult<IEnumerable<string>>> AddImagesAsync([FromForm] IList<IFormFile> files)
         {
-            var ids = await _commandDispatcher.SendAsync<IEnumerable<string>>(createImages);
+            var ids = await _commandDispatcher.SendAsync<IEnumerable<string>>(new CreateImages(files));
             var urls = new List<string>();
             var scheme = Request.Scheme;
             var baseUrl = $"{scheme}://{Request.Host}{Request.Path}";

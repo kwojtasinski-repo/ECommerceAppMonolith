@@ -52,10 +52,10 @@ namespace ECommerce.Modules.Items.Api.Controllers
             return Ok();
         }
 
-        [HttpDelete]
-        public async Task<ActionResult> DeleteAsync(DeleteItemSale command)
+        [HttpDelete("{itemSaleId:guid}")]
+        public async Task<ActionResult> DeleteAsync(Guid itemSaleId)
         {
-            await _commandDispatcher.SendAsync(command);
+            await _commandDispatcher.SendAsync(new DeleteItemSale(itemSaleId));
             return Ok();
         }
     }

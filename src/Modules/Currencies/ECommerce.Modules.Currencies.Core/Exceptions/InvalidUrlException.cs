@@ -9,9 +9,9 @@ namespace ECommerce.Modules.Currencies.Core.Exceptions
 {
     internal class InvalidUrlException : ECommerceException
     {
-        public string Url { get; set; }
+        public string Url { get; }
 
-        public InvalidUrlException(string url) : base("Given invalid url. Check appsettings.")
+        public InvalidUrlException(string url) : base($"Given invalid url. Check '{url}' if is correct.")
         {
             Url = url;
         }
