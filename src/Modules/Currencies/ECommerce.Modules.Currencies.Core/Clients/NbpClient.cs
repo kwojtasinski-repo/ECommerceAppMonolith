@@ -15,10 +15,11 @@ namespace ECommerce.Modules.Currencies.Core.Clients
         private readonly IFlurlClient _flurlClient;
         private readonly NbpClientOptions _clientOptions;
 
-        public NbpClient(HttpClient httpClient, IOptions<NbpClientOptions> clientOptions)
+        public NbpClient(IHttpClientFactory httpClient, IOptions<NbpClientOptions> clientOptions)
         {
-            _flurlClient = new FlurlClient(httpClient);
+            _flurlClient = new FlurlClient(httpClient.CreateClient());
             _clientOptions = clientOptions.Value;
+            _flurlClient.WithTimeout(_clientOptions.Timeout);
         }
 
         public async Task<ExchangeRate> GetCurrencyAsync(string currencyCode)
@@ -44,29 +45,21 @@ namespace ECommerce.Modules.Currencies.Core.Clients
         {
             try
             {
-                var response = await _flurlClient.Request(urlBuilder).GetAsync(completionOption: HttpCompletionOption.ResponseHeadersRead);
+                using var cancellationTokenSource = new CancellationTokenSource();
+                cancellationTokenSource.CancelAfter(_flurlClient.Settings.Timeout.Value);
+                var response = await _flurlClient.Request(urlBuilder).GetAsync(cancellationToken: cancellationTokenSource.Token, completionOption: HttpCompletionOption.ResponseHeadersRead);
 
-                if (response.StatusCode == (int) System.Net.HttpStatusCode.OK)
-                {
-                    var exchangeRate = await response.GetJsonAsync<ExchangeRate>();
-                    return exchangeRate;
-                }
-                else if (response.StatusCode == (int) System.Net.HttpStatusCode.NotFound)
+                var exchangeRate = await response.GetJsonAsync<ExchangeRate>();
+                return exchangeRate;
+            }
+            catch (FlurlHttpException exception)
+            {
+                if (exception.StatusCode == (int) System.Net.HttpStatusCode.NotFound)
                 {
                     return null;
                 }
-                else if ((int) response.StatusCode >= 400 && (int) response.StatusCode < 500)
-                {
-                    throw new ClientException(urlBuilder, response.StatusCode);
-                }
-                else if((int) response.StatusCode >= 500 && (int) response.StatusCode < 600)
-                {
-                    throw new ServerNotAvailableException(urlBuilder, response.StatusCode);
-                }
-                else
-                {
-                    throw new InvalidUrlException(urlBuilder);
-                }
+
+                throw exception;
             }
             catch (Exception)
             {

@@ -33,7 +33,9 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
 
         private void Authenticate(Guid userId)
         {
-            var jwt = AuthHelper.GenerateJwt(userId.ToString());
+            var claims = new Dictionary<string, IEnumerable<string>>();
+            claims.Add("permissions", new[] { "currencies" });
+            var jwt = AuthHelper.GenerateJwt(userId.ToString(), "admin", claims: claims);
             //_client.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
             _client.WithOAuthBearerToken(jwt);
         }

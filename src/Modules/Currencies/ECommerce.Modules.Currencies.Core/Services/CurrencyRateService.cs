@@ -56,13 +56,8 @@ namespace ECommerce.Modules.Currencies.Core.Services
             }
 
             var rate = await _currencyRateRepository.GetCurrencyRateForDateAsync(currencyId, date);
-            
-            if (rate is null)
-            {
-                throw new CurrencyRateNotFoundException(currencyId);
-            }
 
-            var dto = rate.AsDto();
+            var dto = rate?.AsDto();
             return dto;
         }
 
@@ -83,7 +78,7 @@ namespace ECommerce.Modules.Currencies.Core.Services
 
         private async Task<CurrencyRateDto> GetLatestCurrencyRateAsync(Guid currencyId, string currencyCode, DateOnly date) 
         {
-            if (currencyCode == "PLN")
+            if (currencyCode.ToUpper() == "PLN")
             {
                 var currencyRatePln = await TryGetCurrencyRatePln(currencyId, date);
                 return currencyRatePln;

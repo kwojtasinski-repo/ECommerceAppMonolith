@@ -9,12 +9,12 @@ namespace ECommerce.Modules.Currencies.Core.Exceptions
 {
     internal class RateNotFoundException : ECommerceException
     {
-        public string CurrrencyCode { get; }
+        public string CurrencyCode { get; }
         public DateOnly Date { get; }
 
         public RateNotFoundException(string currencyCode, DateOnly date) : base($"Rate for currency '{currencyCode}' and date '{date}' was not found.")
         {
-            CurrrencyCode = currencyCode;
+            CurrencyCode = currencyCode;
             Date = date;
         }
     }

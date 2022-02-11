@@ -35,6 +35,17 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.Services
         }
 
         [Fact]
+        public async Task given_valid_currency_should_update_currency()
+        {
+            var dto = CreateCurrency();
+            _repository.GetAsync(dto.Id).Returns(dto.AsEntity());
+
+            await _service.UpdateAsync(dto);
+
+            await _repository.Received(1).UpdateAsync(Arg.Any<Currency>());
+        }
+
+        [Fact]
         public async Task given_not_existed_currency_when_update_should_throw_an_exception()
         {
             var dto = CreateCurrency();
@@ -75,6 +86,18 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.Services
             exception.ShouldBeOfType<CannotDeleteCurrencyException>();
             ((CannotDeleteCurrencyException)exception).CurrencyId.ShouldBe(expectedException.CurrencyId);
             exception.Message.ShouldBe(expectedException.Message);
+        }
+
+        [Fact]
+        public async Task given_valid_id_should_delete_currency()
+        {
+            var dto = CreateCurrencyDetails();
+            dto.CurrencyRates = new List<CurrencyRateDto>();
+            _repository.GetDetailsAsync(dto.Id).Returns(dto.AsEntity());
+
+            await _service.DeleteAsync(dto.Id);
+
+            await _repository.Received(1).DeleteAsync(Arg.Any<Currency>());
         }
 
         private CurrencyDto CreateCurrency()
