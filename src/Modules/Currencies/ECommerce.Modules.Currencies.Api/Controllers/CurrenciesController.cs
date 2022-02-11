@@ -1,5 +1,6 @@
 ﻿using ECommerce.Modules.Currencies.Core.DTO;
 using ECommerce.Modules.Currencies.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,8 +10,10 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Currencies.Api.Controllers
 {
+    [Authorize(Policy)]
     internal class CurrenciesController : BaseController
     {
+        private const string Policy = "currencies";
         private readonly ICurrencyService _currencyService;
 
         public CurrenciesController(ICurrencyService currencyService)
@@ -19,6 +22,7 @@ namespace ECommerce.Modules.Currencies.Api.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<IReadOnlyList<CurrencyDto>>> GetAllAsync()
@@ -29,6 +33,7 @@ namespace ECommerce.Modules.Currencies.Api.Controllers
 
         [HttpGet("{id:guid}")]
         [ActionName("GetAsync")] // blad z metoda GetAsync (nie moze jej znalezc podczas CrateAtAction())
+        [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<CurrencyDetailsDto>> GetAsync(Guid id)

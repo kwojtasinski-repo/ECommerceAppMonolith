@@ -10,6 +10,10 @@ namespace ECommerce.Modules.Currencies.Api
         public const string BasePath = "currencies-module";
         public string Name => "Currencies";
         public string Path => BasePath;
+        public IEnumerable<string> Policies { get; } = new[]
+        {
+            "currencies"
+        };
 
         public void Register(IServiceCollection services)
         {
