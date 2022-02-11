@@ -3,6 +3,7 @@ using ECommerce.Modules.Items.Application.DTO;
 using ECommerce.Modules.Items.Application.Queries.Brands;
 using ECommerce.Shared.Abstractions.Commands;
 using ECommerce.Shared.Abstractions.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,10 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Api.Controllers
 {
+    [Authorize(Policy)]
     internal class BrandsController : BaseController
     {
+        private const string Policy = "items";
         private readonly ICommandDispatcher _commandDispatcher;
         private readonly IQueryDispatcher _queryDispatcher;
 
@@ -24,6 +27,7 @@ namespace ECommerce.Modules.Items.Api.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<IEnumerable<BrandDto>>> GetAllAsync()
@@ -34,6 +38,7 @@ namespace ECommerce.Modules.Items.Api.Controllers
 
         [ActionName("GetAsync")] // blad z metoda GetAsync (nie moze jej znalezc podczas CrateAtAction())
         [HttpGet("{brandId:guid}")]
+        [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<BrandDto>> GetAsync(Guid brandId)

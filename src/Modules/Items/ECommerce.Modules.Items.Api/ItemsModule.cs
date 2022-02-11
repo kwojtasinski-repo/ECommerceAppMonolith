@@ -14,6 +14,11 @@ namespace ECommerce.Modules.Items.Api
 
         public string Path => BasePath;
 
+        public IEnumerable<string> Policies { get; } = new[]
+        {
+            "items", "item-sale"
+        };
+
         public void Register(IServiceCollection services)
         {
             services.AddDomain();
