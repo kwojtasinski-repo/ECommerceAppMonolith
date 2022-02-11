@@ -25,10 +25,15 @@ namespace ECommerce.Modules.Users.Api.Controllers
 
         [HttpGet]
         [Authorize]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         public async Task<ActionResult<AccountDto>> GetAsync()
             => OkOrNotFound(await _identityService.GetAsync(_context.Identity.Id));
 
         [HttpPost("sign-up")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult> SignUpAsync(SignUpDto dto)
         {
             await _identityService.SignUpAsync(dto);
@@ -36,6 +41,8 @@ namespace ECommerce.Modules.Users.Api.Controllers
         }
 
         [HttpPost("sign-in")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<JsonWebToken>> SignInAsync(SignInDto dto)
             => Ok(await _identityService.SignInAsync(dto));
     }
