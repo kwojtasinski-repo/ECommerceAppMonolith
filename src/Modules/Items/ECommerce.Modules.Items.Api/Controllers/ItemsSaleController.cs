@@ -24,6 +24,8 @@ namespace ECommerce.Modules.Items.Api.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<IEnumerable<ItemSaleDto>>> GetAllAsync()
         {
             var itemsSale = await _queryDispatcher.QueryAsync(new GetItemsSale());
@@ -32,6 +34,8 @@ namespace ECommerce.Modules.Items.Api.Controllers
 
         [ActionName("GetAsync")] // blad z metoda GetAsync (nie moze jej znalezc podczas CrateAtAction())
         [HttpGet("{itemSaleId:guid}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<ItemSaleDetailsDto>> GetAsync(Guid itemSaleId)
         {
             var itemSale = await _queryDispatcher.QueryAsync(new GetItemSale(itemSaleId));
@@ -39,6 +43,10 @@ namespace ECommerce.Modules.Items.Api.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         public async Task<ActionResult> AddAsync(CreateItemSale command)
         {
             await _commandDispatcher.SendAsync(command);
@@ -46,6 +54,10 @@ namespace ECommerce.Modules.Items.Api.Controllers
         }
 
         [HttpPut]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         public async Task<ActionResult> UpdateAsync(UpdateItemSale command) 
         {
             await _commandDispatcher.SendAsync(command);
@@ -53,6 +65,10 @@ namespace ECommerce.Modules.Items.Api.Controllers
         }
 
         [HttpDelete("{itemSaleId:guid}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         public async Task<ActionResult> DeleteAsync(Guid itemSaleId)
         {
             await _commandDispatcher.SendAsync(new DeleteItemSale(itemSaleId));

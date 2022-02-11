@@ -25,6 +25,8 @@ namespace ECommerce.Modules.Items.Api.Controllers
         }
 
         [HttpGet("{imageId:guid}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<string>> Get(Guid imageId)
         {
             var imageSrc = await _queryDispatcher.QueryAsync(new GetImage(imageId));
@@ -33,6 +35,8 @@ namespace ECommerce.Modules.Items.Api.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<IEnumerable<string>>> AddImagesAsync([FromForm] IList<IFormFile> files)
         {
             var ids = await _commandDispatcher.SendAsync<IEnumerable<string>>(new CreateImages(files));

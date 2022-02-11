@@ -24,6 +24,8 @@ namespace ECommerce.Modules.Items.Api.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<IEnumerable<TypeDto>>> GetAllAsync()
         {
             var typeDtos = await _queryDispatcher.QueryAsync(new GetTypes());
@@ -32,6 +34,8 @@ namespace ECommerce.Modules.Items.Api.Controllers
 
         [ActionName("GetAsync")] // blad z metoda GetAsync (nie moze jej znalezc podczas CrateAtAction())
         [HttpGet("{itemId:guid}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<TypeDto>> GetAsync(Guid typeId)
         {
             var typeDto = await _queryDispatcher.QueryAsync(new GetType(typeId));
@@ -39,6 +43,10 @@ namespace ECommerce.Modules.Items.Api.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         public async Task<ActionResult> AddAsync(CreateType command)
         {
             await _commandDispatcher.SendAsync(command);
@@ -46,6 +54,10 @@ namespace ECommerce.Modules.Items.Api.Controllers
         }
 
         [HttpPut]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         public async Task<ActionResult> UpdateAsync(UpdateType command)
         {
             await _commandDispatcher.SendAsync(command);
@@ -53,6 +65,10 @@ namespace ECommerce.Modules.Items.Api.Controllers
         }
 
         [HttpDelete]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         public async Task<ActionResult> DeleteAsync(DeleteType command)
         {
             await _commandDispatcher.SendAsync(command);

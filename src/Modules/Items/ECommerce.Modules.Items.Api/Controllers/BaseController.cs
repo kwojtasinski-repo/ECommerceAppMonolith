@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ECommerce.Shared.Infrastructure.Api;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace ECommerce.Modules.Items.Api.Controllers
 {
     [ApiController]
     [Route(ItemsModule.BasePath + "/[controller]")]
+    [ProducesDefaultContentType]
     internal class BaseController : ControllerBase
     {
         protected ActionResult<T> OkOrNotFound<T>(T model)
