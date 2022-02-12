@@ -18,7 +18,7 @@ namespace ECommerce.Modules.Contacts.Core.DAL.Configurations
             builder.Property(c => c.PhoneNumber).HasMaxLength(20);
             builder.Property(c => c.LastName).HasMaxLength(50);
             builder.Property(c => c.NIP).HasMaxLength(16);
-            builder.HasIndex(c => c.NIP);
+            builder.HasIndex(c => c.NIP).IsUnique();
             builder.HasIndex(c => c.PhoneNumber);
         }
     }

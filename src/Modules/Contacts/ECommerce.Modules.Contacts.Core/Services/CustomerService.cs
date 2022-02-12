@@ -1,4 +1,5 @@
 ﻿using ECommerce.Modules.Contacts.Core.DTO;
+using ECommerce.Modules.Contacts.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,13 @@ namespace ECommerce.Modules.Contacts.Core.Services
 {
     internal class CustomerService : ICustomerService
     {
+        private readonly ICustomerRepository _customerRepository;
+
+        public CustomerService(ICustomerRepository customerRepository)
+        {
+            _customerRepository = customerRepository;
+        }
+
         public Task AddAsync(CustomerDto dto)
         {
             throw new NotImplementedException();

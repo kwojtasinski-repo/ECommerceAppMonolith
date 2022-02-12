@@ -15,10 +15,14 @@ namespace ECommerce.Modules.Contacts.Core.DAL.Configurations
         {
             builder.HasOne(a => a.Customer).WithOne(c => c.Address).HasForeignKey<Address>(a => a.CustomerId);
             builder.Property(a => a.ZipCode).HasMaxLength(16);
+            builder.Property(a => a.BuildingNumber).HasMaxLength(16);
+            builder.Property(a => a.LocaleNumber).HasMaxLength(16);
             builder.Property(a => a.StreetName).HasMaxLength(100);
             builder.Property(a => a.CountryName).HasMaxLength(100);
             builder.Property(a => a.CityName).HasMaxLength(100);
             builder.HasIndex(a => a.ZipCode);
+            builder.HasIndex(a => a.BuildingNumber);
+            builder.HasIndex(a => a.LocaleNumber);
         }
     }
 }

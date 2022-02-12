@@ -13,6 +13,8 @@ namespace ECommerce.Modules.Contacts.Core.DTO
         public string StreetName { get; set; }
         public string CountryName { get; set; }
         public string ZipCode { get; set; }
+        public string BuildingNumber { get; set; }
+        public string? LocaleNumber { get; set; }
         public Guid CustomerId { get; set; }
     }
 }
