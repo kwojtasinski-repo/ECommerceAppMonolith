@@ -14,6 +14,7 @@ namespace ECommerce.Modules.Users.Core.DTO
         public string Email { get; set; }
 
         [Required]
+        [StringLength(7)]
         public string Password { get; set; }
     }
 }

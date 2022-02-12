@@ -9,6 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("ECommerce.Modules.Users.Api")]
+[assembly: InternalsVisibleTo("ECommerce.Modules.Users.Tests.Unit")]
+[assembly: InternalsVisibleTo("ECommerce.Modules.Users.Tests.Integration")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]  //dodane dla generowania mockow do internali
 namespace ECommerce.Modules.Users.Core
 {
     internal static class Extensions
