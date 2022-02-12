@@ -1,0 +1,8 @@
+{
+  "contacts": {
+    "module": {
+      "name": "Contacts",
+      "enabled": false
+    }
+  }
+}

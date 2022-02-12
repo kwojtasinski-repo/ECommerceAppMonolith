@@ -55,13 +55,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{D9D07F5E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Users", "Users", "{0BDDBEBE-9599-47FB-966D-9FD4EE314B1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Users.Tests.Unit", "tests\Modules\Users\ECommerce.Modules.Users.Tests.Unit\ECommerce.Modules.Users.Tests.Unit.csproj", "{5D9496FD-F5A0-4773-902B-75914C2E0FAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Users.Tests.Unit", "tests\Modules\Users\ECommerce.Modules.Users.Tests.Unit\ECommerce.Modules.Users.Tests.Unit.csproj", "{5D9496FD-F5A0-4773-902B-75914C2E0FAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Users.Tests.Integration", "tests\Modules\Users\ECommerce.Modules.Users.Tests.Integration\ECommerce.Modules.Users.Tests.Integration.csproj", "{1435541D-E505-408E-91E7-9A7F6752181E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Users.Tests.Integration", "tests\Modules\Users\ECommerce.Modules.Users.Tests.Integration\ECommerce.Modules.Users.Tests.Integration.csproj", "{1435541D-E505-408E-91E7-9A7F6752181E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Items.Tests.Unit", "tests\Modules\Items\ECommerce.Modules.Items.Tests.Unit\ECommerce.Modules.Items.Tests.Unit.csproj", "{10BCBF4C-FF74-4771-A4FF-5912C36C548D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Items.Tests.Unit", "tests\Modules\Items\ECommerce.Modules.Items.Tests.Unit\ECommerce.Modules.Items.Tests.Unit.csproj", "{10BCBF4C-FF74-4771-A4FF-5912C36C548D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Items.Tests.Integration", "tests\Modules\Items\ECommerce.Modules.Items.Tests.Integration\ECommerce.Modules.Items.Tests.Integration.csproj", "{1D6A7995-F6FC-42B1-9248-0069AA41446E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Items.Tests.Integration", "tests\Modules\Items\ECommerce.Modules.Items.Tests.Integration\ECommerce.Modules.Items.Tests.Integration.csproj", "{1D6A7995-F6FC-42B1-9248-0069AA41446E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contacts", "Contacts", "{AB44658F-0BA4-490F-98F6-6184C15DE154}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Contacts.Api", "src\Modules\Contacts\ECommerce.Modules.Contacts.Api\ECommerce.Modules.Contacts.Api.csproj", "{C968D67B-2A0F-4220-8A9B-21C9133A1F97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Contacts.Core", "src\Modules\Contacts\ECommerce.Modules.Contacts.Core\ECommerce.Modules.Contacts.Core.csproj", "{A0F374AB-2AA7-4DB3-B1E8-D3101AF9FED4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contacts", "Contacts", "{534ABC55-27AC-4B48-AF15-88FB29D8ACAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Contacts.Tests.Unit", "tests\Modules\Contacts\ECommerce.Modules.Contacts.Tests.Unit\ECommerce.Modules.Contacts.Tests.Unit.csproj", "{AD74D5A8-924F-4861-9D44-8D0C4AF366CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Contacts.Tests.Integration", "tests\Modules\Contacts\ECommerce.Modules.Contacts.Tests.Integration\ECommerce.Modules.Contacts.Tests.Integration.csproj", "{996B9537-C995-482D-B222-4B92E3E4F970}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +153,22 @@ Global
 		{1D6A7995-F6FC-42B1-9248-0069AA41446E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D6A7995-F6FC-42B1-9248-0069AA41446E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D6A7995-F6FC-42B1-9248-0069AA41446E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C968D67B-2A0F-4220-8A9B-21C9133A1F97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C968D67B-2A0F-4220-8A9B-21C9133A1F97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C968D67B-2A0F-4220-8A9B-21C9133A1F97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C968D67B-2A0F-4220-8A9B-21C9133A1F97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0F374AB-2AA7-4DB3-B1E8-D3101AF9FED4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0F374AB-2AA7-4DB3-B1E8-D3101AF9FED4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0F374AB-2AA7-4DB3-B1E8-D3101AF9FED4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0F374AB-2AA7-4DB3-B1E8-D3101AF9FED4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD74D5A8-924F-4861-9D44-8D0C4AF366CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD74D5A8-924F-4861-9D44-8D0C4AF366CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD74D5A8-924F-4861-9D44-8D0C4AF366CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD74D5A8-924F-4861-9D44-8D0C4AF366CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{996B9537-C995-482D-B222-4B92E3E4F970}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{996B9537-C995-482D-B222-4B92E3E4F970}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{996B9537-C995-482D-B222-4B92E3E4F970}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{996B9537-C995-482D-B222-4B92E3E4F970}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -174,6 +202,12 @@ Global
 		{1435541D-E505-408E-91E7-9A7F6752181E} = {0BDDBEBE-9599-47FB-966D-9FD4EE314B1D}
 		{10BCBF4C-FF74-4771-A4FF-5912C36C548D} = {D9D07F5E-0AF7-416E-8372-087E4062620E}
 		{1D6A7995-F6FC-42B1-9248-0069AA41446E} = {D9D07F5E-0AF7-416E-8372-087E4062620E}
+		{AB44658F-0BA4-490F-98F6-6184C15DE154} = {65ED8912-3851-49EB-A588-822FEBE0E8E7}
+		{C968D67B-2A0F-4220-8A9B-21C9133A1F97} = {AB44658F-0BA4-490F-98F6-6184C15DE154}
+		{A0F374AB-2AA7-4DB3-B1E8-D3101AF9FED4} = {AB44658F-0BA4-490F-98F6-6184C15DE154}
+		{534ABC55-27AC-4B48-AF15-88FB29D8ACAA} = {F1F9DF9E-971B-49AF-BCA7-D20907179745}
+		{AD74D5A8-924F-4861-9D44-8D0C4AF366CF} = {534ABC55-27AC-4B48-AF15-88FB29D8ACAA}
+		{996B9537-C995-482D-B222-4B92E3E4F970} = {534ABC55-27AC-4B48-AF15-88FB29D8ACAA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {40EE01B2-8BCD-4EB1-A86E-8CD4F43596B8}
