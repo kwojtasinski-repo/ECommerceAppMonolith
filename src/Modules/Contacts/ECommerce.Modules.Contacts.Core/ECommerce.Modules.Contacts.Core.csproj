@@ -6,4 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="DAL\Repositories\" />
+    <Folder Include="Events\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\ECommerce.Shared.Abstractions\ECommerce.Shared.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\Shared\ECommerce.Shared.Infrastructure\ECommerce.Shared.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
