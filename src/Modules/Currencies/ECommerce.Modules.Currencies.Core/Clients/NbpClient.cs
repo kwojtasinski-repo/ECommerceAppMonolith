@@ -47,7 +47,9 @@ namespace ECommerce.Modules.Currencies.Core.Clients
             {
                 using var cancellationTokenSource = new CancellationTokenSource();
                 cancellationTokenSource.CancelAfter(_flurlClient.Settings.Timeout.Value);
-                var response = await _flurlClient.Request(urlBuilder).GetAsync(cancellationToken: cancellationTokenSource.Token, completionOption: HttpCompletionOption.ResponseHeadersRead);
+                var response = await _flurlClient.Request(urlBuilder)
+                    .AllowHttpStatus("404")
+                    .GetAsync(cancellationToken: cancellationTokenSource.Token, completionOption: HttpCompletionOption.ResponseHeadersRead);
 
                 var exchangeRate = await response.GetJsonAsync<ExchangeRate>();
                 return exchangeRate;

@@ -13,7 +13,7 @@ using Xunit;
 
 namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
 {
-    [Collection("integration")]
+    [Collection("integrationCurrencies")]
     public class CurrenciesControllerTests : IClassFixture<TestApplicationFactory<Program>>,
         IClassFixture<TestCurrenciesDbContext>
     {
@@ -44,7 +44,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         [Fact]
         public async Task given_valid_currency_should_add_and_return_201()
         {
-            var currencyDto = new CurrencyDto { Code = "USD", Description = "Dolar" };
+            var currencyDto = new CurrencyDto { Code = "CZK", Description = "Czeska korona" };
             var userId = Guid.NewGuid();
             Authenticate(userId);
 
@@ -61,7 +61,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         [Fact]
         public async Task given_valid_currency_should_add_to_db()
         {
-            var currencyDto = new CurrencyDto { Code = "CHF", Description = "Frank" };
+            var currencyDto = new CurrencyDto { Code = "GBP", Description = "Funt brytyjski" };
             var userId = Guid.NewGuid();
             Authenticate(userId);
 
@@ -83,7 +83,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
             var currency = new Core.Entities.Currency { Id = Guid.NewGuid(), Code = "ABC", Description = "Abcedfgh" };
             await _dbContext.Currencies.AddAsync(currency);
             await _dbContext.SaveChangesAsync();
-            var dto = new CurrencyDto { Id = currency.Id, Code = "PLN", Description = "Polski zloty" };
+            var dto = new CurrencyDto { Id = currency.Id, Code = "CHF", Description = "Frank szwajcarski" };
             var userId = Guid.NewGuid();
             Authenticate(userId);
 
@@ -131,7 +131,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         private List<Core.Entities.Currency> GetSampleData()
         {
             var currency1 = new Core.Entities.Currency { Id = Guid.NewGuid(), Code = "PLN", Description = "Złoty" };
-            var currency2 = new Core.Entities.Currency { Id = Guid.NewGuid(), Code = "EUR", Description = "Euro" };
+            var currency2 = new Core.Entities.Currency { Id = Guid.NewGuid(), Code = "USD", Description = "Dolar" };
             return new List<Core.Entities.Currency> { currency1, currency2 };
         }
 

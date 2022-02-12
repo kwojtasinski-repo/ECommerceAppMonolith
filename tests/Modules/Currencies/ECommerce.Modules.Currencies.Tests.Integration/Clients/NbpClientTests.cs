@@ -19,6 +19,7 @@ using ECommerce.Modules.Currencies.Tests.Integration.Common;
 
 namespace ECommerce.Modules.Currencies.Tests.Integration.Clients
 {
+    [Collection("integrationNBP")]
     public class NbpClientTests : IClassFixture<TestApplicationFactory<Program>>
     {
         [Fact]
@@ -50,9 +51,9 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Clients
         [Fact]
         public async Task given_valid_code_and_date_should_return_rate()
         {
-            var code = "eur";
+            var code = "chf";
             var date = DateOnly.FromDateTime(DateTime.Now);
-            var content = Common.Extensions.GetSampleCurrencyRateJsonString(date);
+            var content = Common.Extensions.GetSampleCurrencyRateJsonString(date, code);
             var url = $"/api/exchangerates/rates/a/{code}/{date.ToString("yyyy-MM-dd")}";
             _wireMockServer.Given(
               Request.Create()
