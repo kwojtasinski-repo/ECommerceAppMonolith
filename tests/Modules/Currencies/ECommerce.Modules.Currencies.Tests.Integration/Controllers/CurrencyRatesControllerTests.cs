@@ -6,20 +6,17 @@ using ECommerce.Modules.Currencies.Core.Exceptions;
 using ECommerce.Modules.Currencies.Tests.Integration.Common;
 using ECommerce.Shared.Tests;
 using Flurl.Http;
-using Humanizer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
 using Xunit;
-using static ECommerce.Modules.Currencies.Tests.Integration.Common.Extensions;
 
 namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
 {

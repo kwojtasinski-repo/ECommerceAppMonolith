@@ -13,8 +13,6 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Common
             var defaultDate = date == new DateOnly() ? new DateOnly(2022, 2, 11) : date;
             var defaultDateString = defaultDate.ToString("yyyy-MM-dd");
             return "{\"table\":\"A\",\"currency\":\"euro\",\"code\":\"" + code + "\",\"rates\":[{\"no\":\"029/A/NBP/2022\",\"effectiveDate\":" + $"\"{defaultDateString}" + "\",\"mid\":4.5163}]}";
-        }
-
-        public record ErrorMessage(string Code, string Message);
+        }        
     }
 }

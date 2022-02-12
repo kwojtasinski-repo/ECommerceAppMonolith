@@ -13,9 +13,7 @@ using WireMock.ResponseBuilders;
 using WireMock.Server;
 using Xunit;
 using Shouldly;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using ECommerce.Modules.Currencies.Tests.Integration.Common;
 
 namespace ECommerce.Modules.Currencies.Tests.Integration.Clients
 {
