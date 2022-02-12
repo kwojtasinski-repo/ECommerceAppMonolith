@@ -136,8 +136,8 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         }
 
         private const string Path = "currencies-module/currencies";
-        private IFlurlClient _client;
-        private CurrenciesDbContext _dbContext;
+        private readonly IFlurlClient _client;
+        private readonly CurrenciesDbContext _dbContext;
 
         public CurrenciesControllerTests(TestApplicationFactory<Program> factory, TestCurrenciesDbContext dbContext)
         {

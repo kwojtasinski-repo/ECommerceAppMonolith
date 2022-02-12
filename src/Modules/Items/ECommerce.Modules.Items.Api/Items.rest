@@ -20,6 +20,7 @@ GET {{url}}/items/{{itemId}}
 ### Add brand
 POST {{url}}/brands
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
     "name": "Samsung"
@@ -34,6 +35,7 @@ GET {{url}}/brands/{{brandId}}
 ### Add type
 POST {{url}}/types
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
     "name": "Electric"
@@ -67,6 +69,7 @@ GET {{url}}/images/{{imageId}}
 ### Add item
 POST {{url}}/items
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
     "itemName": "Samsung S22",
@@ -92,6 +95,7 @@ Content-Type: application/json
 ### Update item
 PUT {{url}}/items
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
     "itemId": "{{itemId}}",
@@ -125,6 +129,7 @@ GET {{url}}/items-sale/{{itemSaleId}}
 ### Add item sale
 POST {{url}}/items-sale
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
     "itemId": "{{itemId}}",
@@ -134,6 +139,7 @@ Content-Type: application/json
 ### Update item sale
 PUT {{url}}/items-sale
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
     "itemSaleId": "{{itemSaleId}}",
@@ -142,13 +148,16 @@ Content-Type: application/json
 
 ### DELETE item sale
 DELETE {{url}}/items-sale/{{itemSaleId}}
+Authorization: Bearer {{accessToken}}
 
 ### DELETE item
 DELETE {{url}}/items/{{itemId}}
+Authorization: Bearer {{accessToken}}
 
 ### Update brand
 PUT {{url}}/brands
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
     "brandId": "{{brandId}}",
@@ -157,10 +166,12 @@ Content-Type: application/json
 
 ### DELETE brand
 DELETE {{url}}/brands/{{brandId}}
+Authorization: Bearer {{accessToken}}
 
 ### Update type
 PUT {{url}}/types
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
     "brandId": "{{typeId}}",
@@ -169,3 +180,4 @@ Content-Type: application/json
 
 ### DELETE brand
 DELETE {{url}}/types/{{typeId}}
+Authorization: Bearer {{accessToken}}
