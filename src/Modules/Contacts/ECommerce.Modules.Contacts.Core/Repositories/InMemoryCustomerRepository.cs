@@ -45,6 +45,10 @@ namespace ECommerce.Modules.Currencies.Core.Repositories
         public Task<Customer> GetDetailsAsync(Guid id)
         {
             _customers.TryGetValue(id, out var customer);
+            if (customer is not null)
+            {
+                customer.Address ??= new Address();
+            }
             return Task.FromResult<Customer>(customer);
         }
 

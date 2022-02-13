@@ -1,4 +1,4 @@
-﻿using ECommerce.Modules.Currencies.Core.Clients;
+﻿using ECommerce.Modules.Currencies.Core.Clients.External;
 using ECommerce.Shared.Tests;
 using Flurl.Http;
 using Humanizer;

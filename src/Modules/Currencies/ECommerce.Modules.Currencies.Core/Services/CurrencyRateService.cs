@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ECommerce.Modules.Currencies.Core.Exceptions;
-using ECommerce.Modules.Currencies.Core.Clients;
+using ECommerce.Modules.Currencies.Core.Clients.External;
 using ECommerce.Shared.Abstractions.Time;
 using ECommerce.Modules.Currencies.Core.Entities;
 

@@ -1,4 +1,4 @@
-﻿using ECommerce.Modules.Currencies.Core.Clients;
+﻿using ECommerce.Modules.Currencies.Core.Clients.External;
 using ECommerce.Modules.Currencies.Tests.Unit.Common;
 using Flurl.Http;
 using Flurl.Http.Testing;

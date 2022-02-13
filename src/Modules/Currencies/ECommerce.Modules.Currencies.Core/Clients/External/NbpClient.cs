@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace ECommerce.Modules.Currencies.Core.Clients
+namespace ECommerce.Modules.Currencies.Core.Clients.External
 {
     internal class NbpClient : INbpClient
     {
@@ -50,18 +50,14 @@ namespace ECommerce.Modules.Currencies.Core.Clients
                 var response = await _flurlClient.Request(urlBuilder)
                     .AllowHttpStatus("404")
                     .GetAsync(cancellationToken: cancellationTokenSource.Token, completionOption: HttpCompletionOption.ResponseHeadersRead);
-
-                var exchangeRate = await response.GetJsonAsync<ExchangeRate>();
-                return exchangeRate;
-            }
-            catch (FlurlHttpException exception)
-            {
-                if (exception.StatusCode == (int) System.Net.HttpStatusCode.NotFound)
+                
+                if (response.StatusCode == (int) System.Net.HttpStatusCode.NotFound)
                 {
                     return null;
                 }
 
-                throw exception;
+                var exchangeRate = await response.GetJsonAsync<ExchangeRate>();
+                return exchangeRate;
             }
             catch (Exception)
             {

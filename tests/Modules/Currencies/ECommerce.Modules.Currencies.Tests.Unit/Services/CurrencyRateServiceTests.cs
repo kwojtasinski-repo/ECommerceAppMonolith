@@ -1,4 +1,4 @@
-﻿using ECommerce.Modules.Currencies.Core.Clients;
+﻿using ECommerce.Modules.Currencies.Core.Clients.External;
 using ECommerce.Modules.Currencies.Core.Entities;
 using ECommerce.Modules.Currencies.Core.Exceptions;
 using ECommerce.Modules.Currencies.Core.Repositories;

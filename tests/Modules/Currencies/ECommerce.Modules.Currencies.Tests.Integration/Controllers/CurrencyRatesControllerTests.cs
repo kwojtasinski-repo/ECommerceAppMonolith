@@ -1,4 +1,4 @@
-﻿using ECommerce.Modules.Currencies.Core.Clients;
+﻿using ECommerce.Modules.Currencies.Core.Clients.External;
 using ECommerce.Modules.Currencies.Core.DAL;
 using ECommerce.Modules.Currencies.Core.DTO;
 using ECommerce.Modules.Currencies.Core.Entities;

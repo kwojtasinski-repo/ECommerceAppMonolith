@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerce.Modules.Currencies.Core.Clients
+namespace ECommerce.Modules.Currencies.Core.Clients.External
 {
     internal interface INbpClient
     {
