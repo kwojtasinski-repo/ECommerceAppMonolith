@@ -5,7 +5,10 @@ using ECommerce.Modules.Items.Application.Files.Interfaces;
 using ECommerce.Modules.Items.Infrastructure.Files.Implementations;
 using ECommerce.Shared.Infrastructure.Postgres;
 using Microsoft.Extensions.DependencyInjection;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("ECommerce.Modules.Items.Tests.Unit")]
+[assembly: InternalsVisibleTo("DynamicProxyAssemblyGen2")] //dodane dla generowania mockow do internali
 namespace ECommerce.Modules.Items.Infrastructure
 {
     public static class Extensions

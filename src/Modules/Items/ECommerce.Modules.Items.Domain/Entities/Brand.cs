@@ -13,11 +13,12 @@ namespace ECommerce.Modules.Items.Domain.Entities
         public string Name { get; private set; }
         public ICollection<Item>? Items { get; private set; }
 
-        public Brand(AggregateId id, string name, int version = 0)
+        public Brand(AggregateId id, string name, int version = 0, ICollection<Item>? items = null)
         {
             Id = id;
             Name = name;
             Version = version;
+            Items = items;
         }
 
         private Brand(AggregateId id)
