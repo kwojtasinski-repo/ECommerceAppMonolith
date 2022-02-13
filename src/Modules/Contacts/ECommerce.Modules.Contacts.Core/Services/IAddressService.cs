@@ -11,8 +11,6 @@ namespace ECommerce.Modules.Contacts.Core.Services
     {
         Task AddAsync(AddressDto dto);
         Task<AddressDto> GetAsync(Guid id);
-        Task<IReadOnlyList<AddressDto>> GetAllAsync();
         Task UpdateAsync(AddressDto dto);
-        Task DeleteAsync(Guid id);
     }
 }

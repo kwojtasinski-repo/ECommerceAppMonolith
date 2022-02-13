@@ -12,6 +12,7 @@ namespace ECommerce.Modules.Contacts.Core.Repositories
         Task AddAsync(Customer customer);
         Task<Customer> GetAsync(Guid id);
         Task<IReadOnlyList<Customer>> GetAllAsync();
+        Task<IReadOnlyList<Customer>> GetAllByUserIdAsync(Guid userId);
         Task UpdateAsync(Customer customer);
         Task DeleteAsync(Customer customer);
     }

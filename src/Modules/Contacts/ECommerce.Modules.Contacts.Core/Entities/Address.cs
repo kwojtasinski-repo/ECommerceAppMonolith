@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Contacts.Core.Entities
 {
-    internal class Address
+    internal class Address : AuditableEntity
     {
-        public Guid Id { get; set; }
         public string CityName { get; set; }
         public string StreetName { get; set; }
         public string CountryName { get; set; }

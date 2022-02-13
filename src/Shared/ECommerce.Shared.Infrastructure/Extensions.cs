@@ -11,6 +11,7 @@ using ECommerce.Shared.Infrastructure.Postgres;
 using ECommerce.Shared.Infrastructure.Queries;
 using ECommerce.Shared.Infrastructure.Services;
 using ECommerce.Shared.Infrastructure.Time;
+using ECommerce.Shared.Infrastructure.Validators;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -71,6 +72,7 @@ namespace ECommerce.Shared.Infrastructure
             services.AddErrorHandling();
             services.AddQueries(assemblies);
             services.AddCommands(assemblies);
+            services.AddValidators(assemblies);
             services.AddPostgres();
             services.AddSingleton<IClock, UtcClock>();
             services.AddHostedService<AppInitializer>();

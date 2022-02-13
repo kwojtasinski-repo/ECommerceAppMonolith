@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Contacts.Core.Entities
 {
-    internal class Customer
+    internal class Customer : AuditableEntity
     {
-        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public bool Company { get; set; }
@@ -16,5 +15,6 @@ namespace ECommerce.Modules.Contacts.Core.Entities
         public string? NIP { get; set; }
         public string PhoneNumber { get; set; }
         public Address Address { get; set; }
+        public Guid UserId { get; set; }
     }
 }

@@ -1,45 +1,64 @@
 ﻿using ECommerce.Modules.Contacts.Core.DTO;
+using ECommerce.Modules.Contacts.Core.Exceptions.Customers;
+using ECommerce.Modules.Contacts.Core.Mappings;
 using ECommerce.Modules.Contacts.Core.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ECommerce.Shared.Abstractions.Validators;
 
 namespace ECommerce.Modules.Contacts.Core.Services
 {
     internal class CustomerService : ICustomerService
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly IValidator<CustomerDto> _validator;
 
-        public CustomerService(ICustomerRepository customerRepository)
+        public CustomerService(ICustomerRepository customerRepository, IValidator<CustomerDto> validator)
         {
             _customerRepository = customerRepository;
+            _validator = validator;
         }
 
-        public Task AddAsync(CustomerDto dto)
+        public async Task AddAsync(CustomerDto dto)
         {
-            throw new NotImplementedException();
+            _validator.Validate(dto);
+            dto.Id = Guid.NewGuid();
+            await _customerRepository.AddAsync(dto.AsEntity());
         }
 
-        public Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var customer = await _customerRepository.GetAsync(id);
+
+            if (customer is null)
+            {
+                throw new CustomerNotFoundException(id);
+            }
+
+            await _customerRepository.DeleteAsync(customer);
         }
 
-        public Task<IReadOnlyList<CustomerDto>> GetAllAsync()
+        public async Task<IReadOnlyList<CustomerDto>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var customers = await _customerRepository.GetAllAsync();
+            return customers.Select(c => c.AsDto()).ToList();
         }
 
-        public Task<CustomerDetailsDto> GetAsync(Guid id)
+        public async Task<CustomerDetailsDto> GetAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var customer = await _customerRepository.GetAsync(id);
+            return customer.AsDetailsDto();
         }
 
-        public Task UpdateAsync(CustomerDto dto)
+        public async Task UpdateAsync(CustomerDto dto)
         {
-            throw new NotImplementedException();
+            _validator.Validate(dto);
+            var customer = await _customerRepository.GetAsync(dto.Id);
+
+            if (customer is null)
+            {
+                throw new CustomerNotFoundException(dto.Id);
+            }
+
+            await _customerRepository.UpdateAsync(dto.AsEntity());
         }
     }
 }
