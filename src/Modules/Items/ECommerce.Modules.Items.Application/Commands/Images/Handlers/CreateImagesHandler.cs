@@ -59,7 +59,7 @@ namespace ECommerce.Modules.Items.Application.Commands.Images.Handlers
                     errors.Append("Image ").Append(fileName).Append(" is too big (").Append(size).Append(" bytes). Allowed ").Append(_saveFilePolicy.GetAllowedSize()).Append("bytes\r\n");
                 }
 
-                var extension = _fileStore.GetFileExtenstion(fileName);
+                var extension = _fileStore.GetFileExtension(fileName);
                 var containsExtension = _saveFilePolicy.GetAllowedImagesExtensions().Contains(extension);
 
                 if (!containsExtension)

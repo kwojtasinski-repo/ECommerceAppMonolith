@@ -1,10 +1,13 @@
 ﻿using ECommerce.Modules.Contacts.Core.DTO;
 using ECommerce.Modules.Contacts.Core.Entities;
+using ECommerce.Modules.Contacts.Core.Exceptions.Customers;
 using ECommerce.Modules.Contacts.Core.Repositories;
 using ECommerce.Modules.Contacts.Core.Services;
 using ECommerce.Modules.Contacts.Core.Validators;
+using ECommerce.Shared.Abstractions.Exceptions;
 using ECommerce.Shared.Abstractions.Validators;
 using NSubstitute;
+using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +53,26 @@ namespace ECommerce.Modules.Contacts.Tests.Unit.Services
 
             await _customerRepository.Received(1).UpdateAsync(Arg.Any<Customer>());
         }
+
+        [Fact]
+        public async Task given_empty_customer_when_add_should_throw_an_exception()
+        {
+            var expectedExceptions = new List<ECommerceException>
+            {
+                new FirstNameCannotBeNullException(),
+                new LastNameCannotBeNullException(),
+                new PhoneNumberCannotBeNull()
+            };
+            var expectedException = new ValidationException(expectedExceptions);
+
+            var exception = await Record.ExceptionAsync(() => _service.AddAsync(new CustomerDto()));
+
+            exception.ShouldNotBeNull();
+            exception.ShouldBeOfType<ValidationException>();
+            exception.Message.ShouldBe(expectedException.Message);
+            ((ValidationException)exception).Exceptions.SequenceEqual(expectedException.Exceptions);
+        }
+
 
         private readonly CustomerService _service;
         private readonly ICustomerRepository _customerRepository;

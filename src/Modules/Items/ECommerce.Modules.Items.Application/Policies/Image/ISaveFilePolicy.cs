@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Application.Policies.Image
 {
-    internal interface ISaveFilePolicy
+    public interface ISaveFilePolicy
     {
         public string GetFileDirectory();
         int GetAllowedSize();

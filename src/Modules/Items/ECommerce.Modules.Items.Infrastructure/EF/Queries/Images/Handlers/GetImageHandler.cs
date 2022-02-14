@@ -30,7 +30,7 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.Queries.Images.Handlers
 
             var bytes = await _fileStore.ReadFileAsync(image.SourcePath);
             var base64String = Convert.ToBase64String(bytes);
-            var extension = _fileStore.GetFileExtenstion(image.SourcePath);
+            var extension = _fileStore.GetFileExtension(image.SourcePath);
 
             return new ImageDto { ImageSource = base64String, Extension = extension };
         }

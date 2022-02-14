@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\Images\" />
     <Folder Include="Commands\Items\" />
     <Folder Include="Commands\ItemSales\" />
     <Folder Include="Commands\Types\" />

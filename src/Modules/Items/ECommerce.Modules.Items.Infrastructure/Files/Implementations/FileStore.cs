@@ -15,7 +15,7 @@ namespace ECommerce.Modules.Items.Infrastructure.Files.Implementations
             _directoryWrapper = directoryWrapper;
         }
 
-        public string GetFileExtenstion(string file)
+        public string GetFileExtension(string file)
         {
             string ext = Path.GetExtension(file);
             return ext;
@@ -37,7 +37,7 @@ namespace ECommerce.Modules.Items.Infrastructure.Files.Implementations
             _directoryWrapper.CreateDirectory(path);
             if (file != null)
             {
-                string ext = GetFileExtenstion(file.FileName);
+                string ext = GetFileExtension(file.FileName);
                 var fileName = ReplaceInvalidChars(file.FileName);
                 string uniqueFileName = Guid.NewGuid().ToString() + "_" + fileName + ext;
                 var outputFile = Path.Combine(path, uniqueFileName);

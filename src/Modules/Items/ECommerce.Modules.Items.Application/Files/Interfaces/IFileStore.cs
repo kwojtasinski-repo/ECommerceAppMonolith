@@ -12,7 +12,7 @@ namespace ECommerce.Modules.Items.Application.Files.Interfaces
         Task<IEnumerable<string>> WriteFilesAsync(ICollection<IFormFile> files, string path);
         Task<string> WriteFileAsync(IFormFile file, string path);
         Task<byte[]> ReadFileAsync(string path);
-        string GetFileExtenstion(string file);
+        string GetFileExtension(string file);
         string ReplaceInvalidChars(string fileName);
     }
 }
