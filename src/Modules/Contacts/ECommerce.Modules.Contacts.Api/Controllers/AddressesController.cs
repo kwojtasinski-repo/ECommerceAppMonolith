@@ -1,5 +1,6 @@
 ﻿using ECommerce.Modules.Contacts.Core.DTO;
 using ECommerce.Modules.Contacts.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Contacts.Api.Controllers
 {
+    [Authorize]
     internal class AddressesController : BaseController
     {
         private readonly IAddressService _addressService;
@@ -23,7 +25,7 @@ namespace ECommerce.Modules.Contacts.Api.Controllers
         public async Task<ActionResult<AddressDto>> GetAsync(Guid id)
         {
             var address = await _addressService.GetAsync(id);
-            return Ok(address);
+            return OkOrNotFound(address);
         }
 
         [HttpPost]

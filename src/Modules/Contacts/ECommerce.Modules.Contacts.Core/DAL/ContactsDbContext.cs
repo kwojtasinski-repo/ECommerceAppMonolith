@@ -45,18 +45,18 @@ namespace ECommerce.Modules.Contacts.Core.DAL
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedBy = _context.Identity.Id;
+                        entry.Entity.CreatedBy = _context.Identity != null ? _context.Identity.Id : Guid.Empty;
                         entry.Entity.Created = _clock.CurrentDate();
                         entry.Entity.Active = true;
                         break;
                     case EntityState.Modified:
-                        entry.Entity.ModifiedBy = _context.Identity.Id;
+                        entry.Entity.ModifiedBy = _context.Identity != null ? _context.Identity.Id : Guid.Empty;
                         entry.Entity.Modified = _clock.CurrentDate();
                         break;
                     case EntityState.Deleted:
-                        entry.Entity.ModifiedBy = _context.Identity.Id;
+                        entry.Entity.ModifiedBy = _context.Identity != null ? _context.Identity.Id : Guid.Empty;
                         entry.Entity.Modified = _clock.CurrentDate();
-                        entry.Entity.InactivedBy = _context.Identity.Id;
+                        entry.Entity.InactivedBy = _context.Identity != null ? _context.Identity.Id : Guid.Empty;
                         entry.Entity.Inactived = _clock.CurrentDate();
                         entry.Entity.Active = false;
                         entry.State = EntityState.Modified;

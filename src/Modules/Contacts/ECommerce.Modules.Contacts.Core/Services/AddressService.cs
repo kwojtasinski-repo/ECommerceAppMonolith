@@ -27,7 +27,7 @@ namespace ECommerce.Modules.Contacts.Core.Services
         public async Task<AddressDto> GetAsync(Guid id)
         {
             var address = await _addressRepository.GetAsync(id);
-            return address.AsDto();
+            return address?.AsDto();
         }
 
         public async Task UpdateAsync(AddressDto dto)
@@ -46,7 +46,7 @@ namespace ECommerce.Modules.Contacts.Core.Services
             address.ZipCode = dto.ZipCode;
             address.BuildingNumber = dto.BuildingNumber;
             address.LocaleNumber = dto.LocaleNumber;
-            await _addressRepository.UpdateAsync(dto.AsEntity());
+            await _addressRepository.UpdateAsync(address);
         }
     }
 }

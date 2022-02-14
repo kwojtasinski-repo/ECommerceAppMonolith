@@ -52,7 +52,8 @@ namespace ECommerce.Modules.Contacts.Core.Mappings
                 PhoneNumber = dto.PhoneNumber,
                 Company = dto.Company,
                 CompanyName = dto.CompanyName,
-                NIP = dto.NIP
+                NIP = dto.NIP,
+                UserId = dto.UserId
             };
             return customer;
         }

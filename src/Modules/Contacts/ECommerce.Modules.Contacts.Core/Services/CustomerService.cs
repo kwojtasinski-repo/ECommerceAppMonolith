@@ -51,7 +51,7 @@ namespace ECommerce.Modules.Contacts.Core.Services
         public async Task<CustomerDetailsDto> GetAsync(Guid id)
         {
             var customer = await _customerRepository.GetAsync(id);
-            return customer.AsDetailsDto();
+            return customer?.AsDetailsDto();
         }
 
         public async Task UpdateAsync(CustomerDto dto)
@@ -64,7 +64,14 @@ namespace ECommerce.Modules.Contacts.Core.Services
                 throw new CustomerNotFoundException(dto.Id);
             }
 
-            await _customerRepository.UpdateAsync(dto.AsEntity());
+            customer.FirstName = dto.FirstName;
+            customer.LastName = dto.LastName;
+            customer.Company = dto.Company;
+            customer.CompanyName = dto.CompanyName;
+            customer.NIP = dto.NIP;
+            customer.PhoneNumber = dto.PhoneNumber;
+
+            await _customerRepository.UpdateAsync(customer);
         }
     }
 }

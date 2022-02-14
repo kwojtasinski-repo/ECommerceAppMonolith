@@ -1,0 +1,96 @@
+@url = http://localhost:5000/contacts-module 
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NjgzZDNjYi02ODkwLTQ4ZTgtOTM2Ni05ODA3NGM1MjQ4NTQiLCJ1bmlxdWVfbmFtZSI6IjU2ODNkM2NiLTY4OTAtNDhlOC05MzY2LTk4MDc0YzUyNDg1NCIsImp0aSI6Ijk5OTBlMzY1LWQ2MmMtNDljYi1hNmVmLTNkYmE5NzNlYzI1OSIsImlhdCI6IjE2NDQ4NzIzMDg4MzMiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOiJ1c2VycyIsIm5iZiI6MTY0NDg3MjMwOCwiZXhwIjoxNjQ0ODc1OTA4LCJpc3MiOiJlY29tbWVyY2UifQ.ytKmfWJ4KL1sFt3VnbVHevbEV0XKYpOB2b35YoCvecE
+@customerId = 2482141f-e4e8-4efb-8750-44c45f332372
+@addressId = fa107d72-1418-45b5-ad51-34f8801eb4e9
+
+### 
+GET {{url}}
+
+### Get my customers
+GET {{url}}/customers/me
+Authorization: Bearer {{accessToken}}
+
+### Get customer
+GET {{url}}/customers/{{customerId}}
+Authorization: Bearer {{accessToken}}
+
+### Add customer
+POST {{url}}/customers
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "firstName": "Gregor",
+    "lastName": "Szahmat",
+    "company": false,
+    "phoneNumber": "+48524123557"
+}
+
+### Get address
+GET {{url}}/addresses/{{addressId}}
+Authorization: Bearer {{accessToken}}
+
+### Add address
+POST {{url}}/addresses
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "cityName": "Gniezno",
+    "streetName": "Wysoka",
+    "countryName": "Poland",
+    "zipCode": "12-452",
+    "buildingNumber": "1",
+    "localeNumber": null,
+    "customerId": "{{customerId}}"
+}
+
+
+### Get customer
+GET {{url}}/customers/{{customerId}}
+Authorization: Bearer {{accessToken}}
+
+### Update customer
+PUT {{url}}/customers
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "id": "{{customerId}}",
+    "firstName": "Gregori",
+    "lastName": "Szahtar",
+    "company": false,
+    "phoneNumber": "+48524123557"
+}
+
+### Update address
+PUT {{url}}/addresses
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "id": "{{addressId}}",
+    "cityName": "Gniezno",
+    "streetName": "Poznanska",
+    "countryName": "Poland",
+    "zipCode": "62-200",
+    "buildingNumber": "12",
+    "localeNumber": null,
+    "customerId": "{{customerId}}"
+}
+
+### Get customer
+GET {{url}}/customers/{{customerId}}
+Authorization: Bearer {{accessToken}}
+
+### DELETE customer
+DELETE {{url}}/customers/{{customerId}}
+Authorization: Bearer {{accessToken}}
+
+### Get customer
+GET {{url}}/customers/{{customerId}}
+Authorization: Bearer {{accessToken}}
+
+### Get customers
+GET {{url}}/customers/me
+Authorization: Bearer {{accessToken}}

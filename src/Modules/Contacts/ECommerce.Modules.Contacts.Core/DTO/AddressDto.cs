@@ -21,6 +21,7 @@ namespace ECommerce.Modules.Contacts.Core.DTO
         [Required]
         public string BuildingNumber { get; set; }
         public string? LocaleNumber { get; set; }
+        [Required]
         public Guid CustomerId { get; set; }
     }
 }

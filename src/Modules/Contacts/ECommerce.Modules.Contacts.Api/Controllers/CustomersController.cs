@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Contacts.Api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     internal class CustomersController : BaseController
     {
         private readonly ICustomerService _customerService;
@@ -41,6 +41,7 @@ namespace ECommerce.Modules.Contacts.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> PostAsync(CustomerDto customerDto)
         {
+            customerDto.UserId = _context.Identity.Id;
             await _customerService.AddAsync(customerDto);
             return CreatedAtAction(nameof(GetAsync), new { id = customerDto.Id }, null);
         }
