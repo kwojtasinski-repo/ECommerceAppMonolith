@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Contacts.Core.Validators
@@ -140,6 +141,12 @@ namespace ECommerce.Modules.Contacts.Core.Validators
 
             if (validator.PhoneNumber is not null)
             {
+                // optional start with + match all digits with length between 7 and 16 in one line
+                if (!Regex.Match(validator.PhoneNumber, @"^(\+?)\d([0-9]{6,15})$").Success)
+                {
+                    exceptionList.Add(new InvalidPhoneNumberFormatException(validator.PhoneNumber));
+                }
+
                 if (validator.PhoneNumber.Length < 7)
                 {
                     exceptionList.Add(new PhoneNumberTooShortException(validator.PhoneNumber));

@@ -14,5 +14,6 @@ namespace ECommerce.Modules.Contacts.Core.Services
         Task<IReadOnlyList<CustomerDto>> GetAllAsync();
         Task UpdateAsync(CustomerDto dto);
         Task DeleteAsync(Guid id);
+        Task<IEnumerable<CustomerDto>> GetAllByUserAsync(Guid userId);
     }
 }

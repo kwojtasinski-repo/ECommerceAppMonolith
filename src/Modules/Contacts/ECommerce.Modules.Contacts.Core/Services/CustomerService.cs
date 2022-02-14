@@ -42,6 +42,12 @@ namespace ECommerce.Modules.Contacts.Core.Services
             return customers.Select(c => c.AsDto()).ToList();
         }
 
+        public async Task<IEnumerable<CustomerDto>> GetAllByUserAsync(Guid userId)
+        {
+            var customers = await _customerRepository.GetAllByUserIdAsync(userId);
+            return customers.Select(c => c.AsDto());
+        }
+
         public async Task<CustomerDetailsDto> GetAsync(Guid id)
         {
             var customer = await _customerRepository.GetAsync(id);

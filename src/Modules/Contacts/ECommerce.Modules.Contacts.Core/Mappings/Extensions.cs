@@ -83,7 +83,7 @@ namespace ECommerce.Modules.Contacts.Core.Mappings
                 Company = customer.Company,
                 CompanyName = customer.CompanyName,
                 NIP = customer.NIP,
-                Address = customer.Address.AsDto()
+                Address = customer.Address?.AsDto()
             };
             return dto;
         }

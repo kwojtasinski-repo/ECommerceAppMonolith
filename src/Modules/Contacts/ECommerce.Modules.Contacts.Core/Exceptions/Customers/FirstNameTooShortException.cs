@@ -11,7 +11,7 @@ namespace ECommerce.Modules.Contacts.Core.Exceptions.Customers
     {
         public string FirstName { get; }
 
-        public FirstNameTooShortException(string firstName) : base($"FirstName '{firstName} is too short.'")
+        public FirstNameTooShortException(string firstName) : base($"FirstName '{firstName}' is too short.")
         {
             FirstName = firstName;
         }

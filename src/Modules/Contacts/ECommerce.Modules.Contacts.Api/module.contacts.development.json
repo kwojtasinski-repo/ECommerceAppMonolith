@@ -2,7 +2,7 @@
   "contacts": {
     "module": {
       "name": "Contacts",
-      "enabled": false
+      "enabled": true
     }
   }
 }

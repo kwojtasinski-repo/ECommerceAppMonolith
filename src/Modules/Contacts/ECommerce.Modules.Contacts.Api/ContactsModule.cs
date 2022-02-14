@@ -8,7 +8,7 @@ namespace ECommerce.Modules.Contacts.Api
     public class ContactsModule : IModule
     {
         public const string BasePath = "contacts-module";
-        public string Name => "Currencies";
+        public string Name => "Contacts";
         public string Path => BasePath;
 
         public void Register(IServiceCollection services)
