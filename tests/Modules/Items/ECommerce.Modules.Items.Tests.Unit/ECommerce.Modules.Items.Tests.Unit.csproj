@@ -28,9 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\Items\" />
-    <Folder Include="Commands\ItemSales\" />
-    <Folder Include="Commands\Types\" />
     <Folder Include="Policies\" />
   </ItemGroup>
 

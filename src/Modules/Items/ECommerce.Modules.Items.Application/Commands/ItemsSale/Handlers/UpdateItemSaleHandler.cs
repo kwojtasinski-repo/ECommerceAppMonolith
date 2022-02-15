@@ -36,7 +36,7 @@ namespace ECommerce.Modules.Items.Application.Commands.ItemsSale.Handlers
         {
             if (command is null)
             {
-                throw new CreateItemSaleCannotBeNullException();
+                throw new UpdateItemSaleCannotBeNullException();
             }
 
             if (command.ItemCost < 0)

@@ -1,4 +1,5 @@
-﻿using ECommerce.Shared.Abstractions.Exceptions;
+﻿
+using ECommerce.Shared.Abstractions.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace ECommerce.Modules.Items.Application.Exceptions
     {
         public Guid Id { get; }
 
-        public BrandNotFoundException(Guid id) : base($"Brand wiht id: '{id}' was not found.")
+        public BrandNotFoundException(Guid id) : base($"Brand with id: '{id}' was not found.")
         {
             Id = id;
         }

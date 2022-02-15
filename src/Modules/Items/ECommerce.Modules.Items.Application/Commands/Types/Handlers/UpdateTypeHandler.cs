@@ -28,7 +28,7 @@ namespace ECommerce.Modules.Items.Application.Commands.Types.Handlers
                 throw new TypeNotFoundException(command.TypeId);
             }
 
-            if (command.Name == command.Name)
+            if (type.Name == command.Name)
             {
                 return;
             }

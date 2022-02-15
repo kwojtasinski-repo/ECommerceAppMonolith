@@ -27,8 +27,7 @@ namespace ECommerce.Modules.Items.Application.Commands.ItemsSale.Handlers
                 throw new ItemSaleNotFoundException(command.ItemSaleId);
             }
 
-            itemSale.ChangeActive(false);
-            await _itemSaleRepository.UpdateAsync(itemSale);
+            await _itemSaleRepository.DeleteAsync(itemSale);
         }
     }
 }

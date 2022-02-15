@@ -14,7 +14,7 @@ namespace ECommerce.Modules.Items.Domain.Entities
 
         public ICollection<Item>? Items { get; private set; }
 
-        public Type(AggregateId id, string name, int version)
+        public Type(AggregateId id, string name, int version = 0)
         {
             Id = id;
             Name = name;

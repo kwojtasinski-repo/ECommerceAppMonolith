@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Application.Policies.Items
 {
-    internal interface IItemDeletionPolicy
+    public interface IItemDeletionPolicy
     {
         Task<bool> CanDeleteAsync(Item item);
     }

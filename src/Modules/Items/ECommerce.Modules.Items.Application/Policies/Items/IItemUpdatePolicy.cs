@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Application.Policies.Items
 {
-    internal interface IItemUpdatePolicy
+    public interface IItemUpdatePolicy
     {
         Task<bool> CanUpdateAsync(Item item);
     }

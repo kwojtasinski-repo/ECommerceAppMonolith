@@ -69,8 +69,32 @@ namespace ECommerce.Modules.Items.Application.Commands.Items.Handlers
                 throw new ItemNameTooLongException(command.ItemName);
             }
 
+            if (command.Tags is not null)
+            {
+                var emptyTags = command.Tags.Where(t => string.IsNullOrWhiteSpace(t));
+
+                if (emptyTags.Any())
+                {
+                    throw new TagsCannotBeNullException();
+                }
+
+                var tooLongTags = command.Tags.Where(t => t.Length > 50);
+
+                if (tooLongTags.Any())
+                {
+                    throw new TagsTooLongException(tooLongTags);
+                }
+            }
+
             if (command.ImagesUrl is not null)
             {
+                var emptyUrls = command.ImagesUrl.Where(im => string.IsNullOrWhiteSpace(im.Url));
+
+                if (emptyUrls.Any())
+                {
+                    throw new UrlsCannotBeNullException();
+                }
+
                 var mainImages = command.ImagesUrl.Where(im => im.MainImage).Count();
 
                 if (mainImages > 1)
