@@ -65,15 +65,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Items.Tes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contacts", "Contacts", "{AB44658F-0BA4-490F-98F6-6184C15DE154}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Contacts.Api", "src\Modules\Contacts\ECommerce.Modules.Contacts.Api\ECommerce.Modules.Contacts.Api.csproj", "{C968D67B-2A0F-4220-8A9B-21C9133A1F97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Contacts.Api", "src\Modules\Contacts\ECommerce.Modules.Contacts.Api\ECommerce.Modules.Contacts.Api.csproj", "{C968D67B-2A0F-4220-8A9B-21C9133A1F97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Contacts.Core", "src\Modules\Contacts\ECommerce.Modules.Contacts.Core\ECommerce.Modules.Contacts.Core.csproj", "{A0F374AB-2AA7-4DB3-B1E8-D3101AF9FED4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Contacts.Core", "src\Modules\Contacts\ECommerce.Modules.Contacts.Core\ECommerce.Modules.Contacts.Core.csproj", "{A0F374AB-2AA7-4DB3-B1E8-D3101AF9FED4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contacts", "Contacts", "{534ABC55-27AC-4B48-AF15-88FB29D8ACAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Contacts.Tests.Unit", "tests\Modules\Contacts\ECommerce.Modules.Contacts.Tests.Unit\ECommerce.Modules.Contacts.Tests.Unit.csproj", "{AD74D5A8-924F-4861-9D44-8D0C4AF366CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Contacts.Tests.Unit", "tests\Modules\Contacts\ECommerce.Modules.Contacts.Tests.Unit\ECommerce.Modules.Contacts.Tests.Unit.csproj", "{AD74D5A8-924F-4861-9D44-8D0C4AF366CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Contacts.Tests.Integration", "tests\Modules\Contacts\ECommerce.Modules.Contacts.Tests.Integration\ECommerce.Modules.Contacts.Tests.Integration.csproj", "{996B9537-C995-482D-B222-4B92E3E4F970}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Contacts.Tests.Integration", "tests\Modules\Contacts\ECommerce.Modules.Contacts.Tests.Integration\ECommerce.Modules.Contacts.Tests.Integration.csproj", "{996B9537-C995-482D-B222-4B92E3E4F970}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sales", "Sales", "{CA1D055B-E768-469A-B48B-080EC0645FBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Modules.Sales.Domain", "src\Modules\Sales\ECommerce.Modules.Sales.Domain\ECommerce.Modules.Sales.Domain.csproj", "{1AFB9FBA-A8C9-4503-AF0C-785BE85CA169}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -169,6 +173,10 @@ Global
 		{996B9537-C995-482D-B222-4B92E3E4F970}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{996B9537-C995-482D-B222-4B92E3E4F970}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{996B9537-C995-482D-B222-4B92E3E4F970}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AFB9FBA-A8C9-4503-AF0C-785BE85CA169}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AFB9FBA-A8C9-4503-AF0C-785BE85CA169}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AFB9FBA-A8C9-4503-AF0C-785BE85CA169}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AFB9FBA-A8C9-4503-AF0C-785BE85CA169}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -208,6 +216,8 @@ Global
 		{534ABC55-27AC-4B48-AF15-88FB29D8ACAA} = {F1F9DF9E-971B-49AF-BCA7-D20907179745}
 		{AD74D5A8-924F-4861-9D44-8D0C4AF366CF} = {534ABC55-27AC-4B48-AF15-88FB29D8ACAA}
 		{996B9537-C995-482D-B222-4B92E3E4F970} = {534ABC55-27AC-4B48-AF15-88FB29D8ACAA}
+		{CA1D055B-E768-469A-B48B-080EC0645FBE} = {65ED8912-3851-49EB-A588-822FEBE0E8E7}
+		{1AFB9FBA-A8C9-4503-AF0C-785BE85CA169} = {CA1D055B-E768-469A-B48B-080EC0645FBE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {40EE01B2-8BCD-4EB1-A86E-8CD4F43596B8}
