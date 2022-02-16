@@ -1,11 +1,5 @@
 ﻿using ECommerce.Modules.Sales.Domain.ItemSales.Entities;
 using ECommerce.Modules.Sales.Domain.Orders.Exceptions;
-using ECommerce.Shared.Abstractions.Kernel.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Sales.Domain.Orders.Entities
 {
@@ -29,6 +23,11 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
         {
             var order = new OrderItem(Guid.NewGuid(), item.Id, item);
             return order;
+        }
+
+        public void AddOrder(Guid orderId)
+        {
+            OrderId = orderId;
         }
 
         private static void ValidateItem(Item item)
