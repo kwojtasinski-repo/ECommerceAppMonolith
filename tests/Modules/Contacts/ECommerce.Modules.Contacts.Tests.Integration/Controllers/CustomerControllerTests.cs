@@ -16,6 +16,8 @@ using Xunit;
 
 namespace ECommerce.Modules.Contacts.Tests.Integration.Controllers
 {
+    [Collection("integrationCustomer")]
+
     public class CustomerControllerTests : IClassFixture<TestApplicationFactory<Program>>,
            IClassFixture<TestContactsDbContext>
     {

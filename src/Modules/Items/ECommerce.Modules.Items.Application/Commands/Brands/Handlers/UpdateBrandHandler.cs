@@ -34,7 +34,7 @@ namespace ECommerce.Modules.Items.Application.Commands.Brands.Handlers
                 return;
             }
 
-            brand.ChangeName(brand.Name);
+            brand.ChangeName(command.Name);
             await _brandRepository.UpdateAsync(brand);
         }
 

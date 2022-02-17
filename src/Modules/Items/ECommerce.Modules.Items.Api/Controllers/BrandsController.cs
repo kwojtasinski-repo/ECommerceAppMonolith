@@ -69,14 +69,14 @@ namespace ECommerce.Modules.Items.Api.Controllers
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:guid}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
-        public async Task<ActionResult> DeleteAsync(DeleteBrand command)
+        public async Task<ActionResult> DeleteAsync(Guid id)
         {
-            await _commandDispatcher.SendAsync(command);
+            await _commandDispatcher.SendAsync(new DeleteBrand(id));
             return Ok();
         }
     }
