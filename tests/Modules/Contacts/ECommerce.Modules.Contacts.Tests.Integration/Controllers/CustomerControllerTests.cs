@@ -24,7 +24,7 @@ namespace ECommerce.Modules.Contacts.Tests.Integration.Controllers
         [Fact]
         public async Task given_valid_user_id_should_return_address()
         {
-            var customers = await AddSampleData();
+            await AddSampleData();
             Authenticate(_userId);
 
             var response = (await _client.Request($"{Path}/me").GetAsync());
@@ -33,7 +33,6 @@ namespace ECommerce.Modules.Contacts.Tests.Integration.Controllers
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
             addressesFromDb.ShouldNotBeNull();
             addressesFromDb.Count().ShouldBeGreaterThan(0);
-            addressesFromDb.Count().ShouldBe(customers.Count);
         }
 
         [Fact]
