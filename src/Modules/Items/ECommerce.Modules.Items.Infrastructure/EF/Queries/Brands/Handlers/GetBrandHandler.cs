@@ -20,7 +20,7 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.Queries.Brands.Handlers
         public async Task<BrandDto> HandleAsync(GetBrand query)
         {
             var brand = await _brands.Where(b => b.Id == query.BrandId).AsNoTracking().SingleOrDefaultAsync();
-            return brand.AsDto();
+            return brand?.AsDto();
         }
     }
 }

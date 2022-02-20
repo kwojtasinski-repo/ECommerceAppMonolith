@@ -57,3 +57,4 @@ namespace ECommerce.Shared.Infrastructure.Modules
         private T TranslateType<T>(object value)
             => _moduleSerializer.Deserialize<T>(_moduleSerializer.Serialize(value));
     }
+}

@@ -19,7 +19,7 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.Queries.Types.Handlers
         public async Task<TypeDto> HandleAsync(GetType query)
         {
             var type = await _types.Where(t => t.Id == query.TypeId).AsNoTracking().SingleOrDefaultAsync();
-            return type.AsDto();
+            return type?.AsDto();
         }
     }
 }

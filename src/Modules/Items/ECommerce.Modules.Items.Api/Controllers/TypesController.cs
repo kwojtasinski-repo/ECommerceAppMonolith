@@ -37,7 +37,7 @@ namespace ECommerce.Modules.Items.Api.Controllers
         }
 
         [ActionName("GetAsync")] // blad z metoda GetAsync (nie moze jej znalezc podczas CrateAtAction())
-        [HttpGet("{itemId:guid}")]
+        [HttpGet("{typeId:guid}")]
         [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -69,14 +69,14 @@ namespace ECommerce.Modules.Items.Api.Controllers
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpDelete("{typeId:guid}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
-        public async Task<ActionResult> DeleteAsync(DeleteType command)
+        public async Task<ActionResult> DeleteAsync(Guid typeId)
         {
-            await _commandDispatcher.SendAsync(command);
+            await _commandDispatcher.SendAsync(new DeleteType(typeId));
             return Ok();
         }
     }
