@@ -121,13 +121,13 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### Get items sale
-GET {{url}}/items-sale
+GET {{url}}/item-sales
 
 ### Get item sale
-GET {{url}}/items-sale/{{itemSaleId}}
+GET {{url}}/item-sales/{{itemSaleId}}
 
 ### Add item sale
-POST {{url}}/items-sale
+POST {{url}}/item-sales
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
@@ -137,7 +137,7 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### Update item sale
-PUT {{url}}/items-sale
+PUT {{url}}/item-sales
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
@@ -147,7 +147,7 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### DELETE item sale
-DELETE {{url}}/items-sale/{{itemSaleId}}
+DELETE {{url}}/item-sales/{{itemSaleId}}
 Authorization: Bearer {{accessToken}}
 
 ### DELETE item

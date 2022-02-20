@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerce.Modules.Items.Application.Queries.ItemsSale
+namespace ECommerce.Modules.Items.Application.Queries.ItemSales
 {
     public record GetItemSale(Guid ItemSaleId) : IQuery<ItemSaleDetailsDto>;
 }

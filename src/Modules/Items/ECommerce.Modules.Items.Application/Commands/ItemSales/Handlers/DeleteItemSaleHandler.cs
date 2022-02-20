@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerce.Modules.Items.Application.Commands.ItemsSale.Handlers
+namespace ECommerce.Modules.Items.Application.Commands.ItemSales.Handlers
 {
     internal class DeleteItemSaleHandler : ICommandHandler<DeleteItemSale>
     {

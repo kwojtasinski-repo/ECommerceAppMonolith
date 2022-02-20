@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerce.Modules.Items.Application.Commands.ItemsSale
+namespace ECommerce.Modules.Items.Application.Commands.ItemSales
 {
     public record CreateItemSale(Guid ItemId, decimal ItemCost) : ICommand
     {

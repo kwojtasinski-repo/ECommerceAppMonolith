@@ -1,6 +1,6 @@
-﻿using ECommerce.Modules.Items.Application.Commands.ItemsSale;
+﻿using ECommerce.Modules.Items.Application.Commands.ItemSales;
 using ECommerce.Modules.Items.Application.DTO;
-using ECommerce.Modules.Items.Application.Queries.ItemsSale;
+using ECommerce.Modules.Items.Application.Queries.ItemSales;
 using ECommerce.Shared.Abstractions.Commands;
 using ECommerce.Shared.Abstractions.Queries;
 using Microsoft.AspNetCore.Authorization;
@@ -14,13 +14,13 @@ using System.Threading.Tasks;
 namespace ECommerce.Modules.Items.Api.Controllers
 {
     [Authorize(Policy)]
-    internal class ItemsSaleController : BaseController
+    internal class ItemSalesController : BaseController
     {
         private const string Policy = "item-sale";
         private readonly ICommandDispatcher _commandDispatcher;
         private readonly IQueryDispatcher _queryDispatcher;
 
-        public ItemsSaleController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher)
+        public ItemSalesController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher)
         {
             _commandDispatcher = commandDispatcher;
             _queryDispatcher = queryDispatcher;

@@ -1,5 +1,5 @@
-﻿using ECommerce.Modules.Items.Application.Commands.ItemsSale;
-using ECommerce.Modules.Items.Application.Commands.ItemsSale.Handlers;
+﻿using ECommerce.Modules.Items.Application.Commands.ItemSales;
+using ECommerce.Modules.Items.Application.Commands.ItemSales.Handlers;
 using ECommerce.Modules.Items.Application.Exceptions;
 using ECommerce.Modules.Items.Domain.Entities;
 using ECommerce.Modules.Items.Domain.Repositories;
