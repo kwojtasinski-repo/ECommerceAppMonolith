@@ -36,7 +36,7 @@ namespace ECommerce.Modules.Items.Application.Commands.Images.Handlers
             {
                 var fileDirection = await _fileStore.WriteFileAsync(file, _saveFilePolicy.GetFileDirectory());
                 var id = Guid.NewGuid();
-                var image = Image.Create(id, fileDirection, file.Name);
+                var image = Image.Create(id, fileDirection, _fileStore.ReplaceInvalidChars(file.FileName));
                 await _imageRepository.AddAsync(image);
                 ids.Add(id.ToString());
             }

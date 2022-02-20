@@ -17,6 +17,7 @@ using Xunit;
 
 namespace ECommerce.Modules.Items.Tests.Integration.Controllers
 {
+    [Collection("integrationItems")]
     public class ItemsControllerTests : IClassFixture<TestApplicationFactory<Program>>,
         IClassFixture<TestItemsDbContext>
     {
