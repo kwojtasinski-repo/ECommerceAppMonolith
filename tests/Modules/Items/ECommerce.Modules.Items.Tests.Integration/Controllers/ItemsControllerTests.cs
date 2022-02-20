@@ -81,7 +81,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             Authenticate(Guid.NewGuid());
 
             var response = (await _client.Request($"{Path}/{id}").DeleteAsync());
-            var itemFromDb = await _dbContext.Types.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
+            var itemFromDb = await _dbContext.Items.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
             itemFromDb.ShouldBeNull();
@@ -120,7 +120,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
         private void Authenticate(Guid userId)
         {
             var claims = new Dictionary<string, IEnumerable<string>>();
-            claims.Add("permissions", new[] { "items", "item-sale" });
+            claims.Add("permissions", new[] { "items" });
             var jwt = AuthHelper.GenerateJwt(userId.ToString(), "admin", claims: claims);
             _client.WithOAuthBearerToken(jwt);
         }
