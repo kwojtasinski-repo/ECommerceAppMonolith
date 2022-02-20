@@ -62,7 +62,7 @@ namespace ECommerce.Modules.Items.Application.Mappings
                 ItemName = item.ItemName,
                 Tags = item.Tags,
                 Type = item.Type.AsDto(),
-                ImagesUrl = item.ImagesUrl.ToImagesEnumerable()
+                ImagesUrl = item.ImagesUrl?.ToImagesEnumerable()
             };
             return itemDto;
         }
@@ -75,7 +75,7 @@ namespace ECommerce.Modules.Items.Application.Mappings
                 Brand = item.Brand.AsDto(),
                 ItemName = item.ItemName,
                 Type = item.Type.AsDto(),
-                ImagesUrl = item.ImagesUrl.ToImagesEnumerable().Where(i => i.MainImage == true).SingleOrDefault()
+                ImagesUrl = item.ImagesUrl?.ToImagesEnumerable().Where(i => i.MainImage == true).SingleOrDefault()
             };
             return itemDto;
         }

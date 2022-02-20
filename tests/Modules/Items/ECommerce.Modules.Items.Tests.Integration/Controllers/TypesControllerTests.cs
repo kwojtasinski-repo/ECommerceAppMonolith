@@ -50,20 +50,20 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
         }
 
         [Fact]
-        public async Task given_valid_dto_should_update()
+        public async Task given_valid_command_should_update()
         {
             var types = await AddSampleData();
             var type = types[1];
             var id = type.Id.Value;
-            var dto = new UpdateType(id, "Type #1234");
+            var command = new UpdateType(id, "Type #1234");
             Authenticate(Guid.NewGuid());
 
-            var response = (await _client.Request($"{Path}").PutJsonAsync(dto));
+            var response = (await _client.Request($"{Path}").PutJsonAsync(command));
             var typeFromDb = await _dbContext.Types.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
             typeFromDb.ShouldNotBeNull();
-            typeFromDb.Name.ShouldBe(dto.Name);
+            typeFromDb.Name.ShouldBe(command.Name);
             typeFromDb.Name.ShouldNotBe(type.Name);
         }
 
@@ -83,12 +83,12 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
         }
 
         [Fact]
-        public async Task given_valid_dto_should_add()
+        public async Task given_valid_command_should_add()
         {
-            var dto = new CreateType("Type #251234");
+            var command = new CreateType("Type #251234");
             Authenticate(Guid.NewGuid());
 
-            var response = (await _client.Request($"{Path}").PostJsonAsync(dto));
+            var response = (await _client.Request($"{Path}").PostJsonAsync(command));
             var (responseHeaderName, responseHeaderValue) = response.Headers.Where(h => h.Name == "Location").FirstOrDefault();
             responseHeaderValue.ShouldNotBeNull();
             var splitted = responseHeaderValue.Split(Path + '/');
@@ -96,7 +96,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var type = _dbContext.Types.Where(c => c.Id == id).SingleOrDefault();
 
             type.ShouldNotBeNull();
-            type.Name.ShouldBe(dto.Name);
+            type.Name.ShouldBe(command.Name);
         }
 
         private void Authenticate(Guid userId)

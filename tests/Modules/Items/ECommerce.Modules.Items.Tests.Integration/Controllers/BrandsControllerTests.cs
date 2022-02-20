@@ -49,20 +49,20 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
         }
 
         [Fact]
-        public async Task given_valid_dto_should_update()
+        public async Task given_valid_command_should_update()
         {
             var brands = await AddSampleData();
             var brand = brands[1];
             var id = brand.Id.Value;
-            var dto = new UpdateBrand(id, "Brand #1234");
+            var command = new UpdateBrand(id, "Brand #1234");
             Authenticate(Guid.NewGuid());
 
-            var response = (await _client.Request($"{Path}").PutJsonAsync(dto));
+            var response = (await _client.Request($"{Path}").PutJsonAsync(command));
             var brandFromDb = await _dbContext.Brands.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
             brandFromDb.ShouldNotBeNull();
-            brandFromDb.Name.ShouldBe(dto.Name);
+            brandFromDb.Name.ShouldBe(command.Name);
             brandFromDb.Name.ShouldNotBe(brand.Name);
         }
 
@@ -82,12 +82,12 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
         }
 
         [Fact]
-        public async Task given_valid_dto_should_add()
+        public async Task given_valid_command_should_add()
         {
-            var dto = new CreateBrand("Brand #251234");
+            var command = new CreateBrand("Brand #251234");
             Authenticate(Guid.NewGuid());
 
-            var response = (await _client.Request($"{Path}").PostJsonAsync(dto));
+            var response = (await _client.Request($"{Path}").PostJsonAsync(command));
             var (responseHeaderName, responseHeaderValue) = response.Headers.Where(h => h.Name == "Location").FirstOrDefault();
             responseHeaderValue.ShouldNotBeNull();
             var splitted = responseHeaderValue.Split(Path + '/');
@@ -95,7 +95,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var brand = _dbContext.Brands.Where(c => c.Id == id).SingleOrDefault();
 
             brand.ShouldNotBeNull();
-            brand.Name.ShouldBe(dto.Name);
+            brand.Name.ShouldBe(command.Name);
         }
 
         private void Authenticate(Guid userId)
