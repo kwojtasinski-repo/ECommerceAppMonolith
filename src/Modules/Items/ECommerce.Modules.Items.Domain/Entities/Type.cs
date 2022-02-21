@@ -15,11 +15,12 @@ namespace ECommerce.Modules.Items.Domain.Entities
 
         public ICollection<Item>? Items { get; private set; }
 
-        public Type(AggregateId id, string name, int version = 0)
+        public Type(AggregateId id, string name, int version = 0, ICollection<Item>? items = null)
         {
             Id = id;
             Name = name;
             Version = version;
+            Items = items;
         }
 
         private Type(AggregateId id)
