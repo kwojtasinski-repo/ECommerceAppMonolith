@@ -3,8 +3,10 @@ using ECommerce.Modules.Items.Application.Commands.Images.Handlers;
 using ECommerce.Modules.Items.Application.Exceptions;
 using ECommerce.Modules.Items.Application.Files.Interfaces;
 using ECommerce.Modules.Items.Application.Policies.Image;
+using ECommerce.Modules.Items.Application.Services;
 using ECommerce.Modules.Items.Domain.Entities;
 using ECommerce.Modules.Items.Domain.Repositories;
+using ECommerce.Shared.Abstractions.Messagging;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using Shouldly;
@@ -80,13 +82,17 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.Images
         private readonly IImageRepository _imageRepository;
         private readonly IFileStore _fileStore;
         private readonly ISaveFilePolicy _saveFilePolicy;
+        private readonly IMessageBroker _messageBroker;
+        private readonly IEventMapper _eventMapper;
 
         public AddImagesCommandHandlerTests()
         {
             _imageRepository = Substitute.For<IImageRepository>();
             _fileStore = Substitute.For<IFileStore>();
             _saveFilePolicy = Substitute.For<ISaveFilePolicy>();
-            _handler = new CreateImagesHandler(_imageRepository, _fileStore, _saveFilePolicy);
+            _messageBroker = Substitute.For<IMessageBroker>();
+            _eventMapper = Substitute.For<IEventMapper>();
+            _handler = new CreateImagesHandler(_imageRepository, _fileStore, _saveFilePolicy, _messageBroker, _eventMapper);
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using ECommerce.Modules.Items.Application.Commands.Types;
 using ECommerce.Modules.Items.Application.Commands.Types.Handlers;
 using ECommerce.Modules.Items.Application.Exceptions;
+using ECommerce.Modules.Items.Application.Services;
 using ECommerce.Modules.Items.Domain.Repositories;
+using ECommerce.Shared.Abstractions.Messagging;
 using NSubstitute;
 using Shouldly;
 using System;
@@ -96,11 +98,15 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.Types
 
         private readonly UpdateTypeHandler _handler;
         private readonly ITypeRepository _typeRepository;
+        private readonly IMessageBroker _messageBroker;
+        private readonly IEventMapper _eventMapper;
 
         public UpdateTypeCommandHandlerTests()
         {
             _typeRepository = Substitute.For<ITypeRepository>();
-            _handler = new UpdateTypeHandler(_typeRepository);
+            _messageBroker = Substitute.For<IMessageBroker>();
+            _eventMapper = Substitute.For<IEventMapper>();
+            _handler = new UpdateTypeHandler(_typeRepository, _messageBroker, _eventMapper);
         }
 
         private Domain.Entities.Type CreateType(Guid id)

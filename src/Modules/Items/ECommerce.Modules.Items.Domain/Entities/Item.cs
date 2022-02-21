@@ -1,4 +1,5 @@
 ﻿using ECommerce.Modules.Items.Domain.Entities.ValueObjects;
+using ECommerce.Modules.Items.Domain.Events;
 using ECommerce.Modules.Items.Domain.Exceptions;
 using ECommerce.Shared.Abstractions.Kernel.Types;
 using System;
@@ -65,6 +66,7 @@ namespace ECommerce.Modules.Items.Domain.Entities
             item.ClearEvents();
             item.Version = 0;
 
+            item.AddEvent(new ItemCreated(item));
             return item;
         }
 
@@ -77,6 +79,7 @@ namespace ECommerce.Modules.Items.Domain.Entities
 
             ItemName = name;
             IncrementVersion();
+            AddEvent(new ItemNameChanged(this));
         }
 
         public void ChangeBrand(Brand brand)
@@ -86,13 +89,9 @@ namespace ECommerce.Modules.Items.Domain.Entities
                 throw new BrandCannotBeNullException();
             }
 
-            if (Brand?.Id == brand.Id)
-            {
-                return;
-            }
-
             Brand = brand;
             IncrementVersion();
+            AddEvent(new ItemBrandChanged(this));
         }
 
         public void ChangeType(Type type)
@@ -102,36 +101,30 @@ namespace ECommerce.Modules.Items.Domain.Entities
                 throw new TypeCannotBeNullException();
             }
 
-            if (Type?.Id == type.Id)
-            {
-                return;
-            }
-
             Type = type;
             IncrementVersion();
+            AddEvent(new ItemTypeChanged(this));
         }
 
         public void ChangeDescription(string? description)
         {
-            if (Description == description)
-            {
-                return;
-            }
-
             Description = description;
             IncrementVersion();
+            AddEvent(new ItemDescriptionChanged(this));
         }
 
         public void ChangeTags(IEnumerable<string>? tags)
         {
             Tags = tags;
             IncrementVersion();
+            AddEvent(new ItemTagsChanged(this));
         }
 
         public void ChangeImagesUrl(Dictionary<string, IEnumerable<ItemImage>>? imagesUrl)
         {
             ImagesUrl = imagesUrl;
             IncrementVersion();
+            AddEvent(new ItemImagesChanged(this));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ECommerce.Modules.Items.Domain.Exceptions;
+﻿using ECommerce.Modules.Items.Domain.Events;
+using ECommerce.Modules.Items.Domain.Exceptions;
 using ECommerce.Shared.Abstractions.Kernel.Types;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,7 @@ namespace ECommerce.Modules.Items.Domain.Entities
             type.ChangeName(name);
             type.ClearEvents();
             type.Version = 0;
+            type.AddEvent(new TypeCreated(type));
             return type;
         }
 
@@ -44,6 +46,7 @@ namespace ECommerce.Modules.Items.Domain.Entities
 
             Name = name;
             IncrementVersion();
+            AddEvent(new TypeNameChanged(this));
         }
     }
 }

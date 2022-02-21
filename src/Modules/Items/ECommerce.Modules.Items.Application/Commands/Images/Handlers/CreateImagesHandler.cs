@@ -1,9 +1,11 @@
 ﻿using ECommerce.Modules.Items.Application.Exceptions;
 using ECommerce.Modules.Items.Application.Files.Interfaces;
 using ECommerce.Modules.Items.Application.Policies.Image;
+using ECommerce.Modules.Items.Application.Services;
 using ECommerce.Modules.Items.Domain.Entities;
 using ECommerce.Modules.Items.Domain.Repositories;
 using ECommerce.Shared.Abstractions.Commands;
+using ECommerce.Shared.Abstractions.Messagging;
 using Microsoft.AspNetCore.Http;
 using System.Text;
 
@@ -14,12 +16,17 @@ namespace ECommerce.Modules.Items.Application.Commands.Images.Handlers
         private readonly IImageRepository _imageRepository;
         private readonly IFileStore _fileStore;
         private readonly ISaveFilePolicy _saveFilePolicy;
+        private readonly IMessageBroker _messageBroker;
+        private readonly IEventMapper _eventMapper;
 
-        public CreateImagesHandler(IImageRepository imageRepository, IFileStore fileStore, ISaveFilePolicy saveFilePolicy)
+        public CreateImagesHandler(IImageRepository imageRepository, IFileStore fileStore, ISaveFilePolicy saveFilePolicy,
+            IMessageBroker messageBroker, IEventMapper eventMapper)
         {
             _imageRepository = imageRepository;
             _fileStore = fileStore;
             _saveFilePolicy = saveFilePolicy;
+            _messageBroker = messageBroker;
+            _eventMapper = eventMapper;
         }
 
         public async Task<IEnumerable<string>> HandleAsync(CreateImages command)
@@ -38,6 +45,8 @@ namespace ECommerce.Modules.Items.Application.Commands.Images.Handlers
                 var id = Guid.NewGuid();
                 var image = Image.Create(id, fileDirection, _fileStore.ReplaceInvalidChars(file.FileName));
                 await _imageRepository.AddAsync(image);
+                var integrationEvents = _eventMapper.MapAll(image.Events);
+                await _messageBroker.PublishAsync(integrationEvents.ToArray());
                 ids.Add(id.ToString());
             }
 

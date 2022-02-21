@@ -1,7 +1,9 @@
 ﻿using ECommerce.Modules.Items.Application.Exceptions;
+using ECommerce.Modules.Items.Application.Services;
 using ECommerce.Modules.Items.Domain.Entities;
 using ECommerce.Modules.Items.Domain.Repositories;
 using ECommerce.Shared.Abstractions.Commands;
+using ECommerce.Shared.Abstractions.Messagging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +15,14 @@ namespace ECommerce.Modules.Items.Application.Commands.Brands.Handlers
     internal class UpdateBrandHandler : ICommandHandler<UpdateBrand>
     {
         private readonly IBrandRepository _brandRepository;
+        private readonly IMessageBroker _messageBroker;
+        private readonly IEventMapper _eventMapper;
 
-        public UpdateBrandHandler(IBrandRepository brandRepository)
+        public UpdateBrandHandler(IBrandRepository brandRepository, IMessageBroker messageBroker, IEventMapper eventMapper)
         {
             _brandRepository = brandRepository;
+            _messageBroker = messageBroker;
+            _eventMapper = eventMapper;
         }
 
         public async Task HandleAsync(UpdateBrand command)
@@ -36,6 +42,9 @@ namespace ECommerce.Modules.Items.Application.Commands.Brands.Handlers
 
             brand.ChangeName(command.Name);
             await _brandRepository.UpdateAsync(brand);
+
+            var integrationEvents = _eventMapper.MapAll(brand.Events);
+            await _messageBroker.PublishAsync(integrationEvents.ToArray());
         }
 
         private static void Validate(UpdateBrand command)

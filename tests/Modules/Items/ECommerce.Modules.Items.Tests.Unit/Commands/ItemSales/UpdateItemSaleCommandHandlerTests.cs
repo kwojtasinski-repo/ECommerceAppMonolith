@@ -1,8 +1,10 @@
 ﻿using ECommerce.Modules.Items.Application.Commands.ItemSales;
 using ECommerce.Modules.Items.Application.Commands.ItemSales.Handlers;
 using ECommerce.Modules.Items.Application.Exceptions;
+using ECommerce.Modules.Items.Application.Services;
 using ECommerce.Modules.Items.Domain.Entities;
 using ECommerce.Modules.Items.Domain.Repositories;
+using ECommerce.Shared.Abstractions.Messagging;
 using NSubstitute;
 using Shouldly;
 using System;
@@ -70,11 +72,15 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.ItemSales
 
         private readonly UpdateItemSaleHandler _handler;
         private readonly IItemSaleRepository _itemSaleRepository;
+        private readonly IMessageBroker _messageBroker;
+        private readonly IEventMapper _eventMapper;
 
         public UpdateItemSaleCommandHandlerTests()
         {
             _itemSaleRepository = Substitute.For<IItemSaleRepository>();
-            _handler = new UpdateItemSaleHandler(_itemSaleRepository);
+            _messageBroker = Substitute.For<IMessageBroker>();
+            _eventMapper = Substitute.For<IEventMapper>();
+            _handler = new UpdateItemSaleHandler(_itemSaleRepository, _messageBroker, _eventMapper);
         }
 
         private ItemSale CreateItemSale(Guid id)

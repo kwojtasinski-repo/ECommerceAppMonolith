@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ECommerce.Modules.Items.Application.Services;
+using ECommerce.Shared.Abstractions.Messagging;
 
 namespace ECommerce.Modules.Items.Application.Commands.Items.Handlers
 {
@@ -16,12 +18,17 @@ namespace ECommerce.Modules.Items.Application.Commands.Items.Handlers
         private readonly IItemRepository _itemRepository;
         private readonly ITypeRepository _typeRepository;
         private readonly IBrandRepository _brandRepository;
+        private readonly IMessageBroker _messageBroker;
+        private readonly IEventMapper _eventMapper;
 
-        public CreateItemHandler(IItemRepository itemRepository, ITypeRepository typeRepository, IBrandRepository brandRepository)
+        public CreateItemHandler(IItemRepository itemRepository, ITypeRepository typeRepository, IBrandRepository brandRepository, 
+            IMessageBroker messageBroker, IEventMapper eventMapper)
         {
             _itemRepository = itemRepository;
             _typeRepository = typeRepository;
             _brandRepository = brandRepository;
+            _messageBroker = messageBroker;
+            _eventMapper = eventMapper;
         }
 
         public async Task HandleAsync(CreateItem command)
@@ -45,6 +52,9 @@ namespace ECommerce.Modules.Items.Application.Commands.Items.Handlers
             var item = Item.Create(command.ItemId, command.ItemName, brand, type, command.Description,
                                     command.Tags, urls);
             await _itemRepository.AddAsync(item);
+
+            var integrationEvents = _eventMapper.MapAll(item.Events);
+            await _messageBroker.PublishAsync(integrationEvents.ToArray());
         }
 
         private static void Validate(CreateItem command)

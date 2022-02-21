@@ -2,9 +2,11 @@
 using ECommerce.Modules.Items.Application.Commands.ItemSales.Handlers;
 using ECommerce.Modules.Items.Application.DTO;
 using ECommerce.Modules.Items.Application.Exceptions;
+using ECommerce.Modules.Items.Application.Services;
 using ECommerce.Modules.Items.Domain.Entities;
 using ECommerce.Modules.Items.Domain.Entities.ValueObjects;
 using ECommerce.Modules.Items.Domain.Repositories;
+using ECommerce.Shared.Abstractions.Messagging;
 using NSubstitute;
 using Shouldly;
 using System;
@@ -108,12 +110,16 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.ItemSales
         private readonly CreateItemSaleHandler _handler;
         private readonly IItemSaleRepository _itemSaleRepository;
         private readonly IItemRepository _itemRepository;
+        private readonly IMessageBroker _messageBroker;
+        private readonly IEventMapper _eventMapper;
 
         public CreateItemSaleCommandHandlerTests()
         {
             _itemSaleRepository = Substitute.For<IItemSaleRepository>();
             _itemRepository = Substitute.For<IItemRepository>();
-            _handler = new CreateItemSaleHandler(_itemSaleRepository, _itemRepository);
+            _messageBroker = Substitute.For<IMessageBroker>();
+            _eventMapper = Substitute.For<IEventMapper>();
+            _handler = new CreateItemSaleHandler(_itemSaleRepository, _itemRepository, _messageBroker, _eventMapper);
         }
 
         private Domain.Entities.Item CreateSampleItem(Guid id, Guid brandId, Guid typeId, Dictionary<string, IEnumerable<ItemImage>> images)

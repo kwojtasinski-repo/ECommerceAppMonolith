@@ -2,8 +2,10 @@
 using ECommerce.Modules.Items.Application.Commands.Items.Handlers;
 using ECommerce.Modules.Items.Application.DTO;
 using ECommerce.Modules.Items.Application.Exceptions;
+using ECommerce.Modules.Items.Application.Services;
 using ECommerce.Modules.Items.Domain.Entities;
 using ECommerce.Modules.Items.Domain.Repositories;
+using ECommerce.Shared.Abstractions.Messagging;
 using NSubstitute;
 using Shouldly;
 using System;
@@ -174,13 +176,17 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.Items
         private readonly IItemRepository _itemRepository;
         private readonly ITypeRepository _typeRepository;
         private readonly IBrandRepository _brandRepository;
+        private readonly IMessageBroker _messageBroker;
+        private readonly IEventMapper _eventMapper;
 
         public CreateItemCommandHandlerTests()
         {
             _itemRepository = Substitute.For<IItemRepository>();
             _typeRepository = Substitute.For<ITypeRepository>();
             _brandRepository = Substitute.For<IBrandRepository>();
-            _handler = new CreateItemHandler(_itemRepository, _typeRepository, _brandRepository);
+            _messageBroker = Substitute.For<IMessageBroker>();
+            _eventMapper = Substitute.For<IEventMapper>();
+            _handler = new CreateItemHandler(_itemRepository, _typeRepository, _brandRepository, _messageBroker, _eventMapper);
         }
 
         private Domain.Entities.Brand CreateSampleBrand(Guid? id)

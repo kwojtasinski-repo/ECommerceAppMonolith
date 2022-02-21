@@ -1,4 +1,5 @@
-﻿using ECommerce.Modules.Items.Domain.Exceptions;
+﻿using ECommerce.Modules.Items.Domain.Events;
+using ECommerce.Modules.Items.Domain.Exceptions;
 using ECommerce.Shared.Abstractions.Kernel.Types;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,7 @@ namespace ECommerce.Modules.Items.Domain.Entities
 
             itemSale.ClearEvents();
             itemSale.Version = 0;
+            itemSale.AddEvent(new ItemSaleCreated(itemSale));
 
             return itemSale;
         }
@@ -49,6 +51,7 @@ namespace ECommerce.Modules.Items.Domain.Entities
         {
             Cost = cost;
             IncrementVersion();
+            AddEvent(new ItemSaleCostChanged(this));
         }
 
         public void ChangeActive(bool active)

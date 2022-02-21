@@ -1,7 +1,9 @@
 ﻿using ECommerce.Modules.Items.Application.Exceptions;
+using ECommerce.Modules.Items.Application.Services;
 using ECommerce.Modules.Items.Domain.Entities;
 using ECommerce.Modules.Items.Domain.Repositories;
 using ECommerce.Shared.Abstractions.Commands;
+using ECommerce.Shared.Abstractions.Messagging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +16,15 @@ namespace ECommerce.Modules.Items.Application.Commands.ItemSales.Handlers
     {
         private readonly IItemSaleRepository _itemSaleRepository;
         private readonly IItemRepository _itemRepository;
+        private readonly IMessageBroker _messageBroker;
+        private readonly IEventMapper _eventMapper;
 
-        public CreateItemSaleHandler(IItemSaleRepository itemSaleRepository, IItemRepository itemRepository)
+        public CreateItemSaleHandler(IItemSaleRepository itemSaleRepository, IItemRepository itemRepository, IMessageBroker messageBroker, IEventMapper eventMapper)
         {
             _itemSaleRepository = itemSaleRepository;
             _itemRepository = itemRepository;
+            _messageBroker = messageBroker;
+            _eventMapper = eventMapper;
         }
 
         public async Task HandleAsync(CreateItemSale command)
@@ -44,6 +50,9 @@ namespace ECommerce.Modules.Items.Application.Commands.ItemSales.Handlers
 
             var itemSale = ItemSale.Create(command.ItemSaleId, item, command.ItemCost);
             await _itemSaleRepository.AddAsync(itemSale);
+
+            var integrationEvents = _eventMapper.MapAll(itemSale.Events);
+            await _messageBroker.PublishAsync(integrationEvents.ToArray());
         }
 
         private static void Validate(CreateItemSale command)

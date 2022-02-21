@@ -3,8 +3,10 @@ using ECommerce.Modules.Items.Application.Commands.Items.Handlers;
 using ECommerce.Modules.Items.Application.DTO;
 using ECommerce.Modules.Items.Application.Exceptions;
 using ECommerce.Modules.Items.Application.Policies.Items;
+using ECommerce.Modules.Items.Application.Services;
 using ECommerce.Modules.Items.Domain.Entities;
 using ECommerce.Modules.Items.Domain.Repositories;
+using ECommerce.Shared.Abstractions.Messagging;
 using NSubstitute;
 using Shouldly;
 using System;
@@ -220,6 +222,8 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.Items
         private readonly ITypeRepository _typeRepository;
         private readonly IBrandRepository _brandRepository;
         private readonly IItemUpdatePolicy _itemUpdatePolicy;
+        private readonly IMessageBroker _messageBroker;
+        private readonly IEventMapper _eventMapper;
 
         public UpdateItemCommandHandlerTests()
         {
@@ -227,7 +231,9 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.Items
             _typeRepository = Substitute.For<ITypeRepository>();
             _brandRepository = Substitute.For<IBrandRepository>();
             _itemUpdatePolicy = Substitute.For<IItemUpdatePolicy>();
-            _handler = new UpdateItemHandler(_itemRepository, _typeRepository, _brandRepository, _itemUpdatePolicy);
+            _messageBroker = Substitute.For<IMessageBroker>();
+            _eventMapper = Substitute.For<IEventMapper>();
+            _handler = new UpdateItemHandler(_itemRepository, _typeRepository, _brandRepository, _itemUpdatePolicy, _messageBroker, _eventMapper);
         }
 
         private Domain.Entities.Item CreateSampleItem(Guid id, Guid brandId, Guid typeId)

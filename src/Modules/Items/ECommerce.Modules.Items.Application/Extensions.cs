@@ -1,5 +1,6 @@
 ﻿using ECommerce.Modules.Items.Application.Policies.Image;
 using ECommerce.Modules.Items.Application.Policies.Items;
+using ECommerce.Modules.Items.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;
 
@@ -13,7 +14,8 @@ namespace ECommerce.Modules.Items.Application
         {
             services.AddTransient<ISaveFilePolicy, DefaultSaveFilePolicy>();
             services.AddTransient<IItemUpdatePolicy, ItemUpdatePolicy>();
-            services.AddTransient<IItemDeletionPolicy, ItemDeletionPolicy>();
+            services.AddTransient<IItemDeletionPolicy, ItemDeletionPolicy>(); 
+            services.AddSingleton<IEventMapper, EventMapper>();
             return services;
         }
     }
