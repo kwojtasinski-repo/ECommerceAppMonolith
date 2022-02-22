@@ -5,6 +5,7 @@ using ECommerce.Modules.Items.Application.Files.Interfaces;
 using ECommerce.Modules.Items.Application.Policies.Image;
 using ECommerce.Modules.Items.Application.Services;
 using ECommerce.Modules.Items.Domain.Entities;
+using ECommerce.Modules.Items.Domain.Events;
 using ECommerce.Modules.Items.Domain.Repositories;
 using ECommerce.Shared.Abstractions.Kernel;
 using ECommerce.Shared.Abstractions.Messagging;

@@ -126,5 +126,11 @@ namespace ECommerce.Modules.Items.Domain.Entities
             IncrementVersion();
             AddEvent(new ItemImagesChanged(this));
         }
+
+        public void ChangeItemSale(ItemSale itemSale)
+        {
+            ItemSale = itemSale;
+            IncrementVersion();
+        }
     }
 }
