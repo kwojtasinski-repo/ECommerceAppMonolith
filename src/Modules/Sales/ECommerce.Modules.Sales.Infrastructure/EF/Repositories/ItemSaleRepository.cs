@@ -10,7 +10,7 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
 {
     internal sealed class ItemSaleRepository : IItemSaleRepository
     {
-        public Task AddAsync(Guid id)
+        public Task AddAsync(ItemSale itemSale)
         {
             throw new NotImplementedException();
         }

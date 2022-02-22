@@ -3,19 +3,24 @@ using ECommerce.Modules.Sales.Domain.ItemSales.Repositories;
 
 namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
 {
-    internal sealed class ItemRepository : IItemSaleRepository
+    internal sealed class ItemRepository : IItemRepository
     {
-        public Task AddAsync(Guid id)
+        public Task AddAsync(Item item)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ItemSale> GetAsync(Guid id)
+        public Task<bool> ExistsAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync(ItemSale itemSale)
+        public Task<Item> GetAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateAsync(Item item)
         {
             throw new NotImplementedException();
         }

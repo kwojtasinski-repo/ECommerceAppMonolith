@@ -10,8 +10,4 @@
     <ProjectReference Include="..\ECommerce.Modules.Sales.Domain\ECommerce.Modules.Sales.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Items\Events\External\Handlers\" />
-  </ItemGroup>
-
 </Project>

@@ -1,6 +1,7 @@
 ﻿using ECommerce.Modules.Sales.Domain.ItemSales.Entities;
 using ECommerce.Modules.Sales.Domain.ItemSales.Repositories;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,19 +11,29 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
 {
     internal sealed class InMemoryItemRepository : IItemRepository
     {
-        public Task AddAsync(Guid id)
+        private readonly ConcurrentDictionary<Guid, Item> _items = new();
+
+        public Task AddAsync(Item item)
         {
-            throw new NotImplementedException();
+            _items.TryAdd(item.Id, item);
+            return Task.CompletedTask;
+        }
+
+        public Task<bool> ExistsAsync(Guid id)
+        {
+            _items.TryGetValue(id, out var item);
+            return Task.FromResult(item != null);
         }
 
         public Task<Item> GetAsync(Guid id)
         {
-            throw new NotImplementedException();
+            _items.TryGetValue(id, out var item);
+            return Task.FromResult<Item>(item);
         }
 
         public Task UpdateAsync(Item item)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
     }
 }

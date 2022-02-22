@@ -10,7 +10,8 @@ namespace ECommerce.Modules.Sales.Domain.ItemSales.Repositories
     public interface IItemRepository
     {
         Task<Item> GetAsync(Guid id);
-        Task AddAsync(Guid id);
+        Task AddAsync(Item item);
         Task UpdateAsync(Item item);
+        Task<bool> ExistsAsync(Guid id);
     }
 }
