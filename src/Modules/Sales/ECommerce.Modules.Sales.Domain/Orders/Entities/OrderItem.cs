@@ -6,22 +6,22 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
     public class OrderItem
     {
         public Guid Id { get; private set; }
-        public Guid ItemId { get; private set; }
-        public Item Item { get; private set; }
+        public Guid ItemCartId { get; private set; }
+        public ItemCart ItemCart { get; private set; }
         public Guid? OrderId { get; private set; }
 
-        public OrderItem(Guid id, Guid itemId, Item item, Guid? orderId = null)
+        public OrderItem(Guid id, Guid itemId, ItemCart itemCart, Guid? orderId = null)
         {
-            ValidateItem(item);
+            ValidateItem(itemCart);
             Id = id;
-            ItemId = itemId;
-            Item = item;
+            ItemCartId = itemId;
+            ItemCart = itemCart;
             OrderId = orderId;
         }
 
-        public static OrderItem Create(Item item)
+        public static OrderItem Create(ItemCart itemCart)
         {
-            var order = new OrderItem(Guid.NewGuid(), item.Id, item);
+            var order = new OrderItem(Guid.NewGuid(), itemCart.Id, itemCart);
             return order;
         }
 
@@ -30,11 +30,11 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             OrderId = orderId;
         }
 
-        private static void ValidateItem(Item item)
+        private static void ValidateItem(ItemCart itemCart)
         {
-            if (item is null)
+            if (itemCart is null)
             {
-                throw new ItemCannotBeNullException();
+                throw new ItemCartCannotBeNullException();
             }
         }
     }
