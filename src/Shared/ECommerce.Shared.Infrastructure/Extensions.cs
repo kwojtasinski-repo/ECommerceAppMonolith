@@ -8,6 +8,7 @@ using ECommerce.Shared.Infrastructure.Conventions;
 using ECommerce.Shared.Infrastructure.Events;
 using ECommerce.Shared.Infrastructure.Exceptions;
 using ECommerce.Shared.Infrastructure.Kernel;
+using ECommerce.Shared.Infrastructure.Messaging;
 using ECommerce.Shared.Infrastructure.Modules;
 using ECommerce.Shared.Infrastructure.Postgres;
 using ECommerce.Shared.Infrastructure.Queries;
@@ -37,7 +38,7 @@ namespace ECommerce.Shared.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, 
             IList<Assembly> assemblies, IList<IModule> modules)
         {
-            var dissabledModules = new List<string>();
+            var disabledModules = new List<string>();
             using (var serviceProvider = services.BuildServiceProvider())
             {
                 var configuration = serviceProvider.GetRequiredService<IConfiguration>();
@@ -52,7 +53,7 @@ namespace ECommerce.Shared.Infrastructure
 
                     if (!bool.Parse(value))
                     {
-                        dissabledModules.Add(key.Split(":")[0]);
+                        disabledModules.Add(key.Split(":")[0]);
                     }   
                 }
             }
@@ -70,12 +71,14 @@ namespace ECommerce.Shared.Infrastructure
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(sp => sp.GetRequiredService<IContextFactory>().Create());
             services.AddModuleInfo(modules);
+            services.AddModuleRequests(assemblies);
             services.AddAuth(modules);
             services.AddErrorHandling();
             services.AddQueries(assemblies);
             services.AddCommands(assemblies); 
             services.AddDomainEvents(assemblies);
             services.AddEvents(assemblies);
+            services.AddMessaging();
             services.AddValidators(assemblies);
             services.AddPostgres();
             services.AddSingleton<IClock, UtcClock>();
@@ -89,9 +92,9 @@ namespace ECommerce.Shared.Infrastructure
                 {
                     var removedParts = new List<ApplicationPart>();
 
-                    foreach (var disabeldModule in dissabledModules)
+                    foreach (var disabledModule in disabledModules)
                     {
-                        var parts = manager.ApplicationParts.Where(app => app.Name.Contains(disabeldModule, StringComparison.InvariantCultureIgnoreCase));
+                        var parts = manager.ApplicationParts.Where(app => app.Name.Contains(disabledModule, StringComparison.InvariantCultureIgnoreCase));
                         removedParts.AddRange(parts);
                     }
 

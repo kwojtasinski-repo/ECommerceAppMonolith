@@ -15,6 +15,11 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
             throw new NotImplementedException();
         }
 
+        public Task<bool> ExistsAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<ItemSale> GetAsync(Guid id)
         {
             throw new NotImplementedException();
