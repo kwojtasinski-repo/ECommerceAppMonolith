@@ -6,6 +6,7 @@ using ECommerce.Modules.Items.Application.Policies.Image;
 using ECommerce.Modules.Items.Application.Services;
 using ECommerce.Modules.Items.Domain.Entities;
 using ECommerce.Modules.Items.Domain.Repositories;
+using ECommerce.Shared.Abstractions.Kernel;
 using ECommerce.Shared.Abstractions.Messagging;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
@@ -61,6 +62,7 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.Images
             var iFormFile = Substitute.For<IFormFile>();
             iFormFile.Length.Returns(1);
             iFormFile.FileName.Returns("test.bmp");
+            _fileStore.ReplaceInvalidChars("test.bmp").Returns("test.bmp");
             iFormFile.Name.Returns("test.bmp");
             var path = "./path";
             _saveFilePolicy.GetFileDirectory().Returns(path);
@@ -76,6 +78,8 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.Images
             await _imageRepository.Received(1).AddAsync(Arg.Any<Image>());
             ids.ShouldNotBeNull();
             ids.Count().ShouldBeGreaterThan(0);
+            _eventMapper.MapAll(Arg.Any<IEnumerable<IDomainEvent>>()).Received(1);
+            await _messageBroker.Received(1).PublishAsync(Arg.Any<IMessage[]>());
         }
 
         private readonly CreateImagesHandler _handler;

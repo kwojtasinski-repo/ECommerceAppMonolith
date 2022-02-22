@@ -4,6 +4,7 @@ using ECommerce.Modules.Items.Application.Exceptions;
 using ECommerce.Modules.Items.Application.Services;
 using ECommerce.Modules.Items.Domain.Entities;
 using ECommerce.Modules.Items.Domain.Repositories;
+using ECommerce.Shared.Abstractions.Kernel;
 using ECommerce.Shared.Abstractions.Messagging;
 using NSubstitute;
 using Shouldly;
@@ -28,6 +29,8 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.ItemSales
             await _handler.HandleAsync(command);
 
             await _itemSaleRepository.Received(1).UpdateAsync(Arg.Any<ItemSale>());
+            _eventMapper.MapAll(Arg.Any<IEnumerable<IDomainEvent>>()).Received(1);
+            await _messageBroker.Received(1).PublishAsync(Arg.Any<IMessage[]>());
         }
 
         [Fact]
