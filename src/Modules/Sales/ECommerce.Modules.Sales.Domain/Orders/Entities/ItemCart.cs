@@ -17,9 +17,11 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
         public IEnumerable<string> ImagesUrl { get; private set; }
         public decimal Cost { get; private set; }
         public bool Active { get; private set; }
+        public OrderItem? OrderItem { get; private set; }
+
 
         public ItemCart(Guid id, string itemName, string brandName, string typeName, string description, IEnumerable<string>? tags, IEnumerable<string> imageUrls,
-            decimal cost, bool active = true)
+            decimal cost, bool active = true, OrderItem? orderItem = null)
         {
             Id = id;
             ItemName = itemName;
@@ -30,6 +32,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             ImagesUrl = imageUrls;
             Cost = cost;
             Active = active;
+            OrderItem = orderItem;
         }
     }
 }

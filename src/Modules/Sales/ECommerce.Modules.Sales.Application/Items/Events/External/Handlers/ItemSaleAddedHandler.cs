@@ -44,7 +44,7 @@ namespace ECommerce.Modules.Sales.Application.Items.Events.External.Handlers
 
             var itemSale = new ItemSale(@event.Id, item, @event.Cost);
             await _itemSaleRepository.AddAsync(itemSale);
-            _logger.LogInformation($"Added an item sale with id '{itemSale.Id}'");
+            _logger.LogInformation($"Added an ItemSale with id '{itemSale.Id}'");
         }
     }
 }
