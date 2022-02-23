@@ -23,10 +23,12 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Configurations
             builder.Property(o => o.OrderNumber).IsRequired().HasMaxLength(50);
 
             builder
-                .Property(i => i.Version)
+                .Property(o => o.Version)
                 .IsConcurrencyToken();
 
-            builder.Property(i => i.Cost).IsRequired().HasPrecision(14, 4);
+            builder.Property(o => o.Cost).IsRequired().HasPrecision(14, 4);
+
+            builder.HasIndex(o => o.OrderNumber).IsUnique();
         }
     }
 }

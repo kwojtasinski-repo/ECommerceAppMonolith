@@ -17,7 +17,7 @@ namespace ECommerce.Modules.Sales.Domain.ItemSales.Entities
         public IEnumerable<string>? ImagesUrl { get; set; }
         public ItemSale? ItemSale { get; set; }
 
-        public Item(Guid id, string itemName, string brandName, string typeName, string? description, IEnumerable<string>? tags, IEnumerable<string>? imageUrls, ItemSale? itemSale = null)
+        public Item(Guid id, string itemName, string brandName, string typeName, string? description, IEnumerable<string>? tags, IEnumerable<string>? imagesUrl)
         {
             Id = id;
             ItemName = itemName;
@@ -25,8 +25,7 @@ namespace ECommerce.Modules.Sales.Domain.ItemSales.Entities
             TypeName = typeName;
             Description = description;
             Tags = tags;
-            ImagesUrl = imageUrls;
-            ItemSale = itemSale;
+            ImagesUrl = imagesUrl;
         }
     }
 }

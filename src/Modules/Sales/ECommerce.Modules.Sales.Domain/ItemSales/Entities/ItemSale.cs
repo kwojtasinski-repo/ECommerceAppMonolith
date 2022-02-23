@@ -8,6 +8,10 @@
         public decimal Cost { get; set; }
         public bool Active { get; set; }
 
+        private ItemSale()
+        {
+        }
+
         public ItemSale(Guid id, Item item, decimal cost, bool active = true)
         {
             Id = id;

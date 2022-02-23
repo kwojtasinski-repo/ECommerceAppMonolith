@@ -6,29 +6,28 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
     public class Order : AggregateRoot
     {
         public string OrderNumber { get; private set; }
-        public OrderItem OrderItem { get; private set; }
         public decimal Cost { get; private set; }
         public bool Paid { get; private set; }
 
         public IEnumerable<OrderItem> OrderItems => _orderItems;
         private ICollection<OrderItem> _orderItems;
 
-        public Order(AggregateId id, string orderNumber, OrderItem orderItem, decimal cost, bool paid = false, ICollection<OrderItem> orderItems = null)
+        private Order() { }
+
+        public Order(AggregateId id, string orderNumber, decimal cost, bool paid = false, ICollection<OrderItem> orderItems = null)
         {
             ValidateOrderNumber(orderNumber);
-            ValidateOrderItem(orderItem);
             ValidateCost(cost);
             Id = id;
             OrderNumber = orderNumber;
-            OrderItem = orderItem;
             Cost = cost;
             Paid = paid;
             _orderItems = orderItems;
         }
 
-        public static Order Create(string paymentNumber, OrderItem orderItem, decimal cost)
+        public static Order Create(string paymentNumber, decimal cost)
         {
-            var order = new Order(Guid.NewGuid(), paymentNumber, orderItem, cost);
+            var order = new Order(Guid.NewGuid(), paymentNumber, cost);
             return order;
         }
 
@@ -47,7 +46,6 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             foreach(var orderItem in orderItems)
             {
                 _orderItems.Add(orderItem);
-                orderItem.AddOrder(Id);
             }
         }
 
@@ -59,7 +57,18 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             }
 
             _orderItems.Add(orderItem);
-            orderItem.AddOrder(Id);
+        }
+
+        public void DeleteOrderItem(OrderItem orderItem)
+        {
+            var orderItemToDelete = _orderItems.Where(oi => oi.Id == orderItem.Id).SingleOrDefault();
+
+            if (orderItemToDelete is null)
+            {
+                throw new OrderItemNotFoundException(Id, orderItem.Id);
+            }
+
+            _orderItems.Remove(orderItemToDelete);
         }
 
         private static void ValidateOrderNumber(string orderNumber)

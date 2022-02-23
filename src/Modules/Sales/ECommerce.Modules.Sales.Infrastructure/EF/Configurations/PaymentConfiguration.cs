@@ -14,17 +14,19 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Configurations
     {
         public void Configure(EntityTypeBuilder<Payment> builder)
         {
-            builder.HasKey(o => o.Id);
+            builder.HasKey(p => p.Id);
 
             builder
-                .Property(o => o.Id)
+                .Property(p => p.Id)
                 .HasConversion(id => id.Value, id => new AggregateId(id));
 
-            builder.Property(o => o.PaymentNumber).IsRequired().HasMaxLength(50);
+            builder.Property(p => p.PaymentNumber).IsRequired().HasMaxLength(50);
 
             builder
-                .Property(i => i.Version)
+                .Property(p => p.Version)
                 .IsConcurrencyToken();
+
+            builder.HasIndex(p => p.PaymentNumber).IsUnique();
         }
     }
 }
