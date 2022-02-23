@@ -1,4 +1,5 @@
 ﻿using ECommerce.Modules.Sales.Domain.Orders.Exceptions;
+using ECommerce.Modules.Sales.Domain.Payments.Entities;
 using ECommerce.Shared.Abstractions.Kernel.Types;
 
 namespace ECommerce.Modules.Sales.Domain.Orders.Entities
@@ -7,14 +8,17 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
     {
         public string OrderNumber { get; private set; }
         public decimal Cost { get; private set; }
+        public Guid CustomerId { get; private set; }
+        public Guid UserId { get; private set; }
         public bool Paid { get; private set; }
 
         public IEnumerable<OrderItem> OrderItems => _orderItems;
         private ICollection<OrderItem> _orderItems;
+        public IEnumerable<Payment>? Payments { get; private set; }
 
         private Order() { }
 
-        public Order(AggregateId id, string orderNumber, decimal cost, bool paid = false, ICollection<OrderItem> orderItems = null)
+        public Order(AggregateId id, string orderNumber, decimal cost, Guid customerId, Guid userId, bool paid = false, ICollection<OrderItem> orderItems = null)
         {
             ValidateOrderNumber(orderNumber);
             ValidateCost(cost);
@@ -22,12 +26,14 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             OrderNumber = orderNumber;
             Cost = cost;
             Paid = paid;
+            CustomerId = customerId;
+            UserId = userId;
             _orderItems = orderItems;
         }
 
-        public static Order Create(string paymentNumber, decimal cost)
+        public static Order Create(string paymentNumber, decimal cost, Guid customerId, Guid userId)
         {
-            var order = new Order(Guid.NewGuid(), paymentNumber, cost);
+            var order = new Order(Guid.NewGuid(), paymentNumber, cost, customerId, userId);
             return order;
         }
 

@@ -10,8 +10,5 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Repositories
     public interface IItemCartRepository
     {
         Task<ItemCart> GetAsync(Guid id);
-        Task UpdateAsync(ItemCart itemCart);
-        Task AddAsync(ItemCart itemCart);
-        Task DeleteAsync(ItemCart itemCart);
     }
 }

@@ -9,20 +9,22 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
         public Guid ItemCartId { get; private set; }
         public ItemCart ItemCart { get; private set; }
         public Order Order { get; private set; }
+        public Guid UserId { get; private set; }
 
         private OrderItem() { }
 
-        public OrderItem(Guid id, Guid itemId, ItemCart itemCart)
+        public OrderItem(Guid id, Guid itemId, ItemCart itemCart, Guid userId)
         {
             ValidateItem(itemCart);
             Id = id;
             ItemCartId = itemId;
             ItemCart = itemCart;
+            UserId = userId;
         }
 
-        public static OrderItem Create(ItemCart itemCart)
+        public static OrderItem Create(ItemCart itemCart, Guid userId)
         {
-            var order = new OrderItem(Guid.NewGuid(), itemCart.Id, itemCart);
+            var order = new OrderItem(Guid.NewGuid(), itemCart.Id, itemCart, userId);
             return order;
         }
 
