@@ -1,11 +1,6 @@
 ﻿using ECommerce.Modules.Sales.Domain.Orders.Entities;
 using ECommerce.Modules.Sales.Domain.Orders.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
 {
@@ -28,6 +23,14 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
         {
             _salesDbContext.OrderItems.Remove(orderItem);
             await _salesDbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<OrderItem>> GetAllByUserIdNotOrderedAsync(Guid userId)
+        {
+            var orderItems = await _salesDbContext.OrderItems.Include(o => o.Order)
+                                    .Where(oi => oi.UserId == userId && oi.Order == null)
+                                    .ToListAsync();
+            return orderItems;
         }
 
         public Task<OrderItem> GetAsync(Guid id)

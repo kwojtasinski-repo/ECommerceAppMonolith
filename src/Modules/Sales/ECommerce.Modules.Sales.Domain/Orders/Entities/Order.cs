@@ -7,6 +7,8 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
     public class Order : AggregateRoot
     {
         public string OrderNumber { get; private set; }
+        public DateTime CreateOrderDate { get; private set; }
+        public DateTime? OrderApprovedDate { get; private set; }
         public decimal Cost { get; private set; }
         public Guid CustomerId { get; private set; }
         public Guid UserId { get; private set; }
@@ -18,7 +20,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
 
         private Order() { }
 
-        public Order(AggregateId id, string orderNumber, decimal cost, Guid customerId, Guid userId, bool paid = false, ICollection<OrderItem> orderItems = null)
+        public Order(AggregateId id, string orderNumber, decimal cost, Guid customerId, Guid userId, DateTime createOrderDate, DateTime? orderApprovedDate = null, bool paid = false, ICollection<OrderItem> orderItems = null)
         {
             ValidateOrderNumber(orderNumber);
             ValidateCost(cost);
@@ -28,12 +30,14 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             Paid = paid;
             CustomerId = customerId;
             UserId = userId;
+            CreateOrderDate = createOrderDate;
+            OrderApprovedDate = orderApprovedDate;
             _orderItems = orderItems;
         }
 
-        public static Order Create(string paymentNumber, decimal cost, Guid customerId, Guid userId)
+        public static Order Create(string orderNumber, decimal cost, Guid customerId, Guid userId, DateTime createOrderDate)
         {
-            var order = new Order(Guid.NewGuid(), paymentNumber, cost, customerId, userId);
+            var order = new Order(Guid.NewGuid(), orderNumber, cost, customerId, userId, createOrderDate);
             return order;
         }
 
@@ -57,11 +61,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
 
         public void AddOrderItem(OrderItem orderItem)
         {
-            if (orderItem is null)
-            {
-                throw new OrderItemCannotBeNullException();
-            }
-
+            ValidateOrderItem(orderItem);
             _orderItems.Add(orderItem);
         }
 

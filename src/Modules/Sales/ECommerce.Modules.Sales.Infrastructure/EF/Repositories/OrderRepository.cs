@@ -46,6 +46,12 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
             return order;
         }
 
+        public Task<Order> GetLatestOrderOnDateAsync(DateTime dateTime)
+        {
+            var order = _salesDbContext.Orders.Where(o => o.CreateOrderDate.Date == dateTime.Date).OrderByDescending(o => o.CreateOrderDate).FirstOrDefaultAsync();
+            return order;
+        }
+
         public async Task UpdateAsync(Order order)
         {
             _salesDbContext.Orders.Update(order);

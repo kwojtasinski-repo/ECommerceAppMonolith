@@ -13,5 +13,6 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Repositories
         Task UpdateAsync(OrderItem orderItem);
         Task AddAsync(OrderItem orderItem);
         Task DeleteAsync(OrderItem orderItem);
+        Task<IEnumerable<OrderItem>> GetAllByUserIdNotOrderedAsync(Guid userId);
     }
 }

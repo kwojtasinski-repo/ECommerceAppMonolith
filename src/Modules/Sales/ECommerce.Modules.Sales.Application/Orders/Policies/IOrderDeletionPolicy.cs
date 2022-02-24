@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerce.Modules.Sales.Domain.Orders.Repositories
+namespace ECommerce.Modules.Sales.Application.Orders.Policies
 {
-    public interface IItemCartRepository
+    public interface IOrderDeletionPolicy
     {
-        Task AddAsync(ItemCart itemCart);
-        Task<ItemCart> GetAsync(Guid id);
+        Task<bool> CanDeleteAsync(Order order);
     }
 }

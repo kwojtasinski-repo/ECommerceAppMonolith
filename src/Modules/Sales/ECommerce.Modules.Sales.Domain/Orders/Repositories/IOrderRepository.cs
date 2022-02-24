@@ -14,5 +14,6 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Repositories
         Task UpdateAsync(Order order);
         Task AddAsync(Order order);
         Task DeleteAsync(Order order);
+        Task<Order> GetLatestOrderOnDateAsync(DateTime dateTime);
     }
 }

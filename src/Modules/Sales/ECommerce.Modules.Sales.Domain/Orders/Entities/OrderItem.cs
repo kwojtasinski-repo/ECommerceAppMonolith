@@ -8,7 +8,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
         public Guid Id { get; private set; }
         public Guid ItemCartId { get; private set; }
         public ItemCart ItemCart { get; private set; }
-        public Order Order { get; private set; }
+        public Order? Order { get; private set; }
         public Guid UserId { get; private set; }
 
         private OrderItem() { }
