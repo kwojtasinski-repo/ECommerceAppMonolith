@@ -44,7 +44,7 @@ namespace ECommerce.Modules.Sales.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         public async Task<ActionResult> PostAsync(CreateOrder command)

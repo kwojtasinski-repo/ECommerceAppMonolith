@@ -23,9 +23,9 @@ namespace ECommerce.Modules.Sales.Domain.Payments.Entities
             PaymentDate = paymentDate;
         }
 
-        public static Payment Create(string paymentNumber, Order order, Guid userId, DateTime paymentDate)
+        public static Payment Create(AggregateId id, string paymentNumber, Order order, Guid userId, DateTime paymentDate)
         {
-            var payment = new Payment(Guid.NewGuid(), paymentNumber, order, userId, paymentDate);
+            var payment = new Payment(id, paymentNumber, order, userId, paymentDate);
             return payment;
         }
 

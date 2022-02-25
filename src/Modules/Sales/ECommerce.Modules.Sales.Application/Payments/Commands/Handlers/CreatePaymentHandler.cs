@@ -4,6 +4,7 @@ using ECommerce.Modules.Sales.Domain.Orders.Repositories;
 using ECommerce.Modules.Sales.Domain.Payments.Entities;
 using ECommerce.Modules.Sales.Domain.Payments.Repositories;
 using ECommerce.Shared.Abstractions.Commands;
+using ECommerce.Shared.Abstractions.Contexts;
 using ECommerce.Shared.Abstractions.Messagging;
 using ECommerce.Shared.Abstractions.Time;
 using System.Text;
@@ -16,13 +17,15 @@ namespace ECommerce.Modules.Sales.Application.Payments.Commands.Handlers
         private readonly IOrderRepository _orderRepository;
         private readonly IClock _clock;
         private readonly IMessageBroker _messageBroker;
+        private readonly IContext _context;
 
-        public CreatePaymentHandler(IPaymentRepository paymentRepository, IOrderRepository orderRepository, IClock clock, IMessageBroker messageBroker)
+        public CreatePaymentHandler(IPaymentRepository paymentRepository, IOrderRepository orderRepository, IClock clock, IMessageBroker messageBroker, IContext context)
         {
             _paymentRepository = paymentRepository;
             _orderRepository = orderRepository;
             _clock = clock;
             _messageBroker = messageBroker;
+            _context = context;
         }
 
         public async Task HandleAsync(CreatePayment command)
@@ -50,7 +53,7 @@ namespace ECommerce.Modules.Sales.Application.Payments.Commands.Handlers
                .Append(currentDate.Year).Append('/').Append(currentDate.Month.ToString("d2"))
                .Append('/').Append(currentDate.Day.ToString("00")).Append('/').Append(number).ToString();
 
-            var payment = Payment.Create(paymentNumber, order, command.UserId, currentDate);
+            var payment = Payment.Create(command.Id, paymentNumber, order, _context.Identity.Id, currentDate);
             await _paymentRepository.AddAsync(payment);
             await _messageBroker.PublishAsync(new PaymentAdded(payment.Id, command.OrderId));
         }
