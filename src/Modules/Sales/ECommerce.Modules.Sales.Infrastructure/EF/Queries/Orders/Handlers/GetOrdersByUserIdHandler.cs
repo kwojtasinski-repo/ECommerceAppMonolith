@@ -17,7 +17,7 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Queries.Orders.Handlers
 
         public async Task<IEnumerable<OrderDto>> HandleAsync(GetOrdersByUserId query)
         {
-            var orders = await _dbContext.Orders.Where(o => o.UserId == query.UserId).ToListAsync();
+            var orders = await _dbContext.Orders.Where(o => o.UserId == query.UserId).AsNoTracking().ToListAsync();
             return orders.Select(o => o.AsDto());
         }
     }

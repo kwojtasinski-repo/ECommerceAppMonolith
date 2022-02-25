@@ -13,5 +13,6 @@ namespace ECommerce.Modules.Sales.Domain.Payments.Repositories
         Task UpdateAsync(Payment payment);
         Task AddAsync(Payment payment);
         Task DeleteAsync(Payment payment);
+        Task<Payment> GetLatestOrderOnDateAsync(DateTime currentDate);
     }
 }

@@ -52,8 +52,8 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
             }
 
             var orderNumber = new StringBuilder("ORDER/")
-                .Append(currentDate.Year).Append("/").Append(currentDate.Month.ToString("d2"))
-                .Append("/").Append(currentDate.Day.ToString("00")).Append("/").Append(number).ToString();
+                .Append(currentDate.Year).Append('/').Append(currentDate.Month.ToString("d2"))
+                .Append('/').Append(currentDate.Day.ToString("00")).Append('/').Append(number).ToString();
 
             var order = Order.Create(orderNumber, cost, command.CustomerId, command.UserId, currentDate);
             order.AddOrderItems(orderItems);

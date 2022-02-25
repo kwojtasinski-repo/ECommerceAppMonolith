@@ -32,7 +32,18 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
 
         public Task<Payment> GetAsync(Guid id)
         {
-            var payment = _salesDbContext.Payments.Where(i => i.Id == id).SingleOrDefaultAsync();
+            var payment = _salesDbContext.Payments
+                .Include(o => o.Order)
+                .Where(i => i.Id == id).SingleOrDefaultAsync();
+            return payment;
+        }
+
+        public Task<Payment> GetLatestOrderOnDateAsync(DateTime currentDate)
+        {
+            var payment = _salesDbContext.Payments
+                .Where(p => p.PaymentDate.Date == currentDate.Date)
+                .OrderByDescending(p => p.PaymentDate)
+                .FirstOrDefaultAsync();
             return payment;
         }
 
