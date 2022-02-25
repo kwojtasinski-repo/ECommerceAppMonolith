@@ -25,6 +25,7 @@ namespace ECommerce.Modules.Sales.Api.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<OrderItemDto>> GetAsync(Guid orderItemId)
         {
             var orderItem = await _queryDispatcher.QueryAsync(new GetOrderItem { OrderItemId = orderItemId });

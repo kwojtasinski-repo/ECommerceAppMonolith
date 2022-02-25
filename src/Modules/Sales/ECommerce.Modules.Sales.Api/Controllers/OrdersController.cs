@@ -23,7 +23,7 @@ namespace ECommerce.Modules.Sales.Api.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("me")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<IEnumerable<OrderDto>>> GetAllAsync()
@@ -37,6 +37,7 @@ namespace ECommerce.Modules.Sales.Api.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<OrderDetailsDto>> GetAsync(Guid orderId)
         {
             var order = await _queryDispatcher.QueryAsync(new GetOrder { OrderId = orderId });

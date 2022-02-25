@@ -6,11 +6,6 @@ using ECommerce.Shared.Abstractions.Contexts;
 using ECommerce.Shared.Abstractions.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Sales.Api.Controllers
 {
@@ -28,7 +23,7 @@ namespace ECommerce.Modules.Sales.Api.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("me")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -43,6 +38,7 @@ namespace ECommerce.Modules.Sales.Api.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<PaymentDto>> GetAsync(Guid paymentId)
         {
             var payment = await _queryDispatcher.QueryAsync(new GetPayment(paymentId));
