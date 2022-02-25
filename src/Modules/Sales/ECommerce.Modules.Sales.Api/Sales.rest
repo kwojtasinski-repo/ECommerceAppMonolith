@@ -1,0 +1,98 @@
+@url = http://localhost:5000/sales-module 
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NjgzZDNjYi02ODkwLTQ4ZTgtOTM2Ni05ODA3NGM1MjQ4NTQiLCJ1bmlxdWVfbmFtZSI6IjU2ODNkM2NiLTY4OTAtNDhlOC05MzY2LTk4MDc0YzUyNDg1NCIsImp0aSI6ImU2NTcwYzVlLTIwNDgtNGZlNS05Mzk5LWVhZjA4NjhiNDE0ZCIsImlhdCI6IjE2NDU1NjM4MDY0NzEiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOlsidXNlcnMiLCJpdGVtcyIsIml0ZW0tc2FsZSJdLCJuYmYiOjE2NDU1NjM4MDYsImV4cCI6MTY0NTU2NzQwNiwiaXNzIjoiZWNvbW1lcmNlIn0.s9kaAQKas0UzhqaJR_PAhxvVdXUQHPCtWaJC0fGjwDM
+@orderItemId = 7577c216-56d2-4553-9915-479b3c6f3d05
+@itemSaleId = fad497da-3e70-4112-9fa1-64039ffb9f0c
+@orderId = f21cef1e-456a-4ccc-afb3-c4175fa9ccf4
+@customerId = 2482141f-e4e8-4efb-8750-44c45f332372
+@paymentId = bd5252e6-475d-4120-8447-c8ec09280d54
+
+### API status
+GET {{url}}
+
+### Get order item
+GET {{url}}/order-items/{{orderItemId}}
+Authorization: Bearer {{accessToken}}
+
+### Add order item
+POST {{url}}/order-items
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "itemSaleId": "{{itemSaleId}}"
+}
+
+### Delete order item
+DELETE {{url}}/order-items/{{orderItemId}}
+Authorization: Bearer {{accessToken}}
+
+### Add order item
+POST {{url}}/order-items
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "itemSaleId": "{{itemSaleId}}"
+}
+
+### Get my orders
+GET {{url}}/orders/me
+Authorization: Bearer {{accessToken}}
+
+### Get order
+GET {{url}}/orders/{{orderId}}
+Authorization: Bearer {{accessToken}}
+
+### Add order
+POST {{url}}/orders
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "customerId": "{{customerId}}"
+}
+
+### Add position to order
+POST {{url}}/orders/positions/add
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "orderId": "{{orderId}}",
+    "itemSaleId": "{{itemSaleId}}"
+}
+
+### Delete position from order
+POST {{url}}/orders/positions/add
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "orderId": "{{orderId}}",
+    "orderItemId": "{{orderItemId}}"
+}
+
+### Get my payments
+GET {{url}}/payments/me
+Authorization: Bearer {{accessToken}}
+
+### Get payment
+GET {{url}}/payments/{{paymentId}}
+Authorization: Bearer {{accessToken}}
+
+### Add payment
+POST {{url}}/payments
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "orderId": "{{orderId}}"
+}
+
+### Delete payment
+DELETE {{url}}/payments/{{paymentId}}
+Authorization: Bearer {{accessToken}}
+
+### Delete order
+DELETE {{url}}/orders/{{orderId}}
+Authorization: Bearer {{accessToken}}
