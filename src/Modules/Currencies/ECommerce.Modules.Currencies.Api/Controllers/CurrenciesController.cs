@@ -36,6 +36,7 @@ namespace ECommerce.Modules.Currencies.Api.Controllers
         [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<CurrencyDetailsDto>> GetAsync(Guid id)
         {
             var currency = await _currencyService.GetAsync(id);
@@ -43,7 +44,7 @@ namespace ECommerce.Modules.Currencies.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         public async Task<ActionResult> PostAsync(CurrencyDto dto)
         {

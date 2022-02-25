@@ -21,6 +21,7 @@ namespace ECommerce.Modules.Currencies.Api.Controllers
         [HttpGet("{currencyId:guid}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<CurrencyRateDto>> GetAsync(Guid currencyId)
         {
             var currency = await _currencyRateService.GetLatestRateAsync(currencyId);
@@ -30,6 +31,7 @@ namespace ECommerce.Modules.Currencies.Api.Controllers
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<CurrencyRateDto>> GetCurrencyRateForDateAsync([FromQuery] Guid currencyId, [FromQuery] DateOnly date)
         {
             var currency = await _currencyRateService.GetCurrencyForDateAsync(currencyId, date);

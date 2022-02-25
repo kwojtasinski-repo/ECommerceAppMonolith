@@ -22,6 +22,9 @@ namespace ECommerce.Modules.Contacts.Api.Controllers
 
         [HttpGet("{id:guid}")]
         [ActionName("GetAsync")] // blad z metoda GetAsync (nie moze jej znalezc podczas CrateAtAction())
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<AddressDto>> GetAsync(Guid id)
         {
             var address = await _addressService.GetAsync(id);
@@ -29,6 +32,8 @@ namespace ECommerce.Modules.Contacts.Api.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult> PostAsync(AddressDto address)
         {
             await _addressService.AddAsync(address);
@@ -36,6 +41,8 @@ namespace ECommerce.Modules.Contacts.Api.Controllers
         }
 
         [HttpPut]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult> PutAsync(AddressDto address)
         {
             await _addressService.UpdateAsync(address);

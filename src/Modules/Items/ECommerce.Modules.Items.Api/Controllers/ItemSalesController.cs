@@ -41,14 +41,15 @@ namespace ECommerce.Modules.Items.Api.Controllers
         [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<ItemSaleDetailsDto>> GetAsync(Guid itemSaleId)
         {
             var itemSale = await _queryDispatcher.QueryAsync(new GetItemSale(itemSaleId));
-            return Ok(itemSale);
+            return OkOrNotFound(itemSale);
         }
 
         [HttpPost]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]

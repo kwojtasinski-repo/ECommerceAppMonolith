@@ -24,6 +24,8 @@ namespace ECommerce.Modules.Contacts.Api.Controllers
         }
 
         [HttpGet("me")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllByUserIdAsync(Guid userId)
         {
             var customers = await _customerService.GetAllByUserAsync(_context.Identity.Id);
@@ -32,6 +34,9 @@ namespace ECommerce.Modules.Contacts.Api.Controllers
 
         [HttpGet("{id:guid}")]
         [ActionName("GetAsync")] // blad z metoda GetAsync (nie moze jej znalezc podczas CrateAtAction())
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<CustomerDetailsDto>> GetAsync(Guid id)
         {
             var customer = await _customerService.GetAsync(id);
@@ -39,6 +44,8 @@ namespace ECommerce.Modules.Contacts.Api.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult> PostAsync(CustomerDto customerDto)
         {
             customerDto.UserId = _context.Identity.Id;
@@ -47,6 +54,8 @@ namespace ECommerce.Modules.Contacts.Api.Controllers
         }
 
         [HttpPut]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult> PutAsync(CustomerDto customerDto)
         {
             await _customerService.UpdateAsync(customerDto);
@@ -54,6 +63,8 @@ namespace ECommerce.Modules.Contacts.Api.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult> DeleteAsync(Guid id)
         {
             await _customerService.DeleteAsync(id);

@@ -27,6 +27,7 @@ namespace ECommerce.Modules.Items.Api.Controllers
         [HttpGet("{imageId:guid}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<string>> Get(Guid imageId)
         {
             var imageSrc = await _queryDispatcher.QueryAsync(new GetImage(imageId));

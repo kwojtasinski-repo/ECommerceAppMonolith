@@ -41,6 +41,7 @@ namespace ECommerce.Modules.Items.Api.Controllers
         [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<BrandDto>> GetAsync(Guid brandId)
         {
             var brandDto = await _queryDispatcher.QueryAsync(new GetBrand(brandId));
@@ -48,7 +49,7 @@ namespace ECommerce.Modules.Items.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
