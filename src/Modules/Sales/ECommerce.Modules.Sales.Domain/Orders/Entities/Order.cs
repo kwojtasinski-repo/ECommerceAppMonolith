@@ -77,6 +77,16 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             _orderItems.Remove(orderItemToDelete);
         }
 
+        public void MarkAsPaid()
+        {
+            Paid = true;
+        }
+
+        public void MarkAsUnpaid()
+        {
+            Paid = false;
+        }
+
         private static void ValidateOrderNumber(string orderNumber)
         {
             if (string.IsNullOrWhiteSpace(orderNumber))
