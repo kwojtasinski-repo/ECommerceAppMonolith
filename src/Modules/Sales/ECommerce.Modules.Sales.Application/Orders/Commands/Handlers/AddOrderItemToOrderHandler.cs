@@ -3,6 +3,7 @@ using ECommerce.Modules.Sales.Domain.ItemSales.Repositories;
 using ECommerce.Modules.Sales.Domain.Orders.Entities;
 using ECommerce.Modules.Sales.Domain.Orders.Repositories;
 using ECommerce.Shared.Abstractions.Commands;
+using ECommerce.Shared.Abstractions.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +18,15 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
         private readonly IItemSaleRepository _itemSaleRepository;
         private readonly IItemCartRepository _itemCartRepository;
         private readonly IOrderItemRepository _orderItemRepository;
+        private readonly IContext _context;
 
-        public AddOrderItemToOrderHandler(IOrderRepository orderRepository, IItemSaleRepository itemSaleRepository, IItemCartRepository itemCartRepository, IOrderItemRepository orderItemRepository)
+        public AddOrderItemToOrderHandler(IOrderRepository orderRepository, IItemSaleRepository itemSaleRepository, IItemCartRepository itemCartRepository, IOrderItemRepository orderItemRepository, IContext context)
         {
             _orderRepository = orderRepository;
             _itemSaleRepository = itemSaleRepository;
             _itemCartRepository = itemCartRepository;
             _orderItemRepository = orderItemRepository;
+            _context = context;
         }
 
         public async Task HandleAsync(AddOrderItemToOrder command)
@@ -46,7 +49,7 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
             var itemCart = new ItemCart(Guid.NewGuid(), itemSale.Item.ItemName, itemSale.Item.BrandName, itemSale.Item.TypeName,
                                         itemSale.Item.Description, itemSale.Item.Tags, itemSale.Item.ImagesUrl, itemSale.Cost);
             await _itemCartRepository.AddAsync(itemCart);
-            var orderItem = OrderItem.Create(itemCart, command.UserId);
+            var orderItem = OrderItem.Create(itemCart, _context.Identity.Id);
             await _orderItemRepository.AddAsync(orderItem);
 
             order.AddOrderItem(orderItem);

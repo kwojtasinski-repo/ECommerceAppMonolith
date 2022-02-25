@@ -35,9 +35,9 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             _orderItems = orderItems;
         }
 
-        public static Order Create(string orderNumber, decimal cost, Guid customerId, Guid userId, DateTime createOrderDate)
+        public static Order Create(AggregateId id, string orderNumber, decimal cost, Guid customerId, Guid userId, DateTime createOrderDate)
         {
-            var order = new Order(Guid.NewGuid(), orderNumber, cost, customerId, userId, createOrderDate);
+            var order = new Order(id, orderNumber, cost, customerId, userId, createOrderDate);
             return order;
         }
 

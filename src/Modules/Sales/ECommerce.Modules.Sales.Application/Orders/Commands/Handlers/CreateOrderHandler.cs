@@ -2,6 +2,7 @@
 using ECommerce.Modules.Sales.Domain.Orders.Entities;
 using ECommerce.Modules.Sales.Domain.Orders.Repositories;
 using ECommerce.Shared.Abstractions.Commands;
+using ECommerce.Shared.Abstractions.Contexts;
 using ECommerce.Shared.Abstractions.Time;
 using System;
 using System.Collections.Generic;
@@ -16,12 +17,14 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
         private readonly IOrderRepository _orderRepository;
         private readonly IOrderItemRepository _orderItemRepository;
         private readonly IClock _clock;
+        private readonly IContext _context;
 
-        public CreateOrderHandler(IOrderRepository orderRepository, IOrderItemRepository orderItemRepository, IClock clock)
+        public CreateOrderHandler(IOrderRepository orderRepository, IOrderItemRepository orderItemRepository, IClock clock, IContext context)
         {
             _orderRepository = orderRepository;
             _orderItemRepository = orderItemRepository;
             _clock = clock;
+            _context = context;
         }
 
         public async Task HandleAsync(CreateOrder command)
@@ -55,7 +58,7 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
                 .Append(currentDate.Year).Append('/').Append(currentDate.Month.ToString("d2"))
                 .Append('/').Append(currentDate.Day.ToString("00")).Append('/').Append(number).ToString();
 
-            var order = Order.Create(orderNumber, cost, command.CustomerId, command.UserId, currentDate);
+            var order = Order.Create(command.Id, orderNumber, cost, command.CustomerId, _context.Identity.Id, currentDate);
             order.AddOrderItems(orderItems);
             await _orderRepository.AddAsync(order);
         }
