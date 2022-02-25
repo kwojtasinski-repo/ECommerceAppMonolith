@@ -2,8 +2,8 @@
 
 namespace ECommerce.Modules.Sales.Application.Orders.Commands
 {
-    public record CreateOrderItem(Guid ItemSaleId, Guid UserId) : ICommand
+    public record CreateOrderItem(Guid ItemSaleId) : ICommand
     {
-        public Guid OrderItem = Guid.NewGuid();
+        public Guid OrderItemId = Guid.NewGuid();
     };
 }

@@ -3,11 +3,7 @@ using ECommerce.Modules.Sales.Domain.ItemSales.Repositories;
 using ECommerce.Modules.Sales.Domain.Orders.Entities;
 using ECommerce.Modules.Sales.Domain.Orders.Repositories;
 using ECommerce.Shared.Abstractions.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ECommerce.Shared.Abstractions.Contexts;
 
 namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
 {
@@ -16,12 +12,14 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
         private readonly IOrderItemRepository _orderItemRepository;
         private readonly IItemSaleRepository _itemSaleRepository;
         private readonly IItemCartRepository _itemCartRepository;
+        private readonly IContext _context;
 
-        public CreateOrderItemHandler(IOrderItemRepository orderItemRepository, IItemSaleRepository itemSaleRepository, IItemCartRepository itemCartRepository)
+        public CreateOrderItemHandler(IOrderItemRepository orderItemRepository, IItemSaleRepository itemSaleRepository, IItemCartRepository itemCartRepository, IContext context)
         {
             _orderItemRepository = orderItemRepository;
             _itemSaleRepository = itemSaleRepository;
             _itemCartRepository = itemCartRepository;
+            _context = context;
         }
 
         public async Task HandleAsync(CreateOrderItem command)
@@ -34,11 +32,11 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
             }
 
             // snapshot
-            var itemCart = new ItemCart(Guid.NewGuid(), itemSale.Item.ItemName, itemSale.Item.BrandName, itemSale.Item.TypeName,
+            var itemCart = new ItemCart(command.OrderItemId, itemSale.Item.ItemName, itemSale.Item.BrandName, itemSale.Item.TypeName,
                                         itemSale.Item.Description, itemSale.Item.Tags, itemSale.Item.ImagesUrl, itemSale.Cost);
             await _itemCartRepository.AddAsync(itemCart);
 
-            var orderItem = OrderItem.Create(itemCart, command.UserId);
+            var orderItem = OrderItem.Create(itemCart, _context.Identity.Id);
             await _orderItemRepository.AddAsync(orderItem);
         }
     }

@@ -29,7 +29,7 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
 
         public async Task HandleAsync(CreateOrder command)
         {
-            var orderItems = await _orderItemRepository.GetAllByUserIdNotOrderedAsync(command.UserId);
+            var orderItems = await _orderItemRepository.GetAllByUserIdNotOrderedAsync(_context.Identity.Id);
 
             if (!orderItems.Any())
             {
