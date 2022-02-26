@@ -8,6 +8,7 @@ namespace ECommerce.Modules.Sales.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddTransient<IOrderDeletionPolicy, OrderDeletionPolicy>();
+            services.AddTransient<IOrderPositionModificationPolicy, OrderPositionModificationPolicy>();
             return services;
         }
     }

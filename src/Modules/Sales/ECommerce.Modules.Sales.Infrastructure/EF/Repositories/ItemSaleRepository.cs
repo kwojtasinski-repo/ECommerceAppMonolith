@@ -20,7 +20,6 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
 
         public async Task AddAsync(ItemSale itemSale)
         {
-            var changeTracker = _salesDbContext.ChangeTracker;
             await _salesDbContext.ItemSales.AddAsync(itemSale);
             await _salesDbContext.SaveChangesAsync();
         }

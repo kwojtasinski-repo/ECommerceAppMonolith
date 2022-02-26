@@ -77,6 +77,28 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             _orderItems.Remove(orderItemToDelete);
         }
 
+        public void RefreshCost()
+        {
+            if (_orderItems is null)
+            {
+                throw new OrderItemsCannotBeNullException();
+            }
+
+            if (_orderItems.Any(ic => ic.ItemCart is null))
+            {
+                throw new CannotRefreshCostWhenItemCartIsNullException(Id);
+            }
+
+            var cost = decimal.Zero;
+
+            foreach (var orderItem in _orderItems)
+            {
+                cost += orderItem.ItemCart.Cost;
+            }
+
+            Cost = cost;
+        }
+
         public void MarkAsPaid()
         {
             Paid = true;

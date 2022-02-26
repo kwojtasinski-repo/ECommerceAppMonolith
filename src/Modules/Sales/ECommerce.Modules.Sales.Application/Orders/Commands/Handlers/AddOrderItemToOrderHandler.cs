@@ -1,4 +1,5 @@
 ﻿using ECommerce.Modules.Sales.Application.Orders.Exceptions;
+using ECommerce.Modules.Sales.Application.Orders.Policies;
 using ECommerce.Modules.Sales.Domain.ItemSales.Repositories;
 using ECommerce.Modules.Sales.Domain.Orders.Entities;
 using ECommerce.Modules.Sales.Domain.Orders.Repositories;
@@ -19,14 +20,16 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
         private readonly IItemCartRepository _itemCartRepository;
         private readonly IOrderItemRepository _orderItemRepository;
         private readonly IContext _context;
+        private readonly IOrderPositionModificationPolicy _orderPositionModificationPolicy;
 
-        public AddOrderItemToOrderHandler(IOrderRepository orderRepository, IItemSaleRepository itemSaleRepository, IItemCartRepository itemCartRepository, IOrderItemRepository orderItemRepository, IContext context)
+        public AddOrderItemToOrderHandler(IOrderRepository orderRepository, IItemSaleRepository itemSaleRepository, IItemCartRepository itemCartRepository, IOrderItemRepository orderItemRepository, IContext context, IOrderPositionModificationPolicy orderPositionModificationPolicy)
         {
             _orderRepository = orderRepository;
             _itemSaleRepository = itemSaleRepository;
             _itemCartRepository = itemCartRepository;
             _orderItemRepository = orderItemRepository;
             _context = context;
+            _orderPositionModificationPolicy = orderPositionModificationPolicy;
         }
 
         public async Task HandleAsync(AddOrderItemToOrder command)
@@ -45,6 +48,12 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
                 throw new OrderNotFoundException(command.OrderId);
             }
 
+            var canAddPosition = await _orderPositionModificationPolicy.CanAddAsync(order);
+            if (!canAddPosition)
+            {
+                throw new PositionToOrderCannotBeAddedException(order.Id, command.ItemSaleId);
+            }
+
             // snapshot
             var itemCart = new ItemCart(Guid.NewGuid(), itemSale.Item.ItemName, itemSale.Item.BrandName, itemSale.Item.TypeName,
                                         itemSale.Item.Description, itemSale.Item.Tags, itemSale.Item.ImagesUrl, itemSale.Cost);
@@ -53,6 +62,7 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
             await _orderItemRepository.AddAsync(orderItem);
 
             order.AddOrderItem(orderItem);
+            order.RefreshCost();
             await _orderRepository.UpdateAsync(order);
         }
     }

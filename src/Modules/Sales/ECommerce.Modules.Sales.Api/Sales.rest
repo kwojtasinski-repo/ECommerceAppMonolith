@@ -1,8 +1,8 @@
 @url = http://localhost:5000/sales-module 
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NjgzZDNjYi02ODkwLTQ4ZTgtOTM2Ni05ODA3NGM1MjQ4NTQiLCJ1bmlxdWVfbmFtZSI6IjU2ODNkM2NiLTY4OTAtNDhlOC05MzY2LTk4MDc0YzUyNDg1NCIsImp0aSI6IjE1NTFiNzg5LWQxZjMtNDM1ZS1iODk5LTBkNmFkOTc1NTJmYiIsImlhdCI6IjE2NDU4Nzc1MjI2NTgiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOlsidXNlcnMiLCJpdGVtcyIsIml0ZW0tc2FsZSJdLCJuYmYiOjE2NDU4Nzc1MjIsImV4cCI6MTY0NTg4MTEyMiwiaXNzIjoiZWNvbW1lcmNlIn0.WxQQ7c_xJd-fnw8uDyhg0-gnwBH0Ro06woRjt1BeCLU
-@orderItemId = b0d02f6e-f7db-4044-95e8-8aeea54e7e1d
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NjgzZDNjYi02ODkwLTQ4ZTgtOTM2Ni05ODA3NGM1MjQ4NTQiLCJ1bmlxdWVfbmFtZSI6IjU2ODNkM2NiLTY4OTAtNDhlOC05MzY2LTk4MDc0YzUyNDg1NCIsImp0aSI6IjU5OTliZjBkLTJjOTgtNGNhYy05YjU2LTBkZWU5ZTE5ZTZhNiIsImlhdCI6IjE2NDU4OTYzNDE5ODciLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOlsidXNlcnMiLCJpdGVtcyIsIml0ZW0tc2FsZSJdLCJuYmYiOjE2NDU4OTYzNDEsImV4cCI6MTY0NTg5OTk0MSwiaXNzIjoiZWNvbW1lcmNlIn0.k-i6N_NfCW-AKmoyRVpXtCgmGLiCGARtYmFuK-j0reM
+@orderItemId = b22790a1-0281-4bec-9cf8-5c83c0b87379
 @itemSaleId = 7ce20008-8f4b-4bdd-a06f-8f5edc8e2b4c
-@orderId = 36bc2178-c94e-44d0-ac56-26f91db7a2f2
+@orderId = c8b1357f-e25c-42c7-a174-4d3c674d676d
 @customerId = 2482141f-e4e8-4efb-8750-44c45f332372
 @paymentId = 67d2ec07-17b5-41f2-8f06-388debaf45e8
 
@@ -38,6 +38,11 @@ Authorization: Bearer {{accessToken}}
 ### Get my orders
 GET {{url}}/orders/me
 Authorization: Bearer {{accessToken}}
+
+### Get all order items in cart
+GET {{url}}/cart/me
+Authorization: Bearer {{accessToken}}
+
 
 ### Get order
 GET {{url}}/orders/{{orderId}}

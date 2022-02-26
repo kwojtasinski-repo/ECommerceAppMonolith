@@ -7,8 +7,20 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Sales.Application.Orders.Policies
 {
-    internal class OrderDeletionPolicy : IOrderDeletionPolicy
+    internal class OrderPositionModificationPolicy : IOrderPositionModificationPolicy
     {
+        public Task<bool> CanAddAsync(Order order)
+        {
+            var canAdd = true;
+
+            if (order.Paid is true)
+            {
+                canAdd = false;
+            }
+            
+            return Task.FromResult(canAdd);
+        }
+
         public Task<bool> CanDeleteAsync(Order order)
         {
             var canDelete = true;
