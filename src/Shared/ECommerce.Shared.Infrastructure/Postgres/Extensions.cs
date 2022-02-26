@@ -25,7 +25,10 @@ namespace ECommerce.Shared.Infrastructure.Postgres
         public static IServiceCollection AddPostgres<T>(this IServiceCollection services) where T : DbContext
         {
             var options = services.GetOptions<PostgresOptions>("postgres");
-            services.AddDbContext<T>(context => context.UseNpgsql(options.ConnectionString));
+            services.AddDbContext<T>(context => context.UseNpgsql(options.ConnectionString, sqlQptions =>
+            {
+                sqlQptions.EnableRetryOnFailure();
+            }));
             return services;
         }
 

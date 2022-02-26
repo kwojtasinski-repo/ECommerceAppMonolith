@@ -27,7 +27,9 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
 
         public async Task<IEnumerable<OrderItem>> GetAllByUserIdNotOrderedAsync(Guid userId)
         {
-            var orderItems = await _salesDbContext.OrderItems.Include(o => o.Order)
+            var orderItems = await _salesDbContext.OrderItems
+                                    .Include(o => o.Order)
+                                    .Include(ic => ic.ItemCart)
                                     .Where(oi => oi.UserId == userId && oi.Order == null)
                                     .ToListAsync();
             return orderItems;

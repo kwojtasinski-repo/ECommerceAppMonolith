@@ -1,10 +1,10 @@
 @url = http://localhost:5000/sales-module 
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NjgzZDNjYi02ODkwLTQ4ZTgtOTM2Ni05ODA3NGM1MjQ4NTQiLCJ1bmlxdWVfbmFtZSI6IjU2ODNkM2NiLTY4OTAtNDhlOC05MzY2LTk4MDc0YzUyNDg1NCIsImp0aSI6ImU2NTcwYzVlLTIwNDgtNGZlNS05Mzk5LWVhZjA4NjhiNDE0ZCIsImlhdCI6IjE2NDU1NjM4MDY0NzEiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOlsidXNlcnMiLCJpdGVtcyIsIml0ZW0tc2FsZSJdLCJuYmYiOjE2NDU1NjM4MDYsImV4cCI6MTY0NTU2NzQwNiwiaXNzIjoiZWNvbW1lcmNlIn0.s9kaAQKas0UzhqaJR_PAhxvVdXUQHPCtWaJC0fGjwDM
-@orderItemId = 7577c216-56d2-4553-9915-479b3c6f3d05
-@itemSaleId = fad497da-3e70-4112-9fa1-64039ffb9f0c
-@orderId = f21cef1e-456a-4ccc-afb3-c4175fa9ccf4
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NjgzZDNjYi02ODkwLTQ4ZTgtOTM2Ni05ODA3NGM1MjQ4NTQiLCJ1bmlxdWVfbmFtZSI6IjU2ODNkM2NiLTY4OTAtNDhlOC05MzY2LTk4MDc0YzUyNDg1NCIsImp0aSI6IjE1NTFiNzg5LWQxZjMtNDM1ZS1iODk5LTBkNmFkOTc1NTJmYiIsImlhdCI6IjE2NDU4Nzc1MjI2NTgiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOlsidXNlcnMiLCJpdGVtcyIsIml0ZW0tc2FsZSJdLCJuYmYiOjE2NDU4Nzc1MjIsImV4cCI6MTY0NTg4MTEyMiwiaXNzIjoiZWNvbW1lcmNlIn0.WxQQ7c_xJd-fnw8uDyhg0-gnwBH0Ro06woRjt1BeCLU
+@orderItemId = b0d02f6e-f7db-4044-95e8-8aeea54e7e1d
+@itemSaleId = 7ce20008-8f4b-4bdd-a06f-8f5edc8e2b4c
+@orderId = 36bc2178-c94e-44d0-ac56-26f91db7a2f2
 @customerId = 2482141f-e4e8-4efb-8750-44c45f332372
-@paymentId = bd5252e6-475d-4120-8447-c8ec09280d54
+@paymentId = 67d2ec07-17b5-41f2-8f06-388debaf45e8
 
 ### API status
 GET {{url}}
@@ -53,7 +53,7 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### Add position to order
-POST {{url}}/orders/positions/add
+PATCH {{url}}/orders/positions/add
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
@@ -63,7 +63,7 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### Delete position from order
-POST {{url}}/orders/positions/add
+PATCH {{url}}/orders/positions/delete
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 

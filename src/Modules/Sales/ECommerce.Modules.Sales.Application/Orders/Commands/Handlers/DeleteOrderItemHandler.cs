@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
 {
-    internal class DeleteOrderItemHandler : ICommandHandler<DeleteOrder>
+    internal class DeleteOrderItemHandler : ICommandHandler<DeleteOrderItem>
     {
         private readonly IOrderItemRepository _orderItemRepository;
 
@@ -18,13 +18,13 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
             _orderItemRepository = orderItemRepository;
         }
 
-        public async Task HandleAsync(DeleteOrder command)
+        public async Task HandleAsync(DeleteOrderItem command)
         {
-            var orderItem = await _orderItemRepository.GetAsync(command.OrderId);
+            var orderItem = await _orderItemRepository.GetAsync(command.OrderItemId);
 
             if (orderItem is null)
             {
-                throw new OrderItemNotFoundException(command.OrderId);
+                throw new OrderItemNotFoundException(command.OrderItemId);
             }
 
             await _orderItemRepository.DeleteAsync(orderItem);

@@ -25,9 +25,9 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
             return item is not null;
         }
 
-        public Task<Item> GetAsync(Guid id)
+        public async Task<Item> GetAsync(Guid id)
         {
-            var item = _salesDbContext.Items.Where(i => i.Id == id).AsNoTracking().SingleOrDefaultAsync();
+            var item = await _salesDbContext.Items.Where(i => i.Id == id).SingleOrDefaultAsync();
             return item;
         }
 

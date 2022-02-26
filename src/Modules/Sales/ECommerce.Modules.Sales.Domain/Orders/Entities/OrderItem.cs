@@ -22,9 +22,9 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             UserId = userId;
         }
 
-        public static OrderItem Create(ItemCart itemCart, Guid userId)
+        public static OrderItem Create(Guid id, ItemCart itemCart, Guid userId)
         {
-            var order = new OrderItem(Guid.NewGuid(), itemCart.Id, itemCart, userId);
+            var order = new OrderItem(id, itemCart.Id, itemCart, userId);
             return order;
         }
 

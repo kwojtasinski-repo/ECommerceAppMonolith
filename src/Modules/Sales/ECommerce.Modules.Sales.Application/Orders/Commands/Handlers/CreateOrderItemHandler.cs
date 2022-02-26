@@ -32,11 +32,11 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
             }
 
             // snapshot
-            var itemCart = new ItemCart(command.OrderItemId, itemSale.Item.ItemName, itemSale.Item.BrandName, itemSale.Item.TypeName,
+            var itemCart = new ItemCart(Guid.NewGuid(), itemSale.Item.ItemName, itemSale.Item.BrandName, itemSale.Item.TypeName,
                                         itemSale.Item.Description, itemSale.Item.Tags, itemSale.Item.ImagesUrl, itemSale.Cost);
             await _itemCartRepository.AddAsync(itemCart);
 
-            var orderItem = OrderItem.Create(itemCart, _context.Identity.Id);
+            var orderItem = OrderItem.Create(command.OrderItemId, itemCart, _context.Identity.Id);
             await _orderItemRepository.AddAsync(orderItem);
         }
     }

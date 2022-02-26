@@ -15,7 +15,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
         public bool Paid { get; private set; }
 
         public IEnumerable<OrderItem> OrderItems => _orderItems;
-        private ICollection<OrderItem> _orderItems;
+        private ICollection<OrderItem> _orderItems = new List<OrderItem>();
         public IEnumerable<Payment>? Payments { get; private set; }
 
         private Order() { }
@@ -32,7 +32,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             UserId = userId;
             CreateOrderDate = createOrderDate;
             OrderApprovedDate = orderApprovedDate;
-            _orderItems = orderItems;
+            _orderItems = orderItems ?? new List<OrderItem>();
         }
 
         public static Order Create(AggregateId id, string orderNumber, decimal cost, Guid customerId, Guid userId, DateTime createOrderDate)

@@ -39,7 +39,7 @@ namespace ECommerce.Modules.Sales.Api.Controllers
         public async Task<ActionResult> PostAsync(CreateOrderItem command)
         {
             await _commandDispatcher.SendAsync(command);
-            return CreatedAtAction(nameof(GetAsync), new { orderItemId = command.ItemSaleId }, null);
+            return CreatedAtAction(nameof(GetAsync), new { orderItemId = command.OrderItemId }, null);
         }
 
         [HttpDelete("{orderItemId:guid}")]
