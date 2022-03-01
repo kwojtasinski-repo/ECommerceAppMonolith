@@ -21,6 +21,7 @@ namespace ECommerce.Modules.Sales.Infrastructure
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddUnitOfWork<ISalesUnitOfWork, SalesUnitOfWork>();
             return services;
         }
     }

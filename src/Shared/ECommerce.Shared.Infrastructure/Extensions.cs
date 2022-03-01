@@ -81,6 +81,7 @@ namespace ECommerce.Shared.Infrastructure
             services.AddMessaging();
             services.AddValidators(assemblies);
             services.AddPostgres();
+            services.AddTransactionalDecorators();
             services.AddSingleton<IClock, UtcClock>();
             services.AddHostedService<AppInitializer>();
             services.AddControllers(options =>
