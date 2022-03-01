@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ECommerce.Shared.Abstractions.Commands;
+using ECommerce.Shared.Infrastructure.Postgres.Decorators;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -32,5 +34,24 @@ namespace ECommerce.Shared.Infrastructure.Postgres
             return services;
         }
 
+        public static IServiceCollection AddTransactionalDecorators(this IServiceCollection services)
+        {
+            services.TryDecorate(typeof(ICommandHandler<>), typeof(TransactionalCommandHandlerDecorator<>));
+            services.TryDecorate(typeof(ICommandHandler<,>), typeof(TransactionalCommandHandlerDecorator<>));
+            return services;
+        }
+
+        public static IServiceCollection AddUnitOfWork<TUnitOfWork, TImplementationUnitOfWork>(this IServiceCollection services)
+            where TUnitOfWork : class, IUnitOfWork
+            where TImplementationUnitOfWork : class, TUnitOfWork
+        {
+            services.AddScoped<TUnitOfWork, TImplementationUnitOfWork>();
+            services.AddScoped<IUnitOfWork, TImplementationUnitOfWork>();
+
+            using var serviceProvider = services.BuildServiceProvider();
+            serviceProvider.GetRequiredService<UnitOfWorkTypeRegistry>().Register<TUnitOfWork>();
+
+            return services;
+        }
     }
 }
