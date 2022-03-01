@@ -28,7 +28,7 @@ namespace ECommerce.Shared.Infrastructure.Postgres.Decorators
             }
 
             var unitOfWork = (IUnitOfWork)_serviceProvider.GetRequiredService(unitOfWorkType);
-            unitOfWork.ExecuteAsync(() => _handler.HandleAsync(command));
+            await unitOfWork.ExecuteAsync(() => _handler.HandleAsync(command));
         }
     }
 }

@@ -23,11 +23,11 @@ namespace ECommerce.Shared.Infrastructure.Postgres
             try
             {
                 await action();
-                transaction.Commit();
+                await transaction.CommitAsync();
             }
             catch(Exception)
             {
-                transaction.Rollback();
+                await transaction.RollbackAsync();
                 throw;
             }
         }

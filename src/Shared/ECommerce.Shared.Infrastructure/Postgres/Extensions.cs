@@ -21,16 +21,14 @@ namespace ECommerce.Shared.Infrastructure.Postgres
                 config.ConnectionString = options.ConnectionString;
             });
 
+            services.AddSingleton(new UnitOfWorkTypeRegistry());
             return services;
         }
 
         public static IServiceCollection AddPostgres<T>(this IServiceCollection services) where T : DbContext
         {
             var options = services.GetOptions<PostgresOptions>("postgres");
-            services.AddDbContext<T>(context => context.UseNpgsql(options.ConnectionString, sqlQptions =>
-            {
-                sqlQptions.EnableRetryOnFailure();
-            }));
+            services.AddDbContext<T>(context => context.UseNpgsql(options.ConnectionString));
             return services;
         }
 
