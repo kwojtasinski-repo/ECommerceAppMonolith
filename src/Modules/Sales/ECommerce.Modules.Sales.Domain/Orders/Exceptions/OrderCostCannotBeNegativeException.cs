@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Sales.Domain.Orders.Exceptions
 {
-    internal class OrderCostCannotBeNegativeException : ECommerceException
+    public class OrderCostCannotBeNegativeException : ECommerceException
     {
         public decimal Cost { get; }
 

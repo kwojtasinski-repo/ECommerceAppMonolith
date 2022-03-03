@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Sales.Domain.Orders.Exceptions
 {
-    internal class OrderItemCannotBeNullException : ECommerceException
+    public class OrderItemCannotBeNullException : ECommerceException
     {
         public OrderItemCannotBeNullException() : base("OrderItem cannot be null.")
         {

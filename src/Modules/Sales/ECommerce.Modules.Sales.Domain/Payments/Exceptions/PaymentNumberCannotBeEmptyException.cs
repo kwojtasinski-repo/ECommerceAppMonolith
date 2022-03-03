@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Sales.Domain.Payments.Exceptions
 {
-    internal class PaymentNumberCannotBeEmptyException : ECommerceException
+    public class PaymentNumberCannotBeEmptyException : ECommerceException
     {
         public PaymentNumberCannotBeEmptyException() : base("PaymentNumber cannot be empty.")
         {

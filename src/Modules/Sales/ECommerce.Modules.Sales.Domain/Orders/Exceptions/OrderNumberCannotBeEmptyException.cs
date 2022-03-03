@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Sales.Domain.Orders.Exceptions
 {
-    internal class OrderNumberCannotBeEmptyException : ECommerceException
+    public class OrderNumberCannotBeEmptyException : ECommerceException
     {
         public OrderNumberCannotBeEmptyException() : base("OrderNumber cannot be empty.")
         {

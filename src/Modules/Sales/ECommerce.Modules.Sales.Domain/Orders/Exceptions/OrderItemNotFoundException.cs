@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Sales.Domain.Orders.Exceptions
 {
-    internal class OrderItemNotFoundException : ECommerceException
+    public class OrderItemNotFoundException : ECommerceException
     {
         public Guid OrderId { get; }
         public Guid OrderItemId { get; }

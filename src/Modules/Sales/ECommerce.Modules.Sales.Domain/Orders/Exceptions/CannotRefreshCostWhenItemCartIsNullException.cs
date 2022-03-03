@@ -2,7 +2,7 @@
 
 namespace ECommerce.Modules.Sales.Domain.Orders.Exceptions
 {
-    internal class CannotRefreshCostWhenItemCartIsNullException : ECommerceException
+    public class CannotRefreshCostWhenItemCartIsNullException : ECommerceException
     {
         public Guid OrderId { get; }
 
