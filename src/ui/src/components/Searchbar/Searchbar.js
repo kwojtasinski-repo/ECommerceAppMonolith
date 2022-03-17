@@ -30,7 +30,7 @@ function Searchbar() {
                 onKeyDown={onKeyDownHandler}
                 onChange={event => setTerm(event.target.value)}
                 type = "text"
-                className = "form-control search"
+                className = "form-control search w-auto"
                 placeholder = "Szukaj..."/>
             <button className = {`ms-1 btn btn-primary`}
                 onClick={search}>Szukaj</button>

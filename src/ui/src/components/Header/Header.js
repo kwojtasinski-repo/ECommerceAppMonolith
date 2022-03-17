@@ -2,19 +2,21 @@ import styles from './Header.module.css';
 
 function Header(props) {
     return (
-        <header className={`${styles.header} p-3 bg-dark text-white`}>
-            <div className="container">
-                <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                    <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                        <li className="nav-link px-2 text-white">ECommerce App</li>
-                    </ul>
+        <div className='top-sticky-bar-container js-top-sticky-bar-container'>
+            <header className={`${styles.header} header-fixed-container header-fixed-container-visible bg-dark text-white`}>
+                <div className='container-fluid'>
+                    <div className='d-flex justify-content-center align-items-center ms-2'>
+                        <div>
+                            ECommerce App
+                        </div>
 
-                    <div>
-                        {props.children}
+                        <div className='ms-2 text-center'>
+                            {props.children}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>
+            </header>
+        </div>
     );
 }
 
