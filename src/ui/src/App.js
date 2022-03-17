@@ -4,6 +4,7 @@ import Header from './components/Header/Header';
 import Menu from './components/Menu/Menu';
 import Footer from './components/Footer/Footer';
 import Searchbar from './components/Searchbar/Searchbar';
+import Items from './components/Items/Items';
 
 function App() {
   const header = (
@@ -16,6 +17,10 @@ function App() {
     <Menu />
   )
 
+  const content = (
+    <Items />
+  )
+
   const footer = (
     <Footer />
   )
@@ -24,6 +29,7 @@ function App() {
     <Layout 
       header = {header}
       menu = {menu}
+      content = {content}
       footer = {footer}
       />
   );
