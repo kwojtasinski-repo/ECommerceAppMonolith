@@ -1,8 +1,8 @@
 function Footer() {
     return(
-        <>
-            Footer
-        </>
+        <div className="text-center m-3 text-primary">
+            &copy; Kamil Wojtasiński
+        </div>
     );
 }
 
