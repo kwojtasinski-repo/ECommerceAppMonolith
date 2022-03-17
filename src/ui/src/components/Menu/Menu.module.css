@@ -1,0 +1,17 @@
+.menuContainer {
+    border: 1px solid #cdcdcd;
+    margin: 10px 0px;
+}
+
+.menuItem {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.menuItem a {
+    color: #6c757d;
+}
+
+.menuItemActive {
+    text-decoration: underline;
+}
