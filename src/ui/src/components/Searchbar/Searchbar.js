@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 function Searchbar() {
     const [term, setTerm] = useState('');
-    
+    const inputRef = useRef(null);
+
     const onKeyDownHandler = event => {
         if (event.key === 'Enter') {
             search();
@@ -12,10 +13,19 @@ function Searchbar() {
     const search = () => {
         console.log(`term: ${term}`);
     }
+    
+    const focusInput = () => {
+        inputRef.current.focus();
+    }
+
+    useEffect(() => {
+        focusInput();
+    }, []);
 
     return (
         <div className="d-flex">
             <input 
+                ref={inputRef}
                 value={term}
                 onKeyDown={onKeyDownHandler}
                 onChange={event => setTerm(event.target.value)}
