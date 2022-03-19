@@ -7,11 +7,8 @@ public class Program
             .LoadFromConfig(builder.Configuration.GetSection("reverseProxy"));
 
         var app = builder.Build();
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapGet("/", context => context.Response.WriteAsync("ECommerce Gateway!"));
-            app.MapReverseProxy();
-        });
+        app.MapGet("/", context => context.Response.WriteAsync("ECommerce Gateway!"));
+        app.MapReverseProxy();
 
         var task = app.RunAsync();
         return task;
