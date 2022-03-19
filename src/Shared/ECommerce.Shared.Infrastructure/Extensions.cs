@@ -144,6 +144,7 @@ namespace ECommerce.Shared.Infrastructure
             app.UseAuthorization();
             app.MapControllers();
             app.MapGet("/", context => context.Response.WriteAsync("E-Commerce API!"));
+            app.MapModuleInfo();
             return app;
         }
 

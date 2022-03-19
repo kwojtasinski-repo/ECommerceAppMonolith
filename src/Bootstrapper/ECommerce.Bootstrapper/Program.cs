@@ -5,7 +5,6 @@ public class Program
 {
     public static Task Main(string[] args)
     {
-
         var builder = WebApplication.CreateBuilder(args);
         builder.Host.ConfigureModules();
 
