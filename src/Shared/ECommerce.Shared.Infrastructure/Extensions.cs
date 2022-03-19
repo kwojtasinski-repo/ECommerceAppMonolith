@@ -34,6 +34,7 @@ namespace ECommerce.Shared.Infrastructure
     internal static class Extensions
     {
         private const string modulePart = "ECommerce.Modules.";
+        private const string CorsPolicy = "cors";
 
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, 
             IList<Assembly> assemblies, IList<IModule> modules)
@@ -57,6 +58,17 @@ namespace ECommerce.Shared.Infrastructure
                     }   
                 }
             }
+
+            services.AddCors(cors =>
+            {
+                cors.AddPolicy(CorsPolicy, policy =>
+                {
+                    policy.WithOrigins("*")
+                          .WithMethods("POST", "PUT", "PATCH", "DELETE")
+                          .WithHeaders("Content-Type", "Authorization");
+                });
+            });
+
             services.AddSwaggerGen(swagger =>
             {
                 swagger.CustomSchemaIds(s => s.FullName);
@@ -112,6 +124,7 @@ namespace ECommerce.Shared.Infrastructure
 
         public static WebApplication UseInfrastructure(this WebApplication app)
         {
+            app.UseCors(CorsPolicy);
             app.UseErrorHandling(); 
             app.UseSwagger();
             app.UseSwaggerUI(swaggerUI =>
