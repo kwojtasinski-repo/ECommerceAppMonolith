@@ -8,6 +8,7 @@ import Items from './components/Items/Items';
 import axios from './axios-setup';
 import { useEffect, useState } from 'react';
 import { mapToItems } from './helpers/mapper';
+import ErrorBoundary from './hoc/ErrorBoundary';
 
 function App() {
   const [items, setItems] = useState([]);
@@ -42,12 +43,14 @@ function App() {
   )
 
   return (
-    <Layout 
-      header = {header}
-      menu = {menu}
-      content = {content}
-      footer = {footer}
-      />
+    <ErrorBoundary>
+      <Layout 
+        header = {header}
+        menu = {menu}
+        content = {content}
+        footer = {footer}
+        />
+    </ErrorBoundary>
   );
 }
 
