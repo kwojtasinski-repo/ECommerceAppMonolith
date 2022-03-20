@@ -1,4 +1,5 @@
 import styles from './Item.module.css'
+import { Link } from 'react-router-dom';
 
 function Item(props) {
     return (
@@ -7,9 +8,9 @@ function Item(props) {
                <div className="row">
                     <div className="col-4 h-auto w-auto">
                         <img
-                        src={props.imageUrl}
-                        alt=""
-                        className="img-fluid img-thumbnail" />
+                            src={props.imageUrl}
+                            alt=""
+                            className={`img-fluid img-thumbnail ${styles.imgMax}`} />
                     </div>
                     <div className="col-4">
                         <div className="row">

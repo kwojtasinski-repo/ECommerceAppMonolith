@@ -5,8 +5,22 @@ import Menu from './components/Menu/Menu';
 import Footer from './components/Footer/Footer';
 import Searchbar from './components/Searchbar/Searchbar';
 import Items from './components/Items/Items';
+import axios from './axios-setup';
+import { useEffect, useState } from 'react';
 
 function App() {
+  const [items, setItems] = useState([]);
+
+  const fetchItems = async () => {
+    const response = await axios.get(`/items-module/item-sales`);
+    setItems(response.data);
+  };
+
+  
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
   const header = (
     <Header >
       <Searchbar />
@@ -18,7 +32,7 @@ function App() {
   )
 
   const content = (
-    <Items />
+    <Items items={items} />
   )
 
   const footer = (

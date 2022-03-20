@@ -1,3 +1,10 @@
 .itemBorder {
     width: 40rem;
 }
+
+.imgMax {
+    max-width: 250px;
+    width:100%;
+    max-height: 250px;
+    height: 100%;
+}
