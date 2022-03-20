@@ -3,7 +3,7 @@ import Layout from './components/Layout/Layout';
 import Header from './components/Header/Header';
 import Menu from './components/Menu/Menu';
 import Footer from './components/Footer/Footer';
-import Searchbar from './components/Searchbar/Searchbar';
+import Searchbar from './components/UI/Searchbar/Searchbar';
 import Items from './components/Items/Items';
 import axios from './axios-setup';
 import { useEffect, useState } from 'react';
