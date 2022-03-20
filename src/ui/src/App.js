@@ -6,11 +6,14 @@ import Footer from './components/Footer/Footer';
 import Searchbar from './components/UI/Searchbar/Searchbar';
 import Items from './components/Items/Items';
 import axios from './axios-setup';
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { mapToItems } from './helpers/mapper';
 import ErrorBoundary from './hoc/ErrorBoundary';
+import { initialState, reducer } from './reducer';
+import AuthContext from './context/AuthContext';
 
 function App() {
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [items, setItems] = useState([]);
 
   const fetchItems = async () => {
@@ -43,14 +46,20 @@ function App() {
   )
 
   return (
-    <ErrorBoundary>
-      <Layout 
-        header = {header}
-        menu = {menu}
-        content = {content}
-        footer = {footer}
-        />
-    </ErrorBoundary>
+    <AuthContext.Provider value = {{
+        user: state.user,
+        login: (user) => dispatch({ type: "login", user }),
+        logout: (user) => dispatch({ type: "logout" })
+    }}>
+      <ErrorBoundary>
+        <Layout 
+          header = {header}
+          menu = {menu}
+          content = {content}
+          footer = {footer}
+          />
+      </ErrorBoundary>
+    </AuthContext.Provider>
   );
 }
 

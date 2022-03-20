@@ -12,14 +12,13 @@ function Items(props) {
         imageUrl: `https://placeimg.com/220/18${Math.floor(Math.random() * 10)}/arch`
     }
 
-    console.log(props);
-
     return (
         <div>
             <h1 className={styles.title}>Oferty:</h1>
             <div className='row me-2'>
                 {props.items.map(i => 
-                            <Item {...i} />
+                            <Item key={i.id}
+                                  {...i} />
                 )}
 
                 <Item {...item} />
