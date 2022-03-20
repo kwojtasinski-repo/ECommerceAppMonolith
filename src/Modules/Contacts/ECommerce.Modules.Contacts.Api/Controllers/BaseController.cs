@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 namespace ECommerce.Modules.Contacts.Api.Controllers
 {
     [ApiController]
-    [ProducesDefaultContentType]
     [Route(ContactsModule.BasePath + "/[controller]")]
+    [ProducesDefaultContentType]
     internal class BaseController : ControllerBase
     {
         protected ActionResult<T> OkOrNotFound<T>(T model)

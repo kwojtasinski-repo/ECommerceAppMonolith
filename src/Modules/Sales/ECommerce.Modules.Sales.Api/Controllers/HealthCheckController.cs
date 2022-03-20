@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ECommerce.Modules.Sales.Api.Controllers
 {
     [Route(SalesModule.BasePath)]
-    internal class HealthCheckController
+    internal class HealthCheckController : BaseController
     {
         [HttpGet]
         public ActionResult<string> Get() => "Sales API";
