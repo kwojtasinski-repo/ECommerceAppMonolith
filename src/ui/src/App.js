@@ -7,13 +7,15 @@ import Searchbar from './components/Searchbar/Searchbar';
 import Items from './components/Items/Items';
 import axios from './axios-setup';
 import { useEffect, useState } from 'react';
+import { mapToItems } from './helpers/mapper';
 
 function App() {
   const [items, setItems] = useState([]);
 
   const fetchItems = async () => {
     const response = await axios.get(`/items-module/item-sales`);
-    setItems(response.data);
+    const items = mapToItems(response.data);
+    setItems(items);
   };
 
   

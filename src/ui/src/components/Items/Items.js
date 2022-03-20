@@ -19,9 +19,7 @@ function Items(props) {
             <h1 className={styles.title}>Oferty:</h1>
             <div className='row me-2'>
                 {props.items.map(i => 
-                            <Item name={i.item.itemName}
-                                  cost={i.cost}
-                                  imageUrl={i.item.imageUrl.url} />
+                            <Item {...i} />
                 )}
 
                 <Item {...item} />
