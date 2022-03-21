@@ -13,6 +13,9 @@ import ErrorBoundary from './hoc/ErrorBoundary';
 import { initialState, reducer } from './reducer';
 import AuthContext from './context/AuthContext';
 import NotFound from './pages/404/NotFound';
+import Login from './pages/Auth/Login/Login';
+import Register from './pages/Auth/Register/Register';
+import Item from './pages/Item/Item';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -42,6 +45,9 @@ function App() {
   const content = (
     <Suspense fallback={<p>Ładowanie...</p>} >
       <Routes>
+        <Route path='/items/:id' element = {<Item />} />
+        <Route path='/login' element = {<Login />} />
+        <Route path='/register' element = {<Register />} />
         <Route path="/" end element = {<Items items={items} />} />
         <Route path="*" element = {<NotFound/>} />
       </Routes>

@@ -1,0 +1,52 @@
+.item {
+    margin-bottom: 20px;
+    background-color: rgb(236 236 236);
+}
+
+.title {
+    font-weight: bold;
+    font-size: 1.8rem;
+    margin-bottom: 0;
+}
+
+.type {
+    font-size: 1.5rem;
+    margin-bottom: 0;
+}
+
+.typeDesc {
+    font-size: 1.2rem;
+    margin-bottom: 0;
+}
+
+.brand {
+    font-size: 1.5rem;
+    margin-bottom: 0;
+}
+
+.brandDesc {
+    font-size: 1.2rem;
+    margin-bottom: 0;
+}
+
+.description {
+    color: grey;
+    margin-top: 10px;
+    font-size: 0.88rem;
+    margin-bottom: 0;
+}
+
+.costTheme {
+    margin-bottom: 0;
+    margin-right: 20px;
+    text-align: center;
+}
+
+.cost {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.galery {
+    margin-top: 20px;
+}
