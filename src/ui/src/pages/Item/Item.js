@@ -4,14 +4,20 @@ import { useParams } from "react-router-dom";
 import styles from './Item.module.css';
 import Gallery from "../../components/Gallery/Gallery";
 import { mapToItem } from "../../helpers/mapper";
+import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
+import useWebsiteTitle from "../../hooks/useWebsiteTitle";
 
 function Item(props) {
     const { id } = useParams();
     const [item, setItem] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const setTitle = useWebsiteTitle();
 
     const fetchItem = async () => {
         const response = await axios.get(`/items-module/item-sales/${id}`);
         setItem(mapToItem(response.data));
+        setTitle(`Przedmiot - ${response.data.item.itemName}`);
+        setLoading(false);
     }
 
     useEffect(() => {
@@ -20,7 +26,7 @@ function Item(props) {
 
     return (
         <>
-            {item ? (
+            {loading ? <LoadingIcon /> : (
                 <div className={`card ${styles.item}`}>
                     <div className="card-body">
                         <div className="row">
@@ -59,7 +65,7 @@ function Item(props) {
                         </div>
                     </div>
                 </div>
-                ): null
+                )
             }
         </>
     )
