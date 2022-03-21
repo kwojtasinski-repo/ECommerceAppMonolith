@@ -1,6 +1,6 @@
 import axios from "../../axios-setup";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styles from './Item.module.css';
 import Gallery from "../../components/Gallery/Gallery";
 import { mapToItem } from "../../helpers/mapper";
@@ -12,9 +12,6 @@ function Item(props) {
     const fetchItem = async () => {
         const response = await axios.get(`/items-module/item-sales/${id}`);
         setItem(mapToItem(response.data));
-        console.log(response.data);
-        console.log('item');
-        console.log(mapToItem(response.data));
     }
 
     useEffect(() => {

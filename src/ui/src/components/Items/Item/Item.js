@@ -7,10 +7,12 @@ function Item(props) {
             <div className="card-body">
                <div className="row">
                     <div className="col-4 h-auto w-auto">
-                        <img
-                            src={props.imageUrl}
-                            alt=""
-                            className={`img-fluid img-thumbnail ${styles.imgMax}`} />
+                        <Link to={`/items/${props.id}`} >
+                            <img
+                                src={props.imageUrl}
+                                alt=""
+                                className={`img-fluid img-thumbnail ${styles.imgMax}`} />
+                        </Link>
                     </div>
                     <div className="col-4">
                         <div className="row">

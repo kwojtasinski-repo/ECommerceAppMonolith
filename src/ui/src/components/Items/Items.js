@@ -20,13 +20,6 @@ function Items(props) {
                             <Item key={i.id}
                                   {...i} />
                 )}
-
-                <Item {...item} />
-                <Item {...item} />
-                <Item {...item} />
-                <Item {...item} />
-                <Item {...item} />
-                <Item {...item} />
             </div>
             
         </div>

@@ -9,10 +9,8 @@ function Gallery(props) {
     useEffect(() => {
         if (props.items) {
             const itemArrays = props.items.map(i => (
-                { id: new Date().getTime(), url: i }
+                { id: new Date().getTime() + Math.floor(Math.random() * 10), url: i }
             ));
-            console.log(props.items);
-            console.log(itemArrays);
             setItems(itemArrays);
         }
     }, []);
@@ -28,7 +26,7 @@ function Gallery(props) {
     return (
         <div className="overlay">
             {items.map(i => (
-                    <img key={new Date().getTime()} id={i.id} onClick={handleShowDialog} className={`${styles.imageSmall} fixed z-10 inset-0 overflow-y-auto ms-2 mt-2`}
+                    <img key={new Date().getTime() + Math.random()} id={i.id} onClick={handleShowDialog} className={`${styles.imageSmall} fixed z-10 inset-0 overflow-y-auto ms-2 mt-2`}
                         src={i.url}
                         alt="no image" />
             ))}

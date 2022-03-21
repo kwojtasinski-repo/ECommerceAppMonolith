@@ -5,10 +5,7 @@ import Header from './components/Header/Header';
 import Menu from './components/Menu/Menu';
 import Footer from './components/Footer/Footer';
 import Searchbar from './components/UI/Searchbar/Searchbar';
-import Items from './components/Items/Items';
-import axios from './axios-setup';
-import { Suspense, useEffect, useReducer, useState } from 'react';
-import { mapToItems } from './helpers/mapper';
+import { Suspense, useReducer } from 'react';
 import ErrorBoundary from './hoc/ErrorBoundary';
 import { initialState, reducer } from './reducer';
 import AuthContext from './context/AuthContext';
@@ -16,22 +13,11 @@ import NotFound from './pages/404/NotFound';
 import Login from './pages/Auth/Login/Login';
 import Register from './pages/Auth/Register/Register';
 import Item from './pages/Item/Item';
+import Home from './pages/Home/Home';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [items, setItems] = useState([]);
-
-  const fetchItems = async () => {
-    const response = await axios.get(`/items-module/item-sales`);
-    const items = mapToItems(response.data);
-    setItems(items);
-  };
-
   
-  useEffect(() => {
-    fetchItems();
-  }, []);
-
   const header = (
     <Header >
       <Searchbar />
@@ -48,7 +34,7 @@ function App() {
         <Route path='/items/:id' element = {<Item />} />
         <Route path='/login' element = {<Login />} />
         <Route path='/register' element = {<Register />} />
-        <Route path="/" end element = {<Items items={items} />} />
+        <Route path="/" end element = {<Home />} />
         <Route path="*" element = {<NotFound/>} />
       </Routes>
     </Suspense>

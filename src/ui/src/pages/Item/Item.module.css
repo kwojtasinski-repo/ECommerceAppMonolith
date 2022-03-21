@@ -17,6 +17,7 @@
 .typeDesc {
     font-size: 1.2rem;
     margin-bottom: 0;
+    margin-top: 10px;
 }
 
 .brand {
@@ -27,6 +28,7 @@
 .brandDesc {
     font-size: 1.2rem;
     margin-bottom: 0;
+    margin-top: 10px;
 }
 
 .description {

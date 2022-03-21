@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import style from './Menu.module.css';
 
 function Menu() {
@@ -5,7 +6,9 @@ function Menu() {
         <nav className={`${style.menuContainer} navbar navbar-expand-lg navbar-light bg-light`}>
             <ul className={style.menu}>
                 <li className={style.menuItem}>
-                    <a className={`${style.menuItem} navbar-brand`} href="#">Home</a>
+                    <NavLink to='/' className={style.menuItem}  >
+                        Home
+                    </NavLink>
                 </li>
                 <li className={style.menuItem}>
                     <a className={`${style.menuItem} navbar-brand`} href="#">Profile</a>
