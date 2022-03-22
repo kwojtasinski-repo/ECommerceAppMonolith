@@ -14,6 +14,7 @@ import Login from './pages/Auth/Login/Login';
 import Register from './pages/Auth/Register/Register';
 import Item from './pages/Item/Item';
 import Home from './pages/Home/Home';
+import ReducerContext from './context/ReducerContext';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -49,16 +50,21 @@ function App() {
       <AuthContext.Provider value = {{
           user: state.user,
           login: (user) => dispatch({ type: "login", user }),
-          logout: (user) => dispatch({ type: "logout" })
+          logout: () => dispatch({ type: "logout" })
       }}>
-        <ErrorBoundary>
-          <Layout 
-            header = {header}
-            menu = {menu}
-            content = {content}
-            footer = {footer}
-            />
-        </ErrorBoundary>
+        <ReducerContext.Provider value={{
+          state: state,
+          dispatch: dispatch
+        }} >
+          <ErrorBoundary>
+            <Layout 
+              header = {header}
+              menu = {menu}
+              content = {content}
+              footer = {footer}
+              />
+          </ErrorBoundary>
+        </ReducerContext.Provider>
       </AuthContext.Provider>
     </Router>
   );

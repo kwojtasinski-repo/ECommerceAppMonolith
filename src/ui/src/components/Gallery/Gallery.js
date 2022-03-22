@@ -28,7 +28,7 @@ function Gallery(props) {
             {items.map(i => (
                     <img key={new Date().getTime() + Math.random()} id={i.id} onClick={handleShowDialog} className={`${styles.imageSmall} fixed z-10 inset-0 overflow-y-auto ms-2 mt-2`}
                         src={i.url}
-                        alt="no image" />
+                        alt="imgSmall" />
             ))}
 
                     {isOpen && (
@@ -41,7 +41,7 @@ function Gallery(props) {
                             <img className={styles.imageLarge}
                                 src={imageToShow}
                                 onClick={handleShowDialog}
-                                alt="no image" />
+                                alt="imgLarge" />
                                 
                         </dialog>
                     )}
