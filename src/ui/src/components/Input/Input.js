@@ -16,6 +16,10 @@ const InputText = props => {
 
 function Input(props) {
     switch(props.type) {
+        case 'password':
+            return <InputText {...props} type="password" />;
+        case 'email':
+            return <InputText {...props} type="email" />;
         default:
             return <InputText {...props} />;
     }

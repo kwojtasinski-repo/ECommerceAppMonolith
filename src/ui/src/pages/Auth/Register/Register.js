@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "../../../components/Input/Input";
 import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
+import { validate } from "../../../helpers/validation";
 import useAuth from "../../../hooks/useAuth";
+import axios from '../../../axios-setup';
 
 function Register() {
     const navigate = useNavigate();
-    const [auth, setAuth] = useAuth();
+    const [auth] = useAuth();
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({
         email: {
@@ -31,10 +33,21 @@ function Register() {
     const submit = async event => {
         event.preventDefault();
         setLoading(true);
+
+        try {
+            axios.post('users-module/account/sign-up', {
+                email: form.email.value,
+                password: form.email.value
+            });
+            // informacja o poprawnym zarejestrowaniu sie
+        } catch(exception) {
+            //setError()
+            setLoading(false);
+        }
     };
 
     const changeHandler = (value, fieldName) => {
-        //const error = validate(form[fieldName].rules, value);
+        const error = validate(form[fieldName].rules, value);
 
         setForm({
             ...form,
@@ -42,7 +55,7 @@ function Register() {
                 ...form[fieldName],
                 value,
                 showError: true,
-                error: ''
+                error
             }
         });
     };
