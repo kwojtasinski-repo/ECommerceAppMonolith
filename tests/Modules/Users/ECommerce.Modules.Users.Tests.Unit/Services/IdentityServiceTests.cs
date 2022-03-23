@@ -20,7 +20,7 @@ namespace ECommerce.Modules.Users.Tests.Unit.Services
         [Fact]
         public async Task given_valid_user_should_sign_up()
         {
-            var signUp = new SignUpDto { Id = Guid.NewGuid(), Email = "test@testowy.pl", Password = "password", Role = "user" };
+            var signUp = new SignUpDto { Id = Guid.NewGuid(), Email = "test@testowy.pl", Password = "Password123", Role = "user" };
 
             await _service.SignUpAsync(signUp);
 
@@ -31,7 +31,7 @@ namespace ECommerce.Modules.Users.Tests.Unit.Services
         [Fact]
         public async Task given_email_already_in_use_should_throw_an_exception()
         {
-            var signUp = new SignUpDto { Id = Guid.NewGuid(), Email = "test@testowy.pl", Password = "password", Role = "user" };
+            var signUp = new SignUpDto { Id = Guid.NewGuid(), Email = "test@testowy.pl", Password = "Password1234", Role = "user" };
             var expectedException = new EmailInUseException();
             _userRepository.GetAsync(signUp.Email).Returns(new User());
 
@@ -43,9 +43,23 @@ namespace ECommerce.Modules.Users.Tests.Unit.Services
         }
 
         [Fact]
+        public async Task given_invalid_password_should_throw_an_exception_when_sign_up()
+        {
+            var signUp = new SignUpDto { Id = Guid.NewGuid(), Email = "test@testowy.pl", Password = "password", Role = "user" };
+            var expectedException = new InvalidPasswordException();
+            _userRepository.GetAsync(signUp.Email).Returns(new User());
+
+            var exception = await Record.ExceptionAsync(() => _service.SignUpAsync(signUp));
+
+            exception.ShouldNotBeNull();
+            exception.ShouldBeOfType<InvalidPasswordException>();
+            exception.Message.ShouldBe(expectedException.Message);
+        }
+
+        [Fact]
         public async Task given_valid_sign_in_dto_should_return_json_token()
         {
-            var dto = new SignInDto { Email = "test@teser.pl", Password = "password" };
+            var dto = new SignInDto { Email = "test@teser.pl", Password = "Password123!" };
             var role = "admin";
             var claims = new Dictionary<string, IEnumerable<string>>();
             var user = GetSampleUser(dto.Email, dto.Password, role, claims);

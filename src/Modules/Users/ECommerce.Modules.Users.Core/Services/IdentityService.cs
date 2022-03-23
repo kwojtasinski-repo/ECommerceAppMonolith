@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Users.Core.Services
@@ -66,6 +67,14 @@ namespace ECommerce.Modules.Users.Core.Services
         {
             dto.Id = Guid.NewGuid();
             var email = dto.Email.ToLowerInvariant();
+
+            Regex pattern = new Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d\\w\\W]{8,}$");
+
+            if (!pattern.IsMatch(dto.Password))
+            {
+                throw new InvalidPasswordException();
+            }
+
             var user = await _userRepository.GetAsync(email);
 
             if (user is not null)

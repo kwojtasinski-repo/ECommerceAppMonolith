@@ -5,6 +5,7 @@ using ECommerce.Modules.Users.Core.Exceptions;
 using ECommerce.Shared.Abstractions.Auth;
 using ECommerce.Shared.Tests;
 using Flurl.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
 using System;
@@ -23,7 +24,7 @@ namespace ECommerce.Modules.Users.Tests.Integration.Controllers
         [Fact]
         public async Task given_valid_user_should_sign_up()
         {
-            var signUpDto = new SignUpDto { Email = "test@testowy.pl", Password = "password", Role = "user", Claims = new Dictionary<string, IEnumerable<string>>() };
+            var signUpDto = new SignUpDto { Email = "test@testowy.pl", Password = "Password123", Role = "user", Claims = new Dictionary<string, IEnumerable<string>>() };
 
             await _client.Request($"{Path}/sign-up").PostJsonAsync(signUpDto);
 
@@ -36,7 +37,7 @@ namespace ECommerce.Modules.Users.Tests.Integration.Controllers
         [Fact]
         public async Task given_existing_email_when_sign_up_should_return_bad_request()
         {
-            var signUpDto = new SignUpDto { Email = "test2@testowy.pl", Password = "password", Role = "user", Claims = new Dictionary<string, IEnumerable<string>>() };
+            var signUpDto = new SignUpDto { Email = "test2@testowy.pl", Password = "Password123!", Role = "user", Claims = new Dictionary<string, IEnumerable<string>>() };
             await _dbContext.Users.AddAsync(CreateSampleUser(signUpDto.Email, signUpDto.Email, "user", new Dictionary<string, IEnumerable<string>>()));
             await _dbContext.SaveChangesAsync();
             var expectedException = new EmailInUseException();
@@ -54,9 +55,9 @@ namespace ECommerce.Modules.Users.Tests.Integration.Controllers
         [Fact]
         public async Task given_valid_user_should_sign_in_and_return_token()
         {
-            var signInDto = new SignInDto { Email = "test3@testowy.pl", Password = "password" };
+            var signInDto = new SignInDto { Email = "test3@testowy.pl", Password = "Password412" };
             var user = CreateSampleUser(signInDto.Email,
-                "AQAAAAEAACcQAAAAEDNYWkm3o+82wXgwt617sFfh+qtMQsa9LewO2Hc0MCCD3OE2V4PT9n9EIH9mMSjbTw==", "user", new Dictionary<string, IEnumerable<string>>());
+                _passwordHasher.HashPassword(default, signInDto.Password), "user", new Dictionary<string, IEnumerable<string>>());
             await _dbContext.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
@@ -70,7 +71,7 @@ namespace ECommerce.Modules.Users.Tests.Integration.Controllers
         [Fact]
         public async Task given_not_existing_user_when_sign_in_should_return_bad_request()
         {
-            var signInDto = new SignInDto { Email = "test4@testowy.pl", Password = "password" };
+            var signInDto = new SignInDto { Email = "test4@testowy.pl", Password = "Password123a@" };
             var expectedException = new InvalidCredentialsException();
 
             var response = await _client.Request($"{Path}/sign-in").AllowHttpStatus("400").PostJsonAsync(signInDto);
@@ -86,9 +87,9 @@ namespace ECommerce.Modules.Users.Tests.Integration.Controllers
         [Fact]
         public async Task given_invalid_password_when_sign_in_should_return_bad_request()
         {
-            var signInDto = new SignInDto { Email = "test5@testowy.pl", Password = "password21" };
+            var signInDto = new SignInDto { Email = "test5@testowy.pl", Password = "Password21" };
             var user = CreateSampleUser(signInDto.Email,
-                "AQAAAAEAACcQAAAAEDNYWkm3o+82wXgwt617sFfh+qtMQsa9LewO2Hc0MCCD3OE2V4PT9n9EIH9mMSjbTw==", "user", new Dictionary<string, IEnumerable<string>>());
+                _passwordHasher.HashPassword(default, "PassW0RD!@12"), "user", new Dictionary<string, IEnumerable<string>>());
             await _dbContext.AddAsync(user);
             await _dbContext.SaveChangesAsync(); 
             var expectedException = new InvalidCredentialsException();
@@ -108,7 +109,7 @@ namespace ECommerce.Modules.Users.Tests.Integration.Controllers
         {
             var signInDto = new SignInDto { Email = "test6@testowy.pl", Password = "password" };
             var user = CreateSampleUser(signInDto.Email,
-                "AQAAAAEAACcQAAAAEDNYWkm3o+82wXgwt617sFfh+qtMQsa9LewO2Hc0MCCD3OE2V4PT9n9EIH9mMSjbTw==", "user", new Dictionary<string, IEnumerable<string>>());
+                _passwordHasher.HashPassword(default, signInDto.Password), "user", new Dictionary<string, IEnumerable<string>>());
             user.IsActive = false;
             await _dbContext.AddAsync(user);
             await _dbContext.SaveChangesAsync();
@@ -141,11 +142,13 @@ namespace ECommerce.Modules.Users.Tests.Integration.Controllers
         private const string Path = "users-module/account";
         private readonly UsersDbContext _dbContext;
         private readonly IFlurlClient _client;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
         public AccountControllerTests(TestApplicationFactory<Program> factory, TestUsersDbContext dbContext)
         {
             _client = new FlurlClient(factory.CreateClient());
             _dbContext = dbContext.DbContext;
+            _passwordHasher = factory.Services.GetService(typeof(IPasswordHasher<User>)) as IPasswordHasher<User>;
         }
     }
 }
