@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "../../../components/Input/Input";
 import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
-import { validate } from "../../../helpers/validation";
+import { mapToMessage, validate } from "../../../helpers/validation";
 import useAuth from "../../../hooks/useAuth";
 import axios from '../../../axios-setup';
 
@@ -32,21 +32,57 @@ function Register() {
 
     const submit = async event => {
         event.preventDefault();
+        const errorsEmail = validate(form.email.rules, form.email.value);
+        const errorsPassword = validate(form.password.rules, form.password.value);
+        setForm({
+            ...form,
+            email: {
+                ...form.email,
+                value: form.email.value,
+                showError: true,
+                error: errorsEmail
+            },
+            password: {
+                ...form.password,
+                value: form.password.value,
+                showError: true,
+                error: errorsPassword
+            }
+        });
+
+        if (errorsEmail.length || errorsPassword.length) {
+            setLoading(false);
+            return;
+        }
+        
         setLoading(true);
 
         try {
-            axios.post('users-module/account/sign-up', {
+            const response = await axios.post('users-module/account/sign-up', {
                 email: form.email.value,
-                password: form.email.value
+                password: form.email.value,
+                claims: {
+                    permissions: []
+                }
             });
+            debugger;
             // informacja o poprawnym zarejestrowaniu sie
         } catch(exception) {
-            //setError()
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            
+            for(const errMsg in errors) {
+                errorMessage += mapToMessage(errors[errMsg].code, status);
+            }
+            
+            setError(errorMessage);
             setLoading(false);
         }
     };
 
     const changeHandler = (value, fieldName) => {
+        debugger;
         const error = validate(form[fieldName].rules, value);
 
         setForm({
@@ -84,11 +120,11 @@ function Register() {
 
                     <Input
                         label = "Hasło"                    
-                        type = "passowrd"
-                        value = {form.email.value}
+                        type = "password"
+                        value = {form.password.value}
                         onChange = {val => changeHandler(val, 'password')}
-                        error = {form.email.error}
-                        showError = {form.email.showError} />
+                        error = {form.password.error}
+                        showError = {form.password.showError} />
 
                     {error ? (
                         <div className="alert alert-danger">{error}</div>
@@ -98,7 +134,7 @@ function Register() {
                         <LoadingButton
                             loading={loading} 
                             disabled={!valid} >
-                                Gotowe!
+                                Zarejestruj
                         </LoadingButton>
                     </div>
                 </form>
