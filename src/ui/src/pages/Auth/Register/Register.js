@@ -54,19 +54,19 @@ function Register() {
             setLoading(false);
             return;
         }
-        
+
         setLoading(true);
 
         try {
             const response = await axios.post('users-module/account/sign-up', {
                 email: form.email.value,
-                password: form.email.value,
+                password: form.password.value,
                 claims: {
                     permissions: []
                 }
             });
-            debugger;
             // informacja o poprawnym zarejestrowaniu sie
+            console.log(response);
         } catch(exception) {
             let errorMessage = '';
             const status = exception.response.status;
@@ -82,7 +82,6 @@ function Register() {
     };
 
     const changeHandler = (value, fieldName) => {
-        debugger;
         const error = validate(form[fieldName].rules, value);
 
         setForm({

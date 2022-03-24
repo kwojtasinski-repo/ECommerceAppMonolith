@@ -1,14 +1,15 @@
 export const reducer = (state, action) => {
     switch(action.type) {
         case 'login' :
-            return { ...state, user: action.user }
+            return { ...state, user: action.user, event: 'login' }
         case 'logout' : 
-            return { ...state, user: null }
+            return { ...state, user: null, event: 'logout' }
         default :
             throw new Error(`Action ${action.type} doesnt exists.`);
     }
 }
 
 export const initialState = {
-    user: null
+    user: null,
+    event: ''
 };
