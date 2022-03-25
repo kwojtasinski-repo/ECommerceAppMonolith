@@ -58,7 +58,7 @@ function Register() {
         setLoading(true);
 
         try {
-            const response = await axios.post('users-module/account/sign-up', {
+            await axios.post('users-module/account/sign-up', {
                 email: form.email.value,
                 password: form.password.value,
                 claims: {
@@ -66,7 +66,7 @@ function Register() {
                 }
             });
             // informacja o poprawnym zarejestrowaniu sie
-            console.log(response);
+            navigate('/');
         } catch(exception) {
             let errorMessage = '';
             const status = exception.response.status;

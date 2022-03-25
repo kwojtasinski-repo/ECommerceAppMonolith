@@ -2,12 +2,15 @@ import PropTypes from "prop-types";
 import styles from "./Notification.module.css";
 import { ReactComponent as Times } from "./times.svg";
 import cn from "classnames";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import useNotification from "../../hooks/useNotification";
 
 let timeToClose = 3000;
 
 function Notification(props) {
     const notify = useRef();
+    const [notificationsContext, addNotification, deleteNotification] = useNotification();
+    const [id, setId] = useState(props.id);
 
     const onDelete = (event) => {
         event.preventDefault();
@@ -16,7 +19,7 @@ function Notification(props) {
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            notify.current.remove();
+            deleteNotification(id);
         }, props.timeToClose);
         
         return () => {

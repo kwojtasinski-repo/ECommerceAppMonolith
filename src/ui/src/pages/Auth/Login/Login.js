@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
 import useAuth from "../../../hooks/useAuth";
 import axios from '../../../axios-setup';
-import Notification from "../../../components/Notification/Notification";
+import { mapToMessage } from "../../../helpers/validation";
+import useNotification from "../../../hooks/useNotification";
+import { Color } from "../../../components/Notification/Notification";
 
 function Login() {
     const [auth, setAuth] = useAuth();
@@ -13,6 +15,7 @@ function Login() {
     const [loading, setLoading] = useState(false);
     const [valid, setValid] = useState(null);
     const [error, setError] = useState('');
+    const [notifications, addNotification] = useNotification();
 
     const submit = async (event) => {
         event.preventDefault();
@@ -28,9 +31,21 @@ function Login() {
                 token: response.data.accessToken,
                 userId: response.data.id
             })
+            const notification = { color: Color.success, id: new Date().getTime(), text: 'Pomyślnie zalogowano', timeToClose: 5000 };
+            addNotification(notification);
             navigate('/');
         } catch (exception) {
-            console.log(exception.response.data);
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            
+            for(const errMsg in errors) {
+                errorMessage += mapToMessage(errors[errMsg].code, status);
+            }
+            
+            setError(errorMessage);
+            setValid(false);
             setLoading(false);
         }
     }

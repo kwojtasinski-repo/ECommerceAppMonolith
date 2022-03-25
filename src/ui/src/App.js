@@ -15,12 +15,21 @@ import Register from './pages/Auth/Register/Register';
 import Item from './pages/Item/Item';
 import Home from './pages/Home/Home';
 import ReducerContext from './context/ReducerContext';
-import Notification, { Color } from './components/Notification/Notification';
+import Notification from './components/Notification/Notification';
+import NotificationContext from './context/NotificationContext';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [notifications, setNotifications] = useState([]);
   
+  const addNotification = (notification) => {
+    const newNotification = [...notifications, notification]
+    setNotifications(newNotification);
+  };
+  const deleteNotification = (id) => {
+    setNotifications(notifications.filter(n => n.id !== id));
+  };
+
   const header = (
     <Header >
       <Searchbar />
@@ -30,18 +39,6 @@ function App() {
   const menu = (
     <Menu />
   )
-
-  useEffect(() => {
-    if (state.user && state.event === "login") {
-      setNotifications([...notifications, { color: Color.success, id: notifications.length, text: 'Pomyślnie zalogowano', timeToClose: 5000 } ]);
-      state.event = '';
-    } 
-
-    if (state.user == null && state.event === "logout") {
-      setNotifications([...notifications, { color: Color.info, id: notifications.length, text: 'Wylogowano', timeToClose: 5000 } ]);
-      state.event = '';
-    }
-  }, [state.user]);
 
   const content = (
     <Suspense fallback={<p>Ładowanie...</p>} >
@@ -70,19 +67,24 @@ function App() {
           state: state,
           dispatch: dispatch
         }} >
-          <ErrorBoundary>
-            <Layout 
-              header = {header}
-              menu = {menu}
-              content = {content}
-              footer = {footer}
-              />
-              
+          <NotificationContext.Provider value={{
+            notifications: notifications,
+            addNotification: addNotification,
+            deleteNotification: deleteNotification
+          }}>
+            <ErrorBoundary>
+              <Layout 
+                header = {header}
+                menu = {menu}
+                content = {content}
+                footer = {footer}
+                />
+
               {notifications.map(({ id, color, text, timeToClose }) => (
-                <Notification key={id} color={color} text={text} timeToClose={timeToClose} >
-                </Notification>
+                    <Notification key={id} id={id} color={color} text={text} timeToClose={timeToClose} />
               ))}
-          </ErrorBoundary>
+            </ErrorBoundary>
+          </NotificationContext.Provider>
         </ReducerContext.Provider>
       </AuthContext.Provider>
     </Router>
