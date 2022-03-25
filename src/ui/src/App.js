@@ -19,6 +19,10 @@ import Notification from './components/Notification/Notification';
 import NotificationContext from './context/NotificationContext';
 import AddItem from './pages/Items/AddItem/AddItem';
 import Items from './pages/Items/Items';
+import RequireAuth from './hoc/RequireAuth';
+import EditItem from './pages/Items/EditItem/EditItem';
+import DeleteItem from './pages/Items/DeleteItem/DeleteItem';
+import PutItemForSale from './pages/Items/PutItemForSale/PutItemForSale';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -45,9 +49,12 @@ function App() {
   const content = (
     <Suspense fallback={<p>Ładowanie...</p>} >
       <Routes>
-        <Route path='/items/add' element = {<AddItem />} />
-        <Route path='/items/:id' element = {<Item />} />
-        <Route path='/items' element = {<Items />} />
+        <Route path='/items/for-sale' element = { <RequireAuth> <PutItemForSale /> </RequireAuth>} />
+        <Route path='/items/delete' element = { <RequireAuth> <DeleteItem /> </RequireAuth>} />
+        <Route path='/items/edit' element = { <RequireAuth> <EditItem /> </RequireAuth>} />
+        <Route path='/items/add' element = { <RequireAuth> <AddItem /> </RequireAuth>} />
+        <Route path='/items/:id' element = {  <Item />} />
+        <Route path='/items' element = { <RequireAuth> <Items /> </RequireAuth>} />
         <Route path='/login' element = {<Login />} />
         <Route path='/register' element = {<Register />} />
         <Route path="/" end element = {<Home />} />
