@@ -29,7 +29,8 @@ function Login() {
             setAuth({
                 email: response.data.email,
                 token: response.data.accessToken,
-                userId: response.data.id
+                userId: response.data.id,
+                claims: response.data.claims
             })
             const notification = { color: Color.success, id: new Date().getTime(), text: 'Pomyślnie zalogowano', timeToClose: 5000 };
             addNotification(notification);

@@ -31,6 +31,12 @@ function Menu() {
                         <li className={style.menuItem}>
                             <NavLink to="/" onClick={logout} >Wyloguj</NavLink>
                         </li>
+                        {auth && auth?.claims?.permissions?.find(c => c === "items") ? 
+                            <li className={style.menuItem}>
+                                <NavLink to="/items">Przedmioty</NavLink>
+                            </li>
+                            : null
+                        }
                     </> : (<>
                                 <li className={style.menuItem}>
                                     <NavLink to="/register" >Zarejestruj</NavLink>

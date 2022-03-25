@@ -44,7 +44,6 @@ const availableRules = {
 };
 
 export function mapToMessage(code, status) {
-    debugger;
     if (status >= 500) {
         return "Coś poszło nie tak";
     }

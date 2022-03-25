@@ -17,6 +17,8 @@ import Home from './pages/Home/Home';
 import ReducerContext from './context/ReducerContext';
 import Notification from './components/Notification/Notification';
 import NotificationContext from './context/NotificationContext';
+import AddItem from './pages/Items/AddItem/AddItem';
+import Items from './pages/Items/Items';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -43,7 +45,9 @@ function App() {
   const content = (
     <Suspense fallback={<p>Ładowanie...</p>} >
       <Routes>
+        <Route path='/items/add' element = {<AddItem />} />
         <Route path='/items/:id' element = {<Item />} />
+        <Route path='/items' element = {<Items />} />
         <Route path='/login' element = {<Login />} />
         <Route path='/register' element = {<Register />} />
         <Route path="/" end element = {<Home />} />
