@@ -24,7 +24,9 @@ function Menu() {
                     </NavLink>
                 </li>
                 <li className={style.menuItem}>
-                    <a className={`${style.menuItem} navbar-brand`} href="#">Profile</a>
+                    <NavLink to='/profile'>
+                        Profil
+                    </NavLink>
                 </li>
                 {auth ?
                     <>
