@@ -36,6 +36,16 @@ namespace ECommerce.Modules.Items.Api.Controllers
             return Ok(itemsSale);
         }
 
+        [HttpGet("search")]
+        [AllowAnonymous]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<IEnumerable<ItemSaleDto>>> GetAllFilteredByNameAsync([FromQuery] string name)
+        {
+            var itemsSale = await _queryDispatcher.QueryAsync(new GetAllFilteredByName(name));
+            return Ok(itemsSale);
+        }
+
         [ActionName("GetAsync")] // blad z metoda GetAsync (nie moze jej znalezc podczas CrateAtAction())
         [HttpGet("{itemSaleId:guid}")]
         [AllowAnonymous]

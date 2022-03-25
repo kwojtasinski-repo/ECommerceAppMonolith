@@ -23,6 +23,7 @@ import RequireAuth from './hoc/RequireAuth';
 import EditItem from './pages/Items/EditItem/EditItem';
 import DeleteItem from './pages/Items/DeleteItem/DeleteItem';
 import PutItemForSale from './pages/Items/PutItemForSale/PutItemForSale';
+import Search from './pages/Search/Search';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -54,6 +55,10 @@ function App() {
         <Route path='/items/edit' element = { <RequireAuth> <EditItem /> </RequireAuth>} />
         <Route path='/items/add' element = { <RequireAuth> <AddItem /> </RequireAuth>} />
         <Route path='/items/:id' element = {  <Item />} />
+        <Route path='/search' element = {<Search />} >  
+          <Route path=":term" element = {<Search />} />
+          <Route path="" element = {<Search />} />
+        </Route>
         <Route path='/items' element = { <RequireAuth> <Items /> </RequireAuth>} />
         <Route path='/login' element = {<Login />} />
         <Route path='/register' element = {<Register />} />

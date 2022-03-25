@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Searchbar() {
     const [term, setTerm] = useState('');
     const inputRef = useRef(null);
+    const navigate = useNavigate();
 
     const onKeyDownHandler = event => {
         if (event.key === 'Enter') {
@@ -11,7 +13,7 @@ function Searchbar() {
     }
 
     const search = () => {
-        console.log(`term: ${term}`);
+        navigate(`/search/${term}`);
     }
     
     const focusInput = () => {
