@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import useNotification from '../../hooks/useNotification';
 import { Color } from '../Notification/Notification';
+import ItemCart from '../UI/ItemCart/ItemCart';
 import style from './Menu.module.css';
 
 function Menu() {
@@ -19,7 +20,7 @@ function Menu() {
         <nav className={`${style.menuContainer} navbar navbar-expand-lg navbar-light bg-light`}>
             <ul className={style.menu}>
                 <li className={style.menuItem}>
-                    <NavLink to='/' className={style.menuItem}  >
+                    <NavLink to='/' className={style.menuItem} >
                         Home
                     </NavLink>
                 </li>
@@ -51,6 +52,9 @@ function Menu() {
                             </>
                     )
                 }
+                <NavLink to="#" className={style.menuItem} >
+                    <ItemCart />
+                </NavLink>
             </ul>
         </nav>
     );

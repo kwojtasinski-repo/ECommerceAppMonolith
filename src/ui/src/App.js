@@ -27,6 +27,7 @@ import Search from './pages/Search/Search';
 import Profile from './pages/Profile/Profile';
 import ProfileDetails from './pages/Profile/ProfileDetails/ProfileDetails';
 import ContactData from './pages/Profile/ContactData/ContactData';
+import ItemCart from './components/UI/ItemCart/ItemCart';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
