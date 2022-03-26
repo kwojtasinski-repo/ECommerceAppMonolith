@@ -40,6 +40,12 @@ function Menu() {
                             </li>
                             : null
                         }
+                        {auth && auth?.claims?.permissions?.find(c => c === "currencies") ? 
+                            <li className={style.menuItem}>
+                                <NavLink to="#">Waluty</NavLink>
+                            </li>
+                            : null
+                        }
                     </> : (<>
                                 <li className={style.menuItem}>
                                     <NavLink to="/register" >Zarejestruj</NavLink>

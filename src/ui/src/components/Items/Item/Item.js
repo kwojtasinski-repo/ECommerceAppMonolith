@@ -27,6 +27,7 @@ function Item(props) {
                             </div>
                         </div>
                     </div>
+                    <button>Dodaj do koszyka</button>
                 </div>
             </div>
         </div>
