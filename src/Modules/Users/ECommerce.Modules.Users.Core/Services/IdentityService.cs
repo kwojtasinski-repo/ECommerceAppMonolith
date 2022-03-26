@@ -155,14 +155,15 @@ namespace ECommerce.Modules.Users.Core.Services
 
         private async Task ChangeEmail(User user, string newEmail)
         {
-            var userExists = await _userRepository.GetAsync(newEmail);
+            var email = newEmail.ToLowerInvariant();
+            var userExists = await _userRepository.GetAsync(email);
 
             if (userExists is not null)
             {
                 throw new EmailInUseException();
             }
 
-            user.Email = newEmail;
+            user.Email = email;
             await _userRepository.UpdateAsync(user);
         }
 
@@ -198,17 +199,18 @@ namespace ECommerce.Modules.Users.Core.Services
                 throw new PasswordsAreNotSameException();
             }
 
-            var userExists = await _userRepository.GetAsync(dto.NewEmail);
+            var email = dto.NewEmail.ToLowerInvariant();
+            var userExists = await _userRepository.GetAsync(email);
 
             if (userExists is not null)
             {
                 throw new EmailInUseException();
             }
 
-            user.Email = dto.NewEmail;
             VerifyPassword(user.Password, dto.OldPassword);
             CheckPassword(dto.NewPassword);
 
+            user.Email = email;
             var password = _passwordHasher.HashPassword(default, dto.NewPassword);
             user.Password = password;
             await _userRepository.UpdateAsync(user);

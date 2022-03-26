@@ -125,7 +125,49 @@ namespace ECommerce.Modules.Users.Tests.Integration.Controllers
             exception.Message.ShouldBe(expectedException.Message);
         }
 
-        private User CreateSampleUser(string email, string password, string role, Dictionary<string, IEnumerable<string>> claims)
+        [Fact]
+        public async Task given_valid_new_email_and_password_should_change_credentials()
+        {
+            var dto = new ChangeCredentialsDto { OldEmail = "test123@testowy.pl", OldPassword = "password", NewEmail = "email@gmail.com", NewPassword = "NewP@As1W2RD", NewPasswordConfirm = "NewP@As1W2RD" };
+            var user = CreateSampleUser(dto.OldEmail,
+                _passwordHasher.HashPassword(default, dto.OldPassword), "user", new Dictionary<string, IEnumerable<string>>());
+            await _dbContext.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
+
+            var response = await _client.Request($"{Path}/change-credentials").PostJsonAsync(dto);
+
+            response.ShouldNotBeNull();
+            response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
+            var jsonToken = await response.GetJsonAsync<JsonWebToken>();
+            jsonToken.ShouldNotBeNull();
+            jsonToken.AccessToken.ShouldNotBeNullOrWhiteSpace();
+            jsonToken.Email.ShouldBe(dto.NewEmail);
+        }
+
+        [Fact]
+        public async Task given_valid_new_email_and_password_should_change_credentials_and_sign_in_with_new_password_and_email()
+        {
+            var dto = new ChangeCredentialsDto { OldEmail = "test123@testowy.pl", OldPassword = "password", NewEmail = "emailPasw90675@gmail.com", NewPassword = "NewP@As1W2RD", NewPasswordConfirm = "NewP@As1W2RD" };
+            var user = CreateSampleUser(dto.OldEmail,
+                _passwordHasher.HashPassword(default, dto.OldPassword), "user", new Dictionary<string, IEnumerable<string>>());
+            await _dbContext.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
+
+            var response = await _client.Request($"{Path}/change-credentials").PostJsonAsync(dto);
+            var responseSignIn = await _client.Request($"{Path}/sign-in").PostJsonAsync(new SignInDto { Email = dto.NewEmail, Password = dto.NewPassword });
+            var jsonToken = await response.GetJsonAsync<JsonWebToken>();
+            var jsonTokenSigIn = await responseSignIn.GetJsonAsync<JsonWebToken>();
+
+            jsonToken.ShouldNotBeNull();
+            jsonToken.AccessToken.ShouldNotBeNullOrWhiteSpace();
+            jsonToken.Email.ShouldBe(dto.NewEmail.ToLowerInvariant());
+            jsonTokenSigIn.ShouldNotBeNull();
+            jsonTokenSigIn.AccessToken.ShouldNotBeNullOrWhiteSpace();
+            jsonTokenSigIn.Email.ShouldBe(dto.NewEmail.ToLowerInvariant());
+        }
+
+
+        private static User CreateSampleUser(string email, string password, string role, Dictionary<string, IEnumerable<string>> claims)
         {
             return new User
             {
@@ -135,7 +177,7 @@ namespace ECommerce.Modules.Users.Tests.Integration.Controllers
                 CreatedAt = DateTime.UtcNow,
                 Password = password,
                 Role = role,
-                Claims = claims
+                Claims = claims,
             };
         }
 
