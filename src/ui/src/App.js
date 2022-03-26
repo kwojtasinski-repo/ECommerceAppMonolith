@@ -25,6 +25,8 @@ import DeleteItem from './pages/Items/DeleteItem/DeleteItem';
 import PutItemForSale from './pages/Items/PutItemForSale/PutItemForSale';
 import Search from './pages/Search/Search';
 import Profile from './pages/Profile/Profile';
+import ProfileDetails from './pages/Profile/ProfileDetails/ProfileDetails';
+import ContactData from './pages/Profile/ContactData/ContactData';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -64,7 +66,11 @@ function App() {
                                           <RequireAuth>
                                             <Profile/>
                                           </RequireAuth>
-                                        }  />
+                                        }  >
+                          
+          <Route path="contact-data" element = {<ContactData />} />
+          <Route path="" element = {<ProfileDetails/>} />
+        </Route>
         <Route path='/items' element = { <RequireAuth> <Items /> </RequireAuth>} />
         <Route path='/login' element = {<Login />} />
         <Route path='/register' element = {<Register />} />

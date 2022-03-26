@@ -45,5 +45,11 @@ namespace ECommerce.Modules.Users.Api.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<JsonWebToken>> SignInAsync(SignInDto dto)
             => Ok(await _identityService.SignInAsync(dto));
+
+        [HttpPost("change-credentials")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<JsonWebToken>> ChangeCredentialsAsync(ChangeCredentialsDto dto)
+            => Ok(await _identityService.ChangeCredentialsAsync(dto));
     }
 }

@@ -13,5 +13,6 @@ namespace ECommerce.Modules.Users.Core.Services
         Task<AccountDto> GetAsync(Guid id);
         Task<JsonWebToken> SignInAsync(SignInDto dto);
         Task SignUpAsync(SignUpDto dto);
+        Task<JsonWebToken> ChangeCredentialsAsync(ChangeCredentialsDto dto);
     }
 }
