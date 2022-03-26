@@ -168,13 +168,18 @@ namespace ECommerce.Modules.Users.Core.Services
 
         private async Task ChangePassword(User user, ChangeCredentialsDto dto)
         {
-            VerifyPassword(user.Password, dto.OldPassword);
-            CheckPassword(dto.NewPassword);
+            if (string.IsNullOrWhiteSpace(dto.NewPasswordConfirm))
+            {
+                throw new PasswordsAreNotSameException();
+            }
 
             if (dto.NewPassword != dto.NewPasswordConfirm)
             {
                 throw new PasswordsAreNotSameException();
             }
+
+            VerifyPassword(user.Password, dto.OldPassword);
+            CheckPassword(dto.NewPassword);
 
             var password = _passwordHasher.HashPassword(default, dto.NewPassword);
             user.Password = password;
@@ -183,6 +188,16 @@ namespace ECommerce.Modules.Users.Core.Services
 
         private async Task ChangeEmailAndPassword(User user, ChangeCredentialsDto dto)
         {
+            if (string.IsNullOrWhiteSpace(dto.NewPasswordConfirm))
+            {
+                throw new PasswordsAreNotSameException();
+            }
+
+            if (dto.NewPassword != dto.NewPasswordConfirm)
+            {
+                throw new PasswordsAreNotSameException();
+            }
+
             var userExists = await _userRepository.GetAsync(dto.NewEmail);
 
             if (userExists is not null)
@@ -193,11 +208,6 @@ namespace ECommerce.Modules.Users.Core.Services
             user.Email = dto.NewEmail;
             VerifyPassword(user.Password, dto.OldPassword);
             CheckPassword(dto.NewPassword);
-
-            if (dto.NewPassword != dto.NewPasswordConfirm)
-            {
-                throw new PasswordsAreNotSameException();
-            }
 
             var password = _passwordHasher.HashPassword(default, dto.NewPassword);
             user.Password = password;

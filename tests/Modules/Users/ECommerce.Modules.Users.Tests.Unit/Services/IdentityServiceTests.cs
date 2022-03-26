@@ -126,7 +126,160 @@ namespace ECommerce.Modules.Users.Tests.Unit.Services
             ((UserNotActiveException) exception).UserId.ShouldBe(expectedException.UserId);
         }
 
-        private User GetSampleUser(string email, string password, string role, Dictionary<string, IEnumerable<string>> claims)
+        [Fact]
+        public async Task given_valid_dto_should_change_email()
+        {
+            var dto = new ChangeCredentialsDto { OldEmail = "tester@gmail.com", NewEmail = "email@email.com" };
+            var role = "admin";
+            var claims = new Dictionary<string, IEnumerable<string>>();
+            var user = GetSampleUser(dto.OldEmail, "password", role, claims);
+            _userRepository.GetAsync(dto.OldEmail.ToLowerInvariant()).Returns(user);
+            var token = CreateToken(role);
+            _authManager.CreateToken(Arg.Any<string>(), role, claims: claims).Returns(token);
+
+            var jwt = await _service.ChangeCredentialsAsync(dto);
+
+            jwt.ShouldNotBeNull();
+            await _userRepository.Received(1).UpdateAsync(Arg.Any<User>());
+        }
+
+        [Fact]
+        public async Task given_valid_dto_should_change_password()
+        {
+            var dto = new ChangeCredentialsDto { OldEmail = "tester@gmail.com", OldPassword="password", NewPassword="Abc1234!sadgs", NewPasswordConfirm = "Abc1234!sadgs" };
+            var role = "admin";
+            var claims = new Dictionary<string, IEnumerable<string>>();
+            var user = GetSampleUser(dto.OldEmail, dto.OldPassword, role, claims);
+            _userRepository.GetAsync(dto.OldEmail.ToLowerInvariant()).Returns(user);
+            _passwordHasher.VerifyHashedPassword(Arg.Any<User>(), Arg.Any<string>(), Arg.Any<string>()).Returns(PasswordVerificationResult.Success);
+            var token = CreateToken(role);
+            _authManager.CreateToken(Arg.Any<string>(), role, claims: claims).Returns(token);
+
+            var jwt = await _service.ChangeCredentialsAsync(dto);
+
+            jwt.ShouldNotBeNull();
+            await _userRepository.Received(1).UpdateAsync(Arg.Any<User>());
+        }
+
+        [Fact]
+        public async Task given_valid_dto_should_change_email_and_password()
+        {
+            var dto = new ChangeCredentialsDto { OldEmail = "tester@gmail.com", NewEmail="em12@gmail.com", OldPassword = "password", NewPassword = "Abc1234!sadgs", NewPasswordConfirm = "Abc1234!sadgs" };
+            var role = "admin";
+            var claims = new Dictionary<string, IEnumerable<string>>();
+            var user = GetSampleUser(dto.OldEmail, dto.OldPassword, role, claims);
+            _userRepository.GetAsync(dto.OldEmail.ToLowerInvariant()).Returns(user);
+            _passwordHasher.VerifyHashedPassword(Arg.Any<User>(), Arg.Any<string>(), Arg.Any<string>()).Returns(PasswordVerificationResult.Success);
+            var token = CreateToken(role);
+            _authManager.CreateToken(Arg.Any<string>(), role, claims: claims).Returns(token);
+
+            var jwt = await _service.ChangeCredentialsAsync(dto);
+
+            jwt.ShouldNotBeNull();
+            await _userRepository.Received(1).UpdateAsync(Arg.Any<User>());
+        }
+
+        [Fact]
+        public async Task given_valid_dto_without_new_values_should_return_null_jwt()
+        {
+            var dto = new ChangeCredentialsDto { OldEmail = "tester@gmail.com", NewEmail = "", NewPasswordConfirm = "", NewPassword = "", OldPassword = "" };
+            var role = "admin";
+            var claims = new Dictionary<string, IEnumerable<string>>();
+            var user = GetSampleUser(dto.OldEmail, dto.OldPassword, role, claims);
+            _userRepository.GetAsync(dto.OldEmail.ToLowerInvariant()).Returns(user);
+
+            var jwt = await _service.ChangeCredentialsAsync(dto);
+
+            jwt.ShouldBeNull();
+            await _userRepository.Received(0).UpdateAsync(Arg.Any<User>());
+        }
+
+        [Fact]
+        public async Task given_invalid_old_email_should_throw_an_exception()
+        {
+            var dto = new ChangeCredentialsDto { OldEmail = "" };
+            var expectedException = new InvalidCredentialsException();
+
+            var exception = await Record.ExceptionAsync(() => _service.ChangeCredentialsAsync(dto));
+
+            exception.ShouldNotBeNull();
+            exception.ShouldBeOfType(expectedException.GetType());
+            exception.Message.ShouldBe(expectedException.Message);
+        }
+
+        [Fact]
+        public async Task given_invalid_password_when_change_credentials_should_throw_an_exception()
+        {
+            var dto = new ChangeCredentialsDto { OldEmail = "tester@gmail.com", OldPassword = "password", NewPassword = "new", NewPasswordConfirm = "new" };
+            var role = "admin";
+            var claims = new Dictionary<string, IEnumerable<string>>();
+            var user = GetSampleUser(dto.OldEmail, dto.OldPassword, role, claims);
+            _userRepository.GetAsync(dto.OldEmail.ToLowerInvariant()).Returns(user); _passwordHasher.VerifyHashedPassword(Arg.Any<User>(), Arg.Any<string>(), Arg.Any<string>()).Returns(PasswordVerificationResult.Success);
+            _passwordHasher.VerifyHashedPassword(Arg.Any<User>(), Arg.Any<string>(), Arg.Any<string>()).Returns(PasswordVerificationResult.Failed);
+            var expectedException = new InvalidCredentialsException();
+
+            var exception = await Record.ExceptionAsync(() => _service.ChangeCredentialsAsync(dto));
+
+            exception.ShouldNotBeNull();
+            exception.ShouldBeOfType(expectedException.GetType());
+            exception.Message.ShouldBe(expectedException.Message);
+        }
+
+        [Fact]
+        public async Task given_invalid_new_password_when_change_credentials_should_throw_an_exception()
+        {
+            var dto = new ChangeCredentialsDto { OldEmail = "tester@gmail.com", OldPassword = "password", NewPassword = "new", NewPasswordConfirm = "new" };
+            var role = "admin";
+            var claims = new Dictionary<string, IEnumerable<string>>();
+            var user = GetSampleUser(dto.OldEmail, dto.OldPassword, role, claims);
+            _userRepository.GetAsync(dto.OldEmail.ToLowerInvariant()).Returns(user); _passwordHasher.VerifyHashedPassword(Arg.Any<User>(), Arg.Any<string>(), Arg.Any<string>()).Returns(PasswordVerificationResult.Success);
+            _passwordHasher.VerifyHashedPassword(Arg.Any<User>(), Arg.Any<string>(), Arg.Any<string>()).Returns(PasswordVerificationResult.Success);
+            var expectedException = new InvalidPasswordException();
+
+            var exception = await Record.ExceptionAsync(() => _service.ChangeCredentialsAsync(dto));
+
+            exception.ShouldNotBeNull();
+            exception.ShouldBeOfType(expectedException.GetType());
+            exception.Message.ShouldBe(expectedException.Message);
+        }
+
+        [Fact]
+        public async Task given_invalid_null_new_password_confirm_when_change_credentials_should_throw_an_exception()
+        {
+            var dto = new ChangeCredentialsDto { OldEmail = "tester@gmail.com", OldPassword = "password", NewPassword = "Newa1323Abcsa" };
+            var role = "admin";
+            var claims = new Dictionary<string, IEnumerable<string>>();
+            var user = GetSampleUser(dto.OldEmail, dto.OldPassword, role, claims);
+            _userRepository.GetAsync(dto.OldEmail.ToLowerInvariant()).Returns(user); _passwordHasher.VerifyHashedPassword(Arg.Any<User>(), Arg.Any<string>(), Arg.Any<string>()).Returns(PasswordVerificationResult.Success);
+            _passwordHasher.VerifyHashedPassword(Arg.Any<User>(), Arg.Any<string>(), Arg.Any<string>()).Returns(PasswordVerificationResult.Success);
+            var expectedException = new PasswordsAreNotSameException();
+
+            var exception = await Record.ExceptionAsync(() => _service.ChangeCredentialsAsync(dto));
+
+            exception.ShouldNotBeNull();
+            exception.ShouldBeOfType(expectedException.GetType());
+            exception.Message.ShouldBe(expectedException.Message);
+        }
+
+        [Fact]
+        public async Task given_invalid_different_new_passwords_when_change_credentials_should_throw_an_exception()
+        {
+            var dto = new ChangeCredentialsDto { OldEmail = "tester@gmail.com", OldPassword = "password", NewPassword = "Newa1323Abcsa", NewPasswordConfirm = "Newa1323AbcsaA!" };
+            var role = "admin";
+            var claims = new Dictionary<string, IEnumerable<string>>();
+            var user = GetSampleUser(dto.OldEmail, dto.OldPassword, role, claims);
+            _userRepository.GetAsync(dto.OldEmail.ToLowerInvariant()).Returns(user); _passwordHasher.VerifyHashedPassword(Arg.Any<User>(), Arg.Any<string>(), Arg.Any<string>()).Returns(PasswordVerificationResult.Success);
+            _passwordHasher.VerifyHashedPassword(Arg.Any<User>(), Arg.Any<string>(), Arg.Any<string>()).Returns(PasswordVerificationResult.Success);
+            var expectedException = new PasswordsAreNotSameException();
+
+            var exception = await Record.ExceptionAsync(() => _service.ChangeCredentialsAsync(dto));
+
+            exception.ShouldNotBeNull();
+            exception.ShouldBeOfType(expectedException.GetType());
+            exception.Message.ShouldBe(expectedException.Message);
+        }
+
+        private static User GetSampleUser(string email, string password, string role, Dictionary<string, IEnumerable<string>> claims)
         {
             return new User
             {
@@ -140,7 +293,7 @@ namespace ECommerce.Modules.Users.Tests.Unit.Services
             };
         }
 
-        private JsonWebToken CreateToken(string role = null)
+        private static JsonWebToken CreateToken(string role = null)
         {
             var token = new JsonWebToken
             {
