@@ -14,9 +14,9 @@ function ItemCart(props) {
              onMouseLeave={() => setBackground('#94989a')}
               >
             {props.count ?
-                <span className={`badge badge-light ${styles.itemCartCount}`} style={{ color : background}}>{props.count}</span>
+                <span className={`badge badge-light ${styles.itemCartCount}`} style={{ color : props.color}}>{props.count}</span>
                 : null }
-            <FontAwesomeIcon icon={faCartShopping} className={styles.shop} style={{ color : background}}/>
+            <FontAwesomeIcon icon={faCartShopping} className={styles.shop} style={{ color : props.color}}/>
         </div>
     )
 }

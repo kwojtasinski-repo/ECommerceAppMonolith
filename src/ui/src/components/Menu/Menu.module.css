@@ -10,9 +10,13 @@
 }
 
 .menuItem a {
-    color: #6c757d;
+    color: #206199;
 }
 
 .menuItemActive {
     text-decoration: underline;
+}
+
+.onHover {
+    filter: brightness(150%);
 }

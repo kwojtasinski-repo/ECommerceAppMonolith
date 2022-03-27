@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import useNotification from '../../hooks/useNotification';
@@ -20,50 +21,68 @@ function Menu() {
         <nav className={`${style.menuContainer} navbar navbar-expand-lg navbar-light bg-light`}>
             <ul className={style.menu}>
                 <li className={style.menuItem}>
-                    <NavLink to='/' className={style.menuItem} >
+                    <Link to='/' className={style.menuItem} >
                         Home
-                    </NavLink>
+                    </Link>
                 </li>
                 <li className={style.menuItem}>
-                    <NavLink to='/profile'>
+                    <Link to='/profile' className={`${style.menuItem}`}>
                         Profil
-                    </NavLink>
+                    </Link>
                 </li>
                 {auth ?
                     <>
                         <li className={style.menuItem}>
-                            <NavLink to="/" onClick={logout} >Wyloguj</NavLink>
+                            <Link to="/" onClick={logout} >Wyloguj</Link>
                         </li>
                         {auth && auth?.claims?.permissions?.find(c => c === "items") ? 
                             <li className={style.menuItem}>
-                                <NavLink to="/items">Przedmioty</NavLink>
+                                <Link to="/items" className={`${style.menuItem}`}>Przedmioty</Link>
                             </li>
                             : null
                         }
                         {auth && auth?.claims?.permissions?.find(c => c === "currencies") ? 
                             <li className={style.menuItem}>
-                                <NavLink to="#">Waluty</NavLink>
+                                <Link to="#" className={`${style.menuItem}`}>Waluty</Link>
                             </li>
                             : null
                         }
                     </> : (<>
                                 <li className={style.menuItem}>
-                                    <NavLink to="/register" >Zarejestruj</NavLink>
+                                    <Link to="/register" className={`${style.menuItem}`} >Zarejestruj</Link>
                                 </li>
                                 <li className={style.menuItem}>
-                                    <NavLink to="/login" >
+                                    <Link to="/login" className={`${style.menuItem}`} >
                                         Zaloguj
-                                    </NavLink>
+                                    </Link>
                                 </li>
                             </>
                     )
                 }
-                <NavLink to="#" className={style.menuItem} >
-                    <ItemCart />
-                </NavLink>
+                <li className={style.menuItem}>
+                    <Link to="#" className={`${style.menuItem}`} >
+                        <ItemCart color="#206199" />
+                    </Link>
+                </li>
             </ul>
         </nav>
     );
+}
+
+function Link(props) {
+    const [onHover, setOnHover] = useState('');
+
+    const onMouseEnter = () => {
+        setOnHover(style.onHover)
+    };
+
+    const onMouseLeave = () => setOnHover('');
+
+    return (
+        <NavLink  key={8} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} to={props.to} className={`${props.className} ${onHover}`} >
+            {props.children}
+        </NavLink>
+    )
 }
 
 export default Menu;
