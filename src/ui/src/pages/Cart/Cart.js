@@ -4,13 +4,14 @@ import styles from "./Cart.module.css";
 
 function Cart(props) {
     const [items] = useCart();
+    const disabledButton = items.length > 0 ? false : true;
 
     return (
         <div className={styles.cart}>
             <div className={styles.title} >
                 Koszyk
             </div>
-            <table class="table">
+            <table className="table">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -35,6 +36,13 @@ function Cart(props) {
                     </tr> ))}        
                 </tbody>
             </table>
+            <div>
+                <button className="btn btn-warning mt-2 float-end"
+                        style={{ marginRight: "20%" }}
+                        disabled={disabledButton} >
+                        Realizuj zamówienie
+                </button>
+            </div>
         </div>
     )
 }

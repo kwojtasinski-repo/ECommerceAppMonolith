@@ -1,7 +1,6 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from 'react';
 import styles from './ItemCart.module.css';
 
 library.add(fas, faCartShopping);
