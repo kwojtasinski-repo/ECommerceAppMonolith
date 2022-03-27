@@ -64,7 +64,7 @@ function Menu() {
                     )
                 }
                 <li className={style.menuItem}>
-                    <Link to="#" className={`${style.menuItem}`} >
+                    <Link to="/cart" className={`${style.menuItem}`} >
                         <ItemCart count={cart.length} color="#206199" />
                     </Link>
                 </li>

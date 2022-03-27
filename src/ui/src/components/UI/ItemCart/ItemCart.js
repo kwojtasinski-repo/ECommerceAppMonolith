@@ -7,12 +7,8 @@ import styles from './ItemCart.module.css';
 library.add(fas, faCartShopping);
 
 function ItemCart(props) {
-    const [background, setBackground] = useState('#94989a');
-
     return (
-        <div onMouseEnter={() => setBackground(props.color)}
-             onMouseLeave={() => setBackground('#94989a')}
-              >
+        <div >
             {props.count ?
                 <span className={`badge badge-light ${styles.itemCartCount}`} style={{ color : props.color}}>{props.count}</span>
                 : null }

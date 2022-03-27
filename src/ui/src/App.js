@@ -28,6 +28,7 @@ import Profile from './pages/Profile/Profile';
 import ProfileDetails from './pages/Profile/ProfileDetails/ProfileDetails';
 import ContactData from './pages/Profile/ContactData/ContactData';
 import ItemCart from './components/UI/ItemCart/ItemCart';
+import Cart from './pages/Cart/Cart';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -73,6 +74,7 @@ function App() {
           <Route path="" element = {<ProfileDetails/>} />
         </Route>
         <Route path='/items' element = { <RequireAuth> <Items /> </RequireAuth>} />
+        <Route path='/cart' element = { <Cart /> } />
         <Route path='/login' element = {<Login />} />
         <Route path='/register' element = {<Register />} />
         <Route path="/" end element = {<Home />} />
