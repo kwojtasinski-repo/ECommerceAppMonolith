@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
+import useCart from '../../hooks/useCart';
 import useNotification from '../../hooks/useNotification';
 import { Color } from '../Notification/Notification';
 import ItemCart from '../UI/ItemCart/ItemCart';
@@ -9,6 +10,9 @@ import style from './Menu.module.css';
 function Menu() {
     const [auth, setAuth] = useAuth();
     const [notifications, addNotification] = useNotification();
+    const [cart] = useCart();
+    console.log(cart)
+    console.log(cart.length)
 
     const logout = (event) => {
         event.preventDefault();
@@ -61,7 +65,7 @@ function Menu() {
                 }
                 <li className={style.menuItem}>
                     <Link to="#" className={`${style.menuItem}`} >
-                        <ItemCart color="#206199" />
+                        <ItemCart count={cart.length} color="#206199" />
                     </Link>
                 </li>
             </ul>
