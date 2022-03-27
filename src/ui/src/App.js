@@ -29,6 +29,7 @@ import ProfileDetails from './pages/Profile/ProfileDetails/ProfileDetails';
 import ContactData from './pages/Profile/ContactData/ContactData';
 import ItemCart from './components/UI/ItemCart/ItemCart';
 import Cart from './pages/Cart/Cart';
+import Currencies from './pages/Currencies/Currencies';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -73,6 +74,7 @@ function App() {
           <Route path="contact-data" element = {<ContactData />} />
           <Route path="" element = {<ProfileDetails/>} />
         </Route>
+        <Route path='/currencies' element = { <RequireAuth> <Currencies /> </RequireAuth>} />
         <Route path='/items' element = { <RequireAuth> <Items /> </RequireAuth>} />
         <Route path='/cart' element = { <Cart /> } />
         <Route path='/login' element = {<Login />} />

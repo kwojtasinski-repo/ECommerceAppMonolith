@@ -47,7 +47,7 @@ function Menu() {
                         }
                         {auth && auth?.claims?.permissions?.find(c => c === "currencies") ? 
                             <li className={style.menuItem}>
-                                <Link to="#" className={`${style.menuItem}`}>Waluty</Link>
+                                <Link to="/currencies" className={`${style.menuItem}`}>Waluty</Link>
                             </li>
                             : null
                         }

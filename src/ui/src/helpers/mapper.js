@@ -29,3 +29,17 @@ export const mapToItem = obj => {
 
     return item;
 }
+
+export const mapToCurrencies = (obj) => {
+    const newCurrencies = [];
+    for (const key in obj) {
+        const item = {
+            id: obj[key].id,
+            code: obj[key].code,
+            description: obj[key].description
+        }
+        newCurrencies.push(item);
+    }
+
+    return newCurrencies;
+};
