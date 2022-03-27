@@ -30,8 +30,9 @@ function Login() {
                 email: response.data.email,
                 token: response.data.accessToken,
                 userId: response.data.id,
-                claims: response.data.claims
-            })
+                claims: response.data.claims,
+                tokenExpiresDate: new Date(response.data.expires)
+            });
             const notification = { color: Color.success, id: new Date().getTime(), text: 'Pomyślnie zalogowano', timeToClose: 5000 };
             addNotification(notification);
             navigate('/');

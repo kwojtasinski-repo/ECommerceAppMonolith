@@ -83,7 +83,7 @@ function Link(props) {
     const onMouseLeave = () => setOnHover('');
 
     return (
-        <NavLink  key={8} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} to={props.to} className={`${props.className} ${onHover}`} >
+        <NavLink onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} to={props.to} className={`${props.className} ${onHover}`} onClick={props.onClick} >
             {props.children}
         </NavLink>
     )

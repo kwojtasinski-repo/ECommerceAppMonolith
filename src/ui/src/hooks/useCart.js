@@ -8,17 +8,17 @@ export default function useCart(props) {
     let removeItem = (item) => {};
     console.log('useCart');
 
-    if (auth) {
-        [cart, addItem, removeItem] = authCart();
-        const [localItemsCart] = localCart();
+   // if (auth) {
+    //    [cart, addItem, removeItem] = authCart();
+   //     const [localItemsCart] = localCart();
 
-        if (localItemsCart.length > 0) {
+    //    if (localItemsCart.length > 0) {
             // add all to authCart
-        }
+   //     }
 
-    } else {
+    //} else {
        [cart, addItem, removeItem] = localCart();
-    }
+   // }
 
     console.log(cart);
     return [cart, addItem, removeItem];
