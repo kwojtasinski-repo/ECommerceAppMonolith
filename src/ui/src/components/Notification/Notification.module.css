@@ -42,12 +42,3 @@
 .notification .closeButton {
     color: #fff;
 }
-
-.position {
-    position: fixed;
-    top: 16px;
-    right: 16px;
-    overflow: hidden;
-    max-height: 200px;
-    transition: max-height 0.3s ease-out;
-}
