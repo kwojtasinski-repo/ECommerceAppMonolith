@@ -40,6 +40,9 @@ const availableRules = {
     },
     password(value) {
         return validatePassword(value) ? '' : 'Hasło powinno zawierać przynajmniej 8 znaków, w tym jedną dużą literę i jedną liczbę';
+    },
+    only(value, rule) {
+        return value.length === rule.length ? '' : `Pole powinno zawierać znaków ${rule.length}`;
     }
 };
 

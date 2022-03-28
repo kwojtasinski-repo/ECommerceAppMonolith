@@ -43,3 +43,13 @@ export const mapToCurrencies = (obj) => {
 
     return newCurrencies;
 };
+
+export const mapToCurrency = (obj) => {
+    const currency = {
+        id: obj.id,
+        code: obj.code,
+        description: obj.description
+    }
+
+    return currency;
+};

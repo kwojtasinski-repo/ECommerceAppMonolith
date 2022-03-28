@@ -13,11 +13,15 @@ const RequireAuth = ({ children }) => {
     let response = auth ? children : (<Navigate to="/login" />);
     const currentDate = new Date();
 
-    if (auth.tokenExpiresDate < currentDate) {
-        setAuth();
-        const notification = { color: Color.error, id: new Date().getTime(), text: 'Poświadczenie wygasło. Zaloguj się ponownie', timeToClose: 5000 };
-        addNotification(notification);
-        return (<Navigate to = "/login" />);
+    if (auth) {
+        const tokenExpiresDate = new Date(auth.tokenExpiresDate);
+        
+        if (tokenExpiresDate < currentDate) {
+            setAuth();
+            const notification = { color: Color.error, id: new Date().getTime(), text: 'Poświadczenie wygasło. Zaloguj się ponownie', timeToClose: 5000 };
+            addNotification(notification);
+            return (<Navigate to = "/login" />);
+        }
     }
 
     if (auth && policies.length > 0) {
