@@ -3,11 +3,16 @@ import { NavLink, Outlet, useOutletContext, useParams } from "react-router-dom";
 import axios from "../../axios-setup";
 import { mapToCurrencies } from "../../helpers/mapper";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
+import Popup, { Type } from "../../components/Popup/Popup";
+import { mapToMessage } from "../../helpers/validation";
 
 function Currencies(props) {
     const [loading, setLoading] = useState(true);
     const [currencies, setCurrencies] = useState([]);
     const [refresh, setRefresh] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [currentId, setCurrentId] = useState();
+    const [error, setError] = useState('');
 
     const getCurrencies = async () => {
         const response = await axios.get("/currencies-module/currencies");
@@ -16,12 +21,33 @@ function Currencies(props) {
     }
 
     const clickHandler = (id) => {
+        setCurrentId(id);
         console.log(id);
+        setIsOpen(!isOpen);
+    }
 
-        if (window.confirm("Usunąć walutę?")) {
-            console.log('deleted');
+    const closePopUp = () => {
+        setIsOpen(!isOpen);
+    }
+
+    const handleDeleteCurrency = () => {
+        setIsOpen(!isOpen);
+
+        try {
+            axios.delete(`/currencies-module/currencies/${currentId}`);
+        } catch(exception) {
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            
+            for(const errMsg in errors) {
+                errorMessage += mapToMessage(errors[errMsg].code, status);
+            }
+            
+            setError(errorMessage);
         }
 
+        setRefresh(true);
     }
 
     useEffect(() => {
@@ -41,6 +67,18 @@ function Currencies(props) {
                             Dodaj walutę
                         </NavLink>
                     </div>
+
+                    {error ? (
+                        <div className="alert alert-danger">{error}</div>
+                    ) : null}
+
+                    {isOpen && <Popup handleConfirm = {handleDeleteCurrency}
+                                      handleClose = {closePopUp}
+                                      type = {Type.alert}
+                                      content = {<>
+                                          <p>Czy chcesz usunąć walutę?</p>
+                                      </>}
+                    /> }
 
                     <div className="pt-4">
                         <Outlet context={{ setRefresh }} />    
