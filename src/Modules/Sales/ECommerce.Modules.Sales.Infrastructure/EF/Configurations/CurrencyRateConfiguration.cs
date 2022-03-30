@@ -11,8 +11,10 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Configurations
             builder.HasKey(i => i.Id);
             builder.Property(i => i.CurrencyCode).IsRequired().HasMaxLength(3);
             builder.Property(i => i.RateDate).IsRequired();
-            builder.Property(i => i.Created).IsRequired().HasDefaultValue(DateOnly.FromDateTime(DateTime.UtcNow));
+            builder.Property(i => i.Created).IsRequired();
             builder.Property(i => i.Rate).IsRequired().HasPrecision(14, 4);
+            builder.HasIndex(i => i.CurrencyCode);
+            builder.HasIndex(i => new { i.CurrencyCode, i.Created }).IsUnique();
         }
     }
 }
