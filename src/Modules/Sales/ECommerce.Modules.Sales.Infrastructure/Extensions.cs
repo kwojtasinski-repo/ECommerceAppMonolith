@@ -1,4 +1,5 @@
-﻿using ECommerce.Modules.Sales.Domain.ItemSales.Repositories;
+﻿using ECommerce.Modules.Sales.Domain.Currency.Repositories;
+using ECommerce.Modules.Sales.Domain.ItemSales.Repositories;
 using ECommerce.Modules.Sales.Domain.Orders.Repositories;
 using ECommerce.Modules.Sales.Domain.Payments.Repositories;
 using ECommerce.Modules.Sales.Infrastructure.EF;
@@ -21,6 +22,7 @@ namespace ECommerce.Modules.Sales.Infrastructure
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<ICurrencyRateRepository, CurrencyRateRepository>();
             services.AddUnitOfWork<ISalesUnitOfWork, SalesUnitOfWork>();
             return services;
         }
