@@ -1,5 +1,6 @@
 ﻿using ECommerce.Modules.Sales.Domain.Currency.Entities;
 using ECommerce.Modules.Sales.Domain.Currency.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,19 +18,22 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
             _salesDbContext = salesDbContext;
         }
 
-        public Task AddAsync(CurrencyRate currencyRate)
+        public async Task AddAsync(CurrencyRate currencyRate)
         {
-            throw new NotImplementedException();
+            await _salesDbContext.CurrencyRates.AddAsync(currencyRate);
+            await _salesDbContext.SaveChangesAsync();
         }
 
-        public Task<bool> ExistsAsync(Guid id)
+        public async Task<bool> ExistsAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var currencyRate = await _salesDbContext.CurrencyRates.Where(cr => cr.Id == id).AsNoTracking().SingleOrDefaultAsync();
+            return currencyRate != null;
         }
 
-        public Task<bool> ExistsAsync(string currencyCode, DateOnly createdDate)
+        public async Task<bool> ExistsAsync(string currencyCode, DateOnly createdDate)
         {
-            throw new NotImplementedException();
+            var currencyRate = await _salesDbContext.CurrencyRates.Where(cr => cr.CurrencyCode == currencyCode && cr.Created == createdDate).AsNoTracking().SingleOrDefaultAsync();
+            return currencyRate != null;
         }
     }
 }

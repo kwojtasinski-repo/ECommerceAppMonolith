@@ -15,7 +15,7 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
 
         public async Task AddAsync(ItemCart itemCart)
         {
-            await _salesDbContext.AddAsync(itemCart);
+            await _salesDbContext.ItemCarts.AddAsync(itemCart);
             await _salesDbContext.SaveChangesAsync();
         }
 
