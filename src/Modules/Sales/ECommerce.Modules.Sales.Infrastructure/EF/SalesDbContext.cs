@@ -1,4 +1,5 @@
-﻿using ECommerce.Modules.Sales.Domain.ItemSales.Entities;
+﻿using ECommerce.Modules.Sales.Domain.Currency.Entities;
+using ECommerce.Modules.Sales.Domain.ItemSales.Entities;
 using ECommerce.Modules.Sales.Domain.Orders.Entities;
 using ECommerce.Modules.Sales.Domain.Payments.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<CurrencyRate> CurrencyRates { get; set; }
 
         public SalesDbContext(DbContextOptions<SalesDbContext> options) : base(options)
         {
