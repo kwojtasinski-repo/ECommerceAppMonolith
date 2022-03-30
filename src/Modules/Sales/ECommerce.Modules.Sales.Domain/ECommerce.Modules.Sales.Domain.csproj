@@ -10,4 +10,8 @@
     <ProjectReference Include="..\..\..\Shared\ECommerce.Shared.Abstractions\ECommerce.Shared.Abstractions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Currency\Repositories\" />
+  </ItemGroup>
+
 </Project>

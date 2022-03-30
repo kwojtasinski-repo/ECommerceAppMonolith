@@ -56,7 +56,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var items = await AddSampleData();
             var item = items[1];
             var id = item.Id.Value;
-            var command = new UpdateItemSale(id, 10000M);
+            var command = new UpdateItemSale(id, 10000M, "PLN");
             Authenticate(Guid.NewGuid());
 
             var response = (await _client.Request($"{Path}").PutJsonAsync(command));
@@ -98,7 +98,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
                 });
             _dbContext.Items.Add(item);
             await _dbContext.SaveChangesAsync();
-            var command = new CreateItemSale(item.Id.Value, 5000M);
+            var command = new CreateItemSale(item.Id.Value, 5000M, "PLN");
             Authenticate(Guid.NewGuid());
 
             var response = (await _client.Request($"{Path}").PostJsonAsync(command));
@@ -155,8 +155,8 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
                         }
                     }
                 });
-            var itemSale1 = new Domain.Entities.ItemSale(Guid.NewGuid(), item1, 1500M, true);
-            var itemSale2 = new Domain.Entities.ItemSale(Guid.NewGuid(), item2, 2500M, true);
+            var itemSale1 = new Domain.Entities.ItemSale(Guid.NewGuid(), item1, 1500M, true, "PLN");
+            var itemSale2 = new Domain.Entities.ItemSale(Guid.NewGuid(), item2, 2500M, true, "PLN");
             return new List<Domain.Entities.ItemSale> { itemSale1, itemSale2 };
         }
 

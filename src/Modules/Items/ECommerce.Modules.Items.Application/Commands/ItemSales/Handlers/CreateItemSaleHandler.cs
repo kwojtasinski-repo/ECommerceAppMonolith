@@ -48,7 +48,7 @@ namespace ECommerce.Modules.Items.Application.Commands.ItemSales.Handlers
                 throw new CannotCreateItemSaleWithoutMainImageException();
             }
 
-            var itemSale = ItemSale.Create(command.ItemSaleId, item, command.ItemCost);
+            var itemSale = ItemSale.Create(command.ItemSaleId, item, command.ItemCost, command.CurrencyCode);
             await _itemSaleRepository.AddAsync(itemSale);
 
             var integrationEvents = _eventMapper.MapAll(itemSale.Events);

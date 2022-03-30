@@ -22,7 +22,7 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.ItemSales
         [Fact]
         public async Task given_valid_command_should_update()
         {
-            var command = new UpdateItemSale(Guid.NewGuid(), 1500M);
+            var command = new UpdateItemSale(Guid.NewGuid(), 1500M, "PLN");
             var itemSale = CreateItemSale(command.ItemSaleId);
             _itemSaleRepository.GetAsync(command.ItemSaleId).Returns(itemSale);
 
@@ -48,7 +48,7 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.ItemSales
         [Fact]
         public async Task given_negative_cost_should_throw_an_exception()
         {
-            var command = new UpdateItemSale(Guid.NewGuid(), -1500M);
+            var command = new UpdateItemSale(Guid.NewGuid(), -1500M, "PLN");
             var expectedException = new ItemCostCannotBeNegativeException(command.ItemCost);
 
             var exception = await Record.ExceptionAsync(() => _handler.HandleAsync(command));
@@ -62,7 +62,7 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.ItemSales
         [Fact]
         public async Task given_invalid_item_sale_id_should_throw_an_exception()
         {
-            var command = new UpdateItemSale(Guid.NewGuid(), 1500M);
+            var command = new UpdateItemSale(Guid.NewGuid(), 1500M, "PLN");
             var expectedException = new ItemSaleNotFoundException(command.ItemSaleId);
 
             var exception = await Record.ExceptionAsync(() => _handler.HandleAsync(command));
@@ -88,7 +88,7 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.ItemSales
 
         private ItemSale CreateItemSale(Guid id)
         {
-            return new ItemSale(id, CreateSampleItem(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()), 1250M, true);
+            return new ItemSale(id, CreateSampleItem(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()), 1250M, true, "PLN");
         }
 
         private Domain.Entities.Item CreateSampleItem(Guid id, Guid brandId, Guid typeId)

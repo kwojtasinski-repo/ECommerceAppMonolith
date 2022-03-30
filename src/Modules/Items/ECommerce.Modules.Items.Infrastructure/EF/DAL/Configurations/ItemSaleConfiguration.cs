@@ -15,6 +15,7 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.DAL.Configurations
                 .HasConversion(id => id.Value, id => new AggregateId(id));
             builder.Property(i => i.Cost).IsRequired().HasPrecision(14, 4);
             builder.Property(i => i.Active).HasDefaultValue(true);
+            builder.Property(i => i.CurrencyCode).IsRequired().HasMaxLength(3).HasDefaultValue("PLN");
             builder.HasOne(i => i.Item).WithOne(i => i.ItemSale).HasForeignKey<ItemSale>(i => i.ItemId);
         }
     }

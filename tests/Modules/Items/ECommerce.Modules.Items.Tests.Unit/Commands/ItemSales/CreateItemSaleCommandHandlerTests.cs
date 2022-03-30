@@ -24,7 +24,7 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.ItemSales
         [Fact]
         public async Task given_valid_command_should_add()
         {
-            var command = new CreateItemSale(Guid.NewGuid(), 1250M);
+            var command = new CreateItemSale(Guid.NewGuid(), 1250M, "PLN");
             var dictionary = new Dictionary<string, IEnumerable<ItemImage>>();
             dictionary.Add(Item.IMAGES, new[] { new ItemImage { Url = "http://google.pl", MainImage = true } });
             var item = CreateSampleItem(command.ItemId, Guid.NewGuid(), Guid.NewGuid(), dictionary);
@@ -40,7 +40,7 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.ItemSales
         [Fact]
         public async Task given_item_without_main_image_should_throw_an_exception()
         {
-            var command = new CreateItemSale(Guid.NewGuid(), 1250M);
+            var command = new CreateItemSale(Guid.NewGuid(), 1250M, "PLN");
             var dictionary = new Dictionary<string, IEnumerable<ItemImage>>();
             dictionary.Add(Item.IMAGES, new[] { new ItemImage { Url = "http://google.pl", MainImage = false } });
             var item = CreateSampleItem(command.ItemId, Guid.NewGuid(), Guid.NewGuid(), dictionary);
@@ -57,7 +57,7 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.ItemSales
         [Fact]
         public async Task given_item_without_images_should_throw_an_exception()
         {
-            var command = new CreateItemSale(Guid.NewGuid(), 1250M);
+            var command = new CreateItemSale(Guid.NewGuid(), 1250M, "PLN");
             var item = CreateSampleItem(command.ItemId, Guid.NewGuid(), Guid.NewGuid(), null);
             _itemRepository.GetAsync(command.ItemId).Returns(item);
             var expectedException = new CannotCreateItemSaleWithoutImagesException();
@@ -72,7 +72,7 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.ItemSales
         [Fact]
         public async Task given_invalid_item_id_should_throw_an_exception()
         {
-            var command = new CreateItemSale(Guid.NewGuid(), 1250M);
+            var command = new CreateItemSale(Guid.NewGuid(), 1250M, "PLN");
             var item = CreateSampleItem(command.ItemId, Guid.NewGuid(), Guid.NewGuid(), null);
             var expectedException = new ItemNotFoundException(item.Id);
 
@@ -99,7 +99,7 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.ItemSales
         [Fact]
         public async Task given_negative_cost_should_throw_an_exception()
         {
-            var command = new CreateItemSale(Guid.NewGuid(), -1500M);
+            var command = new CreateItemSale(Guid.NewGuid(), -1500M, "PLN");
             var expectedException = new ItemCostCannotBeNegativeException(command.ItemCost);
 
             var exception = await Record.ExceptionAsync(() => _handler.HandleAsync(command));

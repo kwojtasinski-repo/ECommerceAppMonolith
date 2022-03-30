@@ -28,7 +28,7 @@ namespace ECommerce.Modules.Items.Tests.Unit.Policies.Items
         {
             var item = new Item(Guid.NewGuid(), "Test", new Brand(Guid.NewGuid(), "TestBrand"), new Domain.Entities.Type(Guid.NewGuid(), "TestType"),
                                 "Description", null, null);
-            var itemSale = ItemSale.Create(Guid.NewGuid(), item, 1500M);
+            var itemSale = ItemSale.Create(Guid.NewGuid(), item, 1500M, "PLN");
             item.ChangeItemSale(itemSale);
 
             var canDelete = await _itemDeletionPolicy.CanDeleteAsync(item);

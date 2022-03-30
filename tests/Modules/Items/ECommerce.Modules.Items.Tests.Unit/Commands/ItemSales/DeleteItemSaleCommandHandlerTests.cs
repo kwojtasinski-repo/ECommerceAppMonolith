@@ -53,7 +53,7 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.ItemSales
 
         private ItemSale CreateItemSale(Guid id)
         {
-            return new ItemSale(id, CreateSampleItem(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()), 1250M, true);
+            return new ItemSale(id, CreateSampleItem(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()), 1250M, true, "PLN");
         }
 
         private Domain.Entities.Item CreateSampleItem(Guid id, Guid brandId, Guid typeId)

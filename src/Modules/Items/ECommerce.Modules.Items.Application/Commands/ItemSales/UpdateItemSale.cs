@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Application.Commands.ItemSales
 {
-    public record UpdateItemSale(Guid ItemSaleId, decimal ItemCost) : ICommand
+    public record UpdateItemSale(Guid ItemSaleId, decimal ItemCost, string CurrencyCode) : ICommand
     {
     };
 }

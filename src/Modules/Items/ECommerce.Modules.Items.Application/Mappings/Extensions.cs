@@ -97,6 +97,7 @@ namespace ECommerce.Modules.Items.Application.Mappings
                 Id = itemSale.Id,
                 Cost = itemSale.Cost,
                 Active = itemSale.Active.Value != null && itemSale.Active.Value is true,
+                CurrencyCode = itemSale.CurrencyCode,
                 Item = new ItemToSaleDto(itemSale.Item.Id, itemSale.Item.ItemName,
                         itemSale.Item.ImagesUrl.ToImagesEnumerable().Where(i => i.MainImage == true).SingleOrDefault())
             };
@@ -109,6 +110,7 @@ namespace ECommerce.Modules.Items.Application.Mappings
             {
                 Id = itemSale.Id,
                 Cost = itemSale.Cost,
+                CurrencyCode = itemSale.CurrencyCode,
                 Active = itemSale.Active.Value != null && itemSale.Active.Value is true,
                 Item = itemSale.Item.AsDetailsDto()
             };

@@ -11,6 +11,7 @@ namespace ECommerce.Modules.Items.Application.DTO
         public Guid Id { get; set; }
         public ItemDetailsDto Item { get; set; }
         public decimal Cost { get; set; }
+        public string CurrencyCode { get; set; }
         public bool Active { get; set; }
     }
 }

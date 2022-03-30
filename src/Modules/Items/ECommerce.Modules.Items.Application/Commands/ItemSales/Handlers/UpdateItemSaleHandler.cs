@@ -40,6 +40,7 @@ namespace ECommerce.Modules.Items.Application.Commands.ItemSales.Handlers
             }
 
             itemSale.ChangeCost(command.ItemCost);
+            itemSale.ChangeCurrencyCode(command.CurrencyCode);
             await _itemSaleRepository.UpdateAsync(itemSale);
 
             var integrationEvents = _eventMapper.MapAll(itemSale.Events);
