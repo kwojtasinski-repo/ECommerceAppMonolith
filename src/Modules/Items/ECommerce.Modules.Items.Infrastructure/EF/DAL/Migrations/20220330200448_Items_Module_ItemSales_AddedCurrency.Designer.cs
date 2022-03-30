@@ -3,6 +3,7 @@ using System;
 using ECommerce.Modules.Items.Infrastructure.EF.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ECommerce.Modules.Items.Infrastructure.EF.DAL.Migrations
 {
     [DbContext(typeof(ItemsDbContext))]
-    partial class ItemsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220330200448_Items_Module_ItemSales_AddedCurrency")]
+    partial class Items_Module_ItemSales_AddedCurrency
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
