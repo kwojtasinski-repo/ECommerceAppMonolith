@@ -25,7 +25,7 @@ namespace ECommerce.Modules.Items.Application.Services
                 TypeCreated e => new TypeAdded(e.Type.Id),
                 Domain.Events.TypeNameChanged e => new Application.Events.TypeNameChanged(e.Type.Id, e.Type.Name),
 
-                // Item
+                // Item ///TODO: sprawdzic czy te eventy beda uzyteczne jesli nie uwspolnic do jednego konkretnego
                 ItemCreated e => new ItemAdded(e.Item.Id, e.Item.ItemName, e.Item.Description,
                                     e.Item.Brand.Name, e.Item.Type.Name, e.Item.Tags,
                                     e.Item.ImagesUrl?[Item.IMAGES]?.Select(i => i.Url)),
@@ -37,7 +37,7 @@ namespace ECommerce.Modules.Items.Application.Services
                 Domain.Events.ItemImagesChanged e => new Application.Events.ItemImagesChanged(e.Item.Id, e.Item.ImagesUrl?[Item.IMAGES]?.Select(i => i.Url)),
 
                 // ItemSale
-                ItemSaleCreated e => new ItemSaleAdded(e.ItemSale.Id, e.ItemSale.ItemId, e.ItemSale.Cost),
+                ItemSaleCreated e => new ItemSaleAdded(e.ItemSale.Id, e.ItemSale.ItemId, e.ItemSale.Cost, e.ItemSale.CurrencyCode),
                 Domain.Events.ItemSaleCostChanged e => new Application.Events.ItemSaleCostChanged(e.ItemSale.Id, e.ItemSale.Cost),
 
                 _ => null

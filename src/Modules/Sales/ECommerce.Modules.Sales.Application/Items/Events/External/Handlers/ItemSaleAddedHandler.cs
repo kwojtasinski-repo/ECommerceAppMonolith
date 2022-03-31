@@ -42,7 +42,7 @@ namespace ECommerce.Modules.Sales.Application.Items.Events.External.Handlers
                 return;
             }
 
-            var itemSale = new ItemSale(@event.Id, item, @event.Cost);
+            var itemSale = new ItemSale(@event.Id, item, @event.Cost, @event.CurrencyCode);
             await _itemSaleRepository.AddAsync(itemSale);
             _logger.LogInformation($"Added an ItemSale with id '{itemSale.Id}'");
         }
