@@ -40,7 +40,7 @@ namespace ECommerce.Modules.Items.Domain.Entities
             ValidItem(item);
             itemSale.Item = item;
             itemSale.ChangeCost(cost);
-            itemSale.ChangeActive(true);
+            itemSale.Activate();
             itemSale.ChangeCurrencyCode(currencyCode);
             itemSale.ClearEvents();
             itemSale.Version = 0;
@@ -61,10 +61,18 @@ namespace ECommerce.Modules.Items.Domain.Entities
             AddEvent(new ItemSaleCostChanged(this));
         }
 
-        public void ChangeActive(bool active)
+        public void Deactivate()
         {
-            Active = active;
+            Active = false;
             IncrementVersion();
+            AddEvent(new ItemSaleDeactivate(this));
+        }
+
+        public void Activate()
+        {
+            Active = true;
+            IncrementVersion();
+            AddEvent(new ItemSaleActivate(this));
         }
 
         public void ChangeCurrencyCode(string currencyCode)

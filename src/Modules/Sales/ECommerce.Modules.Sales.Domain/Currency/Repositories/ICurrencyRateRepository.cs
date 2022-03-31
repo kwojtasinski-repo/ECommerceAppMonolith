@@ -12,5 +12,6 @@ namespace ECommerce.Modules.Sales.Domain.Currency.Repositories
         Task AddAsync(CurrencyRate currencyRate);
         Task<bool> ExistsAsync(Guid id);
         Task<bool> ExistsAsync(string currencyCode, DateOnly createdDate);
+        Task<CurrencyRate> GetCurrencyRate(string currencyCode, DateOnly createdDate);
     }
 }

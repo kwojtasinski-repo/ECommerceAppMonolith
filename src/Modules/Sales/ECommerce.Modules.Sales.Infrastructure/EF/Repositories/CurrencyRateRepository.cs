@@ -35,5 +35,11 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
             var currencyRate = await _salesDbContext.CurrencyRates.Where(cr => cr.CurrencyCode == currencyCode && cr.Created == createdDate).AsNoTracking().SingleOrDefaultAsync();
             return currencyRate != null;
         }
+
+        public async Task<CurrencyRate> GetCurrencyRate(string currencyCode, DateOnly createdDate)
+        {
+            var currencyRate = await _salesDbContext.CurrencyRates.Where(cr => cr.CurrencyCode == currencyCode && cr.Created == createdDate).SingleOrDefaultAsync();
+            return currencyRate;
+        }
     }
 }
