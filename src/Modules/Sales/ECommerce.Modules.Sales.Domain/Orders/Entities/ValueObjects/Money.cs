@@ -66,7 +66,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities.ValueObjects
 
         public override string ToString()
         {
-            var value = (double)_value / 100;
+            var value = _value / 100;
             return value.ToString("0.00", CultureInfo.CreateSpecificCulture("en-US"));
         }
     }
