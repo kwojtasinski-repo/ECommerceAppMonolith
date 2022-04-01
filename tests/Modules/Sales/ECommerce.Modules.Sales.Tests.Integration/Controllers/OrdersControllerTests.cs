@@ -20,7 +20,7 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
             await AddSampleData();
             var expectedCurrency = "USD";
             var request = new CreateOrder(Guid.NewGuid(), expectedCurrency);
-            var expectedCost = 8500; // 4000USD, 1000PLN, 2000EUR
+            var expectedCost = 8500; // 4000USD, 1000PLN, 2000EUR rate USD 2PLN, EUR 4PLN
             Authenticate(_userId);
 
             var response = await _client.Request($"{Path}").PostJsonAsync(request);
@@ -38,9 +38,9 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
         private async Task AddSampleData()
         {
             // Currency
-            _dbContext.CurrencyRates.Add(new Domain.Currencies.Entities.CurrencyRate { Id = Guid.NewGuid(), Created = DateOnly.FromDateTime(DateTime.Now), CurrencyCode = "PLN", Rate = 1, RateDate = DateOnly.FromDateTime(DateTime.Now) });
-            _dbContext.CurrencyRates.Add(new Domain.Currencies.Entities.CurrencyRate { Id = Guid.NewGuid(), Created = DateOnly.FromDateTime(DateTime.Now), CurrencyCode = "USD", Rate = 2, RateDate = DateOnly.FromDateTime(DateTime.Now) });
-            _dbContext.CurrencyRates.Add(new Domain.Currencies.Entities.CurrencyRate { Id = Guid.NewGuid(), Created = DateOnly.FromDateTime(DateTime.Now), CurrencyCode = "EUR", Rate = 4, RateDate = DateOnly.FromDateTime(DateTime.Now) });
+            _dbContext.CurrencyRates.Add(new Domain.Currencies.Entities.CurrencyRate { Id = Guid.NewGuid(), Created = DateOnly.FromDateTime(DateTime.UtcNow), CurrencyCode = "PLN", Rate = 1, RateDate = DateOnly.FromDateTime(DateTime.UtcNow) });
+            _dbContext.CurrencyRates.Add(new Domain.Currencies.Entities.CurrencyRate { Id = Guid.NewGuid(), Created = DateOnly.FromDateTime(DateTime.UtcNow), CurrencyCode = "USD", Rate = 2, RateDate = DateOnly.FromDateTime(DateTime.UtcNow) });
+            _dbContext.CurrencyRates.Add(new Domain.Currencies.Entities.CurrencyRate { Id = Guid.NewGuid(), Created = DateOnly.FromDateTime(DateTime.UtcNow), CurrencyCode = "EUR", Rate = 4, RateDate = DateOnly.FromDateTime(DateTime.UtcNow) });
 
             // Item
             var item1 = new Domain.ItemSales.Entities.Item(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1", "Description...", null, null);
