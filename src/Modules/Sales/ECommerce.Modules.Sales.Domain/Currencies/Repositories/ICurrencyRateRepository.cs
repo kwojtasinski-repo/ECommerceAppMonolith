@@ -1,11 +1,6 @@
-﻿using ECommerce.Modules.Sales.Domain.Currency.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ECommerce.Modules.Sales.Domain.Currencies.Entities;
 
-namespace ECommerce.Modules.Sales.Domain.Currency.Repositories
+namespace ECommerce.Modules.Sales.Domain.Currencies.Repositories
 {
     public interface ICurrencyRateRepository
     {
@@ -13,5 +8,7 @@ namespace ECommerce.Modules.Sales.Domain.Currency.Repositories
         Task<bool> ExistsAsync(Guid id);
         Task<bool> ExistsAsync(string currencyCode, DateOnly createdDate);
         Task<CurrencyRate> GetCurrencyRate(string currencyCode, DateOnly createdDate);
+        Task UpdateAsync(CurrencyRate currencyRate);
+        Task<IEnumerable<CurrencyRate>> GetCurrencyRatesForDate(IEnumerable<string> currencyCodes, DateOnly date);
     }
 }

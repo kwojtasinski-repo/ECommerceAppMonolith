@@ -1,4 +1,4 @@
-﻿using ECommerce.Modules.Sales.Domain.Currency.Entities;
+﻿using ECommerce.Modules.Sales.Domain.Currencies.Entities;
 using ECommerce.Modules.Sales.Domain.ItemSales.Entities;
 using ECommerce.Modules.Sales.Domain.Orders.Entities;
 using ECommerce.Modules.Sales.Domain.Payments.Entities;
@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Modules.Sales.Infrastructure.EF
 {
-    internal sealed class SalesDbContext : DbContext
+    public sealed class SalesDbContext : DbContext
     {
         public DbSet<Item> Items { get; set; }
         public DbSet<ItemSale> ItemSales { get; set; }

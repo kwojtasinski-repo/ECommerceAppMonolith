@@ -1,4 +1,4 @@
-﻿using ECommerce.Modules.Sales.Domain.Currency.Entities;
+﻿using ECommerce.Modules.Sales.Domain.Currencies.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -1,11 +1,11 @@
 ﻿using System.Globalization;
 
-namespace ECommerce.Modules.Sales.Domain.Orders.Entities.ValueObjects
+namespace ECommerce.Modules.Sales.Domain.Orders.Common.ValueObjects
 {
     public class Money : IEquatable<Money>
     {
         public static readonly Money Zero = new Money(0);
-        private readonly decimal _value;
+        public decimal Value { get; }
 
         public Money(decimal value)
         {
@@ -14,32 +14,32 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities.ValueObjects
                 throw new InvalidOperationException($"Money '{value}' cannot be negative");
             }
 
-            _value = value;
+            Value = value;
         }
 
         public static Money operator +(Money money, Money other)
         {
-            return new Money(money._value + other._value);
+            return new Money(money.Value + other.Value);
         }
     
         public static Money operator -(Money money, Money other)
         {
-            return new Money(money._value - other._value);
+            return new Money(money.Value - other.Value);
         }
 
         public static Money operator *(Money money, Money other)
         {
-            return new Money(money._value * other._value);
+            return new Money(money.Value * other.Value);
         }
 
         public static Money operator /(Money money, Money other)
         {
-            return new Money(money._value / other._value);
+            return new Money(money.Value / other.Value);
         }
 
-        public decimal ToDecimal()
+        public Money ChangeValue(decimal value)
         {
-            return _value;
+            return new Money(value);
         }
 
         public bool Equals(Money? other)
@@ -47,7 +47,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities.ValueObjects
             if (other is null) return false;
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return _value == other._value;
+            return Value == other.Value;
         }
 
         public override bool Equals(object? obj)
@@ -61,13 +61,12 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities.ValueObjects
 
         public override int GetHashCode()
         {
-            return EqualityComparer<decimal>.Default.GetHashCode(_value);
+            return EqualityComparer<decimal>.Default.GetHashCode(Value);
         }
 
         public override string ToString()
         {
-            var value = _value / 100;
-            return value.ToString("0.00", CultureInfo.CreateSpecificCulture("en-US"));
+            return Value.ToString("0.00", CultureInfo.CreateSpecificCulture("en-US"));
         }
     }
 }

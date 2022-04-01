@@ -26,7 +26,17 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Configurations
                 .Property(o => o.Version)
                 .IsConcurrencyToken();
 
-            builder.Property(o => o.Cost).IsRequired().HasPrecision(14, 4);
+            builder.OwnsOne(i => i.Price, navigation =>
+            {
+                navigation.Property(m => m.Value).HasColumnName(nameof(Order.Cost)).IsRequired().HasPrecision(14, 4);
+            });
+
+            builder.OwnsOne(i => i.Currency, navigation =>
+            {
+                navigation.Property(c => c.CurrencyCode).HasColumnName(nameof(Order.CurrencyCode)).IsRequired().HasMaxLength(3);
+                navigation.HasIndex(c => c.CurrencyCode);
+                navigation.Property(c => c.Rate).HasColumnName(nameof(Order.Rate)).IsRequired().HasPrecision(14, 4);
+            });
 
             builder.HasIndex(o => o.OrderNumber).IsUnique();
         }

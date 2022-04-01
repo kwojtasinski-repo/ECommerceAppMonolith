@@ -15,6 +15,19 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Configurations
         {
             builder.HasKey(oi => oi.Id);
             builder.HasOne(oi => oi.ItemCart).WithOne(ic => ic.OrderItem).HasForeignKey<OrderItem>(oi => oi.ItemCartId);
+
+
+            builder.OwnsOne(i => i.Price, navigation =>
+            {
+                navigation.Property(m => m.Value).HasColumnName(nameof(OrderItem.Cost)).IsRequired().HasPrecision(14, 4);
+            });
+
+            builder.OwnsOne(i => i.Currency, navigation =>
+            {
+                navigation.Property(c => c.CurrencyCode).HasColumnName(nameof(OrderItem.CurrencyCode)).IsRequired().HasMaxLength(3);
+                navigation.HasIndex(c => c.CurrencyCode);
+                navigation.Property(c => c.Rate).HasColumnName(nameof(OrderItem.Rate)).IsRequired().HasPrecision(14, 4);
+            });
         }
     }
 }

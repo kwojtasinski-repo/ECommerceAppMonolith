@@ -25,7 +25,12 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Configurations
             builder.Property(i => i.BrandName).IsRequired().HasMaxLength(100);
             builder.Property(i => i.TypeName).IsRequired().HasMaxLength(100);
             builder.Property(i => i.Description).HasMaxLength(300);
-            builder.Property(i => i.Cost).IsRequired().HasPrecision(14, 4);
+            builder.OwnsOne(i => i.Price, navigation =>
+            {
+                navigation.Property(m => m.Value).HasColumnName(nameof(ItemCart.Cost)).IsRequired().HasPrecision(14, 4);
+            });
+            builder.Property(i => i.CurrencyCode).IsRequired().HasMaxLength(3);
+            builder.HasIndex(i => i.CurrencyCode);
 
             // zapis tagow jako text
             builder

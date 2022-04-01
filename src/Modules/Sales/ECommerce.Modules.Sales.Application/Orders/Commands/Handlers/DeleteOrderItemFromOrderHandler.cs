@@ -1,6 +1,7 @@
 ﻿using ECommerce.Modules.Sales.Application.Orders.Exceptions;
 using ECommerce.Modules.Sales.Application.Orders.Policies;
 using ECommerce.Modules.Sales.Domain.Orders.Repositories;
+using ECommerce.Modules.Sales.Domain.Orders.Services;
 using ECommerce.Shared.Abstractions.Commands;
 using System;
 using System.Collections.Generic;
@@ -15,12 +16,14 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
         private readonly IOrderRepository _orderRepository;
         private readonly IOrderItemRepository _orderItemRepository;
         private readonly IOrderPositionModificationPolicy _orderPositionModificationPolicy;
+        private readonly IOrderCalculationCostDomainService _orderCalculationCostDomainService;
 
-        public DeleteOrderItemFromOrderHandler(IOrderRepository orderRepository, IOrderItemRepository orderItemRepository, IOrderPositionModificationPolicy orderPositionModificationPolicy)
+        public DeleteOrderItemFromOrderHandler(IOrderRepository orderRepository, IOrderItemRepository orderItemRepository, IOrderPositionModificationPolicy orderPositionModificationPolicy, IOrderCalculationCostDomainService orderCalculationCostDomainService)
         {
             _orderRepository = orderRepository;
             _orderItemRepository = orderItemRepository;
             _orderPositionModificationPolicy = orderPositionModificationPolicy;
+            _orderCalculationCostDomainService = orderCalculationCostDomainService;
         }
 
         public async Task HandleAsync(DeleteOrderItemFromOrder command)
@@ -46,7 +49,7 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
             }
 
             order.DeleteOrderItem(orderItem);
-            order.RefreshCost();
+            await _orderCalculationCostDomainService.CalulateOrderCost(order);
 
             await _orderRepository.UpdateAsync(order);
             await _orderItemRepository.DeleteAsync(orderItem);

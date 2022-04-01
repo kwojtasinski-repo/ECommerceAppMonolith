@@ -16,6 +16,8 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Configurations
             builder.HasKey(i => i.Id);
             builder.Property(i => i.Cost).IsRequired().HasPrecision(14, 4);
             builder.HasOne(i => i.Item).WithOne(i => i.ItemSale).HasForeignKey<ItemSale>(i => i.ItemId);
+            builder.Property(i => i.CurrencyCode).IsRequired().HasMaxLength(3);
+            builder.HasIndex(i => i.CurrencyCode);
         }
     }
 }

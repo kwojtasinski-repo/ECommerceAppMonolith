@@ -1,10 +1,13 @@
 ﻿using ECommerce.Modules.Sales.Application.Orders.Exceptions;
 using ECommerce.Modules.Sales.Application.Orders.Policies;
+using ECommerce.Modules.Sales.Domain.Currencies.Repositories;
 using ECommerce.Modules.Sales.Domain.ItemSales.Repositories;
 using ECommerce.Modules.Sales.Domain.Orders.Entities;
 using ECommerce.Modules.Sales.Domain.Orders.Repositories;
+using ECommerce.Modules.Sales.Domain.Orders.Services;
 using ECommerce.Shared.Abstractions.Commands;
 using ECommerce.Shared.Abstractions.Contexts;
+using ECommerce.Shared.Abstractions.Time;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +24,11 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
         private readonly IOrderItemRepository _orderItemRepository;
         private readonly IContext _context;
         private readonly IOrderPositionModificationPolicy _orderPositionModificationPolicy;
+        private readonly ICurrencyRateRepository _currencyRateRepository;
+        private readonly IClock _clock;
+        private readonly IOrderCalculationCostDomainService _orderCalculationCostDomainService;
 
-        public AddOrderItemToOrderHandler(IOrderRepository orderRepository, IItemSaleRepository itemSaleRepository, IItemCartRepository itemCartRepository, IOrderItemRepository orderItemRepository, IContext context, IOrderPositionModificationPolicy orderPositionModificationPolicy)
+        public AddOrderItemToOrderHandler(IOrderRepository orderRepository, IItemSaleRepository itemSaleRepository, IItemCartRepository itemCartRepository, IOrderItemRepository orderItemRepository, IContext context, IOrderPositionModificationPolicy orderPositionModificationPolicy, ICurrencyRateRepository currencyRateRepository, IClock clock, IOrderCalculationCostDomainService orderCalculationCostDomainService)
         {
             _orderRepository = orderRepository;
             _itemSaleRepository = itemSaleRepository;
@@ -30,6 +36,9 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
             _orderItemRepository = orderItemRepository;
             _context = context;
             _orderPositionModificationPolicy = orderPositionModificationPolicy;
+            _currencyRateRepository = currencyRateRepository;
+            _clock = clock;
+            _orderCalculationCostDomainService = orderCalculationCostDomainService;
         }
 
         public async Task HandleAsync(AddOrderItemToOrder command)
@@ -58,11 +67,12 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
             var itemCart = new ItemCart(Guid.NewGuid(), itemSale.Item.ItemName, itemSale.Item.BrandName, itemSale.Item.TypeName,
                                         itemSale.Item.Description, itemSale.Item.Tags, itemSale.Item.ImagesUrl, itemSale.Cost, itemSale.CurrencyCode);
             await _itemCartRepository.AddAsync(itemCart);
-            var orderItem = OrderItem.Create(Guid.NewGuid(), itemCart, _context.Identity.Id);
+            var cost = itemSale.Cost;
+            var orderItem = OrderItem.Create(Guid.NewGuid(), itemCart, cost, itemSale.CurrencyCode, decimal.One, _context.Identity.Id);
             await _orderItemRepository.AddAsync(orderItem);
 
             order.AddOrderItem(orderItem);
-            order.RefreshCost();
+            await _orderCalculationCostDomainService.CalulateOrderCost(order);
             await _orderRepository.UpdateAsync(order);
         }
     }

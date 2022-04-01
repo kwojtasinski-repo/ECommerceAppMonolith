@@ -1,4 +1,5 @@
-﻿using ECommerce.Modules.Sales.Domain.Orders.Exceptions;
+﻿using ECommerce.Modules.Sales.Domain.Orders.Common.ValueObjects;
+using ECommerce.Modules.Sales.Domain.Orders.Exceptions;
 using ECommerce.Modules.Sales.Domain.Payments.Entities;
 using ECommerce.Shared.Abstractions.Kernel.Types;
 
@@ -9,7 +10,11 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
         public string OrderNumber { get; private set; }
         public DateTime CreateOrderDate { get; private set; }
         public DateTime? OrderApprovedDate { get; private set; }
-        public decimal Cost { get; private set; }
+        public Money Price { get; private set; }
+        public decimal Cost => Price.Value;
+        public decimal Rate => Currency.Rate;
+        public string CurrencyCode => Currency.CurrencyCode;
+        public Currency Currency { get; private set; }
         public Guid CustomerId { get; private set; }
         public Guid UserId { get; private set; }
         public bool Paid { get; private set; }
@@ -20,13 +25,14 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
 
         private Order() { }
 
-        public Order(AggregateId id, string orderNumber, decimal cost, Guid customerId, Guid userId, DateTime createOrderDate, DateTime? orderApprovedDate = null, bool paid = false, ICollection<OrderItem> orderItems = null)
+        public Order(AggregateId id, string orderNumber, decimal cost, string currencyCode, decimal rate, Guid customerId, Guid userId, DateTime createOrderDate, DateTime? orderApprovedDate = null, bool paid = false, ICollection<OrderItem> orderItems = null)
         {
             ValidateOrderNumber(orderNumber);
             ValidateCost(cost);
             Id = id;
             OrderNumber = orderNumber;
-            Cost = cost;
+            Price = new Money(cost);
+            Currency = new Currency(currencyCode, rate);
             Paid = paid;
             CustomerId = customerId;
             UserId = userId;
@@ -35,9 +41,9 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             _orderItems = orderItems ?? new List<OrderItem>();
         }
 
-        public static Order Create(AggregateId id, string orderNumber, decimal cost, Guid customerId, Guid userId, DateTime createOrderDate)
+        public static Order Create(AggregateId id, string orderNumber, decimal cost, string currencyCode, decimal rate, Guid customerId, Guid userId, DateTime createOrderDate)
         {
-            var order = new Order(id, orderNumber, cost, customerId, userId, createOrderDate);
+            var order = new Order(id, orderNumber, cost, currencyCode, rate, customerId, userId, createOrderDate);
             return order;
         }
 
@@ -77,7 +83,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             _orderItems.Remove(orderItemToDelete);
         }
 
-        public void RefreshCost()
+        internal void RefreshCost()
         {
             if (_orderItems is null)
             {
@@ -93,10 +99,10 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
 
             foreach (var orderItem in _orderItems)
             {
-                cost += orderItem.ItemCart.Cost;
+                cost += orderItem.Cost;
             }
 
-            Cost = cost;
+            Price = new Money(cost);
         }
 
         public void MarkAsPaid()
@@ -107,6 +113,11 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
         public void MarkAsUnpaid()
         {
             Paid = false;
+        }
+
+        public void ChangeCurrency(string currencyCode, decimal rate)
+        {
+            Currency = new Currency(currencyCode, rate);
         }
 
         private static void ValidateOrderNumber(string orderNumber)

@@ -2,6 +2,7 @@
 using ECommerce.Modules.Sales.Application.Payments.Commands.Handlers;
 using ECommerce.Modules.Sales.Application.Payments.Events;
 using ECommerce.Modules.Sales.Application.Payments.Exceptions;
+using ECommerce.Modules.Sales.Domain.Orders.Common.ValueObjects;
 using ECommerce.Modules.Sales.Domain.Orders.Entities;
 using ECommerce.Modules.Sales.Domain.Orders.Repositories;
 using ECommerce.Modules.Sales.Domain.Payments.Entities;
@@ -33,7 +34,8 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Payments.Handlers
         [Fact]
         public async Task given_valid_id_should_add_payment()
         {
-            var order = new Order(Guid.NewGuid(), "ORD", 1200M, Guid.NewGuid(), Guid.NewGuid(), DateTime.Now);
+            var currency = Currency.Default();
+            var order = new Order(Guid.NewGuid(), "ORD", 1200M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), Guid.NewGuid(), DateTime.Now);
             var command = new CreatePayment(order.Id);
             _orderRepository.GetAsync(order.Id).Returns(order);
 
@@ -45,7 +47,8 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Payments.Handlers
         [Fact]
         public async Task given_valid_id_should_publish_event_when_add_payment()
         {
-            var order = new Order(Guid.NewGuid(), "ORD", 1200M, Guid.NewGuid(), Guid.NewGuid(), DateTime.Now);
+            var currency = Currency.Default();
+            var order = new Order(Guid.NewGuid(), "ORD", 1200M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), Guid.NewGuid(), DateTime.Now);
             var command = new CreatePayment(order.Id);
             _orderRepository.GetAsync(order.Id).Returns(order);
 

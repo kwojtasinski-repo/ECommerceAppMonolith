@@ -1,5 +1,5 @@
-﻿using ECommerce.Modules.Sales.Domain.Currency.Entities;
-using ECommerce.Modules.Sales.Domain.Currency.Repositories;
+﻿using ECommerce.Modules.Sales.Domain.Currencies.Entities;
+using ECommerce.Modules.Sales.Domain.Currencies.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -40,6 +40,25 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
         {
             var currencyRate = await _salesDbContext.CurrencyRates.Where(cr => cr.CurrencyCode == currencyCode && cr.Created == createdDate).SingleOrDefaultAsync();
             return currencyRate;
+        }
+
+        public async Task UpdateAsync(CurrencyRate currencyRate)
+        {
+            _salesDbContext.CurrencyRates.Update(currencyRate);
+            await _salesDbContext.SaveChangesAsync();
+        }
+
+        public Task<IEnumerable<CurrencyRate>> GetCurrencyRatesForDate(IEnumerable<string> currencyCodes, DateOnly date)
+        {
+            var currenciesQueryable = _salesDbContext.CurrencyRates.AsQueryable();
+
+            var currencyRates = (from currencyCode in currencyCodes
+                                 join currencyRate in currenciesQueryable
+                                    on currencyCode equals currencyRate.CurrencyCode
+                                 select currencyRate).AsQueryable()
+                                    .Where(cr => cr.Created == date).ToList();
+
+            return Task.FromResult<IEnumerable<CurrencyRate>>(currencyRates);
         }
     }
 }

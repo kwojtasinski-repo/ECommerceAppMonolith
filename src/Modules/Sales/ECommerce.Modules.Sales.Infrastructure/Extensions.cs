@@ -1,4 +1,4 @@
-﻿using ECommerce.Modules.Sales.Domain.Currency.Repositories;
+﻿using ECommerce.Modules.Sales.Domain.Currencies.Repositories;
 using ECommerce.Modules.Sales.Domain.ItemSales.Repositories;
 using ECommerce.Modules.Sales.Domain.Orders.Repositories;
 using ECommerce.Modules.Sales.Domain.Payments.Repositories;
