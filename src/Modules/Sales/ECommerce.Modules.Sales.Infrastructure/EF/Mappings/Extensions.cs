@@ -13,7 +13,7 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Mappings
             {
                 Id = order.Id,
                 OrderNumber = order.OrderNumber,
-                Cost = order.Cost,
+                Cost = order.Price.Value,
                 CreateOrderDate = order.CreateOrderDate,
                 OrderApprovedDate = order.OrderApprovedDate,
                 CustomerId = order.CustomerId,
@@ -28,7 +28,7 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Mappings
             var dto = new OrderDetailsDto
             {
                 Id = order.Id,
-                Cost = order.Cost,
+                Cost = order.Price.Value,
                 CreateOrderDate = order.CreateOrderDate,
                 CustomerId = order.CustomerId,
                 OrderApprovedDate = order.OrderApprovedDate,
@@ -61,7 +61,7 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Mappings
                 ItemName = itemCart.ItemName,
                 BrandName = itemCart.BrandName,
                 TypeName = itemCart.TypeName,
-                Cost = itemCart.Cost,
+                Cost = itemCart.Price.Value,
                 Description = itemCart.Description,
                 Tags = itemCart.Tags,
                 ImagesUrl = itemCart.ImagesUrl

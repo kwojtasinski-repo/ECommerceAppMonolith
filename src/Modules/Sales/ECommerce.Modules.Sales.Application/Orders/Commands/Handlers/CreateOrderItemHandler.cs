@@ -39,10 +39,14 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
             }
 
             var rateDate = DateOnly.FromDateTime(_clock.CurrentDate());
-            var currency = await _currencyRateRepository.GetCurrencyRate(itemSale.CurrencyCode, rateDate);
-            if (currency is null)
+            IEnumerable<string> currencyCodes = new string[] { command.CurrencyCode, itemSale.CurrencyCode };
+            currencyCodes = currencyCodes.Distinct();
+            var currencyRates = await _currencyRateRepository.GetCurrencyRatesForDate(currencyCodes, rateDate);
+            
+            if (currencyRates.Count() != currencyCodes.Count())
             {
-                throw new CurrencyNotFoundException(itemSale.CurrencyCode, rateDate);
+                var currencyCodesFound = currencyRates.Select(cr => cr.CurrencyCode);
+                throw new InvalidCurrenciesException(currencyCodes, currencyCodesFound);
             }
 
             // snapshot
@@ -50,9 +54,14 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
                                         itemSale.Item.Description, itemSale.Item.Tags, itemSale.Item.ImagesUrl, itemSale.Cost, itemSale.CurrencyCode);
             await _itemCartRepository.AddAsync(itemCart);
 
-            var currencyDefault = Currency.Default(); // domyslna waluta PLN
-            var cost = itemCart.Price.Value * currency.Rate;
-            var orderItem = OrderItem.Create(command.OrderItemId, itemCart, cost, currencyDefault.CurrencyCode, currency.Rate, _context.Identity.Id);
+            var currencyCodeTarget = command.CurrencyCode;
+            var currencyCodeSource = itemCart.CurrencyCode;
+            var targetRate = currencyRates.SingleOrDefault(cr => cr.CurrencyCode == currencyCodeTarget);
+            var sourceRate = currencyRates.SingleOrDefault(cr => cr.CurrencyCode == currencyCodeSource);
+            var sourceCost = itemCart.Price.Value;
+            var cost = sourceCost * sourceRate.Rate / targetRate.Rate;
+
+            var orderItem = OrderItem.Create(command.OrderItemId, itemCart, cost, currencyCodeTarget, targetRate.Rate, _context.Identity.Id);
             await _orderItemRepository.AddAsync(orderItem);
         }
     }

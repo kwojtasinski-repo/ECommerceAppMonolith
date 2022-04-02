@@ -31,8 +31,8 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
             var order = _dbContext.Orders.Where(c => c.Id == id).AsNoTracking().SingleOrDefault();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.Created);
-            order.Cost.ShouldBe(expectedCost);
-            order.CurrencyCode.ShouldBe(expectedCurrency);
+            order.Price.Value.ShouldBe(expectedCost);
+            order.Currency.CurrencyCode.ShouldBe(expectedCurrency);
         }
 
         private async Task AddSampleData()
@@ -71,9 +71,9 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
             _dbContext.ItemCarts.Add(itemCart3);
 
             // OrderItem
-            var orderItem1 = new Domain.Orders.Entities.OrderItem(Guid.NewGuid(), itemCart1.Id, itemCart1, itemCart1.Cost, "PLN", decimal.One, _userId);
-            var orderItem2 = new Domain.Orders.Entities.OrderItem(Guid.NewGuid(), itemCart2.Id, itemCart2, itemCart2.Cost, "EUR", decimal.One, _userId);
-            var orderItem3 = new Domain.Orders.Entities.OrderItem(Guid.NewGuid(), itemCart3.Id, itemCart3, itemCart3.Cost, "USD", decimal.One, _userId);
+            var orderItem1 = new Domain.Orders.Entities.OrderItem(Guid.NewGuid(), itemCart1.Id, itemCart1, itemCart1.Price.Value, "PLN", decimal.One, _userId);
+            var orderItem2 = new Domain.Orders.Entities.OrderItem(Guid.NewGuid(), itemCart2.Id, itemCart2, itemCart2.Price.Value, "EUR", decimal.One, _userId);
+            var orderItem3 = new Domain.Orders.Entities.OrderItem(Guid.NewGuid(), itemCart3.Id, itemCart3, itemCart3.Price.Value, "USD", decimal.One, _userId);
 
             _dbContext.OrderItems.Add(orderItem1);
             _dbContext.OrderItems.Add(orderItem2);

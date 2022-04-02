@@ -1,9 +1,4 @@
 ﻿using ECommerce.Modules.Sales.Domain.Orders.Common.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Sales.Domain.Orders.Entities
 {
@@ -17,7 +12,6 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
         public IEnumerable<string>? Tags { get; private set; }
         public IEnumerable<string> ImagesUrl { get; private set; }
         public Money Price { get; private set; }
-        public decimal Cost => Price.Value;
         public string CurrencyCode { get; private set; }
         public bool Active { get; private set; }
         public OrderItem? OrderItem { get; private set; }

@@ -11,9 +11,6 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
         public DateTime CreateOrderDate { get; private set; }
         public DateTime? OrderApprovedDate { get; private set; }
         public Money Price { get; private set; }
-        public decimal Cost => Price.Value;
-        public decimal Rate => Currency.Rate;
-        public string CurrencyCode => Currency.CurrencyCode;
         public Currency Currency { get; private set; }
         public Guid CustomerId { get; private set; }
         public Guid UserId { get; private set; }
@@ -40,10 +37,60 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             OrderApprovedDate = orderApprovedDate;
             _orderItems = orderItems ?? new List<OrderItem>();
         }
+        
+        public Order(AggregateId id, string orderNumber, string currencyCode, decimal rate, Guid customerId, Guid userId, DateTime createOrderDate, DateTime? orderApprovedDate = null, bool paid = false, ICollection<OrderItem> orderItems = null)
+        {
+            ValidateOrderNumber(orderNumber);
+            Id = id;
+            OrderNumber = orderNumber;
+            Price = Money.Zero;
+            Currency = new Currency(currencyCode, rate);
+            Paid = paid;
+            CustomerId = customerId;
+            UserId = userId;
+            CreateOrderDate = createOrderDate;
+            OrderApprovedDate = orderApprovedDate;
+            _orderItems = orderItems ?? new List<OrderItem>();
+        }   
+        
+        public Order(AggregateId id, string orderNumber, Guid customerId, Guid userId, DateTime createOrderDate, DateTime? orderApprovedDate = null, bool paid = false, ICollection<OrderItem> orderItems = null)
+        {
+            ValidateOrderNumber(orderNumber);
+            Id = id;
+            OrderNumber = orderNumber;
+            Price = Money.Zero;
+            Currency = Currency.Default();
+            Paid = paid;
+            CustomerId = customerId;
+            UserId = userId;
+            CreateOrderDate = createOrderDate;
+            OrderApprovedDate = orderApprovedDate;
+            _orderItems = orderItems ?? new List<OrderItem>();
+        }
 
         public static Order Create(AggregateId id, string orderNumber, decimal cost, string currencyCode, decimal rate, Guid customerId, Guid userId, DateTime createOrderDate)
         {
             var order = new Order(id, orderNumber, cost, currencyCode, rate, customerId, userId, createOrderDate);
+            return order;
+        }
+        
+        public static Order Create(AggregateId id, string orderNumber, string currencyCode, decimal rate, Guid customerId, Guid userId, DateTime createOrderDate)
+        {
+            var order = new Order(id, orderNumber, currencyCode, rate, customerId, userId, createOrderDate);
+            return order;
+        }
+
+        public static Order Create(AggregateId id, string orderNumber, string currencyCode, Guid customerId, Guid userId, DateTime createOrderDate)
+        {
+            var currency = Currency.Default();
+            currency.ChangeCode(currencyCode);
+            var order = new Order(id, orderNumber, currency.CurrencyCode, currency.Rate, customerId, userId, createOrderDate);
+            return order;
+        }
+
+        public static Order Create(AggregateId id, string orderNumber, Guid customerId, Guid userId, DateTime createOrderDate)
+        {
+            var order = new Order(id, orderNumber, customerId, userId, createOrderDate);
             return order;
         }
 
@@ -99,7 +146,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
 
             foreach (var orderItem in _orderItems)
             {
-                cost += orderItem.Cost;
+                cost += orderItem.Price.Value;
             }
 
             Price = new Money(cost);

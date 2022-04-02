@@ -9,9 +9,6 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
         public Guid ItemCartId { get; private set; }
         public ItemCart ItemCart { get; private set; }
         public Money Price { get; private set; }
-        public decimal Cost => Price.Value;
-        public decimal Rate => Currency.Rate;
-        public string CurrencyCode => Currency.CurrencyCode;
         public Currency Currency { get; private set; }
         public Order? Order { get; private set; }
         public Guid UserId { get; private set; }

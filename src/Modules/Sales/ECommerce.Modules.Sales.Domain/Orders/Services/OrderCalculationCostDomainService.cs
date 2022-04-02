@@ -19,7 +19,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Services
         public async Task CalulateOrderCost(Order order)
         {
             var orderItems = order.OrderItems;
-            var currencyCodeTarget = order.CurrencyCode;
+            var currencyCodeTarget = order.Currency.CurrencyCode;
             var currencyCodes = orderItems.Select(oi => oi.ItemCart.CurrencyCode).ToList();
             currencyCodes.Add(currencyCodeTarget);
             currencyCodes = currencyCodes.Distinct().ToList(); 
@@ -32,7 +32,6 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Services
                 throw new CannotFindAllCurrenciesException(currencyCodes, currencyCodesFound);
             }
 
-            var cost = decimal.Zero;
             var targetRate = currencyRates.SingleOrDefault(cr => cr.CurrencyCode == currencyCodeTarget);
 
             foreach (var orderItem in orderItems)

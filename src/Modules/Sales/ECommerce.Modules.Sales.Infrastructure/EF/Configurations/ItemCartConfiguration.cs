@@ -27,7 +27,7 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Configurations
             builder.Property(i => i.Description).HasMaxLength(300);
             builder.OwnsOne(i => i.Price, navigation =>
             {
-                navigation.Property(m => m.Value).HasColumnName(nameof(ItemCart.Cost)).IsRequired().HasPrecision(14, 4);
+                navigation.Property(m => m.Value).HasColumnName("Cost").IsRequired().HasPrecision(14, 4);
             });
             builder.Property(i => i.CurrencyCode).IsRequired().HasMaxLength(3);
             builder.HasIndex(i => i.CurrencyCode);

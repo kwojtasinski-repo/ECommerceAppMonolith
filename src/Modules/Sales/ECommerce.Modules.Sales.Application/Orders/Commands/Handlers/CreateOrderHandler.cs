@@ -1,5 +1,6 @@
 ﻿using ECommerce.Modules.Sales.Application.Orders.Exceptions;
 using ECommerce.Modules.Sales.Domain.Currencies.Repositories;
+using ECommerce.Modules.Sales.Domain.Orders.Common.ValueObjects;
 using ECommerce.Modules.Sales.Domain.Orders.Entities;
 using ECommerce.Modules.Sales.Domain.Orders.Repositories;
 using ECommerce.Modules.Sales.Domain.Orders.Services;
@@ -20,16 +21,14 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
         private readonly IOrderItemRepository _orderItemRepository;
         private readonly IClock _clock;
         private readonly IContext _context;
-        private readonly ICurrencyRateRepository _currencyRateRepository;
         private readonly IOrderCalculationCostDomainService _orderCalculationCostDomainService;
 
-        public CreateOrderHandler(IOrderRepository orderRepository, IOrderItemRepository orderItemRepository, IClock clock, IContext context, ICurrencyRateRepository currencyRateRepository, IOrderCalculationCostDomainService orderCalculationCostDomainService)
+        public CreateOrderHandler(IOrderRepository orderRepository, IOrderItemRepository orderItemRepository, IClock clock, IContext context, IOrderCalculationCostDomainService orderCalculationCostDomainService)
         {
             _orderRepository = orderRepository;
             _orderItemRepository = orderItemRepository;
             _clock = clock;
             _context = context;
-            _currencyRateRepository = currencyRateRepository;
             _orderCalculationCostDomainService = orderCalculationCostDomainService;
         }
 
@@ -40,13 +39,6 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
             if (!orderItems.Any())
             {
                 throw new OrderItemsCannotBeEmptyException();
-            }
-
-            var currencyDate = DateOnly.FromDateTime(_clock.CurrentDate());
-            var currency = await _currencyRateRepository.GetCurrencyRate(command.CurrencyCode, currencyDate);
-            if (currency is null)
-            {
-                throw new CurrencyNotFoundException(command.CurrencyCode, currencyDate);
             }
 
             var currentDate = _clock.CurrentDate();
@@ -61,13 +53,11 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
                 number++;
             }
 
-            decimal cost = decimal.Zero;
-
             var orderNumber = new StringBuilder("ORDER/")
                 .Append(currentDate.Year).Append('/').Append(currentDate.Month.ToString("d2"))
                 .Append('/').Append(currentDate.Day.ToString("00")).Append('/').Append(number).ToString();
 
-            var order = Order.Create(command.Id, orderNumber, cost, currency.CurrencyCode, currency.Rate, command.CustomerId, _context.Identity.Id, currentDate);
+            var order = Order.Create(command.Id, orderNumber, command.CustomerId, _context.Identity.Id, currentDate);
             order.AddOrderItems(orderItems);
             await _orderCalculationCostDomainService.CalulateOrderCost(order);
             await _orderRepository.AddAsync(order);

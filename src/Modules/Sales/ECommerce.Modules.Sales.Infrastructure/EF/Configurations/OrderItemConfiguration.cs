@@ -19,14 +19,14 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Configurations
 
             builder.OwnsOne(i => i.Price, navigation =>
             {
-                navigation.Property(m => m.Value).HasColumnName(nameof(OrderItem.Cost)).IsRequired().HasPrecision(14, 4);
+                navigation.Property(m => m.Value).HasColumnName("Cost").IsRequired().HasPrecision(14, 4);
             });
 
             builder.OwnsOne(i => i.Currency, navigation =>
             {
-                navigation.Property(c => c.CurrencyCode).HasColumnName(nameof(OrderItem.CurrencyCode)).IsRequired().HasMaxLength(3);
+                navigation.Property(c => c.CurrencyCode).HasColumnName("CurrencyCode").IsRequired().HasMaxLength(3);
                 navigation.HasIndex(c => c.CurrencyCode);
-                navigation.Property(c => c.Rate).HasColumnName(nameof(OrderItem.Rate)).IsRequired().HasPrecision(14, 4);
+                navigation.Property(c => c.Rate).HasColumnName("Rate").IsRequired().HasPrecision(14, 4);
             });
         }
     }
