@@ -83,7 +83,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
         public static Order Create(AggregateId id, string orderNumber, string currencyCode, Guid customerId, Guid userId, DateTime createOrderDate)
         {
             var currency = Currency.Default();
-            currency.ChangeCode(currencyCode);
+            currency = currency.ChangeCode(currencyCode);
             var order = new Order(id, orderNumber, currency.CurrencyCode, currency.Rate, customerId, userId, createOrderDate);
             return order;
         }

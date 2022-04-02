@@ -57,7 +57,7 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
                 .Append(currentDate.Year).Append('/').Append(currentDate.Month.ToString("d2"))
                 .Append('/').Append(currentDate.Day.ToString("00")).Append('/').Append(number).ToString();
 
-            var order = Order.Create(command.Id, orderNumber, command.CustomerId, _context.Identity.Id, currentDate);
+            var order = Order.Create(command.Id, orderNumber, command.CurrencyCode, command.CustomerId, _context.Identity.Id, currentDate);
             order.AddOrderItems(orderItems);
             await _orderCalculationCostDomainService.CalulateOrderCost(order);
             await _orderRepository.AddAsync(order);
