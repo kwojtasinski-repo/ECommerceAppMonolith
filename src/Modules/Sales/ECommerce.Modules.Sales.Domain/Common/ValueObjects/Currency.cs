@@ -20,7 +20,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Common.ValueObjects
                 throw new InvalidOperationException($"Currency code '{currencyCode}' length '{length}' have to be 3");
             }
 
-            CurrencyCode = currencyCode;
+            CurrencyCode = currencyCode.ToUpperInvariant();
             Rate = rate;
         }
         

@@ -5,6 +5,7 @@
 @orderId = c8b1357f-e25c-42c7-a174-4d3c674d676d
 @customerId = 2482141f-e4e8-4efb-8750-44c45f332372
 @paymentId = 67d2ec07-17b5-41f2-8f06-388debaf45e8
+@currencyCode = PLN
 
 ### API status
 GET {{url}}
@@ -19,7 +20,8 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-    "itemSaleId": "{{itemSaleId}}"
+    "itemSaleId": "{{itemSaleId}}",
+    "currencyCode": "{{currencyCode}}"
 }
 
 ### Delete order item
@@ -32,7 +34,8 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-    "itemSaleId": "{{itemSaleId}}"
+    "itemSaleId": "{{itemSaleId}}",
+    "currencyCode": "{{currencyCode}}"
 }
 
 ### Get my orders
@@ -54,7 +57,8 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-    "customerId": "{{customerId}}"
+    "customerId": "{{customerId}}",
+    "currencyCode": "{{currencyCode}}"
 }
 
 ### Add position to order

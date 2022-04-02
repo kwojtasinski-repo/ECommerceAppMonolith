@@ -80,8 +80,13 @@ namespace ECommerce.Modules.Items.Domain.Entities
             {
                 throw new CurrencyCodeCannotBeNullException();
             }
-            
-            CurrencyCode = currencyCode;
+
+            if (currencyCode.Length != 3)
+            {
+                throw new InvalidCurrencyException(currencyCode);
+            }
+
+            CurrencyCode = currencyCode.ToUpperInvariant();
             IncrementVersion();
         }
 

@@ -7,6 +7,7 @@
 @itemSaleId = 7ce20008-8f4b-4bdd-a06f-8f5edc8e2b4c
 @itemCost = 5000
 @date = 2022-02-03
+@currencyCode = PLN
 
 ### 
 GET {{url}}
@@ -133,7 +134,8 @@ Authorization: Bearer {{accessToken}}
 
 {
     "itemId": "{{itemId}}",
-    "itemCost": "{{itemCost}}"
+    "itemCost": "{{itemCost}}",
+    "currencyCode": "{{currencyCode}}"
 }
 
 ### Update item sale
@@ -143,7 +145,8 @@ Authorization: Bearer {{accessToken}}
 
 {
     "itemSaleId": "{{itemSaleId}}",
-    "itemCost": "{{itemCost}}"
+    "itemCost": "{{itemCost}}",
+    "currencyCode": "{{currencyCode}}"
 }
 
 ### DELETE item sale
