@@ -49,7 +49,7 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Entities
         {
             var currency = Currency.Default();
             var order = new Order(Guid.NewGuid(), "ORD", 120M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
-            var itemCart = new ItemCart(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1", "Description", null, null, 120M, "PLN");
+            var itemCart = new ItemCart(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1", "Description", null, null, 120M, "PLN", DateTime.UtcNow);
             var orderItem = new OrderItem(Guid.NewGuid(), Guid.NewGuid(), itemCart, itemCart.Price.Value * currency.Rate, currency.CurrencyCode, currency.Rate, Guid.NewGuid());
 
             order.AddOrderItem(orderItem);
@@ -90,7 +90,7 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Entities
         {
             var currency = Currency.Default();
             var order = new Order(Guid.NewGuid(), "ORD", 120M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
-            var itemCart = new ItemCart(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1", "Description", null, null, 120M, "PLN");
+            var itemCart = new ItemCart(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1", "Description", null, null, 120M, "PLN", DateTime.UtcNow);
             var orderItem = new OrderItem(Guid.NewGuid(), Guid.NewGuid(), itemCart, itemCart.Price.Value * currency.Rate, currency.CurrencyCode, currency.Rate, Guid.NewGuid());
             var expectedException = new OrderItemNotFoundException(order.Id, orderItem.Id);
 

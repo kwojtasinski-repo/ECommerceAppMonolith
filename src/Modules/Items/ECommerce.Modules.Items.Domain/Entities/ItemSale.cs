@@ -58,7 +58,6 @@ namespace ECommerce.Modules.Items.Domain.Entities
 
             Cost = cost;
             IncrementVersion();
-            AddEvent(new ItemSaleCostChanged(this));
         }
 
         public void Deactivate()

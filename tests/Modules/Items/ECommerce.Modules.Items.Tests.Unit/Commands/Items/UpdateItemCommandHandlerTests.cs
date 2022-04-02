@@ -36,7 +36,6 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.Items
             await _handler.HandleAsync(command);
 
             await _itemRepository.Received(1).UpdateAsync(Arg.Any<Item>());
-            _eventMapper.MapAll(Arg.Any<IEnumerable<IDomainEvent>>()).Received(1);
             await _messageBroker.Received(1).PublishAsync(Arg.Any<IMessage[]>());
         }
 
@@ -226,7 +225,6 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.Items
         private readonly IBrandRepository _brandRepository;
         private readonly IItemUpdatePolicy _itemUpdatePolicy;
         private readonly IMessageBroker _messageBroker;
-        private readonly IEventMapper _eventMapper;
 
         public UpdateItemCommandHandlerTests()
         {
@@ -235,8 +233,7 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.Items
             _brandRepository = Substitute.For<IBrandRepository>();
             _itemUpdatePolicy = Substitute.For<IItemUpdatePolicy>();
             _messageBroker = Substitute.For<IMessageBroker>();
-            _eventMapper = Substitute.For<IEventMapper>();
-            _handler = new UpdateItemHandler(_itemRepository, _typeRepository, _brandRepository, _itemUpdatePolicy, _messageBroker, _eventMapper);
+            _handler = new UpdateItemHandler(_itemRepository, _typeRepository, _brandRepository, _itemUpdatePolicy, _messageBroker);
         }
 
         private Domain.Entities.Item CreateSampleItem(Guid id, Guid brandId, Guid typeId)

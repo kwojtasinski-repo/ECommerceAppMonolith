@@ -1,7 +1,9 @@
-﻿using ECommerce.Modules.Items.Application.Exceptions;
+﻿using ECommerce.Modules.Items.Application.Events;
+using ECommerce.Modules.Items.Application.Exceptions;
 using ECommerce.Modules.Items.Application.Mappings;
 using ECommerce.Modules.Items.Application.Policies.Items;
 using ECommerce.Modules.Items.Application.Services;
+using ECommerce.Modules.Items.Domain.Entities;
 using ECommerce.Modules.Items.Domain.Repositories;
 using ECommerce.Shared.Abstractions.Commands;
 using ECommerce.Shared.Abstractions.Messagging;
@@ -20,17 +22,15 @@ namespace ECommerce.Modules.Items.Application.Commands.Items.Handlers
         private readonly IBrandRepository _brandRepository;
         private readonly IItemUpdatePolicy _itemUpdatePolicy;
         private readonly IMessageBroker _messageBroker;
-        private readonly IEventMapper _eventMapper;
 
         public UpdateItemHandler(IItemRepository itemRepository, ITypeRepository typeRepository, IBrandRepository brandRepository, IItemUpdatePolicy itemUpdatePolicy,
-            IMessageBroker messageBroker, IEventMapper eventMapper)
+            IMessageBroker messageBroker)
         {
             _itemRepository = itemRepository;
             _typeRepository = typeRepository;
             _brandRepository = brandRepository;
             _itemUpdatePolicy = itemUpdatePolicy;
             _messageBroker = messageBroker;
-            _eventMapper = eventMapper;
         }
 
         public async Task HandleAsync(UpdateItem command)
@@ -62,31 +62,20 @@ namespace ECommerce.Modules.Items.Application.Commands.Items.Handlers
                 throw new CannotUpdateItemException(item.Id);
             }
 
-            if (item.ItemName != command.ItemName)
-            {
-                item.ChangeName(command.ItemName);
-            }
-
+            item.ChangeName(command.ItemName);
             item.ChangeDescription(command.Description);
-
-            if (item.Brand.Id != brand.Id)
-            {
-                item.ChangeBrand(brand);
-            }
-
-            if (command.TypeId != type.Id)
-            {
-                item.ChangeType(type);
-            }
-
+            item.ChangeBrand(brand);
+            item.ChangeType(type);
             item.ChangeTags(command.Tags);
             var urls = command.ImagesUrl.ToImageDictionary();
             item.ChangeImagesUrl(urls);
             
             await _itemRepository.UpdateAsync(item);
-
-            var integrationEvents = _eventMapper.MapAll(item.Events);
-            await _messageBroker.PublishAsync(integrationEvents.ToArray());
+            await _messageBroker.PublishAsync(new IMessage[] {
+                new ItemUpdated(item.Id, item.ItemName, item.Description,
+                                    item.Brand.Name, item.Type.Name, item.Tags,
+                                    item.ImagesUrl?[Item.IMAGES]?.Select(i => i.Url))
+            });
         }
 
         private static void Validate(UpdateItem command)

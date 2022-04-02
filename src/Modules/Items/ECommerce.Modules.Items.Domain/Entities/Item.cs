@@ -2,11 +2,6 @@
 using ECommerce.Modules.Items.Domain.Events;
 using ECommerce.Modules.Items.Domain.Exceptions;
 using ECommerce.Shared.Abstractions.Kernel.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Domain.Entities
 {
@@ -79,7 +74,6 @@ namespace ECommerce.Modules.Items.Domain.Entities
 
             ItemName = name;
             IncrementVersion();
-            AddEvent(new ItemNameChanged(this));
         }
 
         public void ChangeBrand(Brand brand)
@@ -91,7 +85,6 @@ namespace ECommerce.Modules.Items.Domain.Entities
 
             Brand = brand;
             IncrementVersion();
-            AddEvent(new ItemBrandChanged(this));
         }
 
         public void ChangeType(Type type)
@@ -103,28 +96,24 @@ namespace ECommerce.Modules.Items.Domain.Entities
 
             Type = type;
             IncrementVersion();
-            AddEvent(new ItemTypeChanged(this));
         }
 
         public void ChangeDescription(string? description)
         {
             Description = description;
             IncrementVersion();
-            AddEvent(new ItemDescriptionChanged(this));
         }
 
         public void ChangeTags(IEnumerable<string>? tags)
         {
             Tags = tags;
             IncrementVersion();
-            AddEvent(new ItemTagsChanged(this));
         }
 
         public void ChangeImagesUrl(Dictionary<string, IEnumerable<ItemImage>>? imagesUrl)
         {
             ImagesUrl = imagesUrl;
             IncrementVersion();
-            AddEvent(new ItemImagesChanged(this));
         }
 
         public void ChangeItemSale(ItemSale itemSale)

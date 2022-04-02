@@ -15,13 +15,11 @@ namespace ECommerce.Modules.Items.Application.Commands.ItemSales.Handlers
     {
         private readonly IItemSaleRepository _itemSaleRepository;
         private readonly IMessageBroker _messageBroker;
-        private readonly IEventMapper _eventMapper;
 
-        public UpdateItemSaleHandler(IItemSaleRepository itemSaleRepository, IMessageBroker messageBroker, IEventMapper eventMapper)
+        public UpdateItemSaleHandler(IItemSaleRepository itemSaleRepository, IMessageBroker messageBroker)
         {
             _itemSaleRepository = itemSaleRepository;
             _messageBroker = messageBroker;
-            _eventMapper = eventMapper;
         }
 
         public async Task HandleAsync(UpdateItemSale command)
@@ -42,9 +40,7 @@ namespace ECommerce.Modules.Items.Application.Commands.ItemSales.Handlers
             itemSale.ChangeCost(command.ItemCost);
             itemSale.ChangeCurrencyCode(command.CurrencyCode);
             await _itemSaleRepository.UpdateAsync(itemSale);
-
-            var integrationEvents = _eventMapper.MapAll(itemSale.Events);
-            await _messageBroker.PublishAsync(integrationEvents.ToArray());
+            await _messageBroker.PublishAsync(new IMessage[] { command });
         }
 
         private static void Validate(UpdateItemSale command)

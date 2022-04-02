@@ -29,7 +29,6 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.ItemSales
             await _handler.HandleAsync(command);
 
             await _itemSaleRepository.Received(1).UpdateAsync(Arg.Any<ItemSale>());
-            _eventMapper.MapAll(Arg.Any<IEnumerable<IDomainEvent>>()).Received(1);
             await _messageBroker.Received(1).PublishAsync(Arg.Any<IMessage[]>());
         }
 
@@ -76,14 +75,12 @@ namespace ECommerce.Modules.Items.Tests.Unit.Commands.ItemSales
         private readonly UpdateItemSaleHandler _handler;
         private readonly IItemSaleRepository _itemSaleRepository;
         private readonly IMessageBroker _messageBroker;
-        private readonly IEventMapper _eventMapper;
 
         public UpdateItemSaleCommandHandlerTests()
         {
             _itemSaleRepository = Substitute.For<IItemSaleRepository>();
             _messageBroker = Substitute.For<IMessageBroker>();
-            _eventMapper = Substitute.For<IEventMapper>();
-            _handler = new UpdateItemSaleHandler(_itemSaleRepository, _messageBroker, _eventMapper);
+            _handler = new UpdateItemSaleHandler(_itemSaleRepository, _messageBroker);
         }
 
         private ItemSale CreateItemSale(Guid id)

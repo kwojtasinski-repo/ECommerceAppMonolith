@@ -25,20 +25,15 @@ namespace ECommerce.Modules.Items.Application.Services
                 TypeCreated e => new TypeAdded(e.Type.Id),
                 Domain.Events.TypeNameChanged e => new Application.Events.TypeNameChanged(e.Type.Id, e.Type.Name),
 
-                // Item ///TODO: sprawdzic czy te eventy beda uzyteczne jesli nie uwspolnic do jednego konkretnego
+                // Item
                 ItemCreated e => new ItemAdded(e.Item.Id, e.Item.ItemName, e.Item.Description,
                                     e.Item.Brand.Name, e.Item.Type.Name, e.Item.Tags,
                                     e.Item.ImagesUrl?[Item.IMAGES]?.Select(i => i.Url)),
-                Domain.Events.ItemBrandChanged e => new Application.Events.ItemBrandChanged(e.Item.Id, e.Item.Brand.Id, e.Item.Brand.Name),
-                Domain.Events.ItemTypeChanged e => new Application.Events.ItemTypeChanged(e.Item.Id, e.Item.Type.Id, e.Item.Type.Name),
-                Domain.Events.ItemNameChanged e => new Application.Events.ItemNameChanged(e.Item.Id, e.Item.ItemName),
-                Domain.Events.ItemDescriptionChanged e => new Application.Events.ItemDescriptionChanged(e.Item.Id, e.Item.Description),
-                Domain.Events.ItemTagsChanged e => new Application.Events.ItemTagsChanged(e.Item.Id, e.Item.Tags),
-                Domain.Events.ItemImagesChanged e => new Application.Events.ItemImagesChanged(e.Item.Id, e.Item.ImagesUrl?[Item.IMAGES]?.Select(i => i.Url)),
 
                 // ItemSale
                 ItemSaleCreated e => new ItemSaleAdded(e.ItemSale.Id, e.ItemSale.ItemId, e.ItemSale.Cost, e.ItemSale.CurrencyCode),
-                Domain.Events.ItemSaleCostChanged e => new Application.Events.ItemSaleCostChanged(e.ItemSale.Id, e.ItemSale.Cost),
+                ItemSaleActivate e => new ItemSaleActivated(e.ItemSale.Id),
+                ItemSaleDeactivate e => new ItemSaleDeactivated(e.ItemSale.Id),
 
                 _ => null
             };

@@ -51,7 +51,8 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
 
             // snapshot
             var itemCart = new ItemCart(Guid.NewGuid(), itemSale.Item.ItemName, itemSale.Item.BrandName, itemSale.Item.TypeName,
-                                        itemSale.Item.Description, itemSale.Item.Tags, itemSale.Item.ImagesUrl, itemSale.Cost, itemSale.CurrencyCode);
+                                        itemSale.Item.Description, itemSale.Item.Tags, itemSale.Item.ImagesUrl, itemSale.Cost, itemSale.CurrencyCode,
+                                        _clock.CurrentDate());
             await _itemCartRepository.AddAsync(itemCart);
 
             var currencyCodeTarget = command.CurrencyCode;

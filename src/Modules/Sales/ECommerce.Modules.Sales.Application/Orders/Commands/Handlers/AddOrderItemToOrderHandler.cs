@@ -6,6 +6,7 @@ using ECommerce.Modules.Sales.Domain.Orders.Repositories;
 using ECommerce.Modules.Sales.Domain.Orders.Services;
 using ECommerce.Shared.Abstractions.Commands;
 using ECommerce.Shared.Abstractions.Contexts;
+using ECommerce.Shared.Abstractions.Time;
 
 namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
 {
@@ -18,8 +19,9 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
         private readonly IContext _context;
         private readonly IOrderPositionModificationPolicy _orderPositionModificationPolicy;
         private readonly IOrderCalculationCostDomainService _orderCalculationCostDomainService;
+        private readonly IClock _clock;
 
-        public AddOrderItemToOrderHandler(IOrderRepository orderRepository, IItemSaleRepository itemSaleRepository, IItemCartRepository itemCartRepository, IOrderItemRepository orderItemRepository, IContext context, IOrderPositionModificationPolicy orderPositionModificationPolicy, IOrderCalculationCostDomainService orderCalculationCostDomainService)
+        public AddOrderItemToOrderHandler(IOrderRepository orderRepository, IItemSaleRepository itemSaleRepository, IItemCartRepository itemCartRepository, IOrderItemRepository orderItemRepository, IContext context, IOrderPositionModificationPolicy orderPositionModificationPolicy, IOrderCalculationCostDomainService orderCalculationCostDomainService, IClock clock)
         {
             _orderRepository = orderRepository;
             _itemSaleRepository = itemSaleRepository;
@@ -28,6 +30,7 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
             _context = context;
             _orderPositionModificationPolicy = orderPositionModificationPolicy;
             _orderCalculationCostDomainService = orderCalculationCostDomainService;
+            _clock = clock;
         }
 
         public async Task HandleAsync(AddOrderItemToOrder command)
@@ -54,7 +57,8 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
 
             // snapshot
             var itemCart = new ItemCart(Guid.NewGuid(), itemSale.Item.ItemName, itemSale.Item.BrandName, itemSale.Item.TypeName,
-                                        itemSale.Item.Description, itemSale.Item.Tags, itemSale.Item.ImagesUrl, itemSale.Cost, itemSale.CurrencyCode);
+                                        itemSale.Item.Description, itemSale.Item.Tags, itemSale.Item.ImagesUrl, itemSale.Cost, itemSale.CurrencyCode,
+                                        _clock.CurrentDate());
             await _itemCartRepository.AddAsync(itemCart);
             var cost = itemSale.Cost;
             var orderItem = OrderItem.Create(Guid.NewGuid(), itemCart, cost, order.Currency.CurrencyCode, order.Currency.Rate, _context.Identity.Id);
