@@ -116,7 +116,8 @@ namespace ECommerce.Shared.Infrastructure
                         manager.ApplicationParts.Remove(removePart);
                     }
 
-                    manager.FeatureProviders.Add(new InternalControllerFeatureProvider()); // zmiana definicji wykrywania controller
+                    // change detection of controllers
+                    manager.FeatureProviders.Add(new InternalControllerFeatureProvider());
                 });
 
             return services;

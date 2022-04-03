@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("ECommerce.Modules.Sales.Tests.Unit")]
-[assembly: InternalsVisibleTo("DynamicProxyAssemblyGen2")] //dodane dla generowania mockow do internali
+[assembly: InternalsVisibleTo("DynamicProxyAssemblyGen2")] // added to allow generate mocks of internals
 namespace ECommerce.Modules.Sales.Application
 {
     public static class Extensions

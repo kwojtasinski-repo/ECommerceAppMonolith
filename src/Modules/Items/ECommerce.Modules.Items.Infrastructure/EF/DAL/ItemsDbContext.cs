@@ -18,7 +18,7 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.DAL
 
         public ItemsDbContext(DbContextOptions<ItemsDbContext> options) : base(options)
         {
-            // problem z UTC Date
+            // UTC Date problem
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 

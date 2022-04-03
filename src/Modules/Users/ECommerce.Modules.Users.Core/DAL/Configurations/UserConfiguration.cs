@@ -24,12 +24,12 @@ namespace ECommerce.Modules.Users.Core.DAL.Configurations
             builder.Property(u => u.Password).IsRequired();
             builder.Property(u => u.Role).IsRequired();
 
-            // zapis do tabeli jako json i deserializacja jako kolekcja
+            // save as json collection and deserialize
             builder.Property(u => u.Claims)
                 .HasConversion(c => JsonSerializer.Serialize(c, SerializerOptions), 
                  c => JsonSerializer.Deserialize<Dictionary<string, IEnumerable<string>>>(c, SerializerOptions));
 
-            // okreslenie jak maja byc porownywane wartosci w polu Claims
+            // determine how to compare Claims
             builder.Property(u => u.Claims).Metadata.SetValueComparer(
                 new ValueComparer<Dictionary<string, IEnumerable<string>>>(
                     (c1, c2) => c1.SequenceEqual(c2),

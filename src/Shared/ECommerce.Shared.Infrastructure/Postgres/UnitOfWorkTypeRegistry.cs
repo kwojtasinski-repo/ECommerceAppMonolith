@@ -8,6 +8,6 @@
 
         public Type Resolve<T>() => _types.TryGetValue(GetKey<T>(), out var type) ? type : null;
 
-        private static string GetKey<T>() => $"{typeof(T).GetModuleName()}"; // context podzielony na moduly
+        private static string GetKey<T>() => $"{typeof(T).GetModuleName()}"; // context divided into modules
     }
 }

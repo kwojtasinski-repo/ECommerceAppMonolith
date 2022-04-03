@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("ECommerce.Modules.Contacts.Api")]
 [assembly: InternalsVisibleTo("ECommerce.Modules.Contacts.Tests.Unit")]
 [assembly: InternalsVisibleTo("ECommerce.Modules.Contacts.Tests.Integration")]
-[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]  //dodane dla generowania mockow do internali
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]  // added to allow generate mocks
 namespace ECommerce.Modules.Contacts.Core
 {
     internal static class Extensions

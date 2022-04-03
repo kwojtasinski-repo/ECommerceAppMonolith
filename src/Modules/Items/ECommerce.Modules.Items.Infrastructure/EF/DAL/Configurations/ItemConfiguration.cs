@@ -26,7 +26,7 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.DAL.Configurations
             builder.Property(i => i.ItemName).IsRequired().HasMaxLength(100);
             builder.Property(i => i.Description).HasMaxLength(300);
 
-            // zapis tagow jako text
+            // save tags as text
             builder
                 .Property(i => i.Tags)
                 .HasConversion(tags => string.Join(',', tags), tags => tags.Split(',', StringSplitOptions.None));
@@ -35,19 +35,19 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.DAL.Configurations
                 .Property(i => i.Version)
                 .IsConcurrencyToken();
 
-            // okreslenie jak maja byc porownywane wartosci w polu Tags
+            // determine how to compare Tags
             builder
                 .Property(x => x.Tags).Metadata.SetValueComparer(
                 new ValueComparer<IEnumerable<string>>(
                     (c1, c2) => c1.SequenceEqual(c2),
                     c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode()))));
 
-            // zapis do tabeli jako json i deserializacja jako kolekcja
+            // save as json collection and deserialize
             builder.Property(u => u.ImagesUrl)
                 .HasConversion(u => JsonSerializer.Serialize(u, SerializerOptions),
                     u => JsonSerializer.Deserialize<Dictionary<string, IEnumerable<ItemImage>>>(u, SerializerOptions));
 
-            // okreslenie jak maja byc porownywane wartosci w polu ImagesUrl
+            // determine how to compare ImagesUrl
             builder.Property(u => u.ImagesUrl).Metadata.SetValueComparer(
                 new ValueComparer<Dictionary<string, IEnumerable<ItemImage>>>(
                     (c1, c2) => c1.SequenceEqual(c2),

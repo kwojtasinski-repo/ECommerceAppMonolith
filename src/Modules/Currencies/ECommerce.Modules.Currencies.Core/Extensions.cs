@@ -13,7 +13,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("ECommerce.Modules.Currencies.Api")]
 [assembly: InternalsVisibleTo("ECommerce.Modules.Currencies.Tests.Unit")]
 [assembly: InternalsVisibleTo("ECommerce.Modules.Currencies.Tests.Integration")]
-[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]  //dodane dla generowania mockow do internali
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]  // added to allow generate mocks of internal classes
 namespace ECommerce.Modules.Currencies.Core
 {
     internal static class Extensions

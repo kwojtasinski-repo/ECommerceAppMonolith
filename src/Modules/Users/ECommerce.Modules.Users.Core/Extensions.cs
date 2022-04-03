@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("ECommerce.Modules.Users.Api")]
 [assembly: InternalsVisibleTo("ECommerce.Modules.Users.Tests.Unit")]
 [assembly: InternalsVisibleTo("ECommerce.Modules.Users.Tests.Integration")]
-[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]  //dodane dla generowania mockow do internali
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]  // added to allow generate mocks of internals
 namespace ECommerce.Modules.Users.Core
 {
     internal static class Extensions

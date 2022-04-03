@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ECommerce.Shared.Infrastructure.Exceptions
 {
     /// <summary>
-    /// klasa stworzona na cele implementacji wlasnych mapowan wyjatkow na konkretny response
+    /// class created to implementation own exception mapping on concrete response
     /// </summary>
     internal class ExceptionCompositionRoot : IExceptionCompositionRoot
     {

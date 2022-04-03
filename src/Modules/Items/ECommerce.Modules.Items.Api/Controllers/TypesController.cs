@@ -36,7 +36,7 @@ namespace ECommerce.Modules.Items.Api.Controllers
             return Ok(typeDtos);
         }
 
-        [ActionName("GetAsync")] // blad z metoda GetAsync (nie moze jej znalezc podczas CrateAtAction())
+        [ActionName("GetAsync")] // error at CreateAction cannot find method
         [HttpGet("{typeId:guid}")]
         [AllowAnonymous]
         [ProducesResponseType(200)]

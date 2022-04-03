@@ -118,7 +118,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         }
 
         /// <summary>
-        /// Do tworzenia zaślepek używam biblioteki WireMock
+        /// Used WireMock to create plugs
         /// </summary>
         private readonly WireMockServer _wireMockServer;
         private const string Path = "currencies-module/currency-rates";
@@ -128,7 +128,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         public CurrencyRatesControllerTests(TestApplicationFactory<Program> factory, TestCurrenciesDbContext dbContext)
         {
             _wireMockServer = WireMockServer.Start();
-            // nadpisuje config nbpClientOptions
+            // override config nbpClientOptions
             var options = factory.Services.GetRequiredService<IOptions<NbpClientOptions>>();
             options.Value.BaseUrl = _wireMockServer.Urls.Single();
             options.Value.Timeout = 2;

@@ -15,7 +15,7 @@ namespace ECommerce.Modules.Currencies.Core.DAL
 
         public CurrenciesDbContext(DbContextOptions<CurrenciesDbContext> options) : base(options)
         {
-            // problem z UTC Date
+            // UTC Date problem
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 

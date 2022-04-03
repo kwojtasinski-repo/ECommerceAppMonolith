@@ -32,7 +32,7 @@ namespace ECommerce.Modules.Currencies.Api.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        [ActionName("GetAsync")] // blad z metoda GetAsync (nie moze jej znalezc podczas CrateAtAction())
+        [ActionName("GetAsync")] // error at CreateAction cannot find method
         [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]

@@ -84,12 +84,12 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Clients
                 .UsingGet()).RespondWith(
               Response.Create()
                 .WithStatusCode(200)
-                // Zwracam odpowiedź po 5 sekundach
+                // Return response after 5 seconds
                 .WithDelay(5.Seconds()));
 
-            // Oczekuję, że zostanie rzucony wyjątek, związany z połączeniem HTTP
-            // Gdyż według konfiguracji połączenie HTTP powinno być nawiązane w
-            // ciągu 2 sekund.
+            // Expect exception to be thrown related to HTTP connection
+            // Because according to configuration, the HTTP response should be established
+            // within 2 seconds
             var exception = await Record.ExceptionAsync(() => _service.GetCurrencyAsync(code));
             exception.ShouldBeOfType<FlurlHttpException>();
         }
@@ -111,7 +111,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Clients
         }
 
         /// <summary>
-        /// Do tworzenia zaślepek używam biblioteki WireMock
+        /// Used WireMock to create plugs
         /// </summary>
         private readonly WireMockServer _wireMockServer;
         private readonly INbpClient _service;
@@ -119,7 +119,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Clients
         public NbpClientTests(TestApplicationFactory<Program> factory)
         {
             _wireMockServer = WireMockServer.Start();
-            // nadpisuje config nbpClientOptions
+            // override config nbpClientOptions
             var options = factory.Services.GetRequiredService<IOptions<NbpClientOptions>>();
             options.Value.BaseUrl = _wireMockServer.Urls.Single();
             options.Value.Timeout = 2;

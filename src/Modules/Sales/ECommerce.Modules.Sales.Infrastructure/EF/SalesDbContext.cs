@@ -18,7 +18,7 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF
 
         public SalesDbContext(DbContextOptions<SalesDbContext> options) : base(options)
         {
-            // problem z UTC Date
+            //  UTC Date problem
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 

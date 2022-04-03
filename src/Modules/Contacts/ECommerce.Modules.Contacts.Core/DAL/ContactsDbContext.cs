@@ -20,13 +20,13 @@ namespace ECommerce.Modules.Contacts.Core.DAL
 
         public ContactsDbContext(DbContextOptions<ContactsDbContext> options) : base(options)
         {
-            // problem z UTC Date
+            // UTC Date problem
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
         public ContactsDbContext(DbContextOptions<ContactsDbContext> options, IClock clock, IContext context) : base(options)
         {
-            // problem z UTC Date
+            // UTC Date problem
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             _clock = clock;
             _context = context;
