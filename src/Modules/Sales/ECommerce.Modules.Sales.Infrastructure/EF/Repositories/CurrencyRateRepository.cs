@@ -52,10 +52,11 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
         {
             var currenciesQueryable = _salesDbContext.CurrencyRates.AsQueryable();
 
+            var currenciesQueryableFiltered = currenciesQueryable.Where(cr => cr.Created == date);
+
             var currencyRates = (from currencyCode in currencyCodes
-                                 join currencyRate in currenciesQueryable
+                                 join currencyRate in currenciesQueryableFiltered
                                     on currencyCode equals currencyRate.CurrencyCode
-                                 where currencyRate.Created == date
                                  select currencyRate).ToList();
 
             return Task.FromResult<IEnumerable<CurrencyRate>>(currencyRates);
