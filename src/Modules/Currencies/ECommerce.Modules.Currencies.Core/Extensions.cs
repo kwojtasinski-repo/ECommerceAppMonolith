@@ -2,8 +2,11 @@
 using ECommerce.Modules.Currencies.Core.DAL;
 using ECommerce.Modules.Currencies.Core.DAL.Repositories;
 using ECommerce.Modules.Currencies.Core.Repositories;
+using ECommerce.Modules.Currencies.Core.Scheduler;
 using ECommerce.Modules.Currencies.Core.Services;
+using ECommerce.Shared.Abstractions.SchedulerJobs;
 using ECommerce.Shared.Infrastructure.Postgres;
+using ECommerce.Shared.Infrastructure.SchedulerJobs;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;
 
@@ -25,6 +28,13 @@ namespace ECommerce.Modules.Currencies.Core
             services.AddScoped<ICurrencyRateRepository, CurrencyRateRepository>();
             services.AddScoped<ICurrencyService, CurrencyService>();
             services.AddScoped<ICurrencyRateService, CurrencyRateService>();
+
+            services.AddScoped<ISchedulerTask<CurrencyRateDownloader>, CurrencyRateDownloader>();
+            services.AddCronJob<ISchedulerTask<CurrencyRateDownloader>, CurrencyRateDownloader >(options =>
+            {
+                options.TimeZoneInfo = TimeZoneInfo.Local;
+                options.CronExpression = @"45 17 * * *";// https://crontab.guru/ info
+            });
 
             return services;
         }
