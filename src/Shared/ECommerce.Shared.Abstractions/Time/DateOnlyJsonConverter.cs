@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace ECommerce.Shared.Infrastructure.Time
+namespace ECommerce.Shared.Abstractions.Time
 {
     public sealed class DateOnlyJsonConverter : JsonConverter<DateOnly>
     {

@@ -3,6 +3,7 @@ using ECommerce.Modules.Currencies.Core.Entities;
 using ECommerce.Modules.Currencies.Core.Exceptions;
 using ECommerce.Modules.Currencies.Core.Repositories;
 using ECommerce.Modules.Currencies.Core.Services;
+using ECommerce.Shared.Abstractions.Messagging;
 using ECommerce.Shared.Abstractions.Time;
 using NSubstitute;
 using Shouldly;
@@ -22,6 +23,7 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.Services
         private readonly ICurrencyRepository _currencyRepository;
         private readonly INbpClient _nbpClient;
         private readonly IClock _clock;
+        private readonly IMessageBroker _messageBroker;
 
         public CurrencyRateServiceTests()
         {
@@ -30,7 +32,8 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.Services
             _nbpClient = Substitute.For<INbpClient>();
             _clock = Substitute.For<IClock>();
             _clock.CurrentDate().Returns(DateTime.UtcNow);
-            _service = new CurrencyRateService(_repository, _currencyRepository, _nbpClient, _clock);
+            _messageBroker = Substitute.For<IMessageBroker>();
+            _service = new CurrencyRateService(_repository, _currencyRepository, _nbpClient, _clock, _messageBroker);
         }
 
         [Fact]

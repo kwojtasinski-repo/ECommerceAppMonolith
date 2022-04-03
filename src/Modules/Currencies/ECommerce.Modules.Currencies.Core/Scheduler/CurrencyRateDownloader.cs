@@ -54,7 +54,8 @@ namespace ECommerce.Modules.Currencies.Core.Scheduler
             var codesDistincted = codes.Distinct();
             var rateDate = DateOnly.FromDateTime(currencyRates.First().EffectiveDate);
             var ratesInDb = await _currencyRateService.GetCurrencyRatesForDate(codesDistincted, rateDate);
-            var ratesFiltered = currencies.Join(rates, c => c.Code.ToUpperInvariant(), r => r.Code.ToUpperInvariant(), (c, r) => r);
+            var ratesFiltered = currencies.Join(rates, c => c.Code.ToUpperInvariant(), r => r.Code.ToUpperInvariant(), (c, r) => r).ToList();
+            ratesFiltered.Add(new RateTable { Currency = "Polski złoty (PLN)", Code = "PLN", Mid = 1 });
 
             foreach (var currencyRate in ratesFiltered)
             {

@@ -1,10 +1,5 @@
-﻿using ECommerce.Shared.Infrastructure.Time;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ECommerce.Shared.Abstractions.Time;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Currencies.Core.DTO
 {
