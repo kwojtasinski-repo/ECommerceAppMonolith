@@ -68,7 +68,6 @@ namespace ECommerce.Modules.Currencies.Core.Mappings
             return currency;
         }
 
-
         public static CurrencyRateDto AsDto(this CurrencyRate currencyRate)
         {
             var dto = new CurrencyRateDto
@@ -80,6 +79,19 @@ namespace ECommerce.Modules.Currencies.Core.Mappings
             };
 
             return dto;
+        }
+
+        public static CurrencyRate AsEntity(this CurrencyRateDto dto)
+        {
+            var currencyRate = new CurrencyRate
+            {
+                Id = dto.Id,
+                CurrencyId = dto.CurrencyId,
+                CurrencyDate = dto.CurrencyDate,
+                Rate = dto.Rate
+            };
+
+            return currencyRate;
         }
     }
 }

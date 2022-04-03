@@ -4,14 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ECommerce.Shared.Infrastructure.SchedulerJobs
 {
-    internal sealed class CrobJob<T, U> : CronJobService<T, U>, ICronJob<T, U>
+    internal sealed class CronJob<T, U> : CronJobService<T, U>, ICronJob<T, U>
         where T : class, ISchedulerTask<U>
-        where U : class
+        where U : class, T
     {
-        private readonly ILogger<T> _logger;
+        private readonly ILogger<CronJob<T, U>> _logger;
         private readonly IServiceProvider _serviceProvider;
 
-        public CrobJob(IScheduleConfig<T> config, ILogger<T> logger, IServiceProvider serviceProvider)
+        public CronJob(IScheduleConfig<T> config, ILogger<CronJob<T, U>> logger, IServiceProvider serviceProvider)
             : base(config.CronExpression, config.TimeZoneInfo)
         {
             _logger = logger;

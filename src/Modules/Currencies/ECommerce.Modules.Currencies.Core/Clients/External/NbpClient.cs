@@ -1,12 +1,6 @@
-﻿using ECommerce.Modules.Currencies.Core.Exceptions;
-using Flurl.Http;
+﻿using Flurl.Http;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Currencies.Core.Clients.External
 {
@@ -22,12 +16,21 @@ namespace ECommerce.Modules.Currencies.Core.Clients.External
             _flurlClient.WithTimeout(_clientOptions.Timeout);
         }
 
+        public async Task<IEnumerable<ExchangeRateTable>> GetAllCurrenciesForCurrentDay(CancellationToken cancellationToken)
+        {
+            var urlBuilder = new StringBuilder();
+            var baseUrl = _clientOptions.BaseUrl;
+            urlBuilder.Append(baseUrl != null ? baseUrl.TrimEnd('/') : "").Append("/api/exchangerates/tables/a");
+            var content = await SendGetRequest<IEnumerable<ExchangeRateTable>>(urlBuilder.ToString(), cancellationToken);
+            return content ?? new List<ExchangeRateTable>();
+        }
+
         public async Task<ExchangeRate> GetCurrencyAsync(string currencyCode)
         {
             var urlBuilder = new StringBuilder();
             urlBuilder.Append(_clientOptions.BaseUrl != null ? _clientOptions.BaseUrl.TrimEnd('/') : "").Append("/api/exchangerates/rates/a/");
             urlBuilder.Append(currencyCode.ToLower());
-            var content = await SendGetRequest(urlBuilder.ToString());
+            var content = await SendGetRequest<ExchangeRate>(urlBuilder.ToString());
             return content;
         }
 
@@ -37,26 +40,33 @@ namespace ECommerce.Modules.Currencies.Core.Clients.External
             urlBuilder.Append(_clientOptions.BaseUrl != null ? _clientOptions.BaseUrl.TrimEnd('/') : "").Append("/api/exchangerates/rates/a/");
             urlBuilder.Append(currencyCode.ToLower()).Append("/");
             urlBuilder.Append(dateTime.ToString("yyyy-MM-dd"));
-            var content = await SendGetRequest(urlBuilder.ToString());
+            var content = await SendGetRequest<ExchangeRate>(urlBuilder.ToString());
             return content;
         }
 
-        private async Task<ExchangeRate> SendGetRequest(string urlBuilder)
+        private async Task<T> SendGetRequest<T>(string urlBuilder)
+            where T : class
+        {
+            using var cancellationTokenSource = new CancellationTokenSource();
+            cancellationTokenSource.CancelAfter(_flurlClient.Settings.Timeout.Value);
+            return await SendGetRequest<T>(urlBuilder, cancellationTokenSource.Token);
+        }
+        
+        private async Task<T> SendGetRequest<T>(string urlBuilder, CancellationToken cancellationToken)
+            where T : class
         {
             try
             {
-                using var cancellationTokenSource = new CancellationTokenSource();
-                cancellationTokenSource.CancelAfter(_flurlClient.Settings.Timeout.Value);
                 var response = await _flurlClient.Request(urlBuilder)
                     .AllowHttpStatus("404")
-                    .GetAsync(cancellationToken: cancellationTokenSource.Token, completionOption: HttpCompletionOption.ResponseHeadersRead);
+                    .GetAsync(cancellationToken: cancellationToken, completionOption: HttpCompletionOption.ResponseHeadersRead);
                 
                 if (response.StatusCode == (int) System.Net.HttpStatusCode.NotFound)
                 {
                     return null;
                 }
 
-                var exchangeRate = await response.GetJsonAsync<ExchangeRate>();
+                var exchangeRate = await response.GetJsonAsync<T>();
                 return exchangeRate;
             }
             catch (Exception)

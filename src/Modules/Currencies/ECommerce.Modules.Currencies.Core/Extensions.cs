@@ -29,11 +29,10 @@ namespace ECommerce.Modules.Currencies.Core
             services.AddScoped<ICurrencyService, CurrencyService>();
             services.AddScoped<ICurrencyRateService, CurrencyRateService>();
 
-            services.AddScoped<ISchedulerTask<CurrencyRateDownloader>, CurrencyRateDownloader>();
-            services.AddCronJob<ISchedulerTask<CurrencyRateDownloader>, CurrencyRateDownloader >(options =>
+            services.AddCronJob<ISchedulerTask<CurrencyRateDownloader>, CurrencyRateDownloader>(options =>
             {
                 options.TimeZoneInfo = TimeZoneInfo.Local;
-                options.CronExpression = @"45 17 * * *";// https://crontab.guru/ info
+                options.CronExpression = @"15 12 * * *";// https://crontab.guru/ info
             });
 
             return services;

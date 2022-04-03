@@ -6,7 +6,7 @@ namespace ECommerce.Shared.Infrastructure.SchedulerJobs
 {
     internal abstract class CronJobService<T, U> : ICronJob<T, U>, IHostedService, IDisposable
         where T : class, ISchedulerTask<U>
-        where U : class
+        where U : class, T
     {
         private System.Timers.Timer _timer;
         private readonly CronExpression _expression;

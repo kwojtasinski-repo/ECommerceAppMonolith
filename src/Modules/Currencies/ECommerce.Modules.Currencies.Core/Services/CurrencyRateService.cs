@@ -1,15 +1,12 @@
 ﻿using ECommerce.Modules.Currencies.Core.DTO;
 using ECommerce.Modules.Currencies.Core.Repositories;
 using ECommerce.Modules.Currencies.Core.Mappings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ECommerce.Modules.Currencies.Core.Exceptions;
 using ECommerce.Modules.Currencies.Core.Clients.External;
 using ECommerce.Shared.Abstractions.Time;
 using ECommerce.Modules.Currencies.Core.Entities;
+using ECommerce.Shared.Abstractions.Messagging;
+using ECommerce.Modules.Currencies.Core.Events;
 
 namespace ECommerce.Modules.Currencies.Core.Services
 {
@@ -23,13 +20,33 @@ namespace ECommerce.Modules.Currencies.Core.Services
         private readonly ICurrencyRepository _currencyRepository;
         private readonly INbpClient _nbpClient;
         private readonly IClock _clock;
+        private readonly IMessageBroker _messageBroker;
 
-        public CurrencyRateService(ICurrencyRateRepository currencyRateRepository, ICurrencyRepository currencyRepository, INbpClient nbpClient, IClock clock)
+        public CurrencyRateService(ICurrencyRateRepository currencyRateRepository, ICurrencyRepository currencyRepository, INbpClient nbpClient, IClock clock,
+            IMessageBroker messageBroker)
         {
             _currencyRateRepository = currencyRateRepository;
             _currencyRepository = currencyRepository;
             _nbpClient = nbpClient;
             _clock = clock;
+            _messageBroker = messageBroker;
+        }
+
+        public async Task AddAsync(CurrencyRateDto currencyRateDto)
+        {
+            currencyRateDto.Id = Guid.NewGuid();
+            var currency = await _currencyRepository.GetAsync(currencyRateDto.CurrencyId);
+
+            if (currency is null)
+            {
+                throw new CurrencyNotFoundException(currencyRateDto.CurrencyId);
+            }
+
+            var currencyRate = currencyRateDto.AsEntity();
+            await _currencyRateRepository.AddAsync(currencyRate);
+            
+            await _messageBroker.PublishAsync(new CurrencyRateAdded(currencyRateDto.Id, currencyRateDto.Rate,
+                                        currency.Code, currencyRateDto.CurrencyDate));
         }
 
         public async Task<IReadOnlyList<CurrencyRateDto>> GetAllAsync()
@@ -61,6 +78,19 @@ namespace ECommerce.Modules.Currencies.Core.Services
             return dto;
         }
 
+        public async Task<IReadOnlyList<CurrencyRateDto>> GetCurrencyRatesForDate(IEnumerable<string> currencyCodes, DateOnly date)
+        {
+            var rates = await _currencyRateRepository.GetCurrencyRatesForDate(currencyCodes, date);
+            var currencyRates = new List<CurrencyRateDto>();
+            
+            foreach(var rate in rates)
+            {
+                currencyRates.Add(rate.AsDto());
+            }
+
+            return currencyRates;
+        }
+
         public async Task<CurrencyRateDto> GetLatestRateAsync(Guid currencyId)
         {
             var currency = await _currencyRepository.GetAsync(currencyId);
@@ -74,6 +104,20 @@ namespace ECommerce.Modules.Currencies.Core.Services
             var currencyRate = await GetLatestCurrencyRateAsync(currencyId, currency.Code, DateOnly.FromDateTime(date));
 
             return currencyRate;
+        }
+
+        public async Task UpdateAsync(CurrencyRateDto currencyRateDto)
+        {
+            var rate = await _currencyRateRepository.GetAsync(currencyRateDto.Id);
+
+            if (rate is null)
+            {
+                throw new CurrencyRateNotFoundException(currencyRateDto.Id);
+            }
+
+            rate.Rate = currencyRateDto.Rate;
+            await _currencyRateRepository.UpdateAsync(rate);
+            await _messageBroker.PublishAsync(new CurrencyRateUpdated(rate.Id, rate.Rate));
         }
 
         private async Task<CurrencyRateDto> GetLatestCurrencyRateAsync(Guid currencyId, string currencyCode, DateOnly date) 

@@ -5,25 +5,28 @@ namespace ECommerce.Shared.Infrastructure.SchedulerJobs
 {
     public static class Extensions
     {
-        public static IServiceCollection AddCronJob<T, U>(this IServiceCollection services, Action<IScheduleConfig<T>> options) 
-            where T : class, ISchedulerTask<U>
-            where U : class
+        //public static IServiceCollection AddScoped<TService, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TImplementation>(this IServiceCollection services)
+        //where TService : class where TImplementation : class, TService
+        public static IServiceCollection AddCronJob<TService, TImplementation>(this IServiceCollection services, Action<IScheduleConfig<TService>> options) 
+            where TService : class, ISchedulerTask<TImplementation>
+            where TImplementation : class, TService
         {
             if (options == null)
             {
                 throw new ArgumentNullException(nameof(options), @"Please provide Schedule Configurations.");
             }
 
-            var config = new ScheduleConfig<T>();
+            var config = new ScheduleConfig<TService>();
             options.Invoke(config);
 
             if (string.IsNullOrWhiteSpace(config.CronExpression))
             {
-                throw new ArgumentNullException(nameof(ScheduleConfig<T>.CronExpression), @"Empty Cron Expression is not allowed.");
+                throw new ArgumentNullException(nameof(ScheduleConfig<TService>.CronExpression), @"Empty Cron Expression is not allowed.");
             }
 
-            services.AddSingleton<IScheduleConfig<T>>(config);
-            services.AddHostedService<CrobJob<T, U>>();
+            services.AddScoped<TService, TImplementation>();
+            services.AddSingleton<IScheduleConfig<TService>>(config);
+            services.AddHostedService<CronJob<TService, TImplementation>>();
 
             return services;
         }

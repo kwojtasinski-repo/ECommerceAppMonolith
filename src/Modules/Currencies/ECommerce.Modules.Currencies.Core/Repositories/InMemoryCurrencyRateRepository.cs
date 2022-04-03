@@ -34,5 +34,21 @@ namespace ECommerce.Modules.Currencies.Core.Repositories
             var currencyRate = _currencyRates.Values.Where(cr => cr.CurrencyId == currencyId && cr.CurrencyDate == date).SingleOrDefault();
             return Task.FromResult<CurrencyRate>(currencyRate);
         }
+
+        public Task<IReadOnlyList<CurrencyRate>> GetCurrencyRatesForDate(IEnumerable<string> currencyCodes, DateOnly date)
+        {
+            var currencyRates = (from currencyCode in currencyCodes
+                                 join currencyRate in _currencyRates.Values
+                                    on currencyCode equals currencyRate.Currency.Code
+                                 where currencyRate.CurrencyDate == date
+                                 select currencyRate).ToList();
+
+            return Task.FromResult<IReadOnlyList<CurrencyRate>>(currencyRates);
+        }
+
+        public Task UpdateAsync(CurrencyRate rate)
+        {
+            return Task.CompletedTask;
+        }
     }
 }
