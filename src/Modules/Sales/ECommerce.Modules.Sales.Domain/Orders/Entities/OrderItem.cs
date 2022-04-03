@@ -1,4 +1,5 @@
-﻿using ECommerce.Modules.Sales.Domain.Orders.Common.ValueObjects;
+﻿using ECommerce.Modules.Sales.Domain.Currencies.Entities;
+using ECommerce.Modules.Sales.Domain.Orders.Common.ValueObjects;
 using ECommerce.Modules.Sales.Domain.Orders.Exceptions;
 
 namespace ECommerce.Modules.Sales.Domain.Orders.Entities
@@ -29,6 +30,16 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
         public static OrderItem Create(Guid id, ItemCart itemCart, decimal cost, string currencyCode, decimal rate, Guid userId)
         {
             var order = new OrderItem(id, itemCart.Id, itemCart, cost, currencyCode, rate, userId);
+            return order;
+        }
+
+
+        public static OrderItem Create(Guid id, ItemCart itemCart, decimal sourceCost, string sourceCurrencyCode, decimal sourceRate, string targetCurrencyCode, decimal targetRate, Guid userId)
+        {
+            var sourceCurrency = new Currency(sourceCurrencyCode, sourceRate);
+            var targetCurrency = new Currency(targetCurrencyCode, targetRate);
+            var cost = sourceCost * sourceCurrency.Rate / targetCurrency.Rate;
+            var order = new OrderItem(id, itemCart.Id, itemCart, cost, targetCurrency.CurrencyCode, targetCurrency.Rate, userId);
             return order;
         }
 

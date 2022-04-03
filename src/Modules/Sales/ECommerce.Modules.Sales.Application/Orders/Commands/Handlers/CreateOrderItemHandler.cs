@@ -60,9 +60,8 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
             var targetRate = currencyRates.SingleOrDefault(cr => cr.CurrencyCode == currencyCodeTarget);
             var sourceRate = currencyRates.SingleOrDefault(cr => cr.CurrencyCode == currencyCodeSource);
             var sourceCost = itemCart.Price.Value;
-            var cost = sourceCost * sourceRate.Rate / targetRate.Rate;
 
-            var orderItem = OrderItem.Create(command.OrderItemId, itemCart, cost, currencyCodeTarget, targetRate.Rate, _context.Identity.Id);
+            var orderItem = OrderItem.Create(command.OrderItemId, itemCart, itemCart.Price.Value, sourceRate.CurrencyCode, sourceRate.Rate, targetRate.CurrencyCode, targetRate.Rate, _context.Identity.Id);
             await _orderItemRepository.AddAsync(orderItem);
         }
     }
