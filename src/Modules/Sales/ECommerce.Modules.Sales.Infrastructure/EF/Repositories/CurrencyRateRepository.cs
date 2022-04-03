@@ -61,5 +61,11 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
 
             return Task.FromResult<IEnumerable<CurrencyRate>>(currencyRates);
         }
+
+        public async Task<CurrencyRate> GetAsync(Guid currencyRateId)
+        {
+            var currencyRate = await _salesDbContext.CurrencyRates.Where(cr => cr.Id == currencyRateId).SingleOrDefaultAsync();
+            return currencyRate;
+        }
     }
 }

@@ -2,5 +2,5 @@
 
 namespace ECommerce.Modules.Currencies.Core.Events
 {
-    internal record CurrencyRateAdded(Guid CurrencyRateId, decimal rate, string currencyCode, DateOnly RateDate) : IEvent;
+    internal record CurrencyRateAdded(Guid CurrencyRateId, decimal Rate, string CurrencyCode, DateOnly RateDate) : IEvent;
 }
