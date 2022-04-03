@@ -58,10 +58,7 @@ namespace ECommerce.Modules.Contacts.Tests.Integration.Controllers
             Authenticate(_userId);
 
             var response = await _client.Request($"{Path}").PostJsonAsync(dto);
-            var (responseHeaderName, responseHeaderValue) = response.Headers.Where(h => h.Name == "Location").FirstOrDefault();
-            responseHeaderValue.ShouldNotBeNull();
-            var splitted = responseHeaderValue.Split(Path + '/');
-            Guid.TryParse(splitted[1], out var id);
+            var id = response.GetIdFromHeaders<Guid>(Path);
             var customerFromDb = _dbContext.Customers.Where(c => c.Id == id).AsNoTracking().SingleOrDefault();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.Created);

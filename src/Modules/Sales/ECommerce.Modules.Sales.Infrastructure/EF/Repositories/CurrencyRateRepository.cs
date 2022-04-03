@@ -55,8 +55,8 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
             var currencyRates = (from currencyCode in currencyCodes
                                  join currencyRate in currenciesQueryable
                                     on currencyCode equals currencyRate.CurrencyCode
-                                 select currencyRate).AsQueryable()
-                                    .Where(cr => cr.Created == date).ToList();
+                                 where currencyRate.Created == date
+                                 select currencyRate).ToList();
 
             return Task.FromResult<IEnumerable<CurrencyRate>>(currencyRates);
         }

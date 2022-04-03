@@ -88,10 +88,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             Authenticate(Guid.NewGuid());
 
             var response = (await _client.Request($"{Path}").PostJsonAsync(command));
-            var (responseHeaderName, responseHeaderValue) = response.Headers.Where(h => h.Name == "Location").FirstOrDefault();
-            responseHeaderValue.ShouldNotBeNull();
-            var splitted = responseHeaderValue.Split(Path + '/');
-            Guid.TryParse(splitted[1], out var id);
+            var id = response.GetIdFromHeaders<Guid>(Path);
             var brand = _dbContext.Brands.Where(c => c.Id == id).SingleOrDefault();
 
             brand.ShouldNotBeNull();
