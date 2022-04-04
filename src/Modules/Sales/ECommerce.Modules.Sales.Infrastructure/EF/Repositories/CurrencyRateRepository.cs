@@ -67,5 +67,25 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
             var currencyRate = await _salesDbContext.CurrencyRates.Where(cr => cr.Id == currencyRateId).SingleOrDefaultAsync();
             return currencyRate;
         }
+
+        public Task<IEnumerable<CurrencyRate>> GetLatestCurrencyRates(IEnumerable<string> currencyCodes)
+        {
+            var currenciesQueryable = _salesDbContext.CurrencyRates.AsQueryable();
+
+            // Where !_salesDbContext.CurrencyRates.Any(...) =
+            // NOT (EXISTS (SELECT 1 FROM sales."CurrencyRates" AS c0
+            // WHERE(c0."CurrencyCode" = c."CurrencyCode") AND(c."RateDate" < c0."RateDate")))
+            var currenciesQueryableFiltered = (from currencyRate in currenciesQueryable
+                                               where !_salesDbContext.CurrencyRates.Any(cr => cr.CurrencyCode == currencyRate.CurrencyCode
+                                                            && currencyRate.RateDate < cr.RateDate)
+                                               select currencyRate);
+
+            var currencyRates = (from currencyCode in currencyCodes
+                                 join currencyRate in currenciesQueryableFiltered
+                                    on currencyCode equals currencyRate.CurrencyCode
+                                 select currencyRate).ToList();
+
+            return Task.FromResult<IEnumerable<CurrencyRate>>(currencyRates);
+        }
     }
 }

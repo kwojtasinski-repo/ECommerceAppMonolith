@@ -25,7 +25,7 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Services
             currencyCodes = currencyCodes.Distinct().ToList();
             var date = DateOnly.FromDateTime(_clock.CurrentDate());
             var currencyRates = CreateSampleCurrencyRates(currencyCodes, rates);
-            _currencyRateRepository.GetCurrencyRatesForDate(Arg.Any<IEnumerable<string>>(), date).Returns(currencyRates);
+            _currencyRateRepository.GetLatestCurrencyRates(Arg.Any<IEnumerable<string>>()).Returns(currencyRates);
             var expectedCost = 850M;
 
             await _service.CalulateOrderCost(order);

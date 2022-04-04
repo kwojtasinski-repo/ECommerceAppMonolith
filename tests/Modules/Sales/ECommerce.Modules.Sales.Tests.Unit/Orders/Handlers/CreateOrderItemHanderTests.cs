@@ -27,7 +27,7 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Handlers
             var rateDate = DateOnly.FromDateTime(_clock.CurrentDate());
             var rates = new Dictionary<string, decimal>() { { "USD", 2M }, { "EUR", 4M } };
             var currencyRates = CreateSampleCurrencyRates(currencyCodes, rates);
-            _currencyRateRepository.GetCurrencyRatesForDate(Arg.Any<IEnumerable<string>>(), rateDate).Returns(currencyRates);
+            _currencyRateRepository.GetLatestCurrencyRates(Arg.Any<IEnumerable<string>>()).Returns(currencyRates);
 
             await _handler.HandleAsync(command);
 

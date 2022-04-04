@@ -24,7 +24,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Services
             currencyCodes.Add(currencyCodeTarget);
             currencyCodes = currencyCodes.Distinct().ToList(); 
             var date = DateOnly.FromDateTime(_clock.CurrentDate());
-            var currencyRates = await _currencyRateRepository.GetCurrencyRatesForDate(currencyCodes, date);
+            var currencyRates = await _currencyRateRepository.GetLatestCurrencyRates(currencyCodes);
 
             if (currencyRates.Count() != currencyCodes.Count)
             {

@@ -38,10 +38,9 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
                 throw new ItemSaleNotFoundException(command.ItemSaleId);
             }
 
-            var rateDate = DateOnly.FromDateTime(_clock.CurrentDate());
             IEnumerable<string> currencyCodes = new string[] { command.CurrencyCode, itemSale.CurrencyCode };
             currencyCodes = currencyCodes.Distinct();
-            var currencyRates = await _currencyRateRepository.GetCurrencyRatesForDate(currencyCodes, rateDate);
+            var currencyRates = await _currencyRateRepository.GetLatestCurrencyRates(currencyCodes);
             
             if (currencyRates.Count() != currencyCodes.Count())
             {

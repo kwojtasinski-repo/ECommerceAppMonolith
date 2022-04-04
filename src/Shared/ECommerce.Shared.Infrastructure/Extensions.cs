@@ -119,8 +119,6 @@ namespace ECommerce.Shared.Infrastructure
                     // change detection of controllers
                     manager.FeatureProviders.Add(new InternalControllerFeatureProvider());
                 });
-            //setup globally for JsonText Serializer
-            SetDefaultJsonSerializerOptions();
 
             return services;
         }
