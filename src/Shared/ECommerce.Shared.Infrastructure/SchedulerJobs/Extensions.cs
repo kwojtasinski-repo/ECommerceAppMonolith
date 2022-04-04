@@ -5,8 +5,6 @@ namespace ECommerce.Shared.Infrastructure.SchedulerJobs
 {
     public static class Extensions
     {
-        //public static IServiceCollection AddScoped<TService, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TImplementation>(this IServiceCollection services)
-        //where TService : class where TImplementation : class, TService
         public static IServiceCollection AddCronJob<TService, TImplementation>(this IServiceCollection services, Action<IScheduleConfig<TService>> options) 
             where TService : class, ISchedulerTask<TImplementation>
             where TImplementation : class, TService
