@@ -11,7 +11,7 @@ namespace ECommerce.Modules.Sales.Application.Items.Events.External
             CurrencyRateId = currencyRateId;
             Rate = rate;
             CurrencyCode = currencyCode;
-            RateDate = RateDate;
+            RateDate = rateDate;
         }
 
         public Guid CurrencyRateId { get; }

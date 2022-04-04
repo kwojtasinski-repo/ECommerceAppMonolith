@@ -93,7 +93,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Sales.Tes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "APIGateway", "APIGateway", "{D05AF2BD-5ECA-4092-8418-BD8BF6CA99E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.APIGateway", "src\APIGateway\ECommerce.APIGateway\ECommerce.APIGateway.csproj", "{023749C7-3D32-451E-9F0F-8CFBC4B55D71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.APIGateway", "src\APIGateway\ECommerce.APIGateway\ECommerce.APIGateway.csproj", "{023749C7-3D32-451E-9F0F-8CFBC4B55D71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
