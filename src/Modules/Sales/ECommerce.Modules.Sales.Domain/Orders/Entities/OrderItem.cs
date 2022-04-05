@@ -16,7 +16,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
 
         private OrderItem() { }
 
-        public OrderItem(Guid id, Guid itemId, ItemCart itemCart, decimal cost, string currencyCode, decimal rate, Guid userId)
+        public OrderItem(Guid id, Guid itemId, ItemCart itemCart, decimal cost, string currencyCode, decimal rate, Guid userId, Order? order = null)
         {
             ValidateItem(itemCart);
             Id = id;
@@ -25,12 +25,19 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             UserId = userId;
             Currency = new Currency(currencyCode, rate);
             Price = new Money(cost);
+            Order = order;
         }
 
         public static OrderItem Create(Guid id, ItemCart itemCart, decimal cost, string currencyCode, decimal rate, Guid userId)
         {
-            var order = new OrderItem(id, itemCart.Id, itemCart, cost, currencyCode, rate, userId);
-            return order;
+            var orderItem = new OrderItem(id, itemCart.Id, itemCart, cost, currencyCode, rate, userId);
+            return orderItem;
+        }
+        
+        public static OrderItem Create(Guid id, Order order, ItemCart itemCart, decimal cost, string currencyCode, decimal rate, Guid userId)
+        {
+            var orderItem = new OrderItem(id, itemCart.Id, itemCart, cost, currencyCode, rate, userId, order);
+            return orderItem;
         }
 
 

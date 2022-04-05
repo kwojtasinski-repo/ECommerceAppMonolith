@@ -7,6 +7,7 @@ using Xunit;
 using System.Net;
 using Shouldly;
 using Microsoft.EntityFrameworkCore;
+using ECommerce.Modules.Sales.Domain.Orders.Entities;
 
 namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
 {
@@ -14,6 +15,25 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
     public class OrdersControllerTests : IClassFixture<TestApplicationFactory<Program>>,
         IClassFixture<TestSalesDbContext>
     {
+        [Fact]
+        public async Task given_valid_order_item_should_add_to_order()
+        {
+            await AddSampleData();
+            var order = Order.Create(Guid.NewGuid(), "ORD/123/123", "EUR", Guid.NewGuid(), _userId, DateTime.Now);
+            _dbContext.Add(order);
+            await _dbContext.SaveChangesAsync();
+            var itemSaleId = new Guid("9120c2c5-c3fc-4283-9975-b9c8e6354bfc"); // 4000 USD // rate 2 USD 4 EUR
+            var request = new AddOrderItemToOrder(order.Id, itemSaleId);
+            Authenticate(_userId);
+
+            var response = await _client.Request($"{Path}/positions/add").PatchJsonAsync(request);
+
+            var orderFromDb = _dbContext.Orders.Include(oi => oi.OrderItems).Where(o => o.Id == order.Id).AsNoTracking().SingleOrDefault();
+            orderFromDb.ShouldNotBeNull();
+            orderFromDb.OrderItems.Count().ShouldBe(1);
+            orderFromDb.Price.Value.ShouldBe(2000M);
+        }
+
         [Fact]
         public async Task given_valid_order_items_with_different_currencies_should_create_order_with_valid_cost_and_currency()
         {
@@ -52,25 +72,25 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
             _dbContext.CurrencyRates.Add(new Domain.Currencies.Entities.CurrencyRate { Id = Guid.NewGuid(), Created = currentDate.AddDays(-3), CurrencyCode = "EUR", Rate = 4, RateDate = currentDate.AddDays(-3) });
 
             // Item
-            var item1 = new Domain.ItemSales.Entities.Item(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1", "Description...", null, null);
-            var item2 = new Domain.ItemSales.Entities.Item(Guid.NewGuid(), "Item #2", "Brand #1", "Type #1", "Description...", null, null);
-            var item3 = new Domain.ItemSales.Entities.Item(Guid.NewGuid(), "Item #3", "Brand #1", "Type #1", "Description...", null, null);
+            var images = new string[] { "https://ithardware.pl/admin/ckeditor/filemanager/userfiles/DanielGorecki/2022/Stycze%C5%84/galaxy_s22.jpg?time=1643274614771", "https://files.mgsm.pl//news/15953/samsung-galaxy-s22-ultra-large.jpg", "https://i.wpimg.pl/O/730x0/m.komorkomania.pl/obraz-2021-09-27-130821-afe03036.png" };
+            var item1 = new Domain.ItemSales.Entities.Item(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1", "Description...", null, images);
+            var item2 = new Domain.ItemSales.Entities.Item(Guid.NewGuid(), "Item #2", "Brand #1", "Type #1", "Description...", null, images);
+            var item3 = new Domain.ItemSales.Entities.Item(Guid.NewGuid(), "Item #3", "Brand #1", "Type #1", "Description...", null, images);
 
             _dbContext.Items.Add(item1);
             _dbContext.Items.Add(item2);
             _dbContext.Items.Add(item3);
 
             // ItemSale
-            var itemSale1 = new Domain.ItemSales.Entities.ItemSale(Guid.NewGuid(), item1, 1000M, "PLN");
-            var itemSale2 = new Domain.ItemSales.Entities.ItemSale(Guid.NewGuid(), item2, 2000M, "EUR");
-            var itemSale3 = new Domain.ItemSales.Entities.ItemSale(Guid.NewGuid(), item3, 4000M, "USD");
+            var itemSale1 = new Domain.ItemSales.Entities.ItemSale(new Guid("9889049c-c94f-4f67-8f1e-ae4d1f73f456"), item1, 1000M, "PLN");
+            var itemSale2 = new Domain.ItemSales.Entities.ItemSale(new Guid("7e75cbb8-9cc1-45f5-b69a-54fdf622b774"), item2, 2000M, "EUR");
+            var itemSale3 = new Domain.ItemSales.Entities.ItemSale(new Guid("9120c2c5-c3fc-4283-9975-b9c8e6354bfc"), item3, 4000M, "USD");
 
             _dbContext.ItemSales.Add(itemSale1);
             _dbContext.ItemSales.Add(itemSale2);
             _dbContext.ItemSales.Add(itemSale3);
 
             // ItemCart
-            var images = new string [] { "https://ithardware.pl/admin/ckeditor/filemanager/userfiles/DanielGorecki/2022/Stycze%C5%84/galaxy_s22.jpg?time=1643274614771", "https://files.mgsm.pl//news/15953/samsung-galaxy-s22-ultra-large.jpg", "https://i.wpimg.pl/O/730x0/m.komorkomania.pl/obraz-2021-09-27-130821-afe03036.png" };
             var itemCart1 = new Domain.Orders.Entities.ItemCart(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1", "Description...", null, images, 1000M, "PLN", currentDateTime);
             var itemCart2 = new Domain.Orders.Entities.ItemCart(Guid.NewGuid(), "Item #2", "Brand #1", "Type #1", "Description...", null, images, 2000M, "EUR", currentDateTime);
             var itemCart3 = new Domain.Orders.Entities.ItemCart(Guid.NewGuid(), "Item #3", "Brand #1", "Type #1", "Description...", null, images, 4000M, "USD", currentDateTime);
