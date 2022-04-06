@@ -12,7 +12,7 @@ namespace ECommerce.Modules.Sales.Application.Orders.Exceptions
         public IEnumerable<string> CurrencyCodesFound { get; }
         public IEnumerable<string> CurrencyCodesNotFound { get; }
 
-        public InvalidCurrenciesException(IEnumerable<string> currencyCodesFound, IEnumerable<string> currencyCodesNotFound) : base($"Invalid currencies. Found '{currencyCodesFound}' and not found '{currencyCodesNotFound}'")
+        public InvalidCurrenciesException(IEnumerable<string> currencyCodesFound, IEnumerable<string> currencyCodesNotFound) : base($"Invalid currencies. Found '{string.Join(',', currencyCodesFound)}' and not found '{string.Join(',', currencyCodesNotFound)}'")
         {
             CurrencyCodesFound = currencyCodesFound;
             CurrencyCodesNotFound = currencyCodesNotFound;

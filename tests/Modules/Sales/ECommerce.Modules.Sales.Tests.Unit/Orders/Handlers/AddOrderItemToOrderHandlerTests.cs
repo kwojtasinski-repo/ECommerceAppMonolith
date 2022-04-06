@@ -1,5 +1,6 @@
 ﻿using ECommerce.Modules.Sales.Application.Orders.Commands;
 using ECommerce.Modules.Sales.Application.Orders.Commands.Handlers;
+using ECommerce.Modules.Sales.Application.Orders.Exceptions;
 using ECommerce.Modules.Sales.Application.Orders.Policies;
 using ECommerce.Modules.Sales.Domain.ItemSales.Entities;
 using ECommerce.Modules.Sales.Domain.ItemSales.Repositories;
@@ -9,6 +10,7 @@ using ECommerce.Modules.Sales.Domain.Orders.Services;
 using ECommerce.Shared.Abstractions.Contexts;
 using ECommerce.Shared.Abstractions.Time;
 using NSubstitute;
+using Shouldly;
 using Xunit;
 
 namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Handlers
@@ -33,6 +35,59 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Handlers
             await _orderItemRepository.Received(1).AddAsync(Arg.Any<OrderItem>());
             await _orderCalculationCostDomainService.Received(1).CalulateOrderCost(Arg.Any<Order>());
             await _orderRepository.Received(1).UpdateAsync(Arg.Any<Order>());
+        }
+
+        [Fact]
+        public async Task given_policy_not_allowed_to_modificate_positions_should_throw_an_exception()
+        {
+            var orderId = Guid.NewGuid();
+            var itemSaleId = Guid.NewGuid();
+            var itemSale = CreateSampleItemSale(itemSaleId, Guid.NewGuid(), 100M, "PLN");
+            _itemSaleRepository.GetAsync(itemSaleId).Returns(itemSale);
+            var order = CreateSampleOrder(orderId, decimal.Zero, "PLN", decimal.One);
+            _orderRepository.GetDetailsAsync(orderId).Returns(order);
+            _orderPositionModificationPolicy.CanAddAsync(order).Returns(false);
+            var expectedException = new PositionToOrderCannotBeAddedException(orderId, itemSaleId);
+            var command = new AddOrderItemToOrder(orderId, itemSaleId);
+
+            var exception = await Record.ExceptionAsync(() => _handler.HandleAsync(command));
+            
+            exception.ShouldNotBeNull();
+            exception.ShouldBeOfType(expectedException.GetType());
+            ((PositionToOrderCannotBeAddedException)exception).OrderId.ShouldBe(expectedException.OrderId);
+            ((PositionToOrderCannotBeAddedException)exception).ItemSaleId.ShouldBe(expectedException.ItemSaleId);
+        }
+
+        [Fact]
+        public async Task given_invalid_order_id_should_throw_an_exception()
+        {
+            var orderId = Guid.NewGuid();
+            var itemSaleId = Guid.NewGuid();
+            var itemSale = CreateSampleItemSale(itemSaleId, Guid.NewGuid(), 100M, "PLN");
+            _itemSaleRepository.GetAsync(itemSaleId).Returns(itemSale);
+            var expectedException = new OrderNotFoundException(orderId);
+            var command = new AddOrderItemToOrder(orderId, itemSaleId);
+
+            var exception = await Record.ExceptionAsync(() => _handler.HandleAsync(command));
+
+            exception.ShouldNotBeNull();
+            exception.ShouldBeOfType(expectedException.GetType());
+            ((OrderNotFoundException)exception).OrderId.ShouldBe(expectedException.OrderId);
+        }
+
+        [Fact]
+        public async Task given_invalid_item_sale_id_should_throw_an_exception()
+        {
+            var orderId = Guid.NewGuid();
+            var itemSaleId = Guid.NewGuid();
+            var expectedException = new ItemSaleNotFoundException(itemSaleId);
+            var command = new AddOrderItemToOrder(orderId, itemSaleId);
+
+            var exception = await Record.ExceptionAsync(() => _handler.HandleAsync(command));
+
+            exception.ShouldNotBeNull();
+            exception.ShouldBeOfType(expectedException.GetType());
+            ((ItemSaleNotFoundException)exception).ItemSaleId.ShouldBe(expectedException.ItemSaleId);
         }
 
         private Order CreateSampleOrder(Guid id, decimal cost, string currencyCode, decimal rate)

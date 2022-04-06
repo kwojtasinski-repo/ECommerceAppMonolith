@@ -10,6 +10,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Repositories
     public interface IOrderItemRepository
     {
         Task<OrderItem> GetAsync(Guid id);
+        Task<OrderItem> GetDetailsAsync(Guid id);
         Task UpdateAsync(OrderItem orderItem);
         Task AddAsync(OrderItem orderItem);
         Task DeleteAsync(OrderItem orderItem);

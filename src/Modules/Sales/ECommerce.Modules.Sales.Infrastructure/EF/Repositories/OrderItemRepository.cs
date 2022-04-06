@@ -42,6 +42,15 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
             return orderItem;
         }
 
+        public Task<OrderItem> GetDetailsAsync(Guid id)
+        {
+            var orderItem = _salesDbContext.OrderItems.Where(oi => oi.Id == id)
+                .Include(i => i.ItemCart)
+                .Include(o => o.Order)
+                .SingleOrDefaultAsync();
+            return orderItem;
+        }
+
         public async Task UpdateAsync(OrderItem orderItem)
         {
             _salesDbContext.OrderItems.Update(orderItem);

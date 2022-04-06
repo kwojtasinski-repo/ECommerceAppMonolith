@@ -1,5 +1,6 @@
 ﻿using ECommerce.Modules.Sales.Application.Orders.Commands;
 using ECommerce.Modules.Sales.Application.Orders.Commands.Handlers;
+using ECommerce.Modules.Sales.Application.Orders.Exceptions;
 using ECommerce.Modules.Sales.Domain.Currencies.Entities;
 using ECommerce.Modules.Sales.Domain.Currencies.Repositories;
 using ECommerce.Modules.Sales.Domain.ItemSales.Entities;
@@ -9,6 +10,7 @@ using ECommerce.Modules.Sales.Domain.Orders.Repositories;
 using ECommerce.Shared.Abstractions.Contexts;
 using ECommerce.Shared.Abstractions.Time;
 using NSubstitute;
+using Shouldly;
 using Xunit;
 
 namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Handlers
@@ -34,6 +36,41 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Handlers
             await _orderItemRepository.Received(1).AddAsync(Arg.Any<OrderItem>());
         }
 
+        [Fact]
+        public async Task given_invalid_currencies_should_throw_an_exception()
+        {
+            var itemSaleId = Guid.NewGuid();
+            var currencyCode = "EUR";
+            var command = new CreateOrderItem(itemSaleId, currencyCode);
+            var itemSale = CreateSampleItemSale(itemSaleId);
+            _itemSaleRepository.GetAsync(command.ItemSaleId).Returns(itemSale);
+            var currencyCodes = new string[] { itemSale.CurrencyCode };
+            var rates = new Dictionary<string, decimal>() { { "USD", 2M }};
+            var currencyRates = CreateSampleCurrencyRates(currencyCodes, rates);
+            _currencyRateRepository.GetLatestCurrencyRates(Arg.Any<IEnumerable<string>>()).Returns(currencyRates);
+
+            var exception = await Record.ExceptionAsync(() => _handler.HandleAsync(command));
+
+            exception.ShouldNotBeNull();
+            exception.Message.ShouldContain(string.Join(',', currencyCodes));
+        }
+
+        [Fact]
+        public async Task given_invalid_item_sale_should_throw_an_exception()
+        {
+            var itemSaleId = Guid.NewGuid();
+            var currencyCode = "EUR";
+            var command = new CreateOrderItem(itemSaleId, currencyCode);
+            var expectedException = new ItemSaleNotFoundException(command.ItemSaleId);
+
+            var exception = await Record.ExceptionAsync(() => _handler.HandleAsync(command));
+
+            exception.ShouldNotBeNull();
+            exception.ShouldBeOfType(expectedException.GetType());
+            ((ItemSaleNotFoundException)exception).ItemSaleId.ShouldBe(expectedException.ItemSaleId);
+            ((ItemSaleNotFoundException)exception).Message.ShouldBe(expectedException.Message);
+        }
+
         private ItemSale CreateSampleItemSale(Guid id)
         {
             var item = new Item(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1", "description", null, null);
@@ -47,7 +84,6 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Handlers
 
             foreach (var currencyCode in currencyCodes)
             {
-                var random = new Random();
                 rates.TryGetValue(currencyCode, out var rate);
                 var currencyRate = new CurrencyRate
                 {

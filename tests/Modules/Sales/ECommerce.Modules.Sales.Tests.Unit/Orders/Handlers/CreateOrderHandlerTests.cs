@@ -1,11 +1,13 @@
 ﻿using ECommerce.Modules.Sales.Application.Orders.Commands;
 using ECommerce.Modules.Sales.Application.Orders.Commands.Handlers;
+using ECommerce.Modules.Sales.Application.Orders.Exceptions;
 using ECommerce.Modules.Sales.Domain.Orders.Entities;
 using ECommerce.Modules.Sales.Domain.Orders.Repositories;
 using ECommerce.Modules.Sales.Domain.Orders.Services;
 using ECommerce.Shared.Abstractions.Contexts;
 using ECommerce.Shared.Abstractions.Time;
 using NSubstitute;
+using Shouldly;
 using Xunit;
 
 namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Handlers
@@ -25,6 +27,21 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Handlers
 
             await _orderRepository.Received(1).GetLatestOrderOnDateAsync(_clock.CurrentDate());
             await _orderRepository.Received(1).AddAsync(Arg.Any<Order>());
+        }
+
+        [Fact]
+        public async Task given_valid_command_should_throw_an_exception_when_there_is_no_order_items()
+        {
+            var customerId = Guid.NewGuid();
+            var currencyCode = "EUR";
+            var command = new CreateOrder(customerId, currencyCode);
+            var expectedException = new OrderItemsCannotBeEmptyException();
+
+            var exception = await Record.ExceptionAsync(() => _handler.HandleAsync(command));
+
+            exception.ShouldNotBeNull();
+            exception.ShouldBeOfType(expectedException.GetType());
+            ((OrderItemsCannotBeEmptyException)exception).Message.ShouldBe(exception.Message);
         }
 
         private IEnumerable<OrderItem> CreateSampleOrderItems()
