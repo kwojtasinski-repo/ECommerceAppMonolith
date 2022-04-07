@@ -12,7 +12,7 @@ using ECommerce.Modules.Sales.Domain.Orders.Entities;
 namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
 {
     [Collection("integrationSales")]
-    public class OrdersControllerTests : IClassFixture<TestApplicationFactory<Program>>,
+    public class OrdersControllerTests : BaseIntegrationTest, IClassFixture<TestApplicationFactory<Program>>,
         IClassFixture<TestSalesDbContext>
     {
         [Fact]
@@ -24,7 +24,7 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
             await _dbContext.SaveChangesAsync();
             var itemSaleId = new Guid("9120c2c5-c3fc-4283-9975-b9c8e6354bfc"); // 4000 USD // rate 2 USD 4 EUR
             var request = new AddOrderItemToOrder(order.Id, itemSaleId);
-            Authenticate(_userId);
+            Authenticate(_userId, _client);
 
             var response = await _client.Request($"{Path}/positions/add").PatchJsonAsync(request);
 
@@ -41,7 +41,7 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
             var expectedCurrency = "USD";
             var request = new CreateOrder(Guid.NewGuid(), expectedCurrency);
             var expectedCost = 8500; // 4000USD, 1000PLN, 2000EUR rate USD 2PLN, EUR 4PLN
-            Authenticate(_userId);
+            Authenticate(_userId, _client);
 
             var response = await _client.Request($"{Path}").PostJsonAsync(request);
             var id = response.GetIdFromHeaders<Guid>(Path);
@@ -50,6 +50,45 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
             response.StatusCode.ShouldBe((int)HttpStatusCode.Created);
             order.Price.Value.ShouldBe(expectedCost);
             order.Currency.CurrencyCode.ShouldBe(expectedCurrency);
+        }
+
+        [Fact]
+        public async Task given_valid_order_item_should_delete_from_order()
+        {
+            await AddSampleData();
+            var expectedCurrency = "USD";
+            var request = new CreateOrder(Guid.NewGuid(), expectedCurrency);
+            Authenticate(_userId, _client);
+            var response = await _client.Request($"{Path}").PostJsonAsync(request);
+            var id = response.GetIdFromHeaders<Guid>(Path);
+            var order = _dbContext.Orders.Include(oi => oi.OrderItems).Where(c => c.Id == id).AsNoTracking().SingleOrDefault();
+            var orderItemToDetele = order.OrderItems.FirstOrDefault();
+            var requestDelete = new DeleteOrderItemFromOrder(order.Id, orderItemToDetele.Id);
+            var expectedCost = 8500;
+
+            var responseDeletedPosition = await _client.Request($"{Path}/positions/delete").PatchJsonAsync(requestDelete);
+
+            var orderFromDb = _dbContext.Orders.Include(oi => oi.OrderItems).Where(o => o.Id == order.Id).AsNoTracking().SingleOrDefault();
+            orderFromDb.ShouldNotBeNull();
+            orderFromDb.OrderItems.Count().ShouldBe(2);
+            orderFromDb.Price.Value.ShouldBeLessThan(expectedCost);
+        }
+
+        [Fact]
+        public async Task given_valid_order_should_delete()
+        {
+            await AddSampleData();
+            var expectedCurrency = "USD";
+            var request = new CreateOrder(Guid.NewGuid(), expectedCurrency);
+            Authenticate(_userId, _client);
+            var response = await _client.Request($"{Path}").PostJsonAsync(request);
+            var id = response.GetIdFromHeaders<Guid>(Path);
+
+            var responseDeletedPosition = await _client.Request($"{Path}/{id}").DeleteAsync();
+
+            var order = _dbContext.Orders.Where(c => c.Id == id).AsNoTracking().SingleOrDefault();
+            responseDeletedPosition.StatusCode.ShouldBe((int)HttpStatusCode.OK);
+            order.ShouldBeNull();
         }
 
         private async Task AddSampleData()
@@ -109,14 +148,6 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
             _dbContext.OrderItems.Add(orderItem3);
 
             await _dbContext.SaveChangesAsync();
-        }
-
-        private void Authenticate(Guid userId)
-        {
-            var claims = new Dictionary<string, IEnumerable<string>>();
-            claims.Add("permissions", new[] { "items", "item-sale" });
-            var jwt = AuthHelper.GenerateJwt(userId.ToString(), "admin", claims: claims);
-            _client.WithOAuthBearerToken(jwt);
         }
 
         private Guid _userId = Guid.NewGuid();
