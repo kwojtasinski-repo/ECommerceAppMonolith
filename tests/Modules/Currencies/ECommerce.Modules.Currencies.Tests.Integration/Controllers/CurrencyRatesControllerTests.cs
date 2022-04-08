@@ -6,8 +6,6 @@ using ECommerce.Modules.Currencies.Core.Exceptions;
 using ECommerce.Modules.Currencies.Tests.Integration.Common;
 using ECommerce.Shared.Tests;
 using Flurl.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Shouldly;
 using System;
 using System.Collections.Generic;
@@ -21,7 +19,7 @@ using Xunit;
 namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
 {
     [Collection("integrationCurrencyRates")]
-    public class CurrencyRatesControllerTests : IClassFixture<TestApplicationFactory<Program>>,
+    public class CurrencyRatesControllerTests : CurrenciesBaseTest, IClassFixture<TestApplicationFactory<Program>>,
         IClassFixture<TestCurrenciesDbContext>
     {
         [Fact]
@@ -117,24 +115,16 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
             exception.Message.ShouldBe(expectedException.Message);
         }
 
-        /// <summary>
-        /// Used WireMock to create plugs
-        /// </summary>
         private readonly WireMockServer _wireMockServer;
         private const string Path = "currencies-module/currency-rates";
         private readonly IFlurlClient _client;
         private readonly CurrenciesDbContext _dbContext;
 
-        public CurrencyRatesControllerTests(TestApplicationFactory<Program> factory, TestCurrenciesDbContext dbContext)
+        public CurrencyRatesControllerTests(TestApplicationFactory<Program> factory, TestCurrenciesDbContext dbContext) : base(factory, dbContext)
         {
-            _wireMockServer = WireMockServer.Start();
-            // override config nbpClientOptions
-            var options = factory.Services.GetRequiredService<IOptions<NbpClientOptions>>();
-            options.Value.BaseUrl = _wireMockServer.Urls.Single();
-            options.Value.Timeout = 2;
-            var client = factory.CreateClient();
-            _client = new FlurlClient(client);
-            _dbContext = dbContext.DbContext;
+            _wireMockServer = WireMockServer;
+            _client = Client;
+            _dbContext = DbContext;
         }
     }
 }

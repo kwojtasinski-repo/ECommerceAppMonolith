@@ -14,7 +14,7 @@ using Xunit;
 namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
 {
     [Collection("integrationCurrencies")]
-    public class CurrenciesControllerTests : IClassFixture<TestApplicationFactory<Program>>,
+    public class CurrenciesControllerTests : CurrenciesBaseTest, IClassFixture<TestApplicationFactory<Program>>,
         IClassFixture<TestCurrenciesDbContext>
     {
         [Fact]
@@ -46,7 +46,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         {
             var currencyDto = new CurrencyDto { Code = "CZK", Description = "Czeska korona" };
             var userId = Guid.NewGuid();
-            Authenticate(userId);
+            Authenticate(userId, _client);
 
             var response = (await _client.Request($"{Path}").PostJsonAsync(currencyDto));
 
@@ -63,7 +63,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         {
             var currencyDto = new CurrencyDto { Code = "GBP", Description = "Funt brytyjski" };
             var userId = Guid.NewGuid();
-            Authenticate(userId);
+            Authenticate(userId, _client);
 
             var response = (await _client.Request($"{Path}").PostJsonAsync(currencyDto));
             var id = response.GetIdFromHeaders<Guid>(Path);
@@ -82,7 +82,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
             await _dbContext.SaveChangesAsync();
             var dto = new CurrencyDto { Id = currency.Id, Code = "CHF", Description = "Frank szwajcarski" };
             var userId = Guid.NewGuid();
-            Authenticate(userId);
+            Authenticate(userId, _client);
 
             await _client.Request($"{Path}/{dto.Id}").PutJsonAsync(dto);
             var dtoUpdated = await _client.Request($"{Path}/{dto.Id}").GetJsonAsync<CurrencyDto>();
@@ -99,20 +99,12 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
             await _dbContext.Currencies.AddAsync(currency);
             await _dbContext.SaveChangesAsync();
             var userId = Guid.NewGuid();
-            Authenticate(userId);
+            Authenticate(userId, _client);
 
             await _client.Request($"{Path}/{currency.Id}").DeleteAsync();
             var response = await Record.ExceptionAsync(() => _client.Request($"{Path}/{currency.Id}").GetJsonAsync<CurrencyDto>());
 
             ((FlurlHttpException) response).StatusCode.ShouldBe((int) HttpStatusCode.NotFound);
-        }
-
-        private void Authenticate(Guid userId)
-        {
-            var claims = new Dictionary<string, IEnumerable<string>>();
-            claims.Add("permissions", new[] { "currencies" });
-            var jwt = AuthHelper.GenerateJwt(userId.ToString(), "admin", claims: claims);
-            _client.WithOAuthBearerToken(jwt);
         }
 
         private async Task AddSampleData()
@@ -136,10 +128,10 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         private readonly IFlurlClient _client;
         private readonly CurrenciesDbContext _dbContext;
 
-        public CurrenciesControllerTests(TestApplicationFactory<Program> factory, TestCurrenciesDbContext dbContext)
+        public CurrenciesControllerTests(TestApplicationFactory<Program> factory, TestCurrenciesDbContext dbContext) : base(factory, dbContext)
         {
-            _client = new FlurlClient(factory.CreateClient());
-            _dbContext = dbContext.DbContext;
+            _client = Client;
+            _dbContext = DbContext;
         }
     }
 }

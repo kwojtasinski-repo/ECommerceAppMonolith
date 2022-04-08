@@ -47,15 +47,16 @@ namespace ECommerce.Modules.Currencies.Core.Scheduler
             }
 
             var currencies = await _currencyService.GetAllAsync();
-            var codes = new List<string>(currencies.Select(c => c.Code))
-            {
-                "PLN"
-            };
-            var codesDistincted = codes.Distinct();
+            var codes = new List<string>(currencies.Select(c => c.Code));
             var rateDate = DateOnly.FromDateTime(currencyRates.First().EffectiveDate);
-            var ratesInDb = await _currencyRateService.GetCurrencyRatesForDate(codesDistincted, rateDate);
+            var ratesInDb = await _currencyRateService.GetCurrencyRatesForDate(codes, rateDate);
             var ratesFiltered = currencies.Join(rates, c => c.Code.ToUpperInvariant(), r => r.Code.ToUpperInvariant(), (c, r) => r).ToList();
-            ratesFiltered.Add(new RateTable { Currency = "Polski złoty (PLN)", Code = "PLN", Mid = 1 });
+            var currencyPlnExists = currencies.Any(c => c.Code.ToUpperInvariant() == "PLN");
+
+            if (currencyPlnExists)
+            {
+                ratesFiltered.Add(new RateTable { Currency = "Polski złoty (PLN)", Code = "PLN", Mid = decimal.One });
+            }
 
             foreach (var currencyRate in ratesFiltered)
             {

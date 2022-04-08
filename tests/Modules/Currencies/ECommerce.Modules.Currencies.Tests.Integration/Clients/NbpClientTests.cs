@@ -4,21 +4,20 @@ using Flurl.Http;
 using Humanizer;
 using System;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
 using Xunit;
 using Shouldly;
-using Microsoft.Extensions.Options;
+using ECommerce.Modules.Currencies.Tests.Integration.Common;
 
 namespace ECommerce.Modules.Currencies.Tests.Integration.Clients
 {
     [Collection("integrationNBP")]
-    public class NbpClientTests : IClassFixture<TestApplicationFactory<Program>>
+    public class NbpClientTests : CurrenciesBaseTest, IClassFixture<TestApplicationFactory<Program>>,
+        IClassFixture<TestCurrenciesDbContext>
     {
         [Fact]
         public async Task given_valid_code_should_return_rate()
@@ -110,20 +109,13 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Clients
             rate.ShouldBeNull();
         }
 
-        /// <summary>
-        /// Used WireMock to create plugs
-        /// </summary>
         private readonly WireMockServer _wireMockServer;
         private readonly INbpClient _service;
 
-        public NbpClientTests(TestApplicationFactory<Program> factory)
+        public NbpClientTests(TestApplicationFactory<Program> factory, TestCurrenciesDbContext dbContext) : base(factory, dbContext)
         {
-            _wireMockServer = WireMockServer.Start();
-            // override config nbpClientOptions
-            var options = factory.Services.GetRequiredService<IOptions<NbpClientOptions>>();
-            options.Value.BaseUrl = _wireMockServer.Urls.Single();
-            options.Value.Timeout = 2;
-            _service = factory.Services.GetRequiredService<INbpClient>();
+            _wireMockServer = WireMockServer;
+            _service = Factory.Services.GetRequiredService<INbpClient>();
         }
     }
 }

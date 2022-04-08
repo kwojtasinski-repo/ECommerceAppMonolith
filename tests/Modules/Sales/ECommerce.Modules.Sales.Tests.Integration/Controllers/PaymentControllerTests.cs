@@ -18,7 +18,7 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
         [Fact]
         public async Task given_valid_command_should_create_payment()
         {
-            var order = await AddOrder();
+            var order = await AddOrder("ORD");
             var command = new CreatePayment(order.Id);
             Authenticate(_userId, _client);
 
@@ -33,7 +33,7 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
         [Fact]
         public async Task given_valid_id_should_delete_payment()
         {
-            var payment = await AddPayment();
+            var payment = await AddPayment("PAY/123");
             Authenticate(_userId, _client);
             
             var response = await _client.Request($"{Path}/{payment.Id.Value}").DeleteAsync();
@@ -43,18 +43,18 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
             paymentFromDb.ShouldBeNull();
         }
 
-        private async Task<Order> AddOrder()
+        private async Task<Order> AddOrder(string orderNumber)
         {
-            var order = new Order(Guid.NewGuid(), "ORD", 100M, "PLN", 1M, Guid.NewGuid(), Guid.NewGuid(), DateTime.Now);
+            var order = new Order(Guid.NewGuid(), orderNumber, 100M, "PLN", 1M, Guid.NewGuid(), Guid.NewGuid(), DateTime.Now);
             await _dbContext.AddAsync(order);
             await _dbContext.SaveChangesAsync();
             return order;
         }
 
-        private async Task<Payment> AddPayment()
+        private async Task<Payment> AddPayment(string paymentNumber)
         {
-            var order = await AddOrder();
-            var payment = new Payment(Guid.NewGuid(), "PAY", order, _userId, DateTime.Now);
+            var order = await AddOrder("PAY/12356436");
+            var payment = new Payment(Guid.NewGuid(), paymentNumber, order, _userId, DateTime.Now);
             await _dbContext.AddAsync(payment);
             await _dbContext.SaveChangesAsync();
             return payment;
