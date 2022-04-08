@@ -16,7 +16,7 @@ using Xunit;
 namespace ECommerce.Modules.Items.Tests.Integration.Controllers
 {
     [Collection("integrationBrands")]
-    public class BrandsControllerTests : IClassFixture<TestApplicationFactory<Program>>,
+    public class BrandsControllerTests : BaseIntegrationTest, IClassFixture<TestApplicationFactory<Program>>,
         IClassFixture<TestItemsDbContext>
     {
         [Fact]
@@ -55,7 +55,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var brand = brands[1];
             var id = brand.Id.Value;
             var command = new UpdateBrand(id, "Brand #1234");
-            Authenticate(Guid.NewGuid());
+            Authenticate(Guid.NewGuid(), _client);
 
             var response = (await _client.Request($"{Path}").PutJsonAsync(command));
             var brandFromDb = await _dbContext.Brands.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
@@ -72,7 +72,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var brands = await AddSampleData();
             var brand = brands[1];
             var id = brand.Id.Value;
-            Authenticate(Guid.NewGuid());
+            Authenticate(Guid.NewGuid(), _client);
 
             var response = (await _client.Request($"{Path}/{id}").DeleteAsync());
             var brandFromDb = await _dbContext.Brands.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
@@ -85,7 +85,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
         public async Task given_valid_command_should_add()
         {
             var command = new CreateBrand("Brand #251234");
-            Authenticate(Guid.NewGuid());
+            Authenticate(Guid.NewGuid(), _client);
 
             var response = (await _client.Request($"{Path}").PostJsonAsync(command));
             var id = response.GetIdFromHeaders<Guid>(Path);
@@ -93,14 +93,6 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
 
             brand.ShouldNotBeNull();
             brand.Name.ShouldBe(command.Name);
-        }
-
-        private void Authenticate(Guid userId)
-        {
-            var claims = new Dictionary<string, IEnumerable<string>>();
-            claims.Add("permissions", new[] { "items", "item-sale" });
-            var jwt = AuthHelper.GenerateJwt(userId.ToString(), "admin", claims: claims);
-            _client.WithOAuthBearerToken(jwt);
         }
 
         private async Task<List<Domain.Entities.Brand>> AddSampleData()

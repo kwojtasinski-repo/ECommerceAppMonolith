@@ -16,7 +16,7 @@ using Xunit;
 namespace ECommerce.Modules.Contacts.Tests.Integration
 {
     [Collection("integrationAddresses")]
-    public class AddressControllerTests : IClassFixture<TestApplicationFactory<Program>>,
+    public class AddressControllerTests : BaseIntegrationTest, IClassFixture<TestApplicationFactory<Program>>,
            IClassFixture<TestContactsDbContext>
     {
         [Fact]
@@ -24,7 +24,7 @@ namespace ECommerce.Modules.Contacts.Tests.Integration
         {
             var addresses = await AddSampleData();
             var address = addresses[0];
-            Authenticate(_userId);
+            Authenticate(_userId, _client);
 
             var response = (await _client.Request($"{Path}/{address.Id}").GetAsync());
             var addressFromDb = await response.GetJsonAsync<AddressDto>();
@@ -43,7 +43,7 @@ namespace ECommerce.Modules.Contacts.Tests.Integration
             _dbContext.Customers.Add(customer);
             await _dbContext.SaveChangesAsync();
             var addressDto = new AddressDto { CountryName = "Poland", CityName = "Nowa Sol", BuildingNumber = "1", CustomerId = customer.Id, StreetName = "Szkolna", ZipCode = "67-100" };
-            Authenticate(_userId);
+            Authenticate(_userId, _client);
 
             var response = await _client.Request($"{Path}").PostJsonAsync(addressDto);
             var id = response.GetIdFromHeaders<Guid>(Path);
@@ -60,7 +60,7 @@ namespace ECommerce.Modules.Contacts.Tests.Integration
         {
             var addresses = await AddSampleData();
             var address = addresses[1];
-            Authenticate(_userId);
+            Authenticate(_userId, _client);
             var addressDto = new AddressDto { Id = address.Id, BuildingNumber = "123", LocaleNumber = "54", CityName = "Zielona Gora", CountryName = address.CountryName, CustomerId = address.CustomerId, StreetName = address.StreetName, ZipCode = address.ZipCode };
             
             var response = await _client.Request($"{Path}").PutJsonAsync(addressDto);
@@ -72,14 +72,6 @@ namespace ECommerce.Modules.Contacts.Tests.Integration
             addressUpdated.LocaleNumber.ShouldNotBe(address.LocaleNumber);
             addressUpdated.CityName.ShouldNotBe(address.CityName);
             addressUpdated.CountryName.ShouldBe(address.CountryName);
-        }
-
-        private void Authenticate(Guid userId)
-        {
-            var claims = new Dictionary<string, IEnumerable<string>>();
-            claims.Add("permissions", new[] { "currencies" });
-            var jwt = AuthHelper.GenerateJwt(userId.ToString(), "admin", claims: claims);
-            _client.WithOAuthBearerToken(jwt);
         }
 
         private const string Path = "contacts-module/addresses";

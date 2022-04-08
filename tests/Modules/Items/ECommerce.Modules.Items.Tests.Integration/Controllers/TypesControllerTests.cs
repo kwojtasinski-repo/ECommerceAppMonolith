@@ -10,15 +10,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace ECommerce.Modules.Items.Tests.Integration.Controllers
 {
     [Collection("integrationTypes")]
-    public class TypesControllerTests
-    : IClassFixture<TestApplicationFactory<Program>>,
+    public class TypesControllerTests : BaseIntegrationTest, IClassFixture<TestApplicationFactory<Program>>,
         IClassFixture<TestItemsDbContext>
     {
         [Fact]
@@ -57,7 +55,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var type = types[1];
             var id = type.Id.Value;
             var command = new UpdateType(id, "Type #1234");
-            Authenticate(Guid.NewGuid());
+            Authenticate(Guid.NewGuid(), _client);
 
             var response = (await _client.Request($"{Path}").PutJsonAsync(command));
             var typeFromDb = await _dbContext.Types.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
@@ -74,7 +72,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var types = await AddSampleData();
             var type = types[1];
             var id = type.Id.Value;
-            Authenticate(Guid.NewGuid());
+            Authenticate(Guid.NewGuid(), _client);
 
             var response = (await _client.Request($"{Path}/{id}").DeleteAsync());
             var typeFromDb = await _dbContext.Types.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
@@ -87,7 +85,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
         public async Task given_valid_command_should_add()
         {
             var command = new CreateType("Type #251234");
-            Authenticate(Guid.NewGuid());
+            Authenticate(Guid.NewGuid(), _client);
 
             var response = (await _client.Request($"{Path}").PostJsonAsync(command));
             var id = response.GetIdFromHeaders<Guid>(Path);
@@ -95,14 +93,6 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
 
             type.ShouldNotBeNull();
             type.Name.ShouldBe(command.Name);
-        }
-
-        private void Authenticate(Guid userId)
-        {
-            var claims = new Dictionary<string, IEnumerable<string>>();
-            claims.Add("permissions", new[] { "items", "item-sale" });
-            var jwt = AuthHelper.GenerateJwt(userId.ToString(), "admin", claims: claims);
-            _client.WithOAuthBearerToken(jwt);
         }
 
         private async Task<List<Domain.Entities.Type>> AddSampleData()

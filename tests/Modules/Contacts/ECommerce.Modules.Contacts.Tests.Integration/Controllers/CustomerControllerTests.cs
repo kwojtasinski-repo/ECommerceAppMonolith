@@ -18,14 +18,14 @@ namespace ECommerce.Modules.Contacts.Tests.Integration.Controllers
 {
     [Collection("integrationCustomer")]
 
-    public class CustomerControllerTests : IClassFixture<TestApplicationFactory<Program>>,
+    public class CustomerControllerTests : BaseIntegrationTest, IClassFixture<TestApplicationFactory<Program>>,
            IClassFixture<TestContactsDbContext>
     {
         [Fact]
         public async Task given_valid_user_id_should_return_address()
         {
             await AddSampleData();
-            Authenticate(_userId);
+            Authenticate(_userId, _client);
 
             var response = (await _client.Request($"{Path}/me").GetAsync());
             var addressesFromDb = await response.GetJsonAsync<IEnumerable<CustomerDto>>();
@@ -40,7 +40,7 @@ namespace ECommerce.Modules.Contacts.Tests.Integration.Controllers
         {
             var customers = await AddSampleData();
             var customer = customers.FirstOrDefault();
-            Authenticate(_userId);
+            Authenticate(_userId, _client);
 
             var response = (await _client.Request($"{Path}/{customer.Id}").GetAsync());
             var customerFromDb = await response.GetJsonAsync<CustomerDto>();
@@ -55,7 +55,7 @@ namespace ECommerce.Modules.Contacts.Tests.Integration.Controllers
         public async Task given_valid_dto_should_add()
         {
             var dto = new CustomerDto { FirstName = "Michael", LastName = "Employer", PhoneNumber = "123456789", Company = false };
-            Authenticate(_userId);
+            Authenticate(_userId, _client);
 
             var response = await _client.Request($"{Path}").PostJsonAsync(dto);
             var id = response.GetIdFromHeaders<Guid>(Path);
@@ -74,7 +74,7 @@ namespace ECommerce.Modules.Contacts.Tests.Integration.Controllers
         {
             var customers = await AddSampleData();
             var customer = customers[1];
-            Authenticate(_userId);
+            Authenticate(_userId, _client);
             var dto = new CustomerDto { Id = customer.Id, FirstName = "Michael", LastName = "Employer", PhoneNumber = "123456789", Company = false };
 
             var response = await _client.Request($"{Path}").PutJsonAsync(dto);
@@ -92,7 +92,7 @@ namespace ECommerce.Modules.Contacts.Tests.Integration.Controllers
         public async Task given_valid_id_should_delete()
         {
             var customers = await AddSampleData();
-            Authenticate(_userId);
+            Authenticate(_userId, _client);
             var customer = customers[1];
 
             var response = await _client.Request($"{Path}/{customer.Id}").DeleteAsync();
@@ -101,14 +101,6 @@ namespace ECommerce.Modules.Contacts.Tests.Integration.Controllers
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
             customerFromDb.ShouldNotBeNull();
             customerFromDb.Active.ShouldBeFalse();
-        }
-
-        private void Authenticate(Guid userId)
-        {
-            var claims = new Dictionary<string, IEnumerable<string>>();
-            claims.Add("permissions", new[] { "currencies" });
-            var jwt = AuthHelper.GenerateJwt(userId.ToString(), "admin", claims: claims);
-            _client.WithOAuthBearerToken(jwt);
         }
 
         private const string Path = "contacts-module/customers";

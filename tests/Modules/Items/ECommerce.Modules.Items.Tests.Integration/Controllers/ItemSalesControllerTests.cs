@@ -11,14 +11,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace ECommerce.Modules.Items.Tests.Integration.Controllers
 {
     [Collection("integrationItemSales")]
-    public class ItemSalesControllerTests : IClassFixture<TestApplicationFactory<Program>>,
+    public class ItemSalesControllerTests : BaseIntegrationTest, IClassFixture<TestApplicationFactory<Program>>,
         IClassFixture<TestItemsDbContext>
     {
         [Fact]
@@ -57,7 +56,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var item = items[1];
             var id = item.Id.Value;
             var command = new UpdateItemSale(id, 10000M, "PLN");
-            Authenticate(Guid.NewGuid());
+            Authenticate(Guid.NewGuid(), _client);
 
             var response = (await _client.Request($"{Path}").PutJsonAsync(command));
             var itemFromDb = await _dbContext.ItemSales.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
@@ -74,7 +73,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var items = await AddSampleData();
             var item = items[1];
             var id = item.Id.Value;
-            Authenticate(Guid.NewGuid());
+            Authenticate(Guid.NewGuid(), _client);
 
             var response = (await _client.Request($"{Path}/{id}").DeleteAsync());
             var itemFromDb = await _dbContext.ItemSales.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
@@ -99,7 +98,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             _dbContext.Items.Add(item);
             await _dbContext.SaveChangesAsync();
             var command = new CreateItemSale(item.Id.Value, 5000M, "PLN");
-            Authenticate(Guid.NewGuid());
+            Authenticate(Guid.NewGuid(), _client);
 
             var response = (await _client.Request($"{Path}").PostJsonAsync(command));
             var id = response.GetIdFromHeaders<Guid>(Path);
@@ -109,14 +108,6 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             itemSale.ShouldNotBeNull();
             itemSale.Cost.ShouldBe(command.ItemCost);
             itemSale.Item.ItemName.ShouldBe(item.ItemName);
-        }
-
-        private void Authenticate(Guid userId)
-        {
-            var claims = new Dictionary<string, IEnumerable<string>>();
-            claims.Add("permissions", new[] { "item-sale" });
-            var jwt = AuthHelper.GenerateJwt(userId.ToString(), "admin", claims: claims);
-            _client.WithOAuthBearerToken(jwt);
         }
 
         private async Task<List<Domain.Entities.ItemSale>> AddSampleData()

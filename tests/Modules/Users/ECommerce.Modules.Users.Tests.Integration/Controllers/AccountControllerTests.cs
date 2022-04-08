@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -165,7 +164,6 @@ namespace ECommerce.Modules.Users.Tests.Integration.Controllers
             jsonTokenSigIn.AccessToken.ShouldNotBeNullOrWhiteSpace();
             jsonTokenSigIn.Email.ShouldBe(dto.NewEmail.ToLowerInvariant());
         }
-
 
         private static User CreateSampleUser(string email, string password, string role, Dictionary<string, IEnumerable<string>> claims)
         {

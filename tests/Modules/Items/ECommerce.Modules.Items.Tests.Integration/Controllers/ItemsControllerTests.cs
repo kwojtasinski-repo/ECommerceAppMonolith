@@ -11,14 +11,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace ECommerce.Modules.Items.Tests.Integration.Controllers
 {
     [Collection("integrationItems")]
-    public class ItemsControllerTests : IClassFixture<TestApplicationFactory<Program>>,
+    public class ItemsControllerTests : BaseIntegrationTest, IClassFixture<TestApplicationFactory<Program>>,
         IClassFixture<TestItemsDbContext>
     {
         [Fact]
@@ -57,7 +56,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var item = items[1];
             var id = item.Id.Value;
             var command = new UpdateItem(id, "Item #1234", "description 1234556675673", item.Brand.Id, item.Type.Id, new[] { "tag #1", "tag #2" }, null);
-            Authenticate(Guid.NewGuid());
+            Authenticate(Guid.NewGuid(), _client);
 
             var response = (await _client.Request($"{Path}").PutJsonAsync(command));
             var itemFromDb = await _dbContext.Items.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
@@ -78,7 +77,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var items = await AddSampleData();
             var item = items[1];
             var id = item.Id.Value;
-            Authenticate(Guid.NewGuid());
+            Authenticate(Guid.NewGuid(), _client);
 
             var response = (await _client.Request($"{Path}/{id}").DeleteAsync());
             var itemFromDb = await _dbContext.Items.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
@@ -98,7 +97,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var tags = new[] { "tag #1", "tag #2" };
             var images = new List<ImageUrl> { new ImageUrl { Url = "http://localhost", MainImage = true }, new ImageUrl { Url = "http://localhost", MainImage = false } };
             var command = new CreateItem("Item #251234", "Description 12348012", brand.Id.Value, type.Id.Value, tags, images);
-            Authenticate(Guid.NewGuid());
+            Authenticate(Guid.NewGuid(), _client);
 
             var response = (await _client.Request($"{Path}").PostJsonAsync(command));
             var id = response.GetIdFromHeaders<Guid>(Path);
@@ -112,14 +111,6 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             item.Tags.Count().ShouldBe(command.Tags.Count());
             item.ImagesUrl[Item.IMAGES].ShouldNotBeNull();
             item.ImagesUrl[Item.IMAGES].Count().ShouldBe(command.ImagesUrl.Count());
-        }
-
-        private void Authenticate(Guid userId)
-        {
-            var claims = new Dictionary<string, IEnumerable<string>>();
-            claims.Add("permissions", new[] { "items" });
-            var jwt = AuthHelper.GenerateJwt(userId.ToString(), "admin", claims: claims);
-            _client.WithOAuthBearerToken(jwt);
         }
 
         private async Task<List<Domain.Entities.Item>> AddSampleData()
