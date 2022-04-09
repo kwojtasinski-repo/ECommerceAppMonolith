@@ -49,7 +49,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Clients
         public async Task given_valid_code_and_date_should_return_rate()
         {
             var code = "chf";
-            var date = DateOnly.FromDateTime(DateTime.Now);
+            var date = DateOnly.FromDateTime(DateTime.UtcNow);
             var content = Common.Extensions.GetSampleCurrencyRateJsonString(date, code);
             var url = $"/api/exchangerates/rates/a/{code}/{date.ToString("yyyy-MM-dd")}";
             _wireMockServer.Given(

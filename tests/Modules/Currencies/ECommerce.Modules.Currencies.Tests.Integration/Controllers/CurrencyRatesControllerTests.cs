@@ -28,7 +28,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
             var currency = new Currency { Id = Guid.NewGuid(), Code = "eur", Description = "euro" };
             await _dbContext.AddAsync(currency);
             await _dbContext.SaveChangesAsync();
-            var date = DateOnly.FromDateTime(DateTime.Now);
+            var date = DateOnly.FromDateTime(DateTime.UtcNow);
             var content = Common.Extensions.GetSampleCurrencyRateJsonString(date);
             var url = $"/api/exchangerates/rates/a/{currency.Code}/{date.ToString("yyyy-MM-dd")}";
             _wireMockServer.Given(
@@ -49,7 +49,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         [Fact]
         public async Task given_valid_id_should_return_latest_currency_rate_from_db()
         {
-            var date = DateOnly.FromDateTime(DateTime.Now);
+            var date = DateOnly.FromDateTime(DateTime.UtcNow);
             var currency = new Currency { Id = Guid.NewGuid(), Code = "chf", Description = "frank", CurrencyRates = new List<CurrencyRate>() };
             var currencyRate = new CurrencyRate { Id = Guid.NewGuid(), Currency = currency, CurrencyId = currency.Id, CurrencyDate = date, Rate = 4.52M };
             currency.CurrencyRates.Add(currencyRate);
@@ -83,7 +83,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         [Fact]
         public async Task given_valid_id_and_date_should_return_currency_rate()
         {
-            var date = DateOnly.FromDateTime(DateTime.Now);
+            var date = DateOnly.FromDateTime(DateTime.UtcNow);
             var currency = new Currency { Id = Guid.NewGuid(), Code = "gbp", Description = "funt", CurrencyRates = new List<CurrencyRate>() };
             var currencyRate = new CurrencyRate { Id = Guid.NewGuid(), Currency = currency, CurrencyId = currency.Id, CurrencyDate = date, Rate = 4.52M };
             currency.CurrencyRates.Add(currencyRate);
@@ -102,7 +102,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         public async Task given_invalid_id_and_valid_date_should_return_status_not_found()
         {
             var id = Guid.NewGuid();
-            var date = DateOnly.FromDateTime(DateTime.Now);
+            var date = DateOnly.FromDateTime(DateTime.UtcNow);
             var expectedException = new CurrencyNotFoundException(id);
 
             var response = await _client.Request($"{Path}/?currencyId={id}&date={date}").AllowHttpStatus("400").GetAsync();

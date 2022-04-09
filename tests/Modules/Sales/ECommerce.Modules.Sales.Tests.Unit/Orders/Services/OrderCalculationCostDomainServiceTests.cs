@@ -60,6 +60,7 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Services
         {
             var itemCart1 = new ItemCart(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1",
                                 "Description", null, null, 100M, "PLN", _clock.CurrentDate());
+            var date = DateTime.UtcNow;
             var orderItem1 = new OrderItem(Guid.NewGuid(), itemCart1.Id, itemCart1, 100M, "PLN", decimal.One, _userId);
 
             var itemCart2 = new ItemCart(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1",

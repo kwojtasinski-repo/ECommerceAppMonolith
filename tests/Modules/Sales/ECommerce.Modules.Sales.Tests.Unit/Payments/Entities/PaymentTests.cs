@@ -14,9 +14,9 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Payments.Entities
         {
             var userId = Guid.NewGuid();
             var currency = Currency.Default();
-            var order = Order.Create(Guid.NewGuid(), "ORD/2022/03/03/1", 1500M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), userId, DateTime.Now);
+            var order = Order.Create(Guid.NewGuid(), "ORD/2022/03/03/1", 1500M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), userId, DateTime.UtcNow);
 
-            var payment = Payment.Create(Guid.NewGuid(), "PAY/2022/03/03/1", order, userId, DateTime.Now);
+            var payment = Payment.Create(Guid.NewGuid(), "PAY/2022/03/03/1", order, userId, DateTime.UtcNow);
 
             payment.ShouldNotBeNull();
             payment.UserId.ShouldBe(userId);
@@ -28,10 +28,10 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Payments.Entities
         {
             var userId = Guid.NewGuid();
             var currency = Currency.Default();
-            var order = Order.Create(Guid.NewGuid(), "ORD/2022/03/03/1", 1500M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), userId, DateTime.Now);
+            var order = Order.Create(Guid.NewGuid(), "ORD/2022/03/03/1", 1500M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), userId, DateTime.UtcNow);
             var expectedException = new PaymentNumberCannotBeEmptyException();
 
-            var exception = Record.Exception(() => Payment.Create(Guid.NewGuid(), "", order, userId, DateTime.Now));
+            var exception = Record.Exception(() => Payment.Create(Guid.NewGuid(), "", order, userId, DateTime.UtcNow));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<PaymentNumberCannotBeEmptyException>();

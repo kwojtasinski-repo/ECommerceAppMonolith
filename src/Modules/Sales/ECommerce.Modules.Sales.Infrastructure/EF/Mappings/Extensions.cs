@@ -48,7 +48,10 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Mappings
                 Id = orderItem.Id,
                 ItemCartId = orderItem.ItemCartId,
                 UserId = orderItem.UserId,
-                ItemCart = orderItem.ItemCart.AsDto()
+                ItemCart = orderItem.ItemCart.AsDto(),
+                Code = orderItem.Currency.CurrencyCode,
+                Rate = orderItem.Currency.Rate,
+                Cost = orderItem.Price.Value
             };
             return dto;
         }
@@ -64,7 +67,9 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Mappings
                 Cost = itemCart.Price.Value,
                 Description = itemCart.Description,
                 Tags = itemCart.Tags,
-                ImagesUrl = itemCart.ImagesUrl
+                ImagesUrl = itemCart.ImagesUrl,
+                Created = itemCart.Created,
+                CurrencyCode = itemCart.CurrencyCode
             };
             return dto;
         }

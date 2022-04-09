@@ -37,11 +37,13 @@ function Cart(props) {
                 </tbody>
             </table>
             <div>
-                <button className="btn btn-warning mt-2 float-end"
-                        style={{ marginRight: "20%" }}
-                        disabled={disabledButton} >
-                        Podsumowanie
-                </button>
+                <NavLink to = 'summary'>
+                    <button className="btn btn-warning mt-2 float-end"
+                            style={{ marginRight: "20%" }}
+                            disabled={disabledButton} >
+                            Podsumowanie
+                    </button>
+                </NavLink>
             </div>
         </div>
     )

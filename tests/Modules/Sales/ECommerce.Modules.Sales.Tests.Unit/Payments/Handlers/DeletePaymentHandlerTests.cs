@@ -32,8 +32,8 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Payments.Handlers
         public async Task given_valid_id_should_delete_payment()
         {
             var currency = Currency.Default();
-            var order = new Order(Guid.NewGuid(), "ORD", 1200M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), Guid.NewGuid(), DateTime.Now);
-            var payment = new Payment(Guid.NewGuid(), "PAY", order, order.UserId, DateTime.Now);
+            var order = new Order(Guid.NewGuid(), "ORD", 1200M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
+            var payment = new Payment(Guid.NewGuid(), "PAY", order, order.UserId, DateTime.UtcNow);
             var command = new DeletePayment(payment.Id);
             _paymentRepository.GetAsync(payment.Id).Returns(payment);
 
@@ -46,8 +46,8 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Payments.Handlers
         public async Task given_valid_id_when_delete_should_publish_event()
         {
             var currency = Currency.Default();
-            var order = new Order(Guid.NewGuid(), "ORD", 1200M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), Guid.NewGuid(), DateTime.Now);
-            var payment = new Payment(Guid.NewGuid(), "PAY", order, order.UserId, DateTime.Now);
+            var order = new Order(Guid.NewGuid(), "ORD", 1200M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
+            var payment = new Payment(Guid.NewGuid(), "PAY", order, order.UserId, DateTime.UtcNow);
             var command = new DeletePayment(payment.Id);
             _paymentRepository.GetAsync(payment.Id).Returns(payment);
 

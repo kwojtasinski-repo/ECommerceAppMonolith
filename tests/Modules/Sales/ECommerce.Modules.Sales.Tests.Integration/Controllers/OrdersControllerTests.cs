@@ -19,7 +19,7 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
         public async Task given_valid_order_item_should_add_to_order()
         {
             var itemSales = await AddSampleData();
-            var order = Order.Create(Guid.NewGuid(), "ORD/123/123", "EUR", Guid.NewGuid(), _userId, DateTime.Now);
+            var order = Order.Create(Guid.NewGuid(), "ORD/123/123", "EUR", Guid.NewGuid(), _userId, DateTime.UtcNow);
             _dbContext.Add(order);
             await _dbContext.SaveChangesAsync();
             var itemSaleId = itemSales.Where(i => i.CurrencyCode == "USD").FirstOrDefault().Id; // 4000 USD // rate 2 USD 4 EUR
@@ -144,6 +144,7 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
             _dbContext.ItemCarts.Add(itemCart3);
 
             // OrderItem
+            var date = DateTime.UtcNow;
             var orderItem1 = new Domain.Orders.Entities.OrderItem(Guid.NewGuid(), itemCart1.Id, itemCart1, itemCart1.Price.Value, "PLN", decimal.One, _userId);
             var orderItem2 = new Domain.Orders.Entities.OrderItem(Guid.NewGuid(), itemCart2.Id, itemCart2, itemCart2.Price.Value, "EUR", decimal.One, _userId);
             var orderItem3 = new Domain.Orders.Entities.OrderItem(Guid.NewGuid(), itemCart3.Id, itemCart3, itemCart3.Price.Value, "USD", decimal.One, _userId);

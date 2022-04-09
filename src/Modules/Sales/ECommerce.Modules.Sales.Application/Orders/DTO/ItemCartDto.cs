@@ -10,5 +10,7 @@
         public IEnumerable<string>? Tags { get; set; }
         public IEnumerable<string> ImagesUrl { get; set; }
         public decimal Cost { get; set; }
+        public string CurrencyCode { get; set; }
+        public DateTime Created { get; set; }
     }
 }

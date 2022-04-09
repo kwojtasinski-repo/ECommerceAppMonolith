@@ -94,7 +94,7 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Handlers
 
         private Order CreateSampleOrder(Guid id)
         {
-            var order = Order.Create(id, "ORDER", Guid.NewGuid(), Guid.NewGuid(), DateTime.Now);
+            var order = Order.Create(id, "ORDER", Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
             return order;
         }
 
@@ -108,7 +108,7 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Handlers
         private ItemCart CreateSampleItemCart(Guid id)
         {
             var itemCart = new ItemCart(id, "Item #1", "Brand #1", "Type #1", "description",
-                                    null, null, 100M, "PLN", DateTime.Now);
+                                    null, null, 100M, "PLN", DateTime.UtcNow);
             return itemCart;
         }
 

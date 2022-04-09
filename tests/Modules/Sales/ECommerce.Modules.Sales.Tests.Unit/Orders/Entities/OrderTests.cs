@@ -48,8 +48,9 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Entities
         public void given_valid_order_item_should_add_to_order()
         {
             var currency = Currency.Default();
-            var order = new Order(Guid.NewGuid(), "ORD", 120M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
-            var itemCart = new ItemCart(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1", "Description", null, null, 120M, "PLN", DateTime.UtcNow);
+            var date = DateTime.UtcNow;
+            var order = new Order(Guid.NewGuid(), "ORD", 120M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), Guid.NewGuid(), date);
+            var itemCart = new ItemCart(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1", "Description", null, null, 120M, "PLN", date);
             var orderItem = new OrderItem(Guid.NewGuid(), Guid.NewGuid(), itemCart, itemCart.Price.Value * currency.Rate, currency.CurrencyCode, currency.Rate, Guid.NewGuid());
 
             order.AddOrderItem(orderItem);
@@ -89,8 +90,9 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Entities
         public void given_invalid_order_item_when_delete_from_order_should_throw_an_exception()
         {
             var currency = Currency.Default();
-            var order = new Order(Guid.NewGuid(), "ORD", 120M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
-            var itemCart = new ItemCart(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1", "Description", null, null, 120M, "PLN", DateTime.UtcNow);
+            var date = DateTime.UtcNow;
+            var order = new Order(Guid.NewGuid(), "ORD", 120M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), Guid.NewGuid(), date);
+            var itemCart = new ItemCart(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1", "Description", null, null, 120M, "PLN", date);
             var orderItem = new OrderItem(Guid.NewGuid(), Guid.NewGuid(), itemCart, itemCart.Price.Value * currency.Rate, currency.CurrencyCode, currency.Rate, Guid.NewGuid());
             var expectedException = new OrderItemNotFoundException(order.Id, orderItem.Id);
 

@@ -87,7 +87,7 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.Services
         public async Task given_currency_pln_should_return_currency_rate_and_add_to_db()
         {
             var currencyId = Guid.NewGuid();
-            var date = DateOnly.FromDateTime(DateTime.Now);
+            var date = DateOnly.FromDateTime(DateTime.UtcNow);
             var rate = decimal.One;
             var currency = new Currency { Id = currencyId, Code = "PLN", CurrencyRates = new List<CurrencyRate>(), Description = "description" };
             _currencyRepository.GetAsync(currencyId).Returns(currency);
@@ -105,7 +105,7 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.Services
         public async Task given_id_should_return_latest_currency_rate_from_db()
         {
             var currencyId = Guid.NewGuid();
-            var date = DateOnly.FromDateTime(DateTime.Now);
+            var date = DateOnly.FromDateTime(DateTime.UtcNow);
             var rate = new decimal(4.25);
             var currency = CreateSampleCurrency(currencyId);
             _currencyRepository.GetAsync(currencyId).Returns(currency);
@@ -127,7 +127,7 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.Services
         public async Task given_id_should_return_latest_currency_rate_from_api_and_save_to_db()
         {
             var currencyId = Guid.NewGuid();
-            var date = DateOnly.FromDateTime(DateTime.Now);
+            var date = DateOnly.FromDateTime(DateTime.UtcNow);
             var rate = new decimal(4.25);
             var currency = CreateSampleCurrency(currencyId); 
             _currencyRepository.GetAsync(currencyId).Returns(currency);
@@ -163,7 +163,7 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.Services
         public async Task given_valid_currency_and_null_rate_should_throw_an_exception()
         {
             var currencyId = Guid.NewGuid();
-            var date = DateOnly.FromDateTime(DateTime.Now);
+            var date = DateOnly.FromDateTime(DateTime.UtcNow);
             var rate = new decimal(4.25);
             var currency = CreateSampleCurrency(currencyId);
             _currencyRepository.GetAsync(currencyId).Returns(currency);

@@ -45,7 +45,7 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
 
         private async Task<Order> AddOrder(string orderNumber)
         {
-            var order = new Order(Guid.NewGuid(), orderNumber, 100M, "PLN", 1M, Guid.NewGuid(), Guid.NewGuid(), DateTime.Now);
+            var order = new Order(Guid.NewGuid(), orderNumber, 100M, "PLN", 1M, Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
             await _dbContext.AddAsync(order);
             await _dbContext.SaveChangesAsync();
             return order;
@@ -54,7 +54,7 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
         private async Task<Payment> AddPayment(string paymentNumber)
         {
             var order = await AddOrder("PAY/12356436");
-            var payment = new Payment(Guid.NewGuid(), paymentNumber, order, _userId, DateTime.Now);
+            var payment = new Payment(Guid.NewGuid(), paymentNumber, order, _userId, DateTime.UtcNow);
             await _dbContext.AddAsync(payment);
             await _dbContext.SaveChangesAsync();
             return payment;

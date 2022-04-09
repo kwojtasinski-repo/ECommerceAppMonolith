@@ -42,7 +42,7 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Handlers
         public async Task given_order_item_with_order_when_delete_should_throw_an_exception()
         {
             var orderItemId = Guid.NewGuid();
-            var order = new Order(Guid.NewGuid(), "ORD", Guid.NewGuid(), Guid.NewGuid(), DateTime.Now);
+            var order = new Order(Guid.NewGuid(), "ORD", Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
             var orderItem = CreateSampleOrderItem(orderItemId, order);
             _orderItemRepository.GetDetailsAsync(orderItemId).Returns(orderItem);
             var command = new DeleteOrderItem(orderItemId);
@@ -65,7 +65,7 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Handlers
         private ItemCart CreateSampleItemCart(Guid id)
         {
             var itemCart = new ItemCart(id, "Item #1", "Brand #1", "Type #1", "description", null,
-                                    null, 1000M, "PLN", DateTime.Now);
+                                    null, 1000M, "PLN", DateTime.UtcNow);
             return itemCart;
         }
 

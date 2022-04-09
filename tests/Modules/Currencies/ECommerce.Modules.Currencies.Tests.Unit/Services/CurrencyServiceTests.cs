@@ -118,7 +118,7 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.Services
                 Id = currencyId,
                 Code = "EUR",
                 Description = "Euro",
-                CurrencyRates = new List<CurrencyRateDto> { new CurrencyRateDto { Id = Guid.NewGuid(), CurrencyDate = DateOnly.FromDateTime(DateTime.Now), CurrencyId = currencyId, Rate = new decimal(4.5544) } }
+                CurrencyRates = new List<CurrencyRateDto> { new CurrencyRateDto { Id = Guid.NewGuid(), CurrencyDate = DateOnly.FromDateTime(DateTime.UtcNow), CurrencyId = currencyId, Rate = new decimal(4.5544) } }
             };
         }
     }

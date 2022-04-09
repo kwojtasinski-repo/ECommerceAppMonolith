@@ -71,3 +71,51 @@ export const mapToCurrencyRates = (obj) => {
 
     return newCurrencies;
 };
+
+export const mapToOrderItems = (obj) => {
+    const newOrderItems = [];
+    for(const key in obj) {
+        const orderItem = {
+            id: obj[key].id,
+            itemCartId: obj[key].itemCartId,
+            itemName: obj[key].itemCart.itemName,
+            brandName: obj[key].itemCart.brandName,
+            typeName: obj[key].itemCart.typeName,
+            description: obj[key].itemCart.description,
+            tags: obj[key].itemCart.tags,
+            images: obj[key].itemCart.imagesUrl,
+            sourceCost: obj[key].itemCart.cost,
+            created: obj[key].itemCart.created,
+            sourceCode: obj.itemCart.currencyCode,
+            code: obj[key].code,
+            rate: obj[key].rate,
+            cost: obj[key].cost,
+            userId: obj[key].userId
+        }
+        newOrderItems.push(orderItem);
+    }
+
+    return newOrderItems;
+}
+
+export const mapToOrderItem = (obj) => {
+    const orderItem = {
+        id: obj.id,
+        itemCartId: obj.itemCartId,
+        itemName: obj.itemCart.itemName,
+        brandName: obj.itemCart.brandName,
+        typeName: obj.itemCart.typeName,
+        description: obj.itemCart.description,
+        tags: obj.itemCart.tags,
+        images: obj.itemCart.imagesUrl,
+        sourceCost: obj.itemCart.cost,
+        created: obj.itemCart.created,
+        sourceCode: obj.itemCart.currencyCode,
+        code: obj.code,
+        rate: obj.rate,
+        cost: obj.cost,
+        userId: obj.userId
+    }
+
+    return orderItem;
+}
