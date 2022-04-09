@@ -110,9 +110,15 @@ namespace ECommerce.Modules.Currencies.Core.Services
         {
             var currencies = await _currencyRepository.GetAllAsync();
             var codes = currencies.Select(c => c.Code);
-            var date = DateOnly.FromDateTime(_clock.CurrentDate());
-            var currencyRates = await GetCurrencyRatesForDate(codes, date);
-            return currencyRates;
+            var currencyRates = await _currencyRateRepository.GetLatestCurrencyRates(codes);
+
+            var rates = new List<CurrencyRateDto>();
+            foreach(var currencyRate in currencyRates)
+            {
+                rates.Add(currencyRate.AsDto());
+            }
+
+            return rates;
         }
 
         public async Task UpdateAsync(CurrencyRateDto currencyRateDto)

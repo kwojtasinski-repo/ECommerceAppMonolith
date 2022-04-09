@@ -32,7 +32,7 @@ function Item(props) {
                         <div className="row">
                             <div className="col mt-5">
                                 <p>Cena:</p>
-                                <h4>{props.cost}</h4>
+                                <h4>{props.cost} PLN</h4>
                             </div>
                         </div>
                     </div>

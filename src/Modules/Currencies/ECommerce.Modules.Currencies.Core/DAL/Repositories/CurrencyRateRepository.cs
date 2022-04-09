@@ -57,6 +57,23 @@ namespace ECommerce.Modules.Currencies.Core.DAL.Repositories
             return Task.FromResult<IReadOnlyList<CurrencyRate>>(currencyRates);
         }
 
+        public Task<IReadOnlyList<CurrencyRate>> GetLatestCurrencyRates(IEnumerable<string> currencyCodes)
+        {
+            var currenciesQueryable = _dbContext.CurrencyRates.AsQueryable();
+
+            var currenciesQueryableFiltered = (from currencyRate in currenciesQueryable
+                                               where !_dbContext.CurrencyRates.Any(cr => cr.Currency.Code == currencyRate.Currency.Code
+                                                            && currencyRate.CurrencyDate < cr.CurrencyDate)
+                                               select currencyRate);
+
+            var currencyRates = (from currencyCode in currencyCodes
+                                 join currencyRate in currenciesQueryableFiltered
+                                    on currencyCode equals currencyRate.Currency.Code
+                                 select currencyRate).ToList();
+
+            return Task.FromResult<IReadOnlyList<CurrencyRate>>(currencyRates);
+        }
+
         public async Task UpdateAsync(CurrencyRate currencyRate)
         {
             _dbContext.CurrencyRates.Update(currencyRate);

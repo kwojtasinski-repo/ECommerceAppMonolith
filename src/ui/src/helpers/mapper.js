@@ -5,6 +5,7 @@ export const mapToItems = obj => {
             id: obj[key].id,
             name: obj[key].item.itemName,
             cost: obj[key].cost,
+            code: obj[key].currencyCode,
             imageUrl: obj[key].item.imageUrl.url
         }
         newItems.push(item);
@@ -24,6 +25,7 @@ export const mapToItem = obj => {
         brand: obj.item.brand.name,
         typeId: obj.item.type.id,
         type: obj.item.type.name,
+        code: obj.currencyCode,
         imagesUrl: obj.item.imagesUrl
     }
 
@@ -52,4 +54,20 @@ export const mapToCurrency = (obj) => {
     }
 
     return currency;
+};
+
+export const mapToCurrencyRates = (obj) => {
+    const newCurrencies = [];
+    for (const key in obj) {
+        const item = {
+            id: obj[key].id,
+            code: obj[key].code,
+            currencyId: obj[key].currencyId,
+            rate: obj[key].rate,
+            currencyDate: obj[key].currencyDate
+        }
+        newCurrencies.push(item);
+    }
+
+    return newCurrencies;
 };

@@ -15,5 +15,6 @@ namespace ECommerce.Modules.Currencies.Core.Repositories
         Task<CurrencyRate> GetCurrencyRateForDateAsync(Guid currencyId, DateOnly date);
         Task<IReadOnlyList<CurrencyRate>> GetCurrencyRatesForDateAsync(IEnumerable<string> currencyCodes, DateOnly date);
         Task UpdateAsync(CurrencyRate rate);
+        Task<IReadOnlyList<CurrencyRate>> GetLatestCurrencyRates(IEnumerable<string> currencyCodes);
     }
 }

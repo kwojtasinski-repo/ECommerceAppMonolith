@@ -40,7 +40,7 @@ function Cart(props) {
                 <button className="btn btn-warning mt-2 float-end"
                         style={{ marginRight: "20%" }}
                         disabled={disabledButton} >
-                        Realizuj zamówienie
+                        Podsumowanie
                 </button>
             </div>
         </div>

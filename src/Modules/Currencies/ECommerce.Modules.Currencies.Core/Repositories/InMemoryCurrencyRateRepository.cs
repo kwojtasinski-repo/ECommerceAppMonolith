@@ -46,6 +46,11 @@ namespace ECommerce.Modules.Currencies.Core.Repositories
             return Task.FromResult<IReadOnlyList<CurrencyRate>>(currencyRates);
         }
 
+        public Task<IReadOnlyList<CurrencyRate>> GetLatestCurrencyRates(IEnumerable<string> currencyCodes)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task UpdateAsync(CurrencyRate rate)
         {
             return Task.CompletedTask;
