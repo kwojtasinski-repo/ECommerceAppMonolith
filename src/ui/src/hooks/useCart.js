@@ -10,8 +10,6 @@ function localCart() {
     let cart = JSON.parse(window.localStorage.getItem('item-cart')) ?? [];
 
     const addItem = (item) => {
-        console.log('addItem local');
-        debugger;
         const itemExists = cart.find(i => i.id === item.id);
         let newItem = {...item, quantity: 1 };
         let newCart = [];

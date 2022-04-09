@@ -8,7 +8,7 @@ namespace ECommerce.Modules.Currencies.Core.DTO
         public Guid Id { get; set; }
         public Guid CurrencyId { get; set; }
         public decimal Rate { get; set; }
-
+        public string Code { get; set; }
         [JsonConverter(typeof(DateOnlyJsonConverter))]
         public DateOnly CurrencyDate { get; set; }
     }

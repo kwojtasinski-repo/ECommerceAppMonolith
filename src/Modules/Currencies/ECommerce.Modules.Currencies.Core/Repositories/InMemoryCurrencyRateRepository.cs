@@ -35,7 +35,7 @@ namespace ECommerce.Modules.Currencies.Core.Repositories
             return Task.FromResult<CurrencyRate>(currencyRate);
         }
 
-        public Task<IReadOnlyList<CurrencyRate>> GetCurrencyRatesForDate(IEnumerable<string> currencyCodes, DateOnly date)
+        public Task<IReadOnlyList<CurrencyRate>> GetCurrencyRatesForDateAsync(IEnumerable<string> currencyCodes, DateOnly date)
         {
             var currencyRates = (from currencyCode in currencyCodes
                                  join currencyRate in _currencyRates.Values

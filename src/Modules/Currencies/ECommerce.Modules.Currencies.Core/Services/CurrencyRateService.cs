@@ -73,14 +73,14 @@ namespace ECommerce.Modules.Currencies.Core.Services
             }
 
             var rate = await _currencyRateRepository.GetCurrencyRateForDateAsync(currencyId, date);
-
             var dto = rate?.AsDto();
+            
             return dto;
         }
 
         public async Task<IReadOnlyList<CurrencyRateDto>> GetCurrencyRatesForDate(IEnumerable<string> currencyCodes, DateOnly date)
         {
-            var rates = await _currencyRateRepository.GetCurrencyRatesForDate(currencyCodes, date);
+            var rates = await _currencyRateRepository.GetCurrencyRatesForDateAsync(currencyCodes, date);
             var currencyRates = new List<CurrencyRateDto>();
             
             foreach(var rate in rates)
@@ -104,6 +104,15 @@ namespace ECommerce.Modules.Currencies.Core.Services
             var currencyRate = await GetLatestCurrencyRateAsync(currencyId, currency.Code, DateOnly.FromDateTime(date));
 
             return currencyRate;
+        }
+
+        public async Task<IReadOnlyList<CurrencyRateDto>> GetLatestRatesAsync()
+        {
+            var currencies = await _currencyRepository.GetAllAsync();
+            var codes = currencies.Select(c => c.Code);
+            var date = DateOnly.FromDateTime(_clock.CurrentDate());
+            var currencyRates = await GetCurrencyRatesForDate(codes, date);
+            return currencyRates;
         }
 
         public async Task UpdateAsync(CurrencyRateDto currencyRateDto)
@@ -178,8 +187,10 @@ namespace ECommerce.Modules.Currencies.Core.Services
             };
 
             await _currencyRateRepository.AddAsync(currencyRate);
+            var dto = currencyRate.AsDto();
+            dto.Code = currencyCode;
 
-            return currencyRate.AsDto();
+            return dto;
         }
 
         private async Task<CurrencyRateDto> TryGetCurrencyRatePln(Guid currencyId, DateOnly date)
@@ -200,8 +211,10 @@ namespace ECommerce.Modules.Currencies.Core.Services
             };
 
             await _currencyRateRepository.AddAsync(currencyRate);
+            var dto = currencyRate.AsDto();
+            dto.Code = "PLN";
 
-            return currencyRate.AsDto();
+            return dto;
         }
     }
 }

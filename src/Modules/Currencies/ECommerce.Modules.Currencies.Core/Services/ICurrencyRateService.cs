@@ -16,5 +16,6 @@ namespace ECommerce.Modules.Currencies.Core.Services
         Task<IReadOnlyList<CurrencyRateDto>> GetCurrencyRatesForDate(IEnumerable<string> codesDistincted, DateOnly date);
         Task AddAsync(CurrencyRateDto currencyRateDto);
         Task UpdateAsync(CurrencyRateDto rateInDb);
+        Task<IReadOnlyList<CurrencyRateDto>> GetLatestRatesAsync();
     }
 }

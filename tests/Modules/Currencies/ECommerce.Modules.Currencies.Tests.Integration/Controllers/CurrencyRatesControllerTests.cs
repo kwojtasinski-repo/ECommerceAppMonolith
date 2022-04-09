@@ -115,6 +115,34 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
             exception.Message.ShouldBe(expectedException.Message);
         }
 
+        [Fact]
+        public async Task should_return_currencies()
+        {
+            await AddSampleData();
+
+            var response = await _client.Request($"{Path}/latest").GetAsync();
+            var currencyRateDtos = await response.GetJsonAsync<IEnumerable<CurrencyRateDto>>();
+
+            currencyRateDtos.ShouldNotBeNull();
+            currencyRateDtos.ShouldNotBeEmpty();
+        }
+
+        private async Task AddSampleData()
+        {
+            var currencyPln = new Currency { Id = Guid.NewGuid(), Code = "PLN", Description = "Polski złoty" };
+            var currencyEur = new Currency { Id = Guid.NewGuid(), Code = "EUR", Description = "Euro" };
+            var currencyUsd = new Currency { Id = Guid.NewGuid(), Code = "USD", Description = "Dolar amerykański" };
+            var currencyChf = new Currency { Id = Guid.NewGuid(), Code = "CHF", Description = "Frank szwajcarski" };
+
+            var currencyDate = DateOnly.FromDateTime(DateTime.UtcNow);
+            await _dbContext.CurrencyRates.AddAsync(new CurrencyRate { Id = Guid.NewGuid(), Currency = currencyPln, CurrencyDate = currencyDate, CurrencyId = currencyPln.Id, Rate = decimal.One });
+            await _dbContext.CurrencyRates.AddAsync(new CurrencyRate { Id = Guid.NewGuid(), Currency = currencyEur, CurrencyDate = currencyDate, CurrencyId = currencyEur.Id, Rate = 4.2512M });
+            await _dbContext.CurrencyRates.AddAsync(new CurrencyRate { Id = Guid.NewGuid(), Currency = currencyUsd, CurrencyDate = currencyDate, CurrencyId = currencyUsd.Id, Rate = 2.5123M });
+            await _dbContext.CurrencyRates.AddAsync(new CurrencyRate { Id = Guid.NewGuid(), Currency = currencyChf, CurrencyDate = currencyDate, CurrencyId = currencyChf.Id, Rate = 3.5632M });
+
+            await _dbContext.SaveChangesAsync();
+        }
+
         private readonly WireMockServer _wireMockServer;
         private const string Path = "currencies-module/currency-rates";
         private readonly IFlurlClient _client;

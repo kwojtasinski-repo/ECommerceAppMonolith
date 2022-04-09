@@ -192,14 +192,55 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.Services
             ((CurrencyNotFoundException) exception).CurrencyId.ShouldBe(expectedException.CurrencyId);
         }
 
+        [Fact]
+        public async Task should_return_latest_rates()
+        {
+            var rates = CreateCurrencyRates();
+            var date = DateOnly.FromDateTime(DateTime.UtcNow);
+            _currencyRepository.GetAllAsync().Returns(rates.Select(c => c.Currency).ToList());
+            _repository.GetCurrencyRatesForDateAsync(Arg.Any<IEnumerable<string>>(), date).Returns(rates);
+
+            var dtos = await _service.GetLatestRatesAsync();
+
+            dtos.ShouldNotBeNull();
+            dtos.ShouldNotBeEmpty();
+            dtos.Select(c => c.Code).Any(c => c is null).ShouldBeFalse();
+        }
+
+        private List<CurrencyRate> CreateCurrencyRates()
+        {
+            var date = DateOnly.FromDateTime(DateTime.UtcNow);
+            var currencyRates = new List<CurrencyRate>();
+            var currencyPln = CreateSampleCurrency(Guid.NewGuid(), "PLN");
+            var currencyEur = CreateSampleCurrency(Guid.NewGuid(), "EUR");
+            var currencyUsd = CreateSampleCurrency(Guid.NewGuid(), "USD");
+            var currencyChf = CreateSampleCurrency(Guid.NewGuid(), "CHF");
+            currencyRates.Add(CreateSampleCurrencyRate(Guid.NewGuid(), currencyPln, date, decimal.One));
+            currencyRates.Add(CreateSampleCurrencyRate(Guid.NewGuid(), currencyEur, date, 1.2412M));
+            currencyRates.Add(CreateSampleCurrencyRate(Guid.NewGuid(), currencyUsd, date, 1.0242M));
+            currencyRates.Add(CreateSampleCurrencyRate(Guid.NewGuid(), currencyChf, date, 1.1753M));
+
+            return currencyRates;
+        }
+
         private Currency CreateSampleCurrency(Guid id)
         {
             return new Currency { Id = id, Code = "TST", CurrencyRates = new List<CurrencyRate>(), Description = "description" };
         }
 
+        private Currency CreateSampleCurrency(Guid id, string currencyCode)
+        {
+            return new Currency { Id = id, Code = currencyCode, CurrencyRates = new List<CurrencyRate>(), Description = "description" };
+        }
+
         private CurrencyRate CreateSampleCurrencyRate(Guid id, Guid currencyId, DateOnly date, decimal rate)
         {
             return new CurrencyRate { Id = id, CurrencyId = currencyId, CurrencyDate = date, Rate = rate };
+        }
+
+        private CurrencyRate CreateSampleCurrencyRate(Guid id, Currency currency, DateOnly date, decimal rate)
+        {
+            return new CurrencyRate { Id = id, CurrencyId = currency.Id, Currency = currency, CurrencyDate = date, Rate = rate };
         }
     }
 }

@@ -75,7 +75,8 @@ namespace ECommerce.Modules.Currencies.Core.Mappings
                 Id = currencyRate.Id,
                 CurrencyId = currencyRate.CurrencyId,
                 CurrencyDate = currencyRate.CurrencyDate,
-                Rate = currencyRate.Rate
+                Rate = currencyRate.Rate,
+                Code = currencyRate.Currency?.Code
             };
 
             return dto;

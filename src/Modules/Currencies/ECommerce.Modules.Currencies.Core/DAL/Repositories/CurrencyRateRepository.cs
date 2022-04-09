@@ -32,18 +32,18 @@ namespace ECommerce.Modules.Currencies.Core.DAL.Repositories
 
         public async Task<CurrencyRate> GetAsync(Guid id)
         {
-            var currencyRate = await _dbContext.CurrencyRates.Where(cr => cr.Id == id).SingleOrDefaultAsync();
+            var currencyRate = await _dbContext.CurrencyRates.Include(c => c.Currency).Where(cr => cr.Id == id).SingleOrDefaultAsync();
             return currencyRate;
         }
 
         public async Task<CurrencyRate> GetCurrencyRateForDateAsync(Guid currencyId, DateOnly date)
         {
-            var currencyRate = await _dbContext.CurrencyRates
+            var currencyRate = await _dbContext.CurrencyRates.Include(c => c.Currency)
                 .Where(cr => cr.CurrencyId == currencyId && cr.CurrencyDate == date).SingleOrDefaultAsync();
             return currencyRate;
         }
 
-        public Task<IReadOnlyList<CurrencyRate>> GetCurrencyRatesForDate(IEnumerable<string> currencyCodes, DateOnly date)
+        public Task<IReadOnlyList<CurrencyRate>> GetCurrencyRatesForDateAsync(IEnumerable<string> currencyCodes, DateOnly date)
         {
             var currenciesQueryable = _dbContext.CurrencyRates.AsQueryable();
 
