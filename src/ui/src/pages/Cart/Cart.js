@@ -1,16 +1,18 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import LoadingButton from "../../components/UI/LoadingButton/LoadingButton";
 import useCart from "../../hooks/useCart";
 import styles from "./Cart.module.css";
 import axios from '../../axios-setup';
 import { mapToMessage } from "../../helpers/validation";
+import ReducerContext from "../../context/ReducerContext";
 
 function Cart(props) {
-    const [items, addItem, removeItem] = useCart();
+    const [items, addItem, removeItem, clear] = useCart();
     const [loading, setLoading] = useState(false);
     const disabledButton = items.length > 0 ? false : true;
     const navigate = useNavigate();
+    const context = useContext(ReducerContext);
 
     const summaryHandler = async () => {
         setLoading(true);
@@ -21,8 +23,10 @@ function Cart(props) {
                 itemSaleIds: itemSaleIds,
                 currencyCode: "PLN"
             });
-    
+            
+            clear();
             setLoading(false);
+            context.dispatch({ type: "cartChanged", cartChanged: true });
             navigate('summary');
         } catch(exception) {
             console.log(exception);

@@ -36,7 +36,7 @@ namespace ECommerce.Shared.Infrastructure
         private const string modulePart = "ECommerce.Modules.";
         private const string CorsPolicy = "cors";
 
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, 
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services,
             IList<Assembly> assemblies, IList<IModule> modules)
         {
             var disabledModules = new List<string>();
@@ -45,7 +45,7 @@ namespace ECommerce.Shared.Infrastructure
                 var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                 var configurations = configuration.AsEnumerable();
 
-                foreach(var (key, value) in configurations)
+                foreach (var (key, value) in configurations)
                 {
                     if (!key.Contains("modules:enabled"))
                     {
@@ -55,7 +55,7 @@ namespace ECommerce.Shared.Infrastructure
                     if (!bool.Parse(value))
                     {
                         disabledModules.Add(key.Split(":")[0]);
-                    }   
+                    }
                 }
             }
 
@@ -87,7 +87,7 @@ namespace ECommerce.Shared.Infrastructure
             services.AddAuth(modules);
             services.AddErrorHandling();
             services.AddQueries(assemblies);
-            services.AddCommands(assemblies); 
+            services.AddCommands(assemblies);
             services.AddDomainEvents(assemblies);
             services.AddEvents(assemblies);
             services.AddMessaging();
@@ -101,6 +101,10 @@ namespace ECommerce.Shared.Infrastructure
                 options.UseDateOnlyTimeOnlyStringConverters();
                 options.Conventions.Add(new RouteTokenTransformerConvention(new DashedConvention()));
             })
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+                })
                 .ConfigureApplicationPartManager(manager =>
                 {
                     var removedParts = new List<ApplicationPart>();

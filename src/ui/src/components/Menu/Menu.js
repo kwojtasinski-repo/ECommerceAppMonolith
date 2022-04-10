@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import ReducerContext from '../../context/ReducerContext';
 import useAuth from '../../hooks/useAuth';
 import useCart from '../../hooks/useCart';
 import useNotification from '../../hooks/useNotification';
@@ -11,8 +12,13 @@ function Menu() {
     const [auth, setAuth] = useAuth();
     const [notifications, addNotification] = useNotification();
     const [cart] = useCart();
-    console.log(cart)
-    console.log(cart.length)
+    const [itemsInCart, setItemsInCart] = useState(0);
+    const context = useContext(ReducerContext);
+    debugger;
+    useEffect(() => {
+        setItemsInCart(cart.length);
+        
+    }, [context.state.cartChanged])
 
     const logout = (event) => {
         event.preventDefault();
@@ -65,7 +71,7 @@ function Menu() {
                 }
                 <li className={style.menuItem}>
                     <Link to="/cart" className={`${style.menuItem}`} >
-                        <ItemCart count={cart.length} color="#206199" />
+                        <ItemCart count={itemsInCart} color="#206199" />
                     </Link>
                 </li>
             </ul>

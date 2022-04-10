@@ -2,12 +2,15 @@ export default function useCart(props) {
     let cart = null;
     let addItem = (item) => {};
     let removeItem = (item) => {};
-    [cart, addItem, removeItem] = localCart();
-    return [cart, addItem, removeItem];
+    let clear = () => {};
+    [cart, addItem, removeItem, clear] = localCart();
+    return [cart, addItem, removeItem, clear];
 };
 
+const key = 'item-cart';
+
 function localCart() {
-    let cart = JSON.parse(window.localStorage.getItem('item-cart')) ?? [];
+    let cart = JSON.parse(window.localStorage.getItem(key)) ?? [];
 
     const addItem = (item) => {
         const itemExists = cart.find(i => i.id === item.id);
@@ -22,7 +25,7 @@ function localCart() {
             newCart = [...cart, newItem];
         }
 
-        window.localStorage.setItem('item-cart', JSON.stringify(newCart));
+        window.localStorage.setItem(key, JSON.stringify(newCart));
     }
 
     const removeItem = (id) => {
@@ -37,8 +40,12 @@ function localCart() {
             newCart = cart.filter(c => c.id !== id);
         }
 
-        window.localStorage.setItem('item-cart', JSON.stringify(newCart));
+        window.localStorage.setItem(key, JSON.stringify(newCart));
     }
 
-    return [cart, addItem, removeItem];
+    const clear = () => {
+        window.localStorage.removeItem(key);
+    }
+
+    return [cart, addItem, removeItem, clear];
 }
