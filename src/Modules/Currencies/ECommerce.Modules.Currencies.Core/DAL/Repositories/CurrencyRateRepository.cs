@@ -51,7 +51,7 @@ namespace ECommerce.Modules.Currencies.Core.DAL.Repositories
 
             var currencyRates = (from currencyCode in currencyCodes
                                  join currencyRate in currenciesQueryableFiltered
-                                    on currencyCode equals currencyRate.Currency.Code
+                                    on currencyCode.ToUpperInvariant() equals currencyRate.Currency.Code.ToUpperInvariant()
                                  select currencyRate).ToList();
 
             return Task.FromResult<IReadOnlyList<CurrencyRate>>(currencyRates);
@@ -62,13 +62,13 @@ namespace ECommerce.Modules.Currencies.Core.DAL.Repositories
             var currenciesQueryable = _dbContext.CurrencyRates.AsQueryable();
 
             var currenciesQueryableFiltered = (from currencyRate in currenciesQueryable
-                                               where !_dbContext.CurrencyRates.Any(cr => cr.Currency.Code == currencyRate.Currency.Code
+                                               where !_dbContext.CurrencyRates.Any(cr => cr.Currency.Code.ToUpperInvariant() == currencyRate.Currency.Code.ToUpperInvariant()
                                                             && currencyRate.CurrencyDate < cr.CurrencyDate)
                                                select currencyRate);
 
             var currencyRates = (from currencyCode in currencyCodes
                                  join currencyRate in currenciesQueryableFiltered
-                                    on currencyCode equals currencyRate.Currency.Code
+                                    on currencyCode.ToUpperInvariant() equals currencyRate.Currency.Code.ToUpperInvariant()
                                  select currencyRate).ToList();
 
             return Task.FromResult<IReadOnlyList<CurrencyRate>>(currencyRates);
