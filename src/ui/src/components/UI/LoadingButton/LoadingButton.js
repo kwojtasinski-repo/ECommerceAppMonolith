@@ -4,11 +4,12 @@ export default function LoadingButton(props) {
 
     return (props.loading ?
         (
-            <button className={`btn btn-success`} disabled >
+            <button style={buttonProps.style ? buttonProps.style : null}
+                className={buttonProps.className ? buttonProps.className : `btn btn-success`} disabled >
                 <span className="spinner-border spinner-border-sm" role="status"></span>
                 <span className="sr-only">Ładowanie...</span>
             </button>
         )
-        : <button {...buttonProps} className={`btn btn-success`}>{props.children}</button>
+        : <button {...buttonProps} className={buttonProps.className ? buttonProps.className : `btn btn-success`}>{props.children}</button>
     )
 }

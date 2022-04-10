@@ -74,6 +74,7 @@ export const mapToCurrencyRates = (obj) => {
 
 export const mapToOrderItems = (obj) => {
     const newOrderItems = [];
+    debugger;
     for(const key in obj) {
         const orderItem = {
             id: obj[key].id,
@@ -85,8 +86,8 @@ export const mapToOrderItems = (obj) => {
             tags: obj[key].itemCart.tags,
             images: obj[key].itemCart.imagesUrl,
             sourceCost: obj[key].itemCart.cost,
-            created: obj[key].itemCart.created,
-            sourceCode: obj.itemCart.currencyCode,
+            created: new Date(obj[key].itemCart.created).toLocaleString(),
+            sourceCode: obj[key].itemCart.currencyCode,
             code: obj[key].code,
             rate: obj[key].rate,
             cost: obj[key].cost,
@@ -109,7 +110,7 @@ export const mapToOrderItem = (obj) => {
         tags: obj.itemCart.tags,
         images: obj.itemCart.imagesUrl,
         sourceCost: obj.itemCart.cost,
-        created: obj.itemCart.created,
+        created: new Date(obj.itemCart.created).toLocaleString(),
         sourceCode: obj.itemCart.currencyCode,
         code: obj.code,
         rate: obj.rate,

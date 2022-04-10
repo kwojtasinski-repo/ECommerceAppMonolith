@@ -42,6 +42,16 @@ namespace ECommerce.Modules.Sales.Api.Controllers
             return CreatedAtAction(nameof(GetAsync), new { orderItemId = command.OrderItemId }, null);
         }
 
+        [HttpPost("multi")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public async Task<ActionResult> AddAllAsync(CreateOrderItems command)
+        {
+            await _commandDispatcher.SendAsync(command);
+            return Ok();
+        }
+
         [HttpDelete("{orderItemId:guid}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]

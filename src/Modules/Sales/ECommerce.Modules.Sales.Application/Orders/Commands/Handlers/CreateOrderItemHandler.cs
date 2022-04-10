@@ -1,7 +1,6 @@
 ﻿using ECommerce.Modules.Sales.Application.Orders.Exceptions;
 using ECommerce.Modules.Sales.Domain.Currencies.Repositories;
 using ECommerce.Modules.Sales.Domain.ItemSales.Repositories;
-using ECommerce.Modules.Sales.Domain.Orders.Common.ValueObjects;
 using ECommerce.Modules.Sales.Domain.Orders.Entities;
 using ECommerce.Modules.Sales.Domain.Orders.Repositories;
 using ECommerce.Shared.Abstractions.Commands;

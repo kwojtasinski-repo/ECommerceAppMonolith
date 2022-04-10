@@ -6,15 +6,16 @@ import { mapToOrderItems } from "../../../helpers/mapper";
 
 function CartSummary(props) {
     const [items, setItems] = useState(null);
-
-    const getCart = async () => {
+    debugger;
+    const fetchCart = async () => {
         const response = await axios.get('sales-module/cart/me');
-        var orderItems = mapToOrderItems(response.data);
+        debugger;
+        const orderItems = mapToOrderItems(response.data);
         setItems(orderItems);
     }
 
     useEffect(() => {
-        getCart();
+        fetchCart();
     }, [])
 
     return (
@@ -33,8 +34,8 @@ function CartSummary(props) {
                     </tr>
                 </thead>
                 <tbody>
-                {items.map(i => (
-                    <tr>
+                {items ? (items.map(i => (
+                    <tr key = {i.id} >
                         <th scope="row"><img className={styles.image} src={i.images.find(i => true)} alt="" /></th>
                         <td>{i.name}</td>
                         <td>{i.cost}</td>
@@ -44,7 +45,7 @@ function CartSummary(props) {
                                 <button className="btn btn-primary">Przejdź do szczegółów</button>
                             </NavLink>
                         </td>
-                    </tr> ))}        
+                    </tr> ))) : <></>}        
                 </tbody>
             </table>
             <div>
@@ -58,3 +59,5 @@ function CartSummary(props) {
         </div>
     )
 }
+
+export default CartSummary;
