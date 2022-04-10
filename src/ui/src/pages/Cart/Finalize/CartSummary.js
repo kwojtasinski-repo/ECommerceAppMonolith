@@ -59,7 +59,7 @@ function CartSummary(props) {
                         <td>{i.cost} {i.code}</td>
                         <td>{i.created}</td>
                         <td>
-                            <NavLink to = {`#`}>
+                            <NavLink to = {`/archive/items/${i.id}`}>
                                 <button className="btn btn-primary">Przejdź do szczegółów</button>
                             </NavLink>
                             <button className="btn btn-danger ms-2"

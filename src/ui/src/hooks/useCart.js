@@ -30,17 +30,20 @@ function localCart() {
 
     const removeItem = (id) => {
         const itemExists = cart.find(i => i.id === id);
-        let newCart = [...cart];
-
+        
         if (itemExists) {
+            let newCart = [...cart];
             itemExists.quantity = itemExists.quantity - 1;
-            newCart = cart.filter(c => c.id !== id);
-            newCart = [...newCart, itemExists];
-        } else {
-            newCart = cart.filter(c => c.id !== id);
-        }
+            
+            if (itemExists.quantity > 0) {
+                newCart = cart.filter(c => c.id !== id);
+                newCart = [...newCart, itemExists];
+            } else {
+                newCart = cart.filter(c => c.id !== id);
+            }
 
-        window.localStorage.setItem(key, JSON.stringify(newCart));
+            window.localStorage.setItem(key, JSON.stringify(newCart));
+        }
     }
 
     const clear = () => {

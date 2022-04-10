@@ -4,8 +4,15 @@ export const reducer = (state, action) => {
             return { ...state, user: action.user }
         case 'logout' : 
             return { ...state, user: null }
-        case 'cartChanged' :
-            return { ...state, cartChanged: action.cartChanged }
+        case 'modifiedState' :
+            let events = state.events;
+            
+            if (events.length === 5) {
+                events = [];
+            }
+
+            events.push(action.currentEvent);
+            return { ...state, events: events }
         default :
             throw new Error(`Action ${action.type} doesnt exists.`);
     }
@@ -13,5 +20,6 @@ export const reducer = (state, action) => {
 
 export const initialState = {
     user: null,
-    cartChanged: false
+    currentEvent: '',
+    events: []
 };

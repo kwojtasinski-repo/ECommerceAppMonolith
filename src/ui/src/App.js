@@ -32,6 +32,7 @@ import Currencies from './pages/Currencies/Currencies';
 import EditCurrency from './pages/Currencies/EditCurrency/EditCurrency';
 import AddCurrency from './pages/Currencies/AddCurrency/AddCurrency';
 import CartSummary from './pages/Cart/Finalize/CartSummary';
+import OrderItemArchive from './pages/Archive/OrderItemArchive';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -58,6 +59,7 @@ function App() {
   const content = (
     <Suspense fallback={<p>Ładowanie...</p>} >
       <Routes>
+        <Route path='/archive/items/:id' element = { <RequireAuth> <OrderItemArchive /> </RequireAuth>} />
         <Route path='/items/for-sale' element = { <RequireAuth> <PutItemForSale /> </RequireAuth>} />
         <Route path='/items/delete' element = { <RequireAuth> <DeleteItem /> </RequireAuth>} />
         <Route path='/items/edit' element = { <RequireAuth> <EditItem /> </RequireAuth>} />

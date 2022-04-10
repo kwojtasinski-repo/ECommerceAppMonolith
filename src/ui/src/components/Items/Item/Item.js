@@ -1,14 +1,17 @@
 import styles from './Item.module.css'
 import { Link } from 'react-router-dom';
 import useCart from '../../../hooks/useCart';
+import ReducerContext from '../../../context/ReducerContext';
+import { useContext } from 'react';
 
 function Item(props) {
     const [itemsInCart, addItem] = useCart();
+    const context = useContext(ReducerContext);
 
     const onClickHandler = (item) => {
         console.log(item);
         addItem(item);
-        window.location.reload(false);
+        context.dispatch({ type: "modifiedState", currentEvent: 'addItem' });
     }
 
     return (

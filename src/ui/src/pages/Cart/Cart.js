@@ -26,7 +26,7 @@ function Cart(props) {
             
             clear();
             setLoading(false);
-            context.dispatch({ type: "cartChanged", cartChanged: true });
+            context.dispatch({ type: "modifiedState", currentEvent: 'clearCart' });
             navigate('summary');
         } catch(exception) {
             console.log(exception);

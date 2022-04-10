@@ -1,7 +1,7 @@
 import axios from "../../axios-setup";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import styles from './Item.module.css';
+import styles from './OrderItemArchive.module.css';
 import Gallery from "../../components/Gallery/Gallery";
 import { mapToOrderItem } from "../../helpers/mapper";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";

@@ -74,7 +74,7 @@ export const mapToCurrencyRates = (obj) => {
 
 export const mapToOrderItems = (obj) => {
     const newOrderItems = [];
-    debugger;
+    
     for(const key in obj) {
         const orderItem = {
             id: obj[key].id,

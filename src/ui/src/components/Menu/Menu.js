@@ -14,11 +14,11 @@ function Menu() {
     const [cart] = useCart();
     const [itemsInCart, setItemsInCart] = useState(0);
     const context = useContext(ReducerContext);
-    debugger;
+    
     useEffect(() => {
         setItemsInCart(cart.length);
-        
-    }, [context.state.cartChanged])
+
+    }, [context.state.events, cart.length])
 
     const logout = (event) => {
         event.preventDefault();
