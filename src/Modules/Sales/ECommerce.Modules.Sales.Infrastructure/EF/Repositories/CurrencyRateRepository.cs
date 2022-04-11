@@ -56,7 +56,7 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
 
             var currencyRates = (from currencyCode in currencyCodes
                                  join currencyRate in currenciesQueryableFiltered
-                                    on currencyCode.ToUpperInvariant() equals currencyRate.CurrencyCode.ToUpperInvariant()
+                                    on currencyCode equals currencyRate.CurrencyCode
                                  select currencyRate).ToList();
 
             return Task.FromResult<IEnumerable<CurrencyRate>>(currencyRates);
@@ -76,13 +76,13 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
             // NOT (EXISTS (SELECT 1 FROM sales."CurrencyRates" AS c0
             // WHERE(c0."CurrencyCode" = c."CurrencyCode") AND(c."RateDate" < c0."RateDate")))
             var currenciesQueryableFiltered = (from currencyRate in currenciesQueryable
-                                               where !_salesDbContext.CurrencyRates.Any(cr => cr.CurrencyCode.ToUpperInvariant() == currencyRate.CurrencyCode.ToUpperInvariant()
+                                               where !_salesDbContext.CurrencyRates.Any(cr => cr.CurrencyCode == currencyRate.CurrencyCode
                                                             && currencyRate.RateDate < cr.RateDate)
                                                select currencyRate);
 
             var currencyRates = (from currencyCode in currencyCodes
                                  join currencyRate in currenciesQueryableFiltered
-                                    on currencyCode.ToUpperInvariant() equals currencyRate.CurrencyCode.ToUpperInvariant()
+                                    on currencyCode equals currencyRate.CurrencyCode
                                  select currencyRate).ToList();
 
             return Task.FromResult<IEnumerable<CurrencyRate>>(currencyRates);
