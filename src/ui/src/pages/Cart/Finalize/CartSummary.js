@@ -88,7 +88,7 @@ function CartSummary(props) {
                 ) : <></>
             }
             <div>
-                <NavLink to = '#' >
+                <NavLink to = '/orders/add' >
                     <button className="btn btn-success mt-2 float-end" >
                             Realizuj zamówienie
                     </button>

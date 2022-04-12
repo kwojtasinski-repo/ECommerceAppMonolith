@@ -4,7 +4,6 @@ import axios from '../../axios-setup';
 import Items from "../../components/Items/Items";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import useWebsiteTitle from "../../hooks/useWebsiteTitle";
-import useRates from "../../hooks/useRates";
 import { calculateItems } from "../../helpers/calculationCost";
 import { getRates } from "../../helpers/getRates";
 
@@ -22,7 +21,6 @@ function Home(props) {
         setLoading(false);
         setTitle('ECommerceApp');
     };
-
   
     useEffect(() => {
         fetchItems();

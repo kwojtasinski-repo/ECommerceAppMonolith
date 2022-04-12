@@ -32,7 +32,7 @@ namespace ECommerce.Modules.Currencies.Core
             services.AddCronJob<ISchedulerTask<CurrencyRateDownloader>, CurrencyRateDownloader>(options =>
             {
                 options.TimeZoneInfo = TimeZoneInfo.Local;
-                options.CronExpression = @"18 12 * * *";// https://crontab.guru/ info
+                options.CronExpression = @"15 12 * * *";// https://crontab.guru/ info
             });
 
             return services;
