@@ -75,7 +75,7 @@ function OrderForm(props) {
     });
 
     const changeHandler = (value, fieldName) => {
-        const error = validate(value[fieldName].rule, value);
+        const error = validate(form[fieldName].rules, value);
         setForm({...form, 
                 [fieldName]: {
                     ...form[fieldName],
@@ -140,6 +140,7 @@ function OrderForm(props) {
                 <div className="col">
                     <Input
                         label="Kod pocztowy"
+                        type="zipCode"
                         value={form.zipCode.value}
                         onChange={val => changeHandler(val, 'zipCode')}
                         error={form.zipCode.error}

@@ -30,6 +30,52 @@ const InputText = props => {
     );
 }
 
+const InputZipCode = props => {
+    const keyPress = event => {
+        const regex = new RegExp(pattern);
+        const key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        const newValue = event.target.value + key;
+        
+        if (!regex.test(newValue)) {
+            event.preventDefault ? event.preventDefault() : event.returnValue = false;
+        }
+    }
+
+    const keyUp = event => {
+        var key = event.keyCode;
+
+        if (key === 8 || key === 46) {
+            return;
+        }
+
+        let value = event.target.value;
+        console.log(value);
+        
+        if (value.length === 2) {
+            event.target.value += '-';
+        }
+    }
+
+    const pattern="^\\d{1,2}(?:\\-\\d{0,3})?$";
+
+    return (
+        <div className="form-group">
+            <label>{props.label}</label>
+            <input 
+                type = {props.type}
+                value = {props.value}
+                className = {`form-control ${props.error && props.showError ? 'is-invalid' : ''}`}
+                onKeyPress = { keyPress }
+                onKeyUp = { keyUp }
+                onChange = { event => props.onChange(event.target.value) } 
+                pattern = { props.pattern } />
+            <div className="invalid-feedback">
+                {props.error}
+            </div>
+        </div>
+    );
+}
+
 const InputSelect = props => {
     return (
         <div className="form-group">
@@ -94,6 +140,8 @@ function Input(props) {
             return <InputCheckBox {...props} />;
         case 'textarea':
             return <InputTextArea {...props} />;
+        case 'zipCode' :
+            return <InputZipCode {...props} />;
         default:
             return <InputText {...props} />;
     }
