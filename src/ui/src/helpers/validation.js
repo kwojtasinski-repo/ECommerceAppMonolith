@@ -43,6 +43,28 @@ const availableRules = {
     },
     only(value, rule) {
         return value.length === rule.length ? '' : `Pole powinno zawierać znaków ${rule.length}`;
+    },
+    requiredIf(value, rules) {
+        if (rules.isRequired) {
+            let errorMessage = '';
+
+            if (value === '') {
+                errorMessage = 'Pole wymagane';
+                return errorMessage;
+            }
+
+            if (rules.rules) {
+                const rulesInside = rules.rules;
+                for(const key in rulesInside) {
+                    const rule = rulesInside[key];
+                    errorMessage = availableRules[rule.rule](value, rule);
+
+                    if (errorMessage) {
+                        return errorMessage;
+                    }
+                }
+            }
+        }
     }
 };
 

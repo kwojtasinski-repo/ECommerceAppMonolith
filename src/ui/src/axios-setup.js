@@ -19,4 +19,14 @@ instance.interceptors.request.use((req) => {
     return req;
 })
 
+axios.interceptors.response.use(function (response) {
+    if(response.headers.location) {
+        return axios.get(response.headers.location);
+    }
+
+    return Promise.resolve(response);
+  }, function (error) {
+    return Promise.reject(error);
+  });
+
 export default instance;

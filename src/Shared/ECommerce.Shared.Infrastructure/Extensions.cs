@@ -65,7 +65,8 @@ namespace ECommerce.Shared.Infrastructure
                 {
                     policy.WithOrigins("*")
                           .WithMethods("POST", "PUT", "PATCH", "DELETE")
-                          .WithHeaders("Content-Type", "Authorization");
+                          .WithHeaders("Content-Type", "Authorization")
+                          .WithExposedHeaders("Location");
                 });
             });
 

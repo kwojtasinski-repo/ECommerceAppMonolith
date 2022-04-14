@@ -49,7 +49,6 @@ const InputZipCode = props => {
         }
 
         let value = event.target.value;
-        console.log(value);
         
         if (value.length === 2) {
             event.target.value += '-';
