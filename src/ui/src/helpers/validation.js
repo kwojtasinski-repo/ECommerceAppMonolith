@@ -49,7 +49,7 @@ const availableRules = {
     requiredIf(value, rules) {
         if (rules.isRequired) {
             let errorMessage = '';
-            debugger;
+            
             if (isEmpty(value)) {
                 errorMessage = 'Pole wymagane';
                 return errorMessage;

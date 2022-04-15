@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Input from "../../components/Input/Input";
-import LoadingButton from "../../components/UI/LoadingButton/LoadingButton";
-import { isEmpty } from "../../helpers/stringExtensions";
-import { validate } from "../../helpers/validation";
+import Input from "../../../components/Input/Input";
+import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
+import { isEmpty } from "../../../helpers/stringExtensions";
+import { validate } from "../../../helpers/validation";
 
 function ContactForm(props) {
     const [loading, setLoading] = useState(false);
@@ -94,7 +94,6 @@ function ContactForm(props) {
     }
 
     const changeHandler = (value, fieldName, form, setForm) => {
-        debugger;
         const error = validate(form[fieldName].rules, value);
         setForm({...form, 
                 [fieldName]: {
@@ -162,7 +161,6 @@ function ContactForm(props) {
     }
 
     const setIsRequiredRule = (value, fieldName, form) => {
-        debugger;
         let rules = form[fieldName].rules;
 
         for (const key in rules) {
