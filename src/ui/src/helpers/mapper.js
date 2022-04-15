@@ -120,3 +120,48 @@ export const mapToOrderItem = (obj) => {
 
     return orderItem;
 }
+
+export const mapToCustomers = (obj) => {
+    const newCustomers = [];
+    
+    for(const key in obj) {
+        const customer = {
+            id: obj[key].id,
+            firstName: obj[key].firstName,
+            lastName: obj[key].lastName,
+            company: obj[key].company,
+            companyName: obj[key].companyName,
+            nip: obj[key].nip,
+            phoneNumber: obj[key].phoneNumber,
+            userId: obj[key].userId
+        }
+        newCustomers.push(customer);
+    }
+
+    return newCustomers;
+}
+
+export const mapToCustomer = (obj) => {
+    const customer = {
+        id: obj.id,
+        firstName: obj.firstName,
+        lastName: obj.lastName,
+        company: obj.company,
+        companyName: obj.companyName,
+        nip: obj.nip,
+        phoneNumber: obj.phoneNumber,
+        address: {
+            id: obj.address.id,
+            cityName: obj.address.cityName,
+            streetName: obj.address.streetName,
+            countryName: obj.address.countryName,
+            zipCode: obj.address.zipCode,
+            buildingNumber: obj.address.buildingNumber,
+            localeNumber: obj.address.localeNumber,
+            customerId: obj.address.customerId
+        },
+        userId: obj.userId
+    }
+
+    return customer;
+}

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 import Input from "../../../components/Input/Input";
 import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
 import { isEmpty } from "../../../helpers/stringExtensions";
@@ -8,6 +9,9 @@ function ContactForm(props) {
     const [loading, setLoading] = useState(false);
     const [isCompany, setIsCompany] = useState(props.company ? props.company : false);
     const [customerForm, setCustomerForm] = useState({
+        id: {
+            value: ''
+        },
         firstName: {
             value: '',
             error: '',
@@ -43,10 +47,16 @@ function ContactForm(props) {
             error: '',
             showError: false,
             rules: ['required', { rule: 'only', length: 9 }]
-        }
+        },
+        userId: {
+            value: ''
+        },
     });
 
     const [addressForm, setAddressForm] = useState({
+        id: {
+            value: ''
+        },
         countryName: {
             value: '',
             error: '',
@@ -82,7 +92,10 @@ function ContactForm(props) {
             error: '',
             showError: false,
             rules: []
-        }
+        },
+        customerId: {
+            value: ''
+        },
     });
 
     const changeHandlerCustomer = (value, fieldName) => {
@@ -151,11 +164,17 @@ function ContactForm(props) {
             ...customerForm,
                 companyName: {
                     ...customerForm.companyName,
-                    rules: rulesCompany
+                    value: null,
+                    rules: [
+                        rulesCompany
+                    ]
                 },
-                rules: {
+                nip: {
                     ...customerForm.nip,
-                    rules: rulesNip
+                    value: null,
+                    rules: [
+                        rulesNip
+                    ]
                 }
         });
     }
@@ -173,6 +192,23 @@ function ContactForm(props) {
             }
         }
     }
+
+    useEffect(() => {
+        if(props.contact) {
+            const newCustomerForm = {...customerForm};
+            for (const key in props.contact.customer) {
+                newCustomerForm[key].value = props.contact.customer[key];
+            }
+
+            const newAddressForm = {...addressForm};
+            for (const key in props.contact.address) {
+                newAddressForm[key].value = props.contact.address[key];
+            }
+
+            setCustomerForm(newCustomerForm);
+            setAddressForm(newAddressForm);
+        }
+    }, [props.contact]);
 
     return (
         <form onSubmit={submit}>
@@ -288,6 +324,8 @@ function ContactForm(props) {
                         showError={customerForm.phoneNumber.showError} />
                 </div>
                 <div className = "text-end mt-4">
+                    {props.cancelEditUrl ? <NavLink className="btn btn-secondary me-2" to = {props.cancelEditUrl} >{props.cancelButtonText}</NavLink>
+                        : null }
                     <LoadingButton 
                         loading = {loading} 
                         className = "btn btn-success">

@@ -16,7 +16,7 @@ function AddContact(props) {
             </div>
             <div className="card-body">
                 <ContactForm
-                    buttonText = "Utwórz zamówienie"
+                    buttonText = "Dodaj dane osobowe"
                     onSubmit = {submit} />
             </div>
         </div>
