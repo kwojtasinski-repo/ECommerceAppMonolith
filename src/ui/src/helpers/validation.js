@@ -1,3 +1,5 @@
+import { isEmpty } from "./stringExtensions"
+
 export function validateEmail(text) {
     const pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return pattern.test(text);
@@ -33,7 +35,7 @@ const availableRules = {
         return value ? '' : 'Pole wymagane';
     },
     min(value, rule) {
-      return value.length > rule.length ? '' : `Min. znaków: ${rule.length}`;
+      return value.length >= rule.length ? '' : `Min. znaków: ${rule.length}`;
     },
     email(value) {
       return validateEmail(value) ? '' : 'Niepoprawy email';
@@ -47,8 +49,8 @@ const availableRules = {
     requiredIf(value, rules) {
         if (rules.isRequired) {
             let errorMessage = '';
-
-            if (value === '') {
+            debugger;
+            if (isEmpty(value)) {
                 errorMessage = 'Pole wymagane';
                 return errorMessage;
             }

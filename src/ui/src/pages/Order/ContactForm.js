@@ -1,9 +1,10 @@
 import { useState } from "react";
 import Input from "../../components/Input/Input";
 import LoadingButton from "../../components/UI/LoadingButton/LoadingButton";
+import { isEmpty } from "../../helpers/stringExtensions";
 import { validate } from "../../helpers/validation";
 
-function OrderForm(props) {
+function ContactForm(props) {
     const [loading, setLoading] = useState(false);
     const [isCompany, setIsCompany] = useState(props.company ? props.company : false);
     const [customerForm, setCustomerForm] = useState({
@@ -26,13 +27,13 @@ function OrderForm(props) {
             rules: []
         },
         companyName: {
-            value: null,
+            value: undefined,
             error: '',
             showError: false,
             rules: [{ rule: 'requiredIf', isRequired: isCompany, rules: [{ rule: 'min', length: 3 }] }]
         },
         nip: {
-            value: null,
+            value: undefined,
             error: '',
             showError: false,
             rules: [{ rule: 'requiredIf', isRequired: isCompany, rules: [{ rule: 'only', length: 10 }] }]
@@ -85,62 +86,53 @@ function OrderForm(props) {
     });
 
     const changeHandlerCustomer = (value, fieldName) => {
-        const error = validate(customerForm[fieldName].rules, value);
-        setCustomerForm({...customerForm, 
+        changeHandler(value, fieldName, customerForm, setCustomerForm);
+    }
+
+    const changeHandlerAddress = (value, fieldName) => {
+        changeHandler(value, fieldName, addressForm, setAddressForm);
+    }
+
+    const changeHandler = (value, fieldName, form, setForm) => {
+        debugger;
+        const error = validate(form[fieldName].rules, value);
+        setForm({...form, 
                 [fieldName]: {
-                    ...customerForm[fieldName],
+                    ...form[fieldName],
                     value,
                     showError: true,
                     error
                 }});
     }
 
-    const changeHandlerAddress = (value, fieldName) => {
-        const error = validate(addressForm[fieldName].rules, value);
-        setAddressForm({...addressForm, 
-                [fieldName]: {
-                    ...addressForm[fieldName],
-                    value,
-                    showError: true,
-                    error
-                }});
+    const validateBeforeSend = (form, setForm) => {
+        for(let field in form) {
+            const error = validate(form[field].rules, form[field].value);
+
+            if (error) {
+                setForm({...form, 
+                    [field]: {
+                        ...form[field],
+                        showError: true,
+                        error
+                    }});
+                setLoading(false);
+                return error;
+            }
+        }
     }
 
     const submit = async (event) => {
         event.preventDefault();
         setLoading(true);
-        debugger;
-        for(let field in customerForm) {
-            const error = validate(customerForm[field].rules, customerForm[field].value);
+        const errorCustomer = validateBeforeSend(customerForm, setCustomerForm);
+        const errorAddress = validateBeforeSend(addressForm, setAddressForm);
 
-            if (error) {
-                setCustomerForm({...customerForm, 
-                    [field]: {
-                        ...customerForm[field],
-                        showError: true,
-                        error
-                    }});
-                setLoading(false);
-                return;
-            }
+        if (!isEmpty(errorCustomer) || !isEmpty(errorAddress)) {
+            setLoading(false);
+            return;
         }
         
-        for(let field in addressForm) {
-            const error = validate(addressForm[field].rules, addressForm[field].value);
-
-            if (error) {
-                setAddressForm({...addressForm, 
-                    [field]: {
-                        ...addressForm[field],
-                        showError: true,
-                        error
-                    }});
-                setLoading(false);
-                return;
-            }
-        }
-
-        console.log('clicked');
         const newForm = {customer: {}, address: {}};
         for (const key in customerForm) {
             newForm.customer[key] = customerForm[key].value;
@@ -148,18 +140,14 @@ function OrderForm(props) {
         for (const key in addressForm) {
             newForm.address[key] = addressForm[key].value;
         }
-        debugger;
         props.onSubmit(newForm);
         setLoading(false);
     }
 
     const companyHandler = (value) => {
-        console.log(value);
         setIsCompany(value);
-        let rulesCompany = customerForm.companyName.rules;
-        rulesCompany[0].isRequired = value;
-        let rulesNip = customerForm.nip.rules;
-        rulesNip[0].isRequired = value;
+        const rulesCompany = setIsRequiredRule(value, 'companyName', customerForm);
+        const rulesNip = setIsRequiredRule(value, 'nip', customerForm);
         setCustomerForm({
             ...customerForm,
                 companyName: {
@@ -171,6 +159,21 @@ function OrderForm(props) {
                     rules: rulesNip
                 }
         });
+    }
+
+    const setIsRequiredRule = (value, fieldName, form) => {
+        debugger;
+        let rules = form[fieldName].rules;
+
+        for (const key in rules) {
+            let rule = rules[key];
+            if (rule instanceof Object) {
+                if (rule.isRequired !== undefined) { // property exists in object
+                    rule.isRequired = value;
+                }
+                return rule;
+            }
+        }
     }
 
     return (
@@ -298,4 +301,4 @@ function OrderForm(props) {
     )
 }
 
-export default OrderForm;
+export default ContactForm;
