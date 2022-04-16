@@ -1,21 +1,29 @@
-import useAuth from "../../../hooks/useAuth";
-import ContactForm from "../../Profile/ContactData/ContactForm";
-import axios from "../../../axios-setup";
-import AddContact from "../../Profile/ContactData/AddContact/AddContact";
+import { useState } from "react";
+import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
+import Contacts from "../Contact/Contacts";
 
 function AddOrder(props) {
-    const [auth] = useAuth();
+    const [customer, setCustomer] = useState(null);
+    const disabledButton = customer === null;
 
     const submit = async (form) => {
     }
-    // dodac dane osobowe juz istniejace
-    // jesli gosc nie chce to moze dodac nowe dane osobowe
-    // walidowac wybranie danych i komunikat najlepiej wyswietlic ze nie ma zaznaczonych danych (tylko nie notyfikacje)
-    // po dodaniu odswiezyc komponent
-    // po pomyslnym dodaniu przekierowanie na "podsumowanie" ktore pozwala na edycje lub platnosc
+    
     return (
         <div>
-            <AddContact />
+            <div>
+                <h5>
+                    {customer !== null ? `Wybrano: ${customer.firstName} ${customer.lastName} ${customer.companyName ? customer.companyName : ""}` : "Wybierz kontakt lub dodaj nowy:"}
+                </h5>
+            </div>
+            <div className="mt-3">
+                <Contacts choosed = {setCustomer} />
+            </div>
+            <div>
+                <LoadingButton disabled = {disabledButton} >
+                    Utwórz zamówienie
+                </LoadingButton>
+            </div>
         </div>
     )
 }
