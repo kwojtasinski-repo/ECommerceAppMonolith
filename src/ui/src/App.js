@@ -35,6 +35,9 @@ import CartSummary from './pages/Cart/Finalize/CartSummary';
 import OrderItemArchive from './pages/Archive/OrderItemArchive';
 import AddOrder from './pages/Order/AddOrder/AddOrder';
 import EditContact from './pages/Profile/ContactData/EditContact/EditContact';
+import AddOrderContact from './pages/Order/Contact/AddOrderContact';
+import EditOrderContact from './pages/Order/Contact/EditOrderContact';
+import AddContact from './pages/Profile/ContactData/AddContact/AddContact';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -61,7 +64,10 @@ function App() {
   const content = (
     <Suspense fallback={<p>Ładowanie...</p>} >
       <Routes>
-        <Route path='/orders/add' element = { <RequireAuth> <AddOrder /> </RequireAuth> }/>
+        <Route path='/orders/add' element = { <RequireAuth> <AddOrder /> </RequireAuth> } >
+          <Route path='add-contact' element = {<AddOrderContact />} />
+          <Route path='edit-contact/:id' element = {<EditOrderContact />} />
+        </Route>
         <Route path='/archive/items/:id' element = { <RequireAuth> <OrderItemArchive /> </RequireAuth>} />
         <Route path='/items/for-sale' element = { <RequireAuth> <PutItemForSale /> </RequireAuth>} />
         <Route path='/items/delete' element = { <RequireAuth> <DeleteItem /> </RequireAuth>} />
@@ -79,6 +85,7 @@ function App() {
                                         }  >
                           
           <Route path="contact-data" element = {<ContactData />} >
+            <Route path="add" element = {<AddContact />} />
             <Route path="edit/:id" element = {<EditContact />} />
           </Route>
           <Route path="" element = {<ProfileDetails/>} />

@@ -3,11 +3,9 @@ import { NavLink, Outlet } from "react-router-dom";
 import axios from "../../../axios-setup";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import { mapToCustomers } from "../../../helpers/mapper";
-import AddContact from "./AddContact/AddContact";
 
 function ContactData(props) {
     const [loading, setLoading] = useState(true);
-    const [addNewContact, setAddNewContact] = useState(false);
     const [customers, setCustomers] = useState([]);
     
     const fetchContacts = async () => {
@@ -20,30 +18,12 @@ function ContactData(props) {
         fetchContacts();
     }, []);
 
-    const addContact = (value) => {
-        setAddNewContact(value);
-    }
-
     return (
         <>
             {loading ? <LoadingIcon /> : (
                 <div>
                     <div>
-                        <button className="btn btn-primary" onClick={ () => addContact(true)} disabled={addNewContact} >
-                            Dodaj nowy kontakt
-                        </button>
-                        {addNewContact ?
-                        <button className="btn btn-warning ms-2" onClick={ () => addContact(false)} >
-                            Anuluj
-                        </button>
-                        : null}
-                    </div>
-                    <div>
-                        {addNewContact ? 
-                        <div className="mt-2">
-                            <AddContact />
-                        </div>
-                        : null}
+                        <NavLink to = "add" className="btn btn-primary mb-2" >Dodaj nowy kontakt</NavLink>
                     </div>
                     <div className="mt-2">
                         <Outlet />

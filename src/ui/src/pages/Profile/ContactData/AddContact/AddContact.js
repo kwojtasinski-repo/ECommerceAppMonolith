@@ -1,24 +1,12 @@
-import axios from "../../../../axios-setup";
-import ContactForm from "../ContactForm";
+import AddContactForm from "../AddContactForm";
 
 function AddContact(props) {
-    const submit = async (form) => {
-        const responseCustomer = await axios.post('/contacts-module/customers', form.customer);
-        const customerId = responseCustomer.headers.location.split('/contacts-module/customers/')[1];
-        form.address.customerId = customerId;
-        await axios.post('/contacts-module/addresses', form.address);
-    }
-
     return (
         <div className="card">
-            <div className="card-header">
-                Nowe dane osobowe
-            </div>
-            <div className="card-body">
-                <ContactForm
-                    buttonText = "Dodaj dane osobowe"
-                    onSubmit = {submit} />
-            </div>
+            <AddContactForm
+                navigateAfterSend = "/profile/contact-data"
+                cancelEditUrl = "/profile/contact-data"
+                cancelButtonText = "Anuluj"/>
         </div>
     )
 }
