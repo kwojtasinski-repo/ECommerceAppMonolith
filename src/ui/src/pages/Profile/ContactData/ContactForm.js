@@ -7,7 +7,7 @@ import { validate } from "../../../helpers/validation";
 
 function ContactForm(props) {
     const [loading, setLoading] = useState(false);
-    const [isCompany, setIsCompany] = useState(props.company ? props.company : false);
+    const [isCompany, setIsCompany] = useState(false);
     const [customerForm, setCustomerForm] = useState({
         id: {
             value: ''
@@ -162,6 +162,10 @@ function ContactForm(props) {
         const rulesNip = setIsRequiredRule(value, 'nip', customerForm);
         setCustomerForm({
             ...customerForm,
+                company: {
+                    ...customerForm.company,
+                    value: value
+                },
                 companyName: {
                     ...customerForm.companyName,
                     value: null,
@@ -194,10 +198,14 @@ function ContactForm(props) {
     }
 
     useEffect(() => {
-        if(props.contact) {
+        if (props.contact) {
             const newCustomerForm = {...customerForm};
             for (const key in props.contact.customer) {
                 newCustomerForm[key].value = props.contact.customer[key];
+                
+                if (key === "company") {
+                    setIsCompany(props.contact.customer[key]);
+                }
             }
 
             const newAddressForm = {...addressForm};

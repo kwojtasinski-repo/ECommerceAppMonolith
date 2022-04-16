@@ -1,22 +1,68 @@
 import { useEffect, useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import axios from "../../../axios-setup";
+import Popup, { Type }  from "../../../components/Popup/Popup";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import { mapToCustomers } from "../../../helpers/mapper";
+import { mapToMessage } from "../../../helpers/validation";
 
 function ContactData(props) {
     const [loading, setLoading] = useState(true);
     const [customers, setCustomers] = useState([]);
+    const [currentId, setCurrentId] = useState();
+    const [isOpen, setIsOpen] = useState(false);
+    const [error, setError] = useState(false);
+    const [actions, setActions] = useState([]);
     
+    const addAction = action => {
+        let newActions = [...actions];
+
+        if (newActions.length === 5) {
+            newActions = [];
+            newActions.push(action);
+        } else {
+            newActions.push(action);
+        }
+
+        setActions(newActions);
+    }
+
     const fetchContacts = async () => {
         const response = await axios.get("/contacts-module/customers/me");
         setCustomers(mapToCustomers(response.data));
         setLoading(false);
     }
 
+    const clickHandler = (id) => {
+        setCurrentId(id);
+        setIsOpen(!isOpen);
+    }
+
+    const handleDeleteContact = () => {
+        setIsOpen(!isOpen);
+        try {
+            axios.delete(`/contacts-module/customers/${currentId}`);
+        } catch(exception) {
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            
+            for(const errMsg in errors) {
+                errorMessage += mapToMessage(errors[errMsg].code, status);
+            }
+            
+            setError(errorMessage);
+        }
+        addAction('deleteContact');
+    }
+
+    const closePopUp = () => {
+        setIsOpen(!isOpen);
+    }
+
     useEffect(() => {
         fetchContacts();
-    }, []);
+    }, [actions]);
 
     return (
         <>
@@ -25,8 +71,21 @@ function ContactData(props) {
                     <div>
                         <NavLink to = "add" className="btn btn-primary mb-2" >Dodaj nowy kontakt</NavLink>
                     </div>
+
+                    {error ? (
+                        <div className="alert alert-danger">{error}</div>
+                    ) : null}
+
+                    {isOpen && <Popup handleConfirm = {handleDeleteContact}
+                                      handleClose = {closePopUp}
+                                      type = {Type.alert}
+                                      content = {<>
+                                          <p>Czy chcesz usunąć kontakt?</p>
+                                      </>}
+                    /> }
+
                     <div className="mt-2">
-                        <Outlet />
+                        <Outlet context={{ addAction }}/>
                     </div>
                     <div>
                         <table className="table table-striped">
@@ -38,7 +97,8 @@ function ContactData(props) {
                                     <th scope="col">Nazwa Firmy</th>
                                     <th scope="col">NIP</th>
                                     <th scope="col">Numer kontaktowy</th>
-                                    <th scope="col">Akcja</th>
+                                    <th scope="col">Edytuj</th>
+                                    <th scope="col">Usuń</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -46,11 +106,24 @@ function ContactData(props) {
                                     <tr id ={c.id} key={new Date().getTime() + Math.random() + Math.random()}>
                                         <td>{c.firstName}</td>
                                         <td>{c.lastName}</td>
-                                        <td>{c.company}</td>
+                                        <td>
+                                            {c.company ? (
+                                                  <input type="checkbox" 
+                                                         class="custom-control-input text-primary ms-1" 
+                                                         onclick="return false;" 
+                                                         checked />
+                                            )
+                                            : null}
+                                        </td>
                                         <td>{c.companyName}</td>
                                         <td>{c.nip}</td>
                                         <td>{c.phoneNumber}</td>
-                                        <td><NavLink className="btn btn-warning" end to={`edit/${c.id}`} >Edytuj</NavLink></td>
+                                        <td>
+                                            <NavLink className="btn btn-warning" end to={`edit/${c.id}`} >Edytuj</NavLink>
+                                        </td>
+                                        <td>
+                                            <button className="btn btn-danger" onClick={() => clickHandler(c.id)}>Usuń</button>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>

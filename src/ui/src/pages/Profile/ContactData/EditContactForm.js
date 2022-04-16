@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import axios from "../../../axios-setup";
 import { mapToCustomer } from "../../../helpers/mapper";
 import ContactForm from "./ContactForm";
@@ -8,6 +8,7 @@ function EditContactForm(props) {
     const [id, setId] = useState(props.id);
     const [contact, setContact] = useState(null);
     const navigate = useNavigate();
+    const { addAction } = useOutletContext();
 
     const fetchCustomer = async () => {
         const response = await axios.get(`/contacts-module/customers/${id}`);
@@ -20,6 +21,7 @@ function EditContactForm(props) {
     const submit = async (form) => {
         await axios.put('/contacts-module/customers', form.customer);
         await axios.put('/contacts-module/addresses', form.address);
+        addAction('editContact');
         navigate(props.navigateAfterSend);
     }
 
