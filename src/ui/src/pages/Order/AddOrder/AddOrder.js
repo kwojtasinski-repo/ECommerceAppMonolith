@@ -1,3 +1,4 @@
+import axios from "../../../axios-setup";
 import { useState } from "react";
 import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
 import Contacts from "../Contact/Contacts";
@@ -6,7 +7,11 @@ function AddOrder(props) {
     const [customer, setCustomer] = useState(null);
     const disabledButton = customer === null;
 
-    const submit = async (form) => {
+    const submit = async () => {
+        await axios.post('/sales-module/orders', {
+            customerId: customer.id, 
+            currencyCode: "PLN"
+        })
     }
     
     return (
@@ -20,7 +25,7 @@ function AddOrder(props) {
                 <Contacts choosed = {setCustomer} />
             </div>
             <div>
-                <LoadingButton disabled = {disabledButton} >
+                <LoadingButton disabled = {disabledButton} onClick = {submit} >
                     Utwórz zamówienie
                 </LoadingButton>
             </div>
