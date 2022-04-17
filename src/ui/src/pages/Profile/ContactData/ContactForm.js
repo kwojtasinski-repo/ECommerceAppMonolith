@@ -198,6 +198,7 @@ function ContactForm(props) {
     }
 
     useEffect(() => {
+        debugger;
         if (props.contact) {
             const newCustomerForm = {...customerForm};
             for (const key in props.contact.customer) {
@@ -205,6 +206,10 @@ function ContactForm(props) {
                 
                 if (key === "company") {
                     setIsCompany(props.contact.customer[key]);
+                }
+
+                if (key === "companyName" || key === "nip") {
+                    newCustomerForm[key].rules[0].isRequired = props.contact.customer.company;
                 }
             }
 

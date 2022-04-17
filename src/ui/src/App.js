@@ -38,6 +38,7 @@ import EditContact from './pages/Profile/ContactData/EditContact/EditContact';
 import AddOrderContact from './pages/Order/Contact/AddOrderContact';
 import EditOrderContact from './pages/Order/Contact/EditOrderContact';
 import AddContact from './pages/Profile/ContactData/AddContact/AddContact';
+import Order from './pages/Order/Order';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -65,9 +66,10 @@ function App() {
     <Suspense fallback={<p>Ładowanie...</p>} >
       <Routes>
         <Route path='/orders/add' element = { <RequireAuth> <AddOrder /> </RequireAuth> } >
-          <Route path='add-contact' element = {<AddOrderContact />} />
-          <Route path='edit-contact/:id' element = {<EditOrderContact />} />
+          <Route path='add-contact' element = {<RequireAuth><AddOrderContact /></RequireAuth>} />
+          <Route path='edit-contact/:id' element = {<RequireAuth><EditOrderContact /></RequireAuth>} />
         </Route>
+        <Route path='/orders/:id' element = { <RequireAuth> <Order/> </RequireAuth> }/>
         <Route path='/archive/items/:id' element = { <RequireAuth> <OrderItemArchive /> </RequireAuth>} />
         <Route path='/items/for-sale' element = { <RequireAuth> <PutItemForSale /> </RequireAuth>} />
         <Route path='/items/delete' element = { <RequireAuth> <DeleteItem /> </RequireAuth>} />
@@ -84,11 +86,11 @@ function App() {
                                           </RequireAuth>
                                         }  >
                           
-          <Route path="contact-data" element = {<ContactData />} >
-            <Route path="add" element = {<AddContact />} />
-            <Route path="edit/:id" element = {<EditContact />} />
+          <Route path="contact-data" element = { <RequireAuth> <ContactData /> </RequireAuth> } >
+            <Route path="add" element = {<RequireAuth><AddContact /></RequireAuth>} />
+            <Route path="edit/:id" element = {<RequireAuth><EditContact /></RequireAuth>} />
           </Route>
-          <Route path="" element = {<ProfileDetails/>} />
+          <Route path="" element = {<RequireAuth><ProfileDetails/></RequireAuth>} />
         </Route>
         <Route path='/cart/summary' element = { <RequireAuth> <CartSummary/> </RequireAuth> } />
         <Route path='/currencies' element = { <RequireAuth> <Currencies /> </RequireAuth>} >

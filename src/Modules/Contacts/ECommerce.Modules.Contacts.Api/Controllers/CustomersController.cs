@@ -26,7 +26,7 @@ namespace ECommerce.Modules.Contacts.Api.Controllers
         [HttpGet("me")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllByUserIdAsync(Guid userId)
+        public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllByUserIdAsync()
         {
             var customers = await _customerService.GetAllByUserAsync(_context.Identity.Id);
             return Ok(customers);

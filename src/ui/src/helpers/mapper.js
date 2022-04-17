@@ -165,3 +165,36 @@ export const mapToCustomer = (obj) => {
 
     return customer;
 }
+
+export const mapToOrder = (obj) => {
+    const order = {
+        id: obj.id,
+        orderNumber: obj.orderNumber,
+        createOrderDate: obj.createOrderDate,
+        orderApprovedDate: obj.orderApprovedDate,
+        cost: obj.cost,
+        customerId: obj.customerId,
+        userId: obj.userId,
+        paid: obj.paid,
+        orderItems: mapToOrderItems(obj.orderItems),
+        payments: mapToPayments(obj.payments)
+    };
+
+    return order;
+}
+
+export const mapToPayments = (objects) => {
+    const payments = [];
+
+    for(const obj of objects) {
+        const payment = {
+            id: obj.id,
+            paymentNumber: obj.paymentNumber,
+            paymentDate: obj.paymentDate,
+            userId: obj.userId
+        };
+        payments.push(payment);
+    }
+
+    return payments;
+}

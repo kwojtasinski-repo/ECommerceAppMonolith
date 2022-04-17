@@ -5,13 +5,12 @@ function getToken() {
     return auth ? auth.token : null;
 }
 
-const token = getToken();
-
 const instance = axios.create({
     baseURL: `${process.env.REACT_APP_BACKEND_URL}`
 });
 
 instance.interceptors.request.use((req) => {
+    const token = getToken();
     if (token) {
         req.headers.Authorization = `Bearer ${token}`;
     }

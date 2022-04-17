@@ -2,16 +2,22 @@ import axios from "../../../axios-setup";
 import { useState } from "react";
 import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
 import Contacts from "../Contact/Contacts";
+import { useNavigate } from "react-router-dom";
 
 function AddOrder(props) {
     const [customer, setCustomer] = useState(null);
     const disabledButton = customer === null;
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const submit = async () => {
-        await axios.post('/sales-module/orders', {
+        setLoading(true);
+        const response = await axios.post('/sales-module/orders', {
             customerId: customer.id, 
             currencyCode: "PLN"
-        })
+        });        
+        const id = response.headers.location.split('/sales-module/orders/')[1];
+        navigate(`/orders/${id}`);
     }
     
     return (
@@ -25,7 +31,8 @@ function AddOrder(props) {
                 <Contacts choosed = {setCustomer} />
             </div>
             <div>
-                <LoadingButton disabled = {disabledButton} onClick = {submit} >
+                <LoadingButton loading = {loading}
+                               disabled = {disabledButton} onClick = {submit} >
                     Utwórz zamówienie
                 </LoadingButton>
             </div>

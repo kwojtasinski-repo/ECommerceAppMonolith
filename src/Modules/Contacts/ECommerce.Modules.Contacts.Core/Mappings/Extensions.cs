@@ -68,7 +68,8 @@ namespace ECommerce.Modules.Contacts.Core.Mappings
                 PhoneNumber = customer.PhoneNumber,
                 Company = customer.Company,
                 CompanyName = customer.CompanyName,
-                NIP = customer.NIP
+                NIP = customer.NIP,
+                UserId = customer.UserId
             };
             return dto;
         }
@@ -84,6 +85,7 @@ namespace ECommerce.Modules.Contacts.Core.Mappings
                 Company = customer.Company,
                 CompanyName = customer.CompanyName,
                 NIP = customer.NIP,
+                UserId = customer.UserId,
                 Address = customer.Address?.AsDto()
             };
             return dto;
