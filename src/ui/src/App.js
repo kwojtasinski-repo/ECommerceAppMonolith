@@ -39,6 +39,7 @@ import AddOrderContact from './pages/Order/Contact/AddOrderContact';
 import EditOrderContact from './pages/Order/Contact/EditOrderContact';
 import AddContact from './pages/Profile/ContactData/AddContact/AddContact';
 import Order from './pages/Order/Order';
+import EditOrder from './pages/Order/EditOrder/EditOrder';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -69,6 +70,7 @@ function App() {
           <Route path='add-contact' element = {<RequireAuth><AddOrderContact /></RequireAuth>} />
           <Route path='edit-contact/:id' element = {<RequireAuth><EditOrderContact /></RequireAuth>} />
         </Route>
+        <Route path='/orders/edit/:id' element = { <RequireAuth> <EditOrder /> </RequireAuth> } />
         <Route path='/orders/:id' element = { <RequireAuth> <Order/> </RequireAuth> }/>
         <Route path='/archive/items/:id' element = { <RequireAuth> <OrderItemArchive /> </RequireAuth>} />
         <Route path='/items/for-sale' element = { <RequireAuth> <PutItemForSale /> </RequireAuth>} />

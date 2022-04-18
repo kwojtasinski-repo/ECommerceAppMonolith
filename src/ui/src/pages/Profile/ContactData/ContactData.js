@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import axios from "../../../axios-setup";
 import Popup, { Type }  from "../../../components/Popup/Popup";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";

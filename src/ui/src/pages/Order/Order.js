@@ -4,14 +4,15 @@ import { NavLink, useParams } from "react-router-dom";
 import { mapToOrder } from "../../helpers/mapper";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import styles from "./Order.module.css"
+import useAuth from "../../hooks/useAuth";
 
 function Order(props) {
     const { id } = useParams();
     const [order, setOrder] = useState();
     const [loading, setLoading] = useState(true);
+    const [auth] = useAuth();
 
     const fetchOrder = async () => {
-        debugger;
         const response = await axios.get(`/sales-module/orders/${id}`);
         setOrder(mapToOrder(response.data));
         setLoading(false);
@@ -26,7 +27,11 @@ function Order(props) {
             {loading ? <LoadingIcon /> : (
                 <div className="pt-2">
                     <div className="mb-4">
-                        <button className="btn btn-primary me-2">Edycja</button>
+                        <NavLink className="btn btn-primary me-2"
+                                 to={`/orders/edit/${order.id}`} >Edycja</NavLink>
+                        {auth.claims.permissions.find(p => p === "item-sale") ?
+                            <button className="btn btn-primary me-2">Edycja Pozycji</button>
+                            : null }
                         <button className="btn btn-primary">Przedź do płatności</button>
                     </div>
                     <div className="table-responsive">
