@@ -1,0 +1,8 @@
+.image {
+    width: 15%;
+    min-width: 70px;
+    max-width: 100px;
+    height: 15%;
+    max-height: 100px;
+    min-height: 70px;
+}

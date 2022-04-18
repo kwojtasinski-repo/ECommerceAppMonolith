@@ -170,8 +170,8 @@ export const mapToOrder = (obj) => {
     const order = {
         id: obj.id,
         orderNumber: obj.orderNumber,
-        createOrderDate: obj.createOrderDate,
-        orderApprovedDate: obj.orderApprovedDate,
+        createOrderDate: new Date(obj.createOrderDate).toLocaleString(),
+        orderApprovedDate: obj.orderApprovedDate ? new Date(obj.orderApprovedDate).toLocaleString() : null,
         cost: obj.cost,
         customerId: obj.customerId,
         userId: obj.userId,
@@ -190,7 +190,7 @@ export const mapToPayments = (objects) => {
         const payment = {
             id: obj.id,
             paymentNumber: obj.paymentNumber,
-            paymentDate: obj.paymentDate,
+            paymentDate: new Date(obj.paymentDate).toLocaleString(),
             userId: obj.userId
         };
         payments.push(payment);
