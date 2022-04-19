@@ -42,34 +42,49 @@ function EditOrder(props) {
         setOrder(newOrder);
     }
 
+    const changeConcactData = async () => {
+        await axios.patch("/sales-module/orders/customer/change", {
+            orderId: order.id,
+            customerId: order.customerId
+        });
+    }
+
     return (
         <>
         {loading ? <LoadingIcon /> : (
             <div className="pt-2">
                 {order !== null ?
-                <div className="table-responsive">
-                    <h4>Zamówienie:</h4>
-                    <table className="table table-bordered">
-                        <thead className="table-dark">
-                            <tr>
-                                <th scope="col">Numer zamówienia</th>
-                                <th scope="col">Data zamówienia</th>
-                                <th scope="col">Data zatwierdzenia</th>
-                                <th scope="col">Koszt</th>
-                                <th scope="col">Opłacono</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr key = {order.id}>
-                                <td>{order.orderNumber}</td>
-                                <td>{order.createOrderDate}</td>
-                                <td>{order.orderApprovedDate}</td>
-                                <td>{order.cost}</td>
-                                <td>{order.paid}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <>
+                    <div>
+                        <button className="btn btn-warning" 
+                                onClick={changeConcactData}>
+                                    Zmień dane kontaktowe
+                        </button>
+                    </div>
+                    <div className="table-responsive mt-2">
+                        <h4>Zamówienie:</h4>
+                        <table className="table table-bordered">
+                            <thead className="table-dark">
+                                <tr>
+                                    <th scope="col">Numer zamówienia</th>
+                                    <th scope="col">Data zamówienia</th>
+                                    <th scope="col">Data zatwierdzenia</th>
+                                    <th scope="col">Koszt</th>
+                                    <th scope="col">Opłacono</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr key = {order.id}>
+                                    <td>{order.orderNumber}</td>
+                                    <td>{order.createOrderDate}</td>
+                                    <td>{order.orderApprovedDate}</td>
+                                    <td>{order.cost}</td>
+                                    <td>{order.paid}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </>
                 : null}
                 {customers.length > 0 ? 
                 <>

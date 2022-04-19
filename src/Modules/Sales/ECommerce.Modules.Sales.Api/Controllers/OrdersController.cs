@@ -74,6 +74,16 @@ namespace ECommerce.Modules.Sales.Api.Controllers
             return Ok();
         }
 
+        [HttpPatch("customer/change")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public async Task<ActionResult> ChangeCustomerAsync(ChangeCustomerInOrder command)
+        {
+            await _commandDispatcher.SendAsync(command);
+            return Ok();
+        }
+
         [HttpDelete("{orderId:guid}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]

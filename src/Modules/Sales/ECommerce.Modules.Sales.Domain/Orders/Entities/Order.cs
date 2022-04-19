@@ -167,6 +167,16 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             Currency = new Currency(currencyCode, rate);
         }
 
+        public void ChangeCustomer(Guid customerId)
+        {
+            if (Guid.Empty == customerId)
+            {
+                throw new CustomerCannotBeEmptyException();
+            }
+
+            CustomerId = customerId;
+        }
+
         private static void ValidateOrderNumber(string orderNumber)
         {
             if (string.IsNullOrWhiteSpace(orderNumber))
