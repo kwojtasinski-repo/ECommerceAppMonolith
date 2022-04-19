@@ -91,6 +91,30 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
             order.ShouldBeNull();
         }
 
+        [Fact]
+        public async Task given_valid_customer_id_should_update_order()
+        {
+            var order = await AddSampleOrder();
+            var customerId = Guid.NewGuid();
+            var request = new ChangeCustomerInOrder(order.Id, customerId);
+            Authenticate(_userId, _client);
+
+            var response = await _client.Request($"{Path}/customer/change").PatchJsonAsync(request);
+
+            var orderAfterUpdate = await _dbContext.Orders.Where(o => o.Id == order.Id).AsNoTracking().SingleOrDefaultAsync();
+            orderAfterUpdate.ShouldNotBeNull();
+            orderAfterUpdate.CustomerId.ShouldNotBe(order.CustomerId);
+            orderAfterUpdate.CustomerId.ShouldBe(customerId);
+        }
+
+        private async Task<Order> AddSampleOrder()
+        {
+            var order = new Order(Guid.NewGuid(), Guid.NewGuid().ToString("N"), Guid.NewGuid(), _userId, DateTime.UtcNow);
+            await _dbContext.Orders.AddAsync(order);
+            await _dbContext.SaveChangesAsync();
+            return order;
+        }
+
         private async Task<List<Domain.ItemSales.Entities.ItemSale>> AddSampleData()
         {
             var currentDateTime = DateTime.UtcNow;
