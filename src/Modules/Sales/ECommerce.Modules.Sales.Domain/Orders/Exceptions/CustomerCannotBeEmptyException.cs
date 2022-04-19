@@ -2,7 +2,7 @@
 
 namespace ECommerce.Modules.Sales.Domain.Orders.Exceptions
 {
-    internal class CustomerCannotBeEmptyException : ECommerceException
+    public class CustomerCannotBeEmptyException : ECommerceException
     {
         public CustomerCannotBeEmptyException() : base("Customer cannot be empty")
         {

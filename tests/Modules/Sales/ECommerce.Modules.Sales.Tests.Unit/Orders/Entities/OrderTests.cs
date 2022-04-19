@@ -104,5 +104,32 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Entities
             ((OrderItemNotFoundException)exception).OrderId.ShouldBe(expectedException.OrderId);
             ((OrderItemNotFoundException)exception).OrderItemId.ShouldBe(expectedException.OrderItemId);
         }
+
+        [Fact]
+        public void given_valid_customer_should_change()
+        {
+            var currency = Currency.Default();
+            var order = Order.Create(Guid.NewGuid(), "ORD", 1200M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
+            var customerId = Guid.NewGuid();
+            
+            order.ChangeCustomer(customerId);
+
+            order.CustomerId.ShouldBe(customerId);
+        }
+
+        [Fact]
+        public void given_invalid_customer_should_throw_an_exception()
+        {
+            var currency = Currency.Default();
+            var order = Order.Create(Guid.NewGuid(), "ORD", 1200M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
+            var customerId = Guid.Empty;
+            var expectedException = new CustomerCannotBeEmptyException();
+
+            var exception = Record.Exception(() => order.ChangeCustomer(customerId));
+
+            exception.ShouldNotBeNull();
+            exception.ShouldBeOfType(expectedException.GetType());
+            exception.Message.ShouldBe(expectedException.Message);
+        }
     }
 }
