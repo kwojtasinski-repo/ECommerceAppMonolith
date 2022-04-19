@@ -42,7 +42,10 @@ function Order(props) {
                         {auth.claims.permissions.find(p => p === "item-sale") ?
                             <button className="btn btn-primary me-2">Edycja Pozycji</button>
                             : null }
-                        <button className="btn btn-primary">Przedź do płatności</button>
+                        <NavLink className="btn btn-primary"
+                                 to={`/payments/add/${order.id}`}>
+                                     Przedź do płatności
+                        </NavLink>
                     </div>
                     <div className="table-responsive">
                         <h4>Zamówienie:</h4>
