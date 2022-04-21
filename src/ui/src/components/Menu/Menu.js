@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import ReducerContext from '../../context/ReducerContext';
 import useAuth from '../../hooks/useAuth';
@@ -7,6 +7,7 @@ import useNotification from '../../hooks/useNotification';
 import { Color } from '../Notification/Notification';
 import ItemCart from '../UI/ItemCart/ItemCart';
 import style from './Menu.module.css';
+import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 
 function Menu() {
     const [auth, setAuth] = useAuth();
@@ -56,7 +57,19 @@ function Menu() {
                                 <Link to="/currencies" className={`${style.menuItem}`}>Waluty</Link>
                             </li>
                             : null
-                        }
+                        }<Nav className={style.menuItem}>
+                            <NavDropdown
+                                id="nav-dropdown-dark-example"
+                                title="Zamówienia"
+                                >
+                                    <Nav.Link as={Link} to="/cart/summary" className={`${style.menuItem}`}>
+                                        Niezrealizowane zamówienie
+                                    </Nav.Link>
+                                    <Nav.Link as={Link} to="" className={`${style.menuItem}`}>
+                                        Moje zamówienia
+                                    </Nav.Link>
+                            </NavDropdown>
+                        </Nav>
                     </> : (<>
                                 <li className={style.menuItem}>
                                     <Link to="/register" className={`${style.menuItem}`} >Zarejestruj</Link>

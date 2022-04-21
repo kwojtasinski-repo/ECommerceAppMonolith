@@ -1,18 +1,31 @@
 import axios from "../../axios-setup";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { mapToOrder } from "../../helpers/mapper";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
+import useNotification from "../../hooks/useNotification";
+import { Color } from "../../components/Notification/Notification";
 
 function AddPayment(props) {
     const { id } = useParams();
     const [order, setOrder] = useState();
     const [loading, setLoading] = useState(true);
+    const [notifications, addNotification] = useNotification();
+    const navigate = useNavigate();
 
     const fetchOrder = async () => {
         const response = await axios.get(`/sales-module/orders/${id}`);
         setOrder(mapToOrder(response.data));
         setLoading(false);
+    }
+
+    const clickHandler = async () => {
+        await axios.post('/sales-module/payments', {
+            orderId: order.id
+        });
+        const notification = { color: Color.success, id: new Date().getTime(), text: 'Opłacono zamówienie', timeToClose: 5000 };
+        addNotification(notification);
+        navigate(`/orders/${order.id}`);
     }
 
     useEffect(() => {
@@ -51,7 +64,10 @@ function AddPayment(props) {
                                 </table>
                             </div>
                             <div className="text-center mb-5">
-                                <button className="btn btn-success text">Opłać</button>
+                                <button className="btn btn-success text"
+                                        onClick={clickHandler}>
+                                            Zapłać
+                                </button>
                             </div>
                         </div>
                 )}

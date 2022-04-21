@@ -11,6 +11,7 @@
 
 .menuItem a {
     color: #206199;
+    text-decoration: underline;
 }
 
 .menuItemActive {
@@ -19,4 +20,15 @@
 
 .onHover {
     filter: brightness(150%);
+}
+
+.linkButton {
+    color: #206199;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    display: inline;
+    margin: 0;
+    padding: 0;
 }

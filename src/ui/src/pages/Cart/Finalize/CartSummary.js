@@ -37,64 +37,68 @@ function CartSummary(props) {
     }, [])
 
     return loading ? <LoadingIcon /> : (
-        <div className={styles.cart}>
-            <div className={styles.title} >
-                Podsumowanie
-            </div>
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Nazwa</th>
-                        <th scope="col">Koszt</th>
-                        <th scope="col">Utworzono</th>
-                        <th scope="col">Szczegóły</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {items ? (items.map(i => (
-                    <tr key = {i.id} >
-                        <th scope="row"><img className={styles.image} src={i.images.find(i => true)} alt="" /></th>
-                        <td>{i.itemName}</td>
-                        <td>{i.cost} {i.code}</td>
-                        <td>{i.created}</td>
-                        <td>
-                            <NavLink to = {`/archive/items/${i.id}`}>
-                                <button className="btn btn-primary">Przejdź do szczegółów</button>
-                            </NavLink>
-                            <button className="btn btn-danger ms-2"
-                                    onClick={() => removeItemHandler(i.id)} >
-                                    Usuń
-                            </button>
-                        </td>
-                    </tr> ))) : <></>}        
-                </tbody>
-            </table>
-            {items ? (
-                <div>
-                    <table className="table w-25" style={{marginLeft: 'auto', marginRight: '0'}}>
-                        <thead>
-                            <tr>
-                                <th>Razem: </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr key = {new Date().getTime()}>
-                                <td>{calculateCost(items)} PLN</td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <>
+        {items && items.length > 0 ? 
+            <div className={styles.cart}>
+                <div className={styles.title} >
+                    Podsumowanie
                 </div>
-                ) : <></>
-            }
-            <div>
-                <NavLink to = '/orders/add' >
-                    <button className="btn btn-success mt-2 float-end" >
-                            Realizuj zamówienie
-                    </button>
-                </NavLink>
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nazwa</th>
+                            <th scope="col">Koszt</th>
+                            <th scope="col">Utworzono</th>
+                            <th scope="col">Szczegóły</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {items ? (items.map(i => (
+                        <tr key = {i.id} >
+                            <th scope="row"><img className={styles.image} src={i.images.find(i => true)} alt="" /></th>
+                            <td>{i.itemName}</td>
+                            <td>{i.cost} {i.code}</td>
+                            <td>{i.created}</td>
+                            <td>
+                                <NavLink to = {`/archive/items/${i.id}`}>
+                                    <button className="btn btn-primary">Przejdź do szczegółów</button>
+                                </NavLink>
+                                <button className="btn btn-danger ms-2"
+                                        onClick={() => removeItemHandler(i.id)} >
+                                        Usuń
+                                </button>
+                            </td>
+                        </tr> ))) : <></>}        
+                    </tbody>
+                </table>
+                {items ? (
+                    <div>
+                        <table className="table w-25" style={{marginLeft: 'auto', marginRight: '0'}}>
+                            <thead>
+                                <tr>
+                                    <th>Razem: </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr key = {new Date().getTime()}>
+                                    <td>{calculateCost(items)} PLN</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    ) : <></>
+                }
+                <div>
+                    <NavLink to = '/orders/add' >
+                        <button className="btn btn-success mt-2 float-end" >
+                                Realizuj zamówienie
+                        </button>
+                    </NavLink>
+                </div>
             </div>
-        </div>
+        :  <h4>Aktualnie nie masz żadnych przedmiotów w trakcie realizacji zamówienia</h4>}
+        </> 
     )
 }
 

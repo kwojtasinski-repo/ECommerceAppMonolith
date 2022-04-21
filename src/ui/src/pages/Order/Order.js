@@ -29,7 +29,9 @@ function Order(props) {
     }, [])
 
     useEffect(() => {
-        fetchCustomer();
+        if(order !== null) {
+            fetchCustomer();
+        }
     }, [order]);
 
     return (
@@ -37,15 +39,19 @@ function Order(props) {
             {loading ? <LoadingIcon /> : (
                 <div className="pt-2">
                     <div className="mb-4">
-                        <NavLink className="btn btn-primary me-2"
-                                 to={`/orders/edit/${order.id}`} >Edycja</NavLink>
-                        {auth.claims.permissions.find(p => p === "item-sale") ?
-                            <button className="btn btn-primary me-2">Edycja Pozycji</button>
-                            : null }
-                        <NavLink className="btn btn-primary"
-                                 to={`/payments/add/${order.id}`}>
-                                     Przedź do płatności
-                        </NavLink>
+                        {!order.paid ? (
+                        <>
+                            <NavLink className="btn btn-primary me-2"
+                                    to={`/orders/edit/${order.id}`} >Edycja</NavLink>
+                            {auth.claims.permissions.find(p => p === "item-sale") ?
+                                <button className="btn btn-primary me-2">Edycja Pozycji</button>
+                                : null }
+                            <NavLink className="btn btn-primary"
+                                    to={`/payments/add/${order.id}`}>
+                                        Przedź do płatności
+                            </NavLink>
+                        </>
+                        ) : null}
                     </div>
                     <div className="table-responsive">
                         <h4>Zamówienie:</h4>
@@ -65,7 +71,9 @@ function Order(props) {
                                     <td>{order.createOrderDate}</td>
                                     <td>{order.orderApprovedDate}</td>
                                     <td>{order.cost}</td>
-                                    <td>{order.paid}</td>
+                                    <td>{order.paid ? "Tak"
+                                            : "Nie"}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
