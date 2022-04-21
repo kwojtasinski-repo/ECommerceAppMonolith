@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import ReducerContext from '../../context/ReducerContext';
 import useAuth from '../../hooks/useAuth';
@@ -7,7 +7,7 @@ import useNotification from '../../hooks/useNotification';
 import { Color } from '../Notification/Notification';
 import ItemCart from '../UI/ItemCart/ItemCart';
 import style from './Menu.module.css';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import { Nav, NavDropdown } from 'react-bootstrap';
 
 function Menu() {
     const [auth, setAuth] = useAuth();
