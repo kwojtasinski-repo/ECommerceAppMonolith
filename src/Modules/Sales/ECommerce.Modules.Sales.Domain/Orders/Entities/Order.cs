@@ -177,6 +177,16 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             CustomerId = customerId;
         }
 
+        public void SetOrderApprovedDate(DateTime orderApprovedDate)
+        {
+            if (orderApprovedDate < CreateOrderDate)
+            {
+                throw new OrderApprovedDateCannotBeLessThanCreateOrderDateException(orderApprovedDate, CreateOrderDate);
+            }
+
+            OrderApprovedDate = orderApprovedDate;
+        }
+
         private static void ValidateOrderNumber(string orderNumber)
         {
             if (string.IsNullOrWhiteSpace(orderNumber))

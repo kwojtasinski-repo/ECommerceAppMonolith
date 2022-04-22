@@ -18,7 +18,9 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Mappings
                 OrderApprovedDate = order.OrderApprovedDate,
                 CustomerId = order.CustomerId,
                 Paid = order.Paid,
-                UserId = order.UserId
+                UserId = order.UserId,
+                Code = order.Currency.CurrencyCode,
+                Rate = order.Currency.Rate
             };
             return dto;
         }
@@ -35,6 +37,8 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Mappings
                 OrderNumber = order.OrderNumber,
                 Paid = order.Paid,
                 UserId = order.UserId,
+                Code = order.Currency.CurrencyCode,
+                Rate = order.Currency.Rate,
                 OrderItems = order.OrderItems.Select(oi => oi.AsDto()),
                 Payments = order.Payments?.Select(p => p.AsDto())
             };

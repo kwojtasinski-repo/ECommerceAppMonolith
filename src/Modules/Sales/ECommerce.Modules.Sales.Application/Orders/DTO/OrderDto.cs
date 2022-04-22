@@ -10,5 +10,7 @@
         public Guid CustomerId { get; set; }
         public Guid UserId { get; set; }
         public bool Paid { get; set; }
+        public string Code { get; set; }
+        public decimal Rate { get; set; }
     }
 }

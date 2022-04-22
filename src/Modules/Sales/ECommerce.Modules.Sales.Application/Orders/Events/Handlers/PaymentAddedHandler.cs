@@ -1,16 +1,19 @@
 ﻿using ECommerce.Modules.Sales.Application.Payments.Events;
 using ECommerce.Modules.Sales.Domain.Orders.Repositories;
 using ECommerce.Shared.Abstractions.Events;
+using ECommerce.Shared.Abstractions.Time;
 
 namespace ECommerce.Modules.Sales.Application.Orders.Events.Handlers
 {
     internal class PaymentAddedHandler : IEventHandler<PaymentAdded>
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IClock _clock;
 
-        public PaymentAddedHandler(IOrderRepository orderRepository)
+        public PaymentAddedHandler(IOrderRepository orderRepository, IClock clock)
         {
             _orderRepository = orderRepository;
+            _clock = clock;
         }
 
         public async Task HandleAsync(PaymentAdded @event)
@@ -23,6 +26,7 @@ namespace ECommerce.Modules.Sales.Application.Orders.Events.Handlers
             }
 
             order.MarkAsPaid();
+            order.SetOrderApprovedDate(_clock.CurrentDate());
             await _orderRepository.UpdateAsync(order);
         }
     }
