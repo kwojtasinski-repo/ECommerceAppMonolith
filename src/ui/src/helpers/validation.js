@@ -83,6 +83,10 @@ export function mapToMessage(code, status) {
         return "Brak dostępu do zasobu";
     }
 
+    if (status == 404) {
+        return "Nie znaleziono";
+    }
+
     if (status == 400) {
         switch(code) {
             case 'invalid_password' : 

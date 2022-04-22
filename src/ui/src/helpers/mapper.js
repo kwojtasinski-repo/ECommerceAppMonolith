@@ -176,11 +176,35 @@ export const mapToOrder = (obj) => {
         customerId: obj.customerId,
         userId: obj.userId,
         paid: obj.paid,
+        code: obj.currencyCode,
+        rate: obj.rate,
         orderItems: mapToOrderItems(obj.orderItems),
         payments: mapToPayments(obj.payments)
     };
 
     return order;
+}
+
+export const mapToOrders = (objects) => {
+    const orders = [];
+    
+    for(const obj of objects) {
+        const order = {
+            id: obj.id,
+            orderNumber: obj.orderNumber,
+            createOrderDate: new Date(obj.createOrderDate).toLocaleString(),
+            orderApprovedDate: obj.orderApprovedDate ? new Date(obj.orderApprovedDate).toLocaleString() : null,
+            cost: obj.cost,
+            customerId: obj.customerId,
+            userId: obj.userId,
+            paid: obj.paid,
+            code: obj.code,
+            rate: obj.rate
+        }
+        orders.push(order);
+    }
+
+    return orders;
 }
 
 export const mapToPayments = (objects) => {

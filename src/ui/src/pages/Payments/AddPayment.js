@@ -51,6 +51,8 @@ function AddPayment(props) {
                                             <th scope="col">Data zamówienia</th>
                                             <th scope="col">Data zatwierdzenia</th>
                                             <th scope="col">Koszt</th>
+                                            <th scope="col">Kod waluty</th>
+                                            <th scope="col">Kurs</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -59,9 +61,13 @@ function AddPayment(props) {
                                             <td>{order.createOrderDate}</td>
                                             <td>{order.orderApprovedDate}</td>
                                             <td>{order.cost}</td>
+                                            <td>{order.code}</td>
+                                            <td>{order.rate}</td>
                                         </tr>
                                     </tbody>
                                 </table>
+                            </div>
+                            <div>
                             </div>
                             <div className="text-center mb-5">
                                 <button className="btn btn-success text"

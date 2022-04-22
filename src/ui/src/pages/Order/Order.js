@@ -5,6 +5,7 @@ import { mapToCustomer, mapToOrder } from "../../helpers/mapper";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import styles from "./Order.module.css"
 import useAuth from "../../hooks/useAuth";
+import { mapToMessage } from "../../helpers/validation";
 
 function Order(props) {
     const { id } = useParams();
@@ -12,16 +13,40 @@ function Order(props) {
     const [loading, setLoading] = useState(true);
     const [auth] = useAuth();
     const [customer, setCustomer] = useState();
+    const [paymentDisabled, setPaymentDisabled] = useState(true);
+    const [error, setError] = useState('');
 
     const fetchOrder = async () => {
-        const response = await axios.get(`/sales-module/orders/${id}`);
-        setOrder(mapToOrder(response.data));
+        try {
+            const response = await axios.get(`/sales-module/orders/${id}`);
+            setOrder(mapToOrder(response.data));
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = 'Zamówienie: ';
+            const status = exception.response.status;
+            const error = exception.response.data.errors;
+            errorMessage += mapToMessage(error, status);
+            setError(errorMessage);
+        }
         setLoading(false);
     }
 
     const fetchCustomer = async () => {
-        const response = await axios.get(`/contacts-module/customers/${order.customerId}`);
-        setCustomer(mapToCustomer(response.data));
+        try {
+            const response = await axios.get(`/contacts-module/customers/${order.customerId}`);
+            setCustomer(mapToCustomer(response.data));
+            setPaymentDisabled(false);
+        } catch (exception) {
+            console.log(exception);
+            if (exception.response) {
+                let errorMessage = 'Dane kontaktu: ';
+                const status = exception.response.status;
+                const error = exception.response.data.errors;
+                errorMessage += mapToMessage(error, status);
+                setError(errorMessage);
+            }
+            setPaymentDisabled(true);
+        }
     }
 
     useEffect(() => {
@@ -39,6 +64,11 @@ function Order(props) {
             {loading ? <LoadingIcon /> : (
                 <div className="pt-2">
                     <div className="mb-4">
+                        {error ? (
+                            <div className="alert alert-danger">
+                                {error}
+                            </div>
+                        ) : null}
                         {!order.paid ? (
                         <>
                             <NavLink className="btn btn-primary me-2"
@@ -46,8 +76,8 @@ function Order(props) {
                             {auth.claims.permissions.find(p => p === "item-sale") ?
                                 <button className="btn btn-primary me-2">Edycja Pozycji</button>
                                 : null }
-                            <NavLink className="btn btn-primary"
-                                    to={`/payments/add/${order.id}`}>
+                            <NavLink className={ paymentDisabled ? "btn btn-primary disabled" : "btn btn-primary"}
+                                    to={`/payments/add/${order.id}`} >
                                         Przedź do płatności
                             </NavLink>
                         </>
@@ -62,6 +92,8 @@ function Order(props) {
                                     <th scope="col">Data zamówienia</th>
                                     <th scope="col">Data zatwierdzenia</th>
                                     <th scope="col">Koszt</th>
+                                    <th scope="col">Waluta</th>
+                                    <th scope="col">Kurs</th>
                                     <th scope="col">Opłacono</th>
                                 </tr>
                             </thead>
@@ -71,6 +103,8 @@ function Order(props) {
                                     <td>{order.createOrderDate}</td>
                                     <td>{order.orderApprovedDate}</td>
                                     <td>{order.cost}</td>
+                                    <td>{order.code}</td>
+                                    <td>{order.rate}</td>
                                     <td>{order.paid ? "Tak"
                                             : "Nie"}
                                     </td>

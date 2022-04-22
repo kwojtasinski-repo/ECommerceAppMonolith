@@ -65,7 +65,7 @@ function Menu() {
                                     <Nav.Link as={Link} to="/cart/summary" className={`${style.menuItem}`}>
                                         Niezrealizowane zamówienie
                                     </Nav.Link>
-                                    <Nav.Link as={Link} to="" className={`${style.menuItem}`}>
+                                    <Nav.Link as={Link} to="/orders" className={`${style.menuItem}`}>
                                         Moje zamówienia
                                     </Nav.Link>
                             </NavDropdown>

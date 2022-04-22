@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { mapToCustomers, mapToOrder } from "../../../helpers/mapper";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
+import { mapToMessage } from "../../../helpers/validation";
 
 function EditOrder(props) {
     const { id } =  useParams();
@@ -10,15 +11,34 @@ function EditOrder(props) {
     const [loading, setLoading] = useState(true);
     const [customers, setCustomers] = useState([]);
     const [customer, setCustomer] = useState(null);
+    const [error, setError] = useState('');
 
     const fetchOrder = async () => {
-        const response = await axios.get(`/sales-module/orders/${id}`);
-        setOrder(mapToOrder(response.data));
+        try {
+            const response = await axios.get(`/sales-module/orders/${id}`);
+            setOrder(mapToOrder(response.data));
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = 'Zamówienia: ';
+            const status = exception.response.status;
+            const error = exception.response.data.errors;
+            errorMessage += mapToMessage(error, status);
+            setError(errorMessage);
+        }
     }
 
     const fetchContacts = async () => {
-        const response = await axios.get("/contacts-module/customers/me");
+        try {
+            const response = await axios.get("/contacts-module/customers/me");
         setCustomers(mapToCustomers(response.data));
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = 'Dane kontaktowe: ';
+            const status = exception.response.status;
+            const error = exception.response.data.errors;
+            errorMessage += mapToMessage(error, status);
+            setError(errorMessage);
+        }
     }
 
     const fetchData = async () => {
@@ -43,16 +63,35 @@ function EditOrder(props) {
     }
 
     const changeConcactData = async () => {
-        await axios.patch("/sales-module/orders/customer/change", {
-            orderId: order.id,
-            customerId: order.customerId
-        });
+        try {
+            await axios.patch("/sales-module/orders/customer/change", {
+                orderId: order.id,
+                customerId: order.customerId
+            });
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            
+            for(const errMsg in errors) {
+                errorMessage += mapToMessage(errors[errMsg].code, status);
+            }
+            
+            setError(errorMessage);
+            setLoading(false);
+        }
     }
 
     return (
         <>
         {loading ? <LoadingIcon /> : (
             <div className="pt-2">
+                {error ? (
+                            <div className="alert alert-danger">
+                                {error}
+                            </div>
+                        ) : null}
                 {order !== null ?
                 <>
                     <div>
@@ -70,6 +109,8 @@ function EditOrder(props) {
                                     <th scope="col">Data zamówienia</th>
                                     <th scope="col">Data zatwierdzenia</th>
                                     <th scope="col">Koszt</th>
+                                    <th scope="col">Waluta</th>
+                                    <th scope="col">Kurs</th>
                                     <th scope="col">Opłacono</th>
                                 </tr>
                             </thead>
@@ -79,7 +120,11 @@ function EditOrder(props) {
                                     <td>{order.createOrderDate}</td>
                                     <td>{order.orderApprovedDate}</td>
                                     <td>{order.cost}</td>
-                                    <td>{order.paid}</td>
+                                    <td>{order.code}</td>
+                                    <td>{order.rate}</td>
+                                    <td>{order.paid ? "Tak"
+                                            : "Nie"}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
