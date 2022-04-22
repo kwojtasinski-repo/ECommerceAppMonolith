@@ -176,7 +176,7 @@ export const mapToOrder = (obj) => {
         customerId: obj.customerId,
         userId: obj.userId,
         paid: obj.paid,
-        code: obj.currencyCode,
+        code: obj.code,
         rate: obj.rate,
         orderItems: mapToOrderItems(obj.orderItems),
         payments: mapToPayments(obj.payments)
@@ -187,7 +187,7 @@ export const mapToOrder = (obj) => {
 
 export const mapToOrders = (objects) => {
     const orders = [];
-    
+
     for(const obj of objects) {
         const order = {
             id: obj.id,

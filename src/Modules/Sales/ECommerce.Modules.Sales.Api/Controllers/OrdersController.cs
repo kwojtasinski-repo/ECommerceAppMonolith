@@ -84,6 +84,16 @@ namespace ECommerce.Modules.Sales.Api.Controllers
             return Ok();
         }
 
+        [HttpPatch("currency/change")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public async Task<ActionResult> ChangeCurrencyAsync(ChangeCurrencyInOrder command)
+        {
+            await _commandDispatcher.SendAsync(command);
+            return Ok();
+        }
+
         [HttpDelete("{orderId:guid}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
