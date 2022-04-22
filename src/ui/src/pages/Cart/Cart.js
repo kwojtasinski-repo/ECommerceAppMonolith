@@ -13,6 +13,7 @@ function Cart(props) {
     const disabledButton = items.length > 0 ? false : true;
     const navigate = useNavigate();
     const context = useContext(ReducerContext);
+    const [error, setError] = useState('');
 
     const summaryHandler = async () => {
         setLoading(true);
@@ -39,6 +40,7 @@ function Cart(props) {
             }
 
             console.log(errorMessage);
+            setError(errorMessage);
             setLoading(false);
         }
     }
@@ -67,6 +69,9 @@ function Cart(props) {
             <div className={styles.title} >
                 Koszyk
             </div>
+            {error ? (
+                <div className="alert alert-danger">{error}</div>
+            ) : null}
             <table className="table">
                 <thead>
                     <tr>

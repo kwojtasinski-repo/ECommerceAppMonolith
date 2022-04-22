@@ -6,17 +6,28 @@ import Gallery from "../../components/Gallery/Gallery";
 import { mapToItem } from "../../helpers/mapper";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import useWebsiteTitle from "../../hooks/useWebsiteTitle";
+import { mapToMessage } from "../../helpers/validation";
 
 function Item(props) {
     const { id } = useParams();
     const [item, setItem] = useState(null);
     const [loading, setLoading] = useState(true);
     const setTitle = useWebsiteTitle();
+    const [error, setError] = useState('');
 
     const fetchItem = async () => {
-        const response = await axios.get(`/items-module/item-sales/${id}`);
-        setItem(mapToItem(response.data));
-        setTitle(`Przedmiot - ${response.data.item.itemName}`);
+        try {
+            const response = await axios.get(`/items-module/item-sales/${id}`);
+            setItem(mapToItem(response.data));
+            setTitle(`Przedmiot - ${response.data.item.itemName}`);
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            errorMessage += mapToMessage(errors, status);            
+            setError(errorMessage);
+        }
         setLoading(false);
     }
 
@@ -29,6 +40,9 @@ function Item(props) {
             {loading ? <LoadingIcon /> : (
                 <div className={`card ${styles.item}`}>
                     <div className="card-body">
+                        {error ? (
+                            <div className="alert alert-danger">{error}</div>
+                        ) : null}
                         <div className="row">
                             <div className="col-4">
                                 <img src={item.imagesUrl.find(im => im.mainImage).url} alt=""

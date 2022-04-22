@@ -29,8 +29,17 @@ function Contacts(props) {
     }
 
     const fetchContacts = async () => {
-        const response = await axios.get("/contacts-module/customers/me");
-        setCustomers(mapToCustomers(response.data));
+        try {
+            const response = await axios.get("/contacts-module/customers/me");
+            setCustomers(mapToCustomers(response.data));
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            errorMessage += mapToMessage(errors.code, status);
+            setError(errorMessage);
+        }
         setLoading(false);
     }
 
@@ -89,7 +98,11 @@ function Contacts(props) {
                                           <p>Czy chcesz usunąć kontakt?</p>
                                       </>}
                     /> }
-
+                    {error ? (
+                        <div className="alert alert-danger">
+                            {error}
+                        </div>
+                    ) : null}
                     <div className="mt-2">
                         <Outlet context={{ addAction }}/>
                     </div>

@@ -3,25 +3,45 @@ import { useState } from "react";
 import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
 import Contacts from "../Contact/Contacts";
 import { useNavigate } from "react-router-dom";
+import { mapToMessage } from "../../../helpers/validation";
 
 function AddOrder(props) {
     const [customer, setCustomer] = useState(null);
     const disabledButton = customer === null;
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const submit = async () => {
         setLoading(true);
-        const response = await axios.post('/sales-module/orders', {
-            customerId: customer.id, 
-            currencyCode: "PLN"
-        });        
-        const id = response.headers.location.split('/sales-module/orders/')[1];
-        navigate(`/orders/${id}`);
+        try {
+            const response = await axios.post('/sales-module/orders', {
+                customerId: customer.id, 
+                currencyCode: "PLN"
+            });        
+            const id = response.headers.location.split('/sales-module/orders/')[1];
+            navigate(`/orders/${id}`);
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            
+            for(const errMsg in errors) {
+                errorMessage += mapToMessage(errors[errMsg].code, status);
+            }
+            setError(errorMessage);
+            setLoading(false);
+        }
     }
     
     return (
         <div>
+            {error ? (
+                <div className="alert alert-danger">
+                    {error}
+                </div>
+            ) : null}
             <div>
                 <h5>
                     {customer !== null ? `Wybrano: ${customer.firstName} ${customer.lastName} ${customer.companyName ? customer.companyName : ""}` : "Wybierz kontakt lub dodaj nowy:"}

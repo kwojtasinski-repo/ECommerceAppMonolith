@@ -28,8 +28,18 @@ function ContactData(props) {
     }
 
     const fetchContacts = async () => {
-        const response = await axios.get("/contacts-module/customers/me");
-        setCustomers(mapToCustomers(response.data));
+        try {
+            const response = await axios.get("/contacts-module/customers/me");
+            setCustomers(mapToCustomers(response.data));
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            errorMessage += mapToMessage(errors, status);
+            setError(errorMessage);
+        }
+
         setLoading(false);
     }
 

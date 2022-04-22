@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { validate } from "../../helpers/validation";
+import { mapToMessage, validate } from "../../helpers/validation";
 import Input from "../../components/Input/Input";
 import LoadingButton from "../../components/UI/LoadingButton/LoadingButton";
 import { NavLink } from "react-router-dom";
 
 function CurrencyForm(props) {
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const [form, setForm] = useState({
         id: {
@@ -34,8 +35,17 @@ function CurrencyForm(props) {
                 code: form.code.value,
                 description: form.description.value
             });
-        } catch (ex) {
-            console.log(ex.response);
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            
+            for(const errMsg in errors) {
+                errorMessage += mapToMessage(errors[errMsg].code, status);
+            }
+            
+            setError(errorMessage);
         }
 
         setLoading(false);
@@ -64,6 +74,10 @@ function CurrencyForm(props) {
     }, [props.currency]);
 
     return (
+        <>
+        {error ? (
+            <div className="alert alert-danger">{error}</div>
+        ) : null}
         <form onSubmit={submit} >
             <Input label = "Kod waluty"
                     type = "text"
@@ -88,6 +102,7 @@ function CurrencyForm(props) {
                 </LoadingButton>
             </div>
         </form>
+        </>
     )
 }
 

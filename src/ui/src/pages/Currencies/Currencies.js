@@ -15,8 +15,18 @@ function Currencies(props) {
     const [error, setError] = useState('');
 
     const getCurrencies = async () => {
-        const response = await axios.get("/currencies-module/currencies");
-        setCurrencies(mapToCurrencies(response.data));
+        try {
+            const response = await axios.get("/currencies-module/currencies");
+            setCurrencies(mapToCurrencies(response.data));
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            errorMessage += mapToMessage(errors, status);
+            setError(errorMessage);
+        }
+
         setLoading(false);
     }
 

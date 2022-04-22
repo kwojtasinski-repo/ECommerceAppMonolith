@@ -4,22 +4,46 @@ import styles from './CartSummary.module.css'
 import axios from "../../../axios-setup";
 import { mapToOrderItems } from "../../../helpers/mapper";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
+import { mapToMessage } from "../../../helpers/validation";
 
 function CartSummary(props) {
     const [items, setItems] = useState(null);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
 
     const fetchCart = async () => {
-        const response = await axios.get('sales-module/cart/me');
-        const orderItems = mapToOrderItems(response.data);
-        setItems(orderItems);
+        try {
+            const response = await axios.get('sales-module/cart/me');
+            const orderItems = mapToOrderItems(response.data);
+            setItems(orderItems);
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            errorMessage += mapToMessage(errors, status);
+            setError(errorMessage);
+        }
         setLoading(false);
     }
 
     const removeItemHandler = async (id) => {
-        await axios.delete(`sales-module/order-items/${id}`);
-        navigate(0); // refresh page
+        try {
+            await axios.delete(`sales-module/order-items/${id}`);
+            navigate(0); // refresh page
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            
+            for(const errMsg in errors) {
+                errorMessage += mapToMessage(errors[errMsg].code, status);
+            }
+            
+            setError(errorMessage);
+        }
     }
 
     const calculateCost = (items) => {
@@ -43,6 +67,9 @@ function CartSummary(props) {
                 <div className={styles.title} >
                     Podsumowanie
                 </div>
+                {error ? (
+                    <div className="alert alert-danger">{error}</div>
+                ) : null}
                 <table className="table">
                     <thead>
                         <tr>

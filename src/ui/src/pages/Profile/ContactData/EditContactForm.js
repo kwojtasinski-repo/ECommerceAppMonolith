@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import axios from "../../../axios-setup";
 import { mapToCustomer } from "../../../helpers/mapper";
+import { mapToMessage } from "../../../helpers/validation";
 import ContactForm from "./ContactForm";
 
 function EditContactForm(props) {
@@ -9,20 +10,43 @@ function EditContactForm(props) {
     const [contact, setContact] = useState(null);
     const navigate = useNavigate();
     const { addAction } = useOutletContext();
+    const [error, setError] = useState('');
 
     const fetchCustomer = async () => {
-        const response = await axios.get(`/contacts-module/customers/${id}`);
-        let customer = mapToCustomer(response.data);
-        const address = {...customer.address};
-        delete customer.address;
-        setContact({ customer, address });
+        try {
+            const response = await axios.get(`/contacts-module/customers/${id}`);
+            let customer = mapToCustomer(response.data);
+            const address = {...customer.address};
+            delete customer.address;
+            setContact({ customer, address });
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            errorMessage += mapToMessage(errors, status);
+            setError(errorMessage);
+        }
     }
     
     const submit = async (form) => {
-        await axios.put('/contacts-module/customers', form.customer);
-        await axios.put('/contacts-module/addresses', form.address);
-        addAction('editContact');
-        navigate(props.navigateAfterSend);
+        try {
+            await axios.put('/contacts-module/customers', form.customer);
+            await axios.put('/contacts-module/addresses', form.address);
+            addAction('editContact');
+            navigate(props.navigateAfterSend);
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            
+            for(const errMsg in errors) {
+                errorMessage += mapToMessage(errors[errMsg].code, status);
+            }
+            
+            setError(errorMessage);
+        }
     }
 
     useEffect(() => {
@@ -34,6 +58,11 @@ function EditContactForm(props) {
             <div className="card-header">
                 Edytuj dane osobowe
             </div>
+            {error ? (
+                <div className="alert alert-danger">
+                    {error}
+                </div>
+            ) : null}
             <div className="card-body">
                 <ContactForm
                     contact = {contact}
