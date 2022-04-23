@@ -1,6 +1,6 @@
 import axios from "../../axios-setup";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import { mapToOrder } from "../../helpers/mapper";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import useNotification from "../../hooks/useNotification";
@@ -12,6 +12,7 @@ function AddPayment(props) {
     const [loading, setLoading] = useState(true);
     const [notifications, addNotification] = useNotification();
     const navigate = useNavigate();
+    const [action, setAction] = useState('');
 
     const fetchOrder = async () => {
         const response = await axios.get(`/sales-module/orders/${id}`);
@@ -30,7 +31,7 @@ function AddPayment(props) {
 
     useEffect(() => {
         fetchOrder();
-    }, []);
+    }, [action]);
 
     return (
         <>
@@ -68,13 +69,21 @@ function AddPayment(props) {
                                 </table>
                             </div>
                             <div>
-                                
+                                <Outlet context={{
+                                    orderId: order.id,
+                                    code: order.code,
+                                    setAction: setAction
+                                }}/>
                             </div>
                             <div className="text-center mb-5">
                                 <button className="btn btn-success text"
                                         onClick={clickHandler}>
                                             Zapłać
                                 </button>
+                                <NavLink to='change-currency'
+                                    className="btn btn-primary ms-2" >
+                                    Zmień walutę
+                                </NavLink>
                             </div>
                         </div>
                 )}

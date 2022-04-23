@@ -42,6 +42,7 @@ import Order from './pages/Order/Order';
 import EditOrder from './pages/Order/EditOrder/EditOrder';
 import AddPayment from './pages/Payments/AddPayment';
 import MyOrders from './pages/Order/MyOrders/MyOrders';
+import ChangeCurrency from './pages/Payments/ChangeCurrency/ChangeCurrency';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -68,7 +69,9 @@ function App() {
   const content = (
     <Suspense fallback={<p>Ładowanie...</p>} >
       <Routes>
-        <Route path='/payments/add/:id' element = { <RequireAuth> <AddPayment /> </RequireAuth> } />
+        <Route path='/payments/add/:id' element = { <RequireAuth> <AddPayment /> </RequireAuth> } >
+          <Route path='change-currency' element = { <RequireAuth> <ChangeCurrency/> </RequireAuth> } />
+        </Route>
         <Route path='/orders/add' element = { <RequireAuth> <AddOrder /> </RequireAuth> } >
           <Route path='add-contact' element = {<RequireAuth><AddOrderContact /></RequireAuth>} />
           <Route path='edit-contact/:id' element = {<RequireAuth><EditOrderContact /></RequireAuth>} />
