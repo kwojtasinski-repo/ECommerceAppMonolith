@@ -68,6 +68,7 @@ function AddPayment(props) {
                                 </table>
                             </div>
                             <div>
+                                
                             </div>
                             <div className="text-center mb-5">
                                 <button className="btn btn-success text"

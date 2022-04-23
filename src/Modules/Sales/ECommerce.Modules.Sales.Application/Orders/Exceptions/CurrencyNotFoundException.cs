@@ -2,7 +2,7 @@
 
 namespace ECommerce.Modules.Sales.Application.Orders.Exceptions
 {
-    internal class CurrencyNotFoundException : ECommerceException
+    public class CurrencyNotFoundException : ECommerceException
     {
         public string CurrencyCode { get; }
 

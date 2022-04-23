@@ -131,5 +131,34 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Entities
             exception.ShouldBeOfType(expectedException.GetType());
             exception.Message.ShouldBe(expectedException.Message);
         }
+
+        [Fact]
+        public void given_valid_approved_date_should_change()
+        {
+            var currency = Currency.Default();
+            var order = Order.Create(Guid.NewGuid(), "ORD", 1200M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
+            var date = DateTime.UtcNow.AddMinutes(10);
+
+            order.SetOrderApprovedDate(date);
+
+            order.OrderApprovedDate.ShouldNotBeNull();
+            order.OrderApprovedDate.ShouldBe(date);
+        }
+
+        [Fact]
+        public void given_approved_date_before_created_should_throw_an_exception()
+        {
+            var currency = Currency.Default();
+            var order = Order.Create(Guid.NewGuid(), "ORD", 1200M, currency.CurrencyCode, currency.Rate, Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
+            var date = DateTime.UtcNow.AddMinutes(-10);
+            var expectedException = new OrderApprovedDateCannotBeLessThanCreateOrderDateException(date, order.CreateOrderDate);
+
+            var exception = Record.Exception(() => order.SetOrderApprovedDate(date));
+
+            exception.ShouldBeOfType(expectedException.GetType());
+            exception.Message.ShouldBe(expectedException.Message);
+            ((OrderApprovedDateCannotBeLessThanCreateOrderDateException)exception).CreateOrderDate.ShouldBe(expectedException.CreateOrderDate);
+            ((OrderApprovedDateCannotBeLessThanCreateOrderDateException)exception).OrderApprovedDate.ShouldBe(expectedException.OrderApprovedDate);
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace ECommerce.Modules.Sales.Domain.Orders.Exceptions
 {
-    internal class OrderApprovedDateCannotBeLessThanCreateOrderDateException : ECommerceException
+    public class OrderApprovedDateCannotBeLessThanCreateOrderDateException : ECommerceException
     {
         public DateTime CreateOrderDate { get; }
         public DateTime OrderApprovedDate { get; }
