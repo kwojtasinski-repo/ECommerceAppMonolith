@@ -8,6 +8,7 @@ using System.Net;
 using Shouldly;
 using Microsoft.EntityFrameworkCore;
 using ECommerce.Modules.Sales.Domain.Orders.Entities;
+using ECommerce.Modules.Sales.Application.Orders.DTO;
 
 namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
 {
@@ -105,6 +106,27 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
             orderAfterUpdate.ShouldNotBeNull();
             orderAfterUpdate.CustomerId.ShouldNotBe(order.CustomerId);
             orderAfterUpdate.CustomerId.ShouldBe(customerId);
+        }
+
+        [Fact]
+        public async Task given_valid_order_and_currency_should_update_order()
+        {
+            await AddSampleData();
+            var primaryCurrency = "PLN";
+            var currency = "USD";
+            var request = new CreateOrder(Guid.NewGuid(), primaryCurrency);
+            Authenticate(_userId, _client);
+            var response = await _client.Request($"{Path}").PostJsonAsync(request);
+            var id = response.GetIdFromHeaders<Guid>(Path);
+            var order = await _client.Request($"{Path}/{id}").GetJsonAsync<OrderDetailsDto>();
+            var command = new ChangeCurrencyInOrder(id, currency);
+
+            var responseCurrencyChanged = await _client.Request($"{Path}/currency/change").PatchJsonAsync(command);
+
+            responseCurrencyChanged.StatusCode.ShouldBe((int)HttpStatusCode.OK);
+            var orderUpdated = await _dbContext.Orders.Where(o => o.Id == id).AsNoTracking().SingleOrDefaultAsync();
+            order.Cost.ShouldBeGreaterThan(orderUpdated.Price.Value);
+            orderUpdated.Currency.CurrencyCode.ShouldBe(currency);
         }
 
         private async Task<Order> AddSampleOrder()
