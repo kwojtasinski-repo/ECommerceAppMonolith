@@ -1,7 +1,11 @@
+import ItemForm from "../ItemForm";
+
 function AddItem(props) {
     return (
         <div>
-            AddItem
+            <ItemForm cancelEditUrl = "/items"
+                      cancelButtonText = "Anuluj"
+                      buttonText = "Dodaj" />
         </div>
     )
 }

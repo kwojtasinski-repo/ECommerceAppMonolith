@@ -97,7 +97,7 @@ function CurrencyForm(props) {
                 <NavLink className="btn btn-secondary me-2" to = {props.cancelEditUrl} >{props.cancelButtonText}</NavLink>
                 <LoadingButton
                     loading={loading} 
-                    className="btn-success">
+                    className="btn btn-success">
                     {props.buttonText}
                 </LoadingButton>
             </div>
