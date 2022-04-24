@@ -15,10 +15,10 @@ function Menu() {
     const [cart] = useCart();
     const [itemsInCart, setItemsInCart] = useState(0);
     const context = useContext(ReducerContext);
+    const [menuOpened, setMenuOpened] = useState(false);
     
     useEffect(() => {
         setItemsInCart(cart.length);
-
     }, [context.state.events, cart.length])
 
     const logout = (event) => {
@@ -26,6 +26,10 @@ function Menu() {
         setAuth();
         const notification = { color: Color.info, id: new Date().getTime(), text: 'Wylogowano', timeToClose: 5000 };
         addNotification(notification);
+    }
+
+    const clickMenuHandler = () => {
+        setMenuOpened(!menuOpened);
     }
 
     return (
@@ -57,11 +61,12 @@ function Menu() {
                                 <Link to="/currencies" className={`${style.menuItem}`}>Waluty</Link>
                             </li>
                             : null
-                        }<Nav className={style.menuItem}>
+                        }<Nav className={style.menuItem}
+                              onClick={clickMenuHandler}>
                             <NavDropdown
                                 id="nav-dropdown-dark-example"
                                 title="Zamówienia"
-                                >
+                                show={menuOpened}>
                                     <Nav.Link as={Link} to="/cart/summary" className={`${style.menuItem}`}>
                                         Niezrealizowane zamówienie
                                     </Nav.Link>

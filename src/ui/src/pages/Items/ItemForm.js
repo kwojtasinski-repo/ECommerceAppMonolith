@@ -87,7 +87,7 @@ function ItemForm(props) {
             console.log(shareImages);
             setImages([
                 ...images,
-                shareImages
+                ...shareImages
             ]);
             setLimitImages(limitImages - shareImages.length);
         }, 1000);
@@ -112,9 +112,21 @@ function ItemForm(props) {
         setLimitImages(limitImages + 1);
     }
 
+    const setMainImage = (image) => {
+        let mainImage = images.find(i => i.mainImage);
+        if (mainImage) {
+            mainImage.mainImage = false;
+        }
+        let imageFound = images.find(i => i.url === image.url);
+        imageFound.mainImage = true;
+        setImages([
+            ...images
+        ]);
+    }
+
     return (
         <div>
-            ItemForm
+            <h4>Dodaj przedmiot</h4>
             {error ? (
                 <div className="alert alert-danger">{error}</div>
             ) : null}
@@ -175,19 +187,22 @@ function ItemForm(props) {
                                                 </>
                                             ) : (imageAddSource === 'addresses' ? 
                                                         <AddImagesFromAddresses setShareImages = {setShareImages}/> : 
-                                                        "From files") }
+                                                        <AddImagesFromFiles limit = {limitImages} setShareImages = {setShareImages} />) }
                                         </div>
                                       </>}
                     /> }
 
                 <div className="mt-2 mb-2">
                     {images.map(i => (
-                        <div style={{ float: "left" }}>
+                        <div key={new Date().getTime() + Math.random()}
+                             style={i.mainImage ? { display: "inline-block", border: "3px solid rgb(25, 135, 84)" } : { display: "inline-block" }}
+                             className="me-2">
                             <img key={new Date().getTime() + Math.random()}
                                 className = {style.imageSmall}
-                                src={i}
-                                alt="imgSmall" />
-                            <button key={i} 
+                                src={i.url}
+                                alt="imgSmall"
+                                onClick={() => setMainImage(i)}/>
+                            <button key={new Date().getTime() + Math.random()} 
                                     type="button" 
                                     className={`${style.xButton}`}
                                     onClick = {() => handleDeleteImage(i)}>
@@ -214,7 +229,8 @@ function ItemForm(props) {
 function AddImagesFromAddresses(props) {
     const [images, setImages] = useState({
         image: {
-            value: '',
+            url: '',
+            mainImage: false
         }
     })
 
@@ -223,28 +239,34 @@ function AddImagesFromAddresses(props) {
             ...images, 
             [fieldName]: {
                 ...images[fieldName],
-                value
+                url: value
             } 
         });
     };
 
     useEffect(()=> {
-        props.setShareImages([
-            images.image.value
-        ])
+        props.setShareImages([{
+            ...images.image
+        }])
     }, [images]);
 
     return (
         <div>
             <Input label = "Podaj adres"
                    onChange = {val => changeHandler(val, 'image')}
-                   value = {images.image.value} />
+                   value = {images.image.url} />
         </div>
     )
 }
 
 function AddImagesFromFiles(props) {
     const limit = props.limit;
+
+    return (
+        <div>
+            imagesFrom files and limit {limit}
+        </div>
+    )
 }
 
 export default ItemForm;
