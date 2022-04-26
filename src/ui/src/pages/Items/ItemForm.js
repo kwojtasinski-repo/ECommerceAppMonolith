@@ -7,6 +7,8 @@ import LoadingButton from "../../components/UI/LoadingButton/LoadingButton";
 import { validate } from "../../helpers/validation";
 import useNotification from "../../hooks/useNotification";
 import style from "./ItemForm.module.css";
+import FilesUploadComponent from "../../components/FilesUpload/FilesUploadComponent";
+import Tags from "../../components/Tags/Tags";
 
 function ItemForm(props) {
     const [isOpen, setIsOpen] = useState(false);
@@ -73,8 +75,8 @@ function ItemForm(props) {
         });
     };
 
-    const submit = () => {
-
+    const submit = (event) => {
+        event.preventDefault();
     }
 
     const handleSendImages = () => {
@@ -155,12 +157,14 @@ function ItemForm(props) {
                        options = { [{key: 1, value: '1', label: 'Typ #1'}, {key: 2, value: '2', label: 'Typ #2'}]} 
                        onChange = {val => changeHandler(val, 'typeId')} />
 
+                <Tags />
+
                 <button type="button" className="btn btn-primary mt-2" onClick={handleAddImages}>
                     Dodaj obrazki
                 </button>
 
                 {isOpen && <Popup handleConfirm = {handleSendImages}
-                                  textConfirm = "Wyślij"  
+                                  textConfirm = "Dodaj"  
                                   handleClose = {handleCloseSendImages}
                                   popupType = "send"
                                   type = {Type.info}
@@ -260,11 +264,31 @@ function AddImagesFromAddresses(props) {
 }
 
 function AddImagesFromFiles(props) {
-    const limit = props.limit;
+    const [images, setImages] = useState([]);
+
+    const fetchUrls = (urls) => {
+        const urlsToSet = [];
+        for(const url of urls) {
+            urlsToSet.push({
+                url,
+                mainImage: false
+            });
+        }
+
+        setImages(urlsToSet);
+    }
+    
+    useEffect(()=> {
+        props.setShareImages([
+            ...images
+        ])
+    }, [images]);
 
     return (
         <div>
-            imagesFrom files and limit {limit}
+            <FilesUploadComponent apiUrl = '/items-module/images'
+                                  limit = {props.limit}
+                                  urlImagesToReturn = {fetchUrls} />
         </div>
     )
 }

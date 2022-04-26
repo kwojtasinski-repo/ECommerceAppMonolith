@@ -25,3 +25,7 @@ code {
   padding: 5px 10px;
   margin: 8px 0px;
 }
+
+textarea[type="textarea"] {
+  resize: none;
+}

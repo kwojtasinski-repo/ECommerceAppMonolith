@@ -32,7 +32,8 @@ namespace ECommerce.Modules.Items.Api.Controllers
         {
             var imageSrc = await _queryDispatcher.QueryAsync(new GetImage(imageId));
             var extension = imageSrc.Extension.Split('.')[1];
-            return OkOrNotFound($"data:image/{extension};base64,{imageSrc.ImageSource}");
+            //return OkOrNotFound($"data:image/{extension};base64,{imageSrc.ImageSource}");
+            return PhysicalFile(imageSrc.ImagePath, $"image/{extension}");
         }
 
         [HttpPost]
