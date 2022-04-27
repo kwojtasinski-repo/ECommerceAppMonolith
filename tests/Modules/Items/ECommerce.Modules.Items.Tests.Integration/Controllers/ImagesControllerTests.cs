@@ -64,10 +64,23 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var id = ids.First();
 
             var response = await _client.Request($"{Path}/{id}").GetAsync();
-            var messageResponse = await response.GetJsonAsync<string>();
+            var inputStream = await response.ResponseMessage.Content.ReadAsStreamAsync();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
-            messageResponse.ShouldContain("base64");
+            inputStream.ShouldNotBeNull();
+            var bytes = ReadFully(inputStream);
+            bytes.ShouldNotBeNull();
+            bytes.ShouldNotBeEmpty();
+            
+        }
+
+        private static byte[] ReadFully(Stream input)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                input.CopyTo(ms);
+                return ms.ToArray();
+            }
         }
 
         private async Task<MultipartFormDataContent> CreateMultipartFormDataContent(FileInfo[] fileInfos)

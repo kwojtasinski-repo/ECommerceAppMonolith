@@ -196,9 +196,8 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.Services
         public async Task should_return_latest_rates()
         {
             var rates = CreateCurrencyRates();
-            var date = DateOnly.FromDateTime(DateTime.UtcNow);
             _currencyRepository.GetAllAsync().Returns(rates.Select(c => c.Currency).ToList());
-            _repository.GetCurrencyRatesForDateAsync(Arg.Any<IEnumerable<string>>(), date).Returns(rates);
+            _repository.GetLatestCurrencyRates(Arg.Any<IEnumerable<string>>()).Returns(rates);
 
             var dtos = await _service.GetLatestRatesAsync();
 
