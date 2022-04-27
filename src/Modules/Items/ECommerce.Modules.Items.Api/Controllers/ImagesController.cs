@@ -28,11 +28,10 @@ namespace ECommerce.Modules.Items.Api.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<string>> Get(Guid imageId)
+        public async Task<PhysicalFileResult> Get(Guid imageId)
         {
             var imageSrc = await _queryDispatcher.QueryAsync(new GetImage(imageId));
             var extension = imageSrc.Extension.Split('.')[1];
-            //return OkOrNotFound($"data:image/{extension};base64,{imageSrc.ImageSource}");
             return PhysicalFile(imageSrc.ImagePath, $"image/{extension}");
         }
 

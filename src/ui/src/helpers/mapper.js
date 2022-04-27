@@ -222,3 +222,43 @@ export const mapToPayments = (objects) => {
 
     return payments;
 }
+
+export const mapToBrands = (objects) => {
+    const brands = [];
+
+    for (const obj of objects) {
+        const brand = mapToBrand(obj);
+        brands.push(brand);
+    }
+
+    return brands;
+}
+
+export const mapToBrand = (obj) => {
+    const brand = {
+        id: obj.id,
+        name: obj.name
+    }
+
+    return brand;
+}
+
+export const mapToTypes = (objects) => {
+    const types = [];
+
+    for (const obj of objects) {
+        const type = mapToType(obj);
+        types.push(type);
+    }
+
+    return types;
+}
+
+export const mapToType = (obj) => {
+    const type = {
+        id: obj.id,
+        name: obj.name
+    }
+
+    return type;
+}

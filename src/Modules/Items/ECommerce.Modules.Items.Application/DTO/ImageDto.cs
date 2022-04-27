@@ -8,7 +8,6 @@ namespace ECommerce.Modules.Items.Application.DTO
 {
     public class ImageDto
     {
-        public string ImageSource { get; set; }
         public string ImagePath { get; set; }
         public string Extension { get; set; }
     }

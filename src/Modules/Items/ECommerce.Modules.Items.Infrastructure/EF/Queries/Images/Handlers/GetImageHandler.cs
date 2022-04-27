@@ -28,11 +28,8 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.Queries.Images.Handlers
                 return null;
             }
 
-            var bytes = await _fileStore.ReadFileAsync(image.SourcePath);
-            var base64String = Convert.ToBase64String(bytes);
             var extension = _fileStore.GetFileExtension(image.SourcePath);
-
-            return new ImageDto { ImagePath = image.SourcePath, ImageSource = base64String, Extension = extension };
+            return new ImageDto { ImagePath = image.SourcePath, Extension = extension };
         }
     }
 }

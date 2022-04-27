@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "../../axios-setup";
 import { mapToMessage } from "../../helpers/validation";
 import LoadingButton from "../UI/LoadingButton/LoadingButton";
+import PropTypes from 'prop-types';
 
 function FilesUploadComponent(props) {
     const limit = props.limit;
@@ -78,3 +79,8 @@ function FilesUploadComponent(props) {
 }
 
 export default FilesUploadComponent;
+
+FilesUploadComponent.propTypes = {
+    apiUrl: PropTypes.string.isRequired,
+    urlImagesToReturn: PropTypes.func.isRequired
+}

@@ -84,7 +84,7 @@ export function mapToMessage(code, status) {
     }
 
     if (status == 404) {
-        return "Nie znaleziono";
+        return "Sprawdź poprawność podanych danych";
     }
 
     if (status == 400) {
