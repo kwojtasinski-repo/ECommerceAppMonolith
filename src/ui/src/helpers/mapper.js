@@ -32,6 +32,41 @@ export const mapToItem = obj => {
     return item;
 }
 
+export const mapToItemsDetails = objects => {
+    const items = [];
+    
+    for (const obj of objects) {
+        const item = {
+            id: obj.id,
+            name: obj.itemName,
+            brandId: obj.brand.id,
+            brand: obj.brand.name,
+            typeId: obj.type.id,
+            type: obj.type.name,
+            imagesUrl: obj.imagesUrl
+        }
+        items.push(item);
+    }
+
+    return items;
+}
+
+export const mapToItemDetails = obj => {
+    const item = {
+        id: obj.id,
+        name: obj.itemName,
+        description: obj.description,
+        tags: obj.tags,
+        brandId: obj.brand.id,
+        brand: obj.brand.name,
+        typeId: obj.type.id,
+        type: obj.type.name,
+        imagesUrl: obj.imagesUrl
+    }
+
+    return item;
+}
+
 export const mapToCurrencies = (obj) => {
     const newCurrencies = [];
     for (const key in obj) {

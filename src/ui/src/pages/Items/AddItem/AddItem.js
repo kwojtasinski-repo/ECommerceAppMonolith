@@ -2,14 +2,22 @@ import axios from "../../../axios-setup";
 import { useEffect, useState } from "react";
 import ItemForm from "../ItemForm";
 import { mapToBrands, mapToTypes } from "../../../helpers/mapper";
+import { useNavigate } from "react-router-dom";
 
 function AddItem(props) {
     const [brands, setBrands] = useState([]);
     const [types, setTypes] = useState([]);
+    const [id, setId] = useState('');
+    const navigate = useNavigate();
 
     const onSubmit = async (form) => {
-        debugger;
-        await axios.post('/items-module/items', form);
+        const response = await axios.post('/items-module/items', form);
+        const itemId = response.headers.location.split('/items-module/items/')[1];
+        setId(itemId);
+    }
+
+    const redirectAfterSuccess = () => {
+        navigate(`/items/details/${id}`);
     }
 
     const fetchBrands = async () => {
@@ -29,12 +37,14 @@ function AddItem(props) {
 
     return (
         <div>
-            <ItemForm onSubmit = {onSubmit}
+            <ItemForm text = "Dodaj przedmiot"
+                      onSubmit = {onSubmit}
                       cancelEditUrl = "/items"
                       cancelButtonText = "Anuluj"
                       buttonText = "Dodaj"
-                      brands={brands}
-                      types={types} />
+                      brands = {brands}
+                      types = {types}
+                      redirectAfterSuccess = {redirectAfterSuccess} />
         </div>
     )
 }

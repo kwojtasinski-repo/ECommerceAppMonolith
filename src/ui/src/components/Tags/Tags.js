@@ -50,7 +50,7 @@ function Tags(props) {
             <label>Tagi</label>
             <div className={style.tagContainer}>
                 {props.tags.map(t => (
-                    <div className={style.tag}>
+                    <div className={style.tag} key = {t}>
                         <span>{t}</span>
                         {canEdit ? <span className={style.xButton}
                               onClick={() => deleteTag(t)}>x</span>
@@ -75,5 +75,5 @@ Tags.defaultProps = {
 
 Tags.propTypes = {
     tags: PropTypes.arrayOf(PropTypes.string).isRequired,
-    setShareTags: PropTypes.func.isRequired
+    setShareTags: PropTypes.func
 }

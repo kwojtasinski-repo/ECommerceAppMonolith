@@ -32,8 +32,15 @@ function Menu() {
         setMenuOpened(!menuOpened);
     }
 
+    const onClick = (event) => {
+        if (event.detail === 1 && menuOpened > 0) {
+            setMenuOpened(false);
+        }
+    }
+
     return (
-        <nav className={`${style.menuContainer} navbar navbar-expand-lg navbar-light bg-light`}>
+        <nav className={`${style.menuContainer} navbar navbar-expand-lg navbar-light bg-light`}
+             onClick={onClick}>
             <ul className={style.menu}>
                 <li className={style.menuItem}>
                     <Link to='/' className={style.menuItem} >

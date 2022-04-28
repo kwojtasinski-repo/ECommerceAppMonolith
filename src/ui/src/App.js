@@ -43,6 +43,7 @@ import EditOrder from './pages/Order/EditOrder/EditOrder';
 import AddPayment from './pages/Payments/AddPayment';
 import MyOrders from './pages/Order/MyOrders/MyOrders';
 import ChangeCurrency from './pages/Payments/ChangeCurrency/ChangeCurrency';
+import ItemDetails from './pages/Items/ItemDetails/ItemDetails';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -80,9 +81,10 @@ function App() {
         <Route path='/orders/:id' element = { <RequireAuth> <Order/> </RequireAuth> }/>
         <Route path='/orders' element = {<RequireAuth> <MyOrders/> </RequireAuth>} />
         <Route path='/archive/items/:id' element = { <RequireAuth> <OrderItemArchive /> </RequireAuth>} />
+        <Route path='/items/details/:id' element = { <RequireAuth> <ItemDetails /> </RequireAuth>} />
         <Route path='/items/for-sale' element = { <RequireAuth> <PutItemForSale /> </RequireAuth>} />
         <Route path='/items/delete' element = { <RequireAuth> <DeleteItem /> </RequireAuth>} />
-        <Route path='/items/edit' element = { <RequireAuth> <EditItem /> </RequireAuth>} />
+        <Route path='/items/edit/:id' element = { <RequireAuth> <EditItem /> </RequireAuth>} />
         <Route path='/items/add' element = { <RequireAuth> <AddItem /> </RequireAuth>} />
         <Route path='/items/:id' element = {  <Item />} />
         <Route path='/search' element = {<Search />} >  

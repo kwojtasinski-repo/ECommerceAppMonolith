@@ -95,7 +95,7 @@ function ItemForm(props) {
         }
     }
 
-    const submit = (event) => {
+    const submit = async (event) => {
         event.preventDefault();
         setLoading(true);
         const errorItem = validateBeforeSend(form, setForm);
@@ -105,8 +105,8 @@ function ItemForm(props) {
         }
 
         try {
-            props.onSubmit({
-                id: form.id.value,
+            await props.onSubmit({
+                itemId: form.id.value,
                 itemName: form.itemName.value,
                 description: form.description.value,
                 brandId: form.brandId.value,
@@ -115,6 +115,7 @@ function ItemForm(props) {
                 imagesUrl: form.imagesUrl.value
             });
             setLoading(false);
+            props.redirectAfterSuccess();
         } catch (exception) {
             console.log(exception);
             let errorMessage = '';
@@ -199,9 +200,37 @@ function ItemForm(props) {
         }
     }, [props.brands, props.types]);
 
+    useEffect(() => {
+        if (props.item) {
+            setForm({
+                ...form,
+                id: {
+                    value: props.item.id
+                },
+                itemName: {
+                    value: props.item.name
+                },
+                description: {
+                    value: props.item.description
+                },
+                brandId: {
+                    value: props.item.brandId
+                },
+                typeId: {
+                    value: props.item.typeId
+                },
+                tags: {
+                    value: props.item.tags
+                },
+                imagesUrl: {
+                    value: props.item.imagesUrl
+                }})
+        }
+    }, [props.item])
+
     return (
         <div>
-            <h4>Dodaj przedmiot</h4>
+            <h4>{props.text}</h4>
             {error ? (
                 <div className="alert alert-danger">{error}</div>
             ) : null}
@@ -253,7 +282,7 @@ function ItemForm(props) {
                 </button>
 
                 {isOpen && <Popup handleConfirm = {handleSendImages}
-                                  textConfirm = "Dodaj"  
+                                  textConfirm = "Ok"  
                                   handleClose = {handleCloseSendImages}
                                   popupType = "send"
                                   type = {Type.info}
@@ -307,12 +336,12 @@ function ItemForm(props) {
                 </div>
 
                 <div className="text-end mt-2">
-                    <NavLink className="btn btn-secondary me-2" to = {props.cancelEditUrl} >{props.cancelButtonText}</NavLink>
                     <LoadingButton
                         loading={loading} 
                         className="btn btn-success">
                         {props.buttonText}
                     </LoadingButton>
+                    <NavLink className="btn btn-secondary ms-2" to = {props.cancelEditUrl} >{props.cancelButtonText}</NavLink>
                 </div>
             </form>
         </div>
@@ -390,5 +419,6 @@ ItemForm.defaultProps = {
 
 ItemForm.propTypes = {
     brands: PropTypes.arrayOf(PropTypes.object),
-    types: PropTypes.arrayOf(PropTypes.object)
+    types: PropTypes.arrayOf(PropTypes.object),
+    redirectAfterSuccess: PropTypes.func.isRequired
 }
