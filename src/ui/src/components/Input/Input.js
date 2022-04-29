@@ -127,6 +127,26 @@ const InputCheckBox = props => {
     );
 }
 
+const InputInteger = props => {
+    const onInput = (value) => {
+        return Math.round(value);
+    }
+
+    return (
+        <div className="form-group">
+            <label>{props.label}</label>
+            <input type = "number"
+                   value = {props.value}
+                   className = {`form-control ${props.error && props.showError ? 'is-invalid' : ''}`}
+                   onChange = { event => props.onChange(event.target.value) } 
+                   onInput = {event => onInput(event.target.value)} />
+            <div className="invalid-feedback">
+                {props.error}
+            </div>
+        </div>
+    );
+}
+
 function Input(props) {
     switch(props.type) {
         case 'select':
@@ -141,6 +161,8 @@ function Input(props) {
             return <InputTextArea {...props} />;
         case 'zipCode' :
             return <InputZipCode {...props} />;
+        case 'integerNumber' :
+            return <InputInteger {...props} />;
         default:
             return <InputText {...props} />;
     }

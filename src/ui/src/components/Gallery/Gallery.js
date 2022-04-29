@@ -7,6 +7,7 @@ function Gallery(props) {
     const [imageToShow, setImageToShow] = useState('');
 
     useEffect(() => {
+        debugger;
         if (props.items) {
             const itemArrays = props.items.map(i => (
                 { id: new Date().getTime() + Math.floor(Math.random() * 10000) + Math.random(), url: i }

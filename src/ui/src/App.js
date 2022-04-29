@@ -82,7 +82,7 @@ function App() {
         <Route path='/orders' element = {<RequireAuth> <MyOrders/> </RequireAuth>} />
         <Route path='/archive/items/:id' element = { <RequireAuth> <OrderItemArchive /> </RequireAuth>} />
         <Route path='/items/details/:id' element = { <RequireAuth> <ItemDetails /> </RequireAuth>} />
-        <Route path='/items/for-sale' element = { <RequireAuth> <PutItemForSale /> </RequireAuth>} />
+        <Route path='/items/for-sale/:id' element = { <RequireAuth> <PutItemForSale /> </RequireAuth>} />
         <Route path='/items/delete' element = { <RequireAuth> <DeleteItem /> </RequireAuth>} />
         <Route path='/items/edit/:id' element = { <RequireAuth> <EditItem /> </RequireAuth>} />
         <Route path='/items/add' element = { <RequireAuth> <AddItem /> </RequireAuth>} />

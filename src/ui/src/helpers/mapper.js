@@ -43,7 +43,7 @@ export const mapToItemsDetails = objects => {
             brand: obj.brand.name,
             typeId: obj.type.id,
             type: obj.type.name,
-            imagesUrl: obj.imagesUrl
+            imageUrl: obj.imagesUrl
         }
         items.push(item);
     }

@@ -10,6 +10,6 @@ namespace ECommerce.Modules.Items.Application.DTO
     {
         public string? Description { get; set; }
         public IEnumerable<string>? Tags { get; set; }
-        public IEnumerable<ImageUrl>? ImagesUrl { get; set; }
+        public new IEnumerable<ImageUrl>? ImagesUrl { get; set; }
     }
 }
