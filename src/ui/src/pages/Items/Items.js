@@ -21,21 +21,9 @@ function Items(props) {
 
     return (
         <div>
-            <div className="row">
-                <div className="d-flex justify-content-center mb-2">
-                    <NavLink className="btn btn-success" to='add'>Dodaj przedmiot</NavLink>
-                </div>
-                <div className="d-flex justify-content-center mb-2">
-                    <NavLink className="btn btn-warning" to='edit'>Edytuj przedmiot</NavLink>
-                </div>
-                <div className="d-flex justify-content-center mb-2">
-                    <NavLink className="btn btn-primary" to='for-sale'>Wystaw przedmiot</NavLink>
-                </div>
-                <div className="d-flex justify-content-center mb-2">
-                    <NavLink className="btn btn-danger" to='delete'>Usuń przedmiot</NavLink>
-                </div>
+            <div>
+                <NavLink className="btn btn-success mb-4" to='add'>Dodaj przedmiot</NavLink>
             </div>
-
             {loading ? <LoadingIcon /> :
                 <div className="table-responsive">
                     <table className="table table-bordered">
@@ -56,6 +44,7 @@ function Items(props) {
                                     <td>{i.brand}</td>
                                     <td>{i.type}</td>
                                     <td>
+                                        <NavLink className="btn btn-success me-2" to = {`for-sale/${i.id}`}>Wystaw przedmiot</NavLink>
                                         <NavLink className="btn btn-warning me-2" to = {`edit/${i.id}`}>Edytuj</NavLink>
                                         <button className="btn btn-danger">Usuń</button>
                                     </td>

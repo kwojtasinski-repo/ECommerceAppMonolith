@@ -1,7 +1,7 @@
 import axios from "../../../axios-setup";
 import { useEffect, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
-import { mapToItemDetails } from "../../../helpers/mapper";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { mapToCurrencies, mapToItemDetails } from "../../../helpers/mapper";
 import { mapToMessage, validate } from "../../../helpers/validation";
 import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
 import Input from "../../../components/Input/Input";
@@ -12,14 +12,16 @@ import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 function PutItemForSale(props) {
     const { id } = useParams();
     const [item, setItem] = useState();
+    const [currencies, setCurrencies] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadingButton, setLoadingButton] = useState(false);
     const [error, setError] = useState('');
     const [form, setForm] = useState({
         itemId: {
-            value: ''
+            value: id
         }, 
         itemCost: {
-            value: 0,
+            value: '',
             error: '',
             showError: false,
             rules: ['required']
@@ -31,6 +33,7 @@ function PutItemForSale(props) {
             rules: ['required', { rule: 'only', length: 3 }]
         }
     });
+    const navigate = useNavigate();
 
     const fetchItem = async () => {
         try {
@@ -49,12 +52,47 @@ function PutItemForSale(props) {
         setLoading(false);
     }
 
+    const fetchCurrencies = async () => {
+        try {
+            const response = await axios.get(`/currencies-module/currencies`);
+            const currenciesLocal = mapToCurrencies(response.data);
+            setCurrencies(currenciesLocal);
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response?.status;
+            const errors = exception.response?.data.errors;
+            errorMessage += mapToMessage(errors, status);            
+            setError(errorMessage);
+        }        
+    }
+
     useEffect(() => {
         fetchItem();
+        fetchCurrencies();        
     }, []);
 
-    const submit = () => {
+    useEffect(() => {
+        if (currencies && currencies.length > 0) {
+            const currency = currencies.find(c => true);
+            setForm({
+                ...form,
+                currencyCode: {
+                    ...form.currencyCode,
+                    value: currency.code
+                }
+            })
+        }
+    }, [currencies])
 
+    const submit = async (event) => {
+        event.preventDefault();
+        await axios.post('/items-module/item-sales', {
+            itemId: form.itemId.value,
+            itemCost: form.itemCost.value,
+            currencyCode: form.currencyCode.value
+        });
+        navigate('/items');
     }
 
     const changeHandler = (value, fieldName) => {
@@ -116,14 +154,27 @@ function PutItemForSale(props) {
                                error = {form.itemCost.error}
                                showError = {form.itemCost.showError}
                                onChange = {val => changeHandler(val, 'itemCost')} />
+                        <Input label = "Waluta"
+                               type = "select" 
+                               value = {form.currencyCode.value}
+                               error = {form.currencyCode.error}
+                               showError = {form.currencyCode.showError}
+                               options = { currencies.map(t => {
+                                    return {
+                                        key: t.id,
+                                        value: t.code,
+                                        label: t.code
+                                    }
+                                })} 
+                               onChange = {val => changeHandler(val, 'currencyCode')} />
                     </div>
                     <div className="text-end mt-2">
                         <LoadingButton
-                            loading={loading} 
+                            loading={loadingButton} 
                             className="btn btn-success">
-                            Zatwierdź
+                            Wystaw
                         </LoadingButton>
-                        <NavLink className="btn btn-secondary ms-2" to = '/' >Anuluj</NavLink>
+                        <NavLink className="btn btn-secondary ms-2" to = '/items' >Anuluj</NavLink>
                     </div>
                 </form>
             </div>
