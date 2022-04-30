@@ -8,6 +8,7 @@ import { Color } from '../Notification/Notification';
 import ItemCart from '../UI/ItemCart/ItemCart';
 import style from './Menu.module.css';
 import { Nav, NavDropdown } from 'react-bootstrap';
+import { createGuid } from '../../helpers/createGuid';
 
 function Menu() {
     const [auth, setAuth] = useAuth();
@@ -31,7 +32,7 @@ function Menu() {
     const clickMenuHandler = () => {
         setMenuOpened(!menuOpened);
     }
-
+    
     const onClick = (event) => {
         if (event.detail === 1 && menuOpened > 0) {
             setMenuOpened(false);
@@ -39,8 +40,7 @@ function Menu() {
     }
 
     return (
-        <nav className={`${style.menuContainer} navbar navbar-expand-lg navbar-light bg-light`}
-             onClick={onClick}>
+        <nav className={`${style.menuContainer} navbar navbar-expand-lg navbar-light bg-light`} onClick={onClick} >
             <ul className={style.menu}>
                 <li className={style.menuItem}>
                     <Link to='/' className={style.menuItem} >
@@ -57,10 +57,20 @@ function Menu() {
                         <li className={style.menuItem}>
                             <Link to="/" onClick={logout} >Wyloguj</Link>
                         </li>
-                        {auth && auth?.claims?.permissions?.find(c => c === "items") ? 
-                            <li className={style.menuItem}>
-                                <Link to="/items" className={`${style.menuItem}`}>Przedmioty</Link>
-                            </li>
+                        {auth && auth?.claims?.permissions?.find(c => c === "items") ?
+                            <DropdownMenu classNameMenu = {style.menuItem}
+                                mainTitle = "Przedmioty"
+                                navItems = {
+                                    <>
+                                    <Nav.Link as={Link} to="/items" className={`${style.menuItem}`}>
+                                        Niewystawione
+                                    </Nav.Link>
+                                    <Nav.Link as={Link} to="/" className={`${style.menuItem}`}>
+                                        Wystawione
+                                    </Nav.Link>
+                                    </>
+                                } />
+
                             : null
                         }
                         {auth && auth?.claims?.permissions?.find(c => c === "currencies") ? 
@@ -68,20 +78,19 @@ function Menu() {
                                 <Link to="/currencies" className={`${style.menuItem}`}>Waluty</Link>
                             </li>
                             : null
-                        }<Nav className={style.menuItem}
-                              onClick={clickMenuHandler}>
-                            <NavDropdown
-                                id="nav-dropdown-dark-example"
-                                title="Zamówienia"
-                                show={menuOpened}>
-                                    <Nav.Link as={Link} to="/cart/summary" className={`${style.menuItem}`}>
-                                        Niezrealizowane zamówienie
-                                    </Nav.Link>
-                                    <Nav.Link as={Link} to="/orders" className={`${style.menuItem}`}>
-                                        Moje zamówienia
-                                    </Nav.Link>
-                            </NavDropdown>
-                        </Nav>
+                        }
+                        <DropdownMenu classNameMenu = {style.menuItem}
+                            mainTitle = "Zamówienia"
+                            navItems = {
+                                <>
+                                <Nav.Link as={Link} to="/cart/summary" className={`${style.menuItem}`}>
+                                    Niezrealizowane zamówienie
+                                </Nav.Link>
+                                <Nav.Link as={Link} to="/orders" className={`${style.menuItem}`}>
+                                    Moje zamówienia
+                                </Nav.Link>
+                                </>
+                            } />
                     </> : (<>
                                 <li className={style.menuItem}>
                                     <Link to="/register" className={`${style.menuItem}`} >Zarejestruj</Link>
@@ -117,6 +126,39 @@ function Link(props) {
         <NavLink onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} to={props.to} className={`${props.className} ${onHover}`} onClick={props.onClick} >
             {props.children}
         </NavLink>
+    )
+}
+
+export function DropdownMenu(props) {
+    const [id, setId] = useState(createGuid('N'));
+    const [menuOpened, setMenuOpened] = useState(false);
+
+    const clickMenuHandler = () => {
+        setMenuOpened(!menuOpened);
+    }
+    
+    const onClick = (event) => {
+        setMenuOpened(false);
+    }
+
+    useEffect(() => {
+        document.body.addEventListener('click', function(e) {
+            if (!e.target.classList.contains(props.classNameMenu) && e.target.id !== id) {
+                onClick(e);
+            }
+        });
+    }, [])
+    
+    return (
+        <Nav className={props.classNameMenu}
+                onClick={clickMenuHandler}>
+            <NavDropdown
+                id={id}
+                title={props.mainTitle}
+                show={menuOpened}>
+                    {props.navItems}
+            </NavDropdown>
+        </Nav>
     )
 }
 

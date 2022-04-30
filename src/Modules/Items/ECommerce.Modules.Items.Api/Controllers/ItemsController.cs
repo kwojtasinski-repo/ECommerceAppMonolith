@@ -48,6 +48,15 @@ namespace ECommerce.Modules.Items.Api.Controllers
             return OkOrNotFound(itemDto);
         }
 
+        [HttpGet("not-put-up-for-sale")]
+        [AllowAnonymous]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<IEnumerable<ItemDto>>> GetAllNotPutUpAsync()
+        {
+            var itemDtos = await _queryDispatcher.QueryAsync(new GetItemsNotPutUpForSale());
+            return Ok(itemDtos);
+        }
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]

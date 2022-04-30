@@ -184,3 +184,6 @@ Authorization: Bearer {{accessToken}}
 ### DELETE brand
 DELETE {{url}}/types/{{typeId}}
 Authorization: Bearer {{accessToken}}
+
+### GET all items not put up for sale
+GET {{url}}/items/not-put-up-for-sale

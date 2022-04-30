@@ -29,7 +29,7 @@ namespace ECommerce.Modules.Sales.Infrastructure.EF.Configurations
             // save Tags as text
             builder
                 .Property(i => i.Tags)
-                .HasConversion(tags => string.Join(',', tags), tags => tags.Split(',', StringSplitOptions.None));
+                .HasConversion(tags => string.Join(',', tags), tags => tags.Split(',', StringSplitOptions.RemoveEmptyEntries));
 
             // determine how to compare Tags
             builder

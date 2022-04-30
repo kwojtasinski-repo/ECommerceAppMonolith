@@ -87,6 +87,7 @@ function PutItemForSale(props) {
 
     const submit = async (event) => {
         event.preventDefault();
+        setLoadingButton(true);
         await axios.post('/items-module/item-sales', {
             itemId: form.itemId.value,
             itemCost: form.itemCost.value,

@@ -7,13 +7,13 @@ import { useNavigate } from "react-router-dom";
 function AddItem(props) {
     const [brands, setBrands] = useState([]);
     const [types, setTypes] = useState([]);
-    const [id, setId] = useState('');
+    let id = '';
     const navigate = useNavigate();
 
     const onSubmit = async (form) => {
         const response = await axios.post('/items-module/items', form);
         const itemId = response.headers.location.split('/items-module/items/')[1];
-        setId(itemId);
+        id = itemId;
     }
 
     const redirectAfterSuccess = () => {

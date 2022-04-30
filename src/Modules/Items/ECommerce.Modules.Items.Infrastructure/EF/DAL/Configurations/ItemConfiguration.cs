@@ -29,7 +29,7 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.DAL.Configurations
             // save tags as text
             builder
                 .Property(i => i.Tags)
-                .HasConversion(tags => string.Join(',', tags), tags => tags.Split(',', StringSplitOptions.None));
+                .HasConversion(tags => string.Join(',', tags), tags => tags.Split(',', StringSplitOptions.RemoveEmptyEntries));
 
             builder
                 .Property(i => i.Version)

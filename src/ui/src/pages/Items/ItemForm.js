@@ -187,18 +187,21 @@ function ItemForm(props) {
 
     useEffect(() => {
         const brand = props.brands.find(b => true);
-        const type = props.types.find(t => true);
         setBrands(props.brands);
-        setTypes(props.types);
 
         if (brand) {
             changeHandler(brand.id, 'brandId');
         }
+    }, [props.brands]);
+
+    useEffect(() => {
+        const type = props.types.find(t => true);
+        setTypes(props.types);
         
         if (type) {
             changeHandler(type.id, 'typeId');
         }
-    }, [props.brands, props.types]);
+    }, [props.types])
 
     useEffect(() => {
         if (props.item) {

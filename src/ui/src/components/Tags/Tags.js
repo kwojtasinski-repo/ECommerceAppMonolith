@@ -1,21 +1,15 @@
 import { useState } from "react";
 import PropTypes from 'prop-types';
 import style from "./Tags.module.css"
+import { isEmpty } from "../../helpers/stringExtensions";
 
 function Tags(props) {
     const [canEdit, setCanEdit] = useState(props.canEdit);
 
     const onKeyUpAddTag = (event) => {
         if (event.key === 'Enter' && event.target.value.length > 0) {
-            const tagExists = props.tags.find(t => t === event.target.value);
-
-            if (!tagExists) {
-                props.setShareTags([
-                    ...props.tags,
-                    event.target.value
-                ]);
-                event.target.value = "";
-            }
+            addTag(event.target.value);
+            event.target.value = "";
         }
     }
 
@@ -26,17 +20,22 @@ function Tags(props) {
         }
     }
 
+    const addTag = (tag) => {
+        const tagExists = props.tags.find(t => t === tag);
+        const tagTrimmed = tag.trim();
+
+        if (!tagExists && !isEmpty(tagTrimmed)) {
+            props.setShareTags([
+                ...props.tags,
+                tag
+            ]);
+        }
+    }
+
     const onClickAddTag = (event) => {
         if (event.detail === 1 && event.target.value.length > 0) {
-            const tagExists = props.tags.find(t => t === event.target.value);
-
-            if (!tagExists) {
-                props.setShareTags([
-                    ...props.tags,
-                    event.target.value
-                ]);
-                event.target.value = "";
-            }
+            addTag(event.target.value);
+            event.target.value = "";
         }
     }
 
