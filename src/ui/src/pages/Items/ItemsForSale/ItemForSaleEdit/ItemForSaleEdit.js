@@ -1,14 +1,14 @@
-import axios from "../../../axios-setup";
+import axios from "../../../../axios-setup";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { mapToCurrencies, mapToItemDetails } from "../../../helpers/mapper";
-import { mapToMessage } from "../../../helpers/validation";
-import Tags from "../../../components/Tags/Tags";
-import Gallery from "../../../components/Gallery/Gallery";
-import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
-import ItemSaleForm from "../ItemSaleForm";
+import Gallery from "../../../../components/Gallery/Gallery";
+import Tags from "../../../../components/Tags/Tags";
+import LoadingIcon from "../../../../components/UI/LoadingIcon/LoadingIcon";
+import { mapToCurrencies, mapToItem } from "../../../../helpers/mapper";
+import { mapToMessage } from "../../../../helpers/validation";
+import ItemSaleForm from "../../ItemSaleForm";
 
-function PutItemForSale(props) {
+function ItemForSaleEdit(props) {
     const { id } = useParams();
     const [item, setItem] = useState();
     const [currencies, setCurrencies] = useState([]);
@@ -18,8 +18,8 @@ function PutItemForSale(props) {
 
     const fetchItem = async () => {
         try {
-            const response = await axios.get(`/items-module/items/${id}`);
-            const itemLocal = mapToItemDetails(response.data);
+            const response = await axios.get(`/items-module/item-sales/${id}`);
+            const itemLocal = mapToItem(response.data);
             setItem(itemLocal);
         } catch (exception) {
             console.log(exception);
@@ -69,34 +69,35 @@ function PutItemForSale(props) {
                 <div className="form-group">
                     <label>Nazwa przedmiotu</label>
                     <input type = "text"
-                            value = {item.name}
-                            className = "form-control"
-                            readOnly />
+                           value = {item.name}
+                           className = "form-control"
+                           readOnly />
                 </div>
                 <div className="form-group">
                     <label>Opis</label>
                     <input type = "textarea"
-                            value = {item.description}
-                            className = "form-control"
-                            readOnly />
+                           value = {item.description}
+                           className = "form-control"
+                           readOnly />
                 </div>    
                 <div className="form-group">
                     <label>Firma</label>
                     <input type = "text" 
-                            value = {item.brand}
-                            className = "form-control"
-                            readOnly />
+                           value = {item.brand}
+                           className = "form-control"
+                           readOnly />
                 </div>
                 <div className="form-group">
                     <label>Typ</label>
                     <input type = "text"
-                            value = {item.type}
-                            className = "form-control"
-                            readOnly />
+                           value = {item.type}
+                           className = "form-control"
+                           readOnly />
                 </div>
                 <Tags tags = {item.tags} canEdit = {false} />
                 <Gallery items = {item.imagesUrl.map(i => i.url)} />
-                <ItemSaleForm onSubmit = {submit}
+                <ItemSaleForm itemSale = {item}
+                              onSubmit = {submit}
                               currencies = {currencies}
                               textSubmit = "Wystaw"
                               textCancel = "Anuluj" />
@@ -106,4 +107,4 @@ function PutItemForSale(props) {
     )
 }
 
-export default PutItemForSale;
+export default ItemForSaleEdit;

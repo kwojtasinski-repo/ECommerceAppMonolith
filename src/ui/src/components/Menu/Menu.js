@@ -62,11 +62,17 @@ function Menu() {
                                 mainTitle = "Przedmioty"
                                 navItems = {
                                     <>
-                                    <Nav.Link as={Link} to="/items" className={`${style.menuItem}`}>
+                                    <Nav.Link as={Link} to="/items" className={`${style.menuItemForItems}`}>
                                         Niewystawione
                                     </Nav.Link>
-                                    <Nav.Link as={Link} end to="/items/sale/" className={`${style.menuItem}`}>
+                                    <Nav.Link as={Link} end to="/items/sale/" className={`${style.menuItemForItems}`}>
                                         Wystawione
+                                    </Nav.Link>
+                                    <Nav.Link as={Link} end to="/brands" className={`${style.menuItemForItems}`}>
+                                        Firmy
+                                    </Nav.Link>
+                                    <Nav.Link as={Link} end to="/types" className={`${style.menuItemForItems}`}>
+                                        Typy
                                     </Nav.Link>
                                     </>
                                 } />

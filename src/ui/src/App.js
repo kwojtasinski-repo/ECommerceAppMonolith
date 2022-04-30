@@ -21,7 +21,6 @@ import AddItem from './pages/Items/AddItem/AddItem';
 import Items from './pages/Items/Items';
 import RequireAuth from './hoc/RequireAuth';
 import EditItem from './pages/Items/EditItem/EditItem';
-import DeleteItem from './pages/Items/DeleteItem/DeleteItem';
 import PutItemForSale from './pages/Items/PutItemForSale/PutItemForSale';
 import Search from './pages/Search/Search';
 import Profile from './pages/Profile/Profile';
@@ -45,7 +44,9 @@ import MyOrders from './pages/Order/MyOrders/MyOrders';
 import ChangeCurrency from './pages/Payments/ChangeCurrency/ChangeCurrency';
 import ItemDetails from './pages/Items/ItemDetails/ItemDetails';
 import ItemsForSale from './pages/Items/ItemsForSale/ItemsForSale';
-import ItemsForSaleEdit from './pages/Items/ItemsForSale/ItemsForSaleEdit/ItemsForSaleEdit';
+import ItemForSaleEdit from './pages/Items/ItemsForSale/ItemForSaleEdit/ItemForSaleEdit';
+import Brands from './pages/Brands/Brands';
+import Types from './pages/Types/Types';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -72,6 +73,8 @@ function App() {
   const content = (
     <Suspense fallback={<p>Ładowanie...</p>} >
       <Routes>
+        <Route path='/brands' element = { <Brands /> }/>
+        <Route path='/types' element = { <Types /> }/>
         <Route path='/payments/add/:id' element = { <RequireAuth> <AddPayment /> </RequireAuth> } >
           <Route path='change-currency' element = { <RequireAuth> <ChangeCurrency/> </RequireAuth> } />
         </Route>
@@ -83,14 +86,13 @@ function App() {
         <Route path='/orders/:id' element = { <RequireAuth> <Order/> </RequireAuth> }/>
         <Route path='/orders' element = {<RequireAuth> <MyOrders/> </RequireAuth>} />
         <Route path='/archive/items/:id' element = { <RequireAuth> <OrderItemArchive /> </RequireAuth>} />
-        <Route path='/items/sale/edit/:id' element = { <RequireAuth> <ItemsForSaleEdit /> </RequireAuth> } />
+        <Route path='/items/sale/edit/:id' element = { <RequireAuth> <ItemForSaleEdit /> </RequireAuth> } />
         <Route path='/items/sale' element = { <RequireAuth> <ItemsForSale /> </RequireAuth> } >
           <Route path=':term' element = { <RequireAuth> <ItemsForSale /> </RequireAuth> }/>
           <Route path='' element = { <RequireAuth> <ItemsForSale /> </RequireAuth> }/>
         </Route>
         <Route path='/items/details/:id' element = { <RequireAuth> <ItemDetails /> </RequireAuth>} />
         <Route path='/items/for-sale/:id' element = { <RequireAuth> <PutItemForSale /> </RequireAuth>} />
-        <Route path='/items/delete' element = { <RequireAuth> <DeleteItem /> </RequireAuth>} />
         <Route path='/items/edit/:id' element = { <RequireAuth> <EditItem /> </RequireAuth>} />
         <Route path='/items/add' element = { <RequireAuth> <AddItem /> </RequireAuth>} />
         <Route path='/items/:id' element = {  <Item />} />
