@@ -1,0 +1,10 @@
+.image {
+    max-width: 100px;
+    min-width: 50px;
+    max-height: 75px;
+    min-height: 45px;
+}
+
+.imageRow {
+    width: 120px;
+}

@@ -65,7 +65,7 @@ function Menu() {
                                     <Nav.Link as={Link} to="/items" className={`${style.menuItem}`}>
                                         Niewystawione
                                     </Nav.Link>
-                                    <Nav.Link as={Link} to="/" className={`${style.menuItem}`}>
+                                    <Nav.Link as={Link} end to="/items/sale/" className={`${style.menuItem}`}>
                                         Wystawione
                                     </Nav.Link>
                                     </>

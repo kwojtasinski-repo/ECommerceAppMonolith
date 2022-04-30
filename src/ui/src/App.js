@@ -5,7 +5,7 @@ import Header from './components/Header/Header';
 import Menu from './components/Menu/Menu';
 import Footer from './components/Footer/Footer';
 import Searchbar from './components/UI/Searchbar/Searchbar';
-import { Suspense, useEffect, useReducer, useState } from 'react';
+import { Suspense, useReducer, useState } from 'react';
 import ErrorBoundary from './hoc/ErrorBoundary';
 import { initialState, reducer } from './reducer';
 import AuthContext from './context/AuthContext';
@@ -44,6 +44,8 @@ import AddPayment from './pages/Payments/AddPayment';
 import MyOrders from './pages/Order/MyOrders/MyOrders';
 import ChangeCurrency from './pages/Payments/ChangeCurrency/ChangeCurrency';
 import ItemDetails from './pages/Items/ItemDetails/ItemDetails';
+import ItemsForSale from './pages/Items/ItemsForSale/ItemsForSale';
+import ItemsForSaleEdit from './pages/Items/ItemsForSale/ItemsForSaleEdit/ItemsForSaleEdit';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -81,6 +83,11 @@ function App() {
         <Route path='/orders/:id' element = { <RequireAuth> <Order/> </RequireAuth> }/>
         <Route path='/orders' element = {<RequireAuth> <MyOrders/> </RequireAuth>} />
         <Route path='/archive/items/:id' element = { <RequireAuth> <OrderItemArchive /> </RequireAuth>} />
+        <Route path='/items/sale/edit/:id' element = { <RequireAuth> <ItemsForSaleEdit /> </RequireAuth> } />
+        <Route path='/items/sale' element = { <RequireAuth> <ItemsForSale /> </RequireAuth> } >
+          <Route path=':term' element = { <RequireAuth> <ItemsForSale /> </RequireAuth> }/>
+          <Route path='' element = { <RequireAuth> <ItemsForSale /> </RequireAuth> }/>
+        </Route>
         <Route path='/items/details/:id' element = { <RequireAuth> <ItemDetails /> </RequireAuth>} />
         <Route path='/items/for-sale/:id' element = { <RequireAuth> <PutItemForSale /> </RequireAuth>} />
         <Route path='/items/delete' element = { <RequireAuth> <DeleteItem /> </RequireAuth>} />
