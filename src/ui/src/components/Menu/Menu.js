@@ -62,16 +62,16 @@ function Menu() {
                                 mainTitle = "Przedmioty"
                                 navItems = {
                                     <>
-                                    <Nav.Link as={Link} to="/items" className={`${style.menuItemForItems}`}>
+                                    <Nav.Link as={Link} to="/items" className={`${style.menuItemDropdown}`}>
                                         Niewystawione
                                     </Nav.Link>
-                                    <Nav.Link as={Link} end to="/items/sale/" className={`${style.menuItemForItems}`}>
+                                    <Nav.Link as={Link} end to="/items/sale/" className={`${style.menuItemDropdown}`}>
                                         Wystawione
                                     </Nav.Link>
-                                    <Nav.Link as={Link} end to="/brands" className={`${style.menuItemForItems}`}>
+                                    <Nav.Link as={Link} end to="/brands" className={`${style.menuItemDropdown}`}>
                                         Firmy
                                     </Nav.Link>
-                                    <Nav.Link as={Link} end to="/types" className={`${style.menuItemForItems}`}>
+                                    <Nav.Link as={Link} end to="/types" className={`${style.menuItemDropdown}`}>
                                         Typy
                                     </Nav.Link>
                                     </>
@@ -89,10 +89,10 @@ function Menu() {
                             mainTitle = "Zamówienia"
                             navItems = {
                                 <>
-                                <Nav.Link as={Link} to="/cart/summary" className={`${style.menuItem}`}>
+                                <Nav.Link as={Link} to="/cart/summary" className={`${style.menuItemDropdown}`}>
                                     Niezrealizowane zamówienie
                                 </Nav.Link>
-                                <Nav.Link as={Link} to="/orders" className={`${style.menuItem}`}>
+                                <Nav.Link as={Link} to="/orders" className={`${style.menuItemDropdown}`}>
                                     Moje zamówienia
                                 </Nav.Link>
                                 </>

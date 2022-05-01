@@ -84,7 +84,7 @@ export function mapToMessage(code, status) {
     }
 
     if (status == 404) {
-        return "Sprawdź poprawność podanych danych";
+        return "Sprawdź podany url";
     }
 
     if (status == 400) {
@@ -98,7 +98,7 @@ export function mapToMessage(code, status) {
             case 'invalid_credentials' :
                 return "Niepoprawne dane logowania, sprawdź czy email i hasło są poprawne";
             default :
-                return "Sprawdź podany url";
+                return "Sprawdź poprawność podanych danych";
         }
     }
 }
