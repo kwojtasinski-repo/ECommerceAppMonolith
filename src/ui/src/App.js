@@ -51,7 +51,7 @@ import TypeEdit from './pages/Types/Edit/TypeEdit';
 import TypeAdd from './pages/Types/Add/TypeAdd';
 import EditBrand from './pages/Brands/Edit/EditBrand';
 import AddBrand from './pages/Brands/Add/AddBrand';
-import Users from './pages/Profile/Users/Users';
+import Users from './pages/Users/Users';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);

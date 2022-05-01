@@ -297,3 +297,25 @@ export const mapToType = (obj) => {
 
     return type;
 }
+
+export const mapToUsers = (objects) => {
+    const users = [];
+
+    for (const obj of objects) {
+        users.push(mapToUser(obj));
+    }
+
+    return users;
+}
+
+export const mapToUser = (obj) => {
+    const user = {
+        id: obj.id,
+        email: obj.email,
+        role: obj.role,
+        claims: obj.claims,
+        createdAt: new Date(obj.createdAt).toLocaleString()
+    }
+
+    return user;
+}
