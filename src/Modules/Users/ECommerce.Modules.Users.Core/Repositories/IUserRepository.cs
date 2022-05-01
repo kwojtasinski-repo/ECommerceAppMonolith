@@ -1,4 +1,5 @@
-﻿using ECommerce.Modules.Users.Core.Entities;
+﻿using ECommerce.Modules.Users.Core.DTO;
+using ECommerce.Modules.Users.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,7 @@ namespace ECommerce.Modules.Users.Core.Repositories
         Task<User> GetAsync(string email);
         Task AddAsync(User user);
         Task UpdateAsync(User user);
+        Task<IEnumerable<User>> GetAllByEmailAsync(string email);
+        Task<IEnumerable<User>> GetAllAsync();
     }
 }

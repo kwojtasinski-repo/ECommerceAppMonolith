@@ -224,5 +224,31 @@ namespace ECommerce.Modules.Users.Core.Services
                 throw new InvalidCredentialsException();
             }
         }
+
+        public async Task<IEnumerable<AccountDto>> GetAllAsync()
+        {
+            var users = await _userRepository.GetAllAsync();
+
+            var accounts = new List<AccountDto>();
+            foreach (var user in users)
+            {
+                accounts.Add(user.AsAccountDto());
+            }
+
+            return accounts;
+        }
+
+        public async Task<IEnumerable<AccountDto>> GetAllByEmailAsync(string email)
+        {
+            var users = await _userRepository.GetAllByEmailAsync(email);
+
+            var accounts = new List<AccountDto>();
+            foreach (var user in users)
+            {
+                accounts.Add(user.AsAccountDto());
+            }
+
+            return accounts;
+        }
     }
 }

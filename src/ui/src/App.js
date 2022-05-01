@@ -49,6 +49,9 @@ import Brands from './pages/Brands/Brands';
 import Types from './pages/Types/Types';
 import TypeEdit from './pages/Types/Edit/TypeEdit';
 import TypeAdd from './pages/Types/Add/TypeAdd';
+import EditBrand from './pages/Brands/Edit/EditBrand';
+import AddBrand from './pages/Brands/Add/AddBrand';
+import Users from './pages/Profile/Users/Users';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -75,7 +78,11 @@ function App() {
   const content = (
     <Suspense fallback={<p>Ładowanie...</p>} >
       <Routes>
-        <Route path='/brands' element = { <Brands /> }/>
+        <Route path="/users" element = { <Users /> }/>
+        <Route path='/brands' element = { <Brands /> } >
+          <Route path='edit/:id' element = { <RequireAuth> <EditBrand /> </RequireAuth> } />
+          <Route path='add' element = { <RequireAuth> <AddBrand /> </RequireAuth> } />
+        </Route>
         <Route path='/types' element = { <Types /> } >
           <Route path='edit/:id' element = { <RequireAuth> <TypeEdit /> </RequireAuth> } />
           <Route path='add' element = { <RequireAuth> <TypeAdd /> </RequireAuth> } />
@@ -110,7 +117,7 @@ function App() {
                                             <Profile/>
                                           </RequireAuth>
                                         }  >
-                          
+          
           <Route path="contact-data" element = { <RequireAuth> <ContactData /> </RequireAuth> } >
             <Route path="add" element = {<RequireAuth><AddContact /></RequireAuth>} />
             <Route path="edit/:id" element = {<RequireAuth><EditContact /></RequireAuth>} />

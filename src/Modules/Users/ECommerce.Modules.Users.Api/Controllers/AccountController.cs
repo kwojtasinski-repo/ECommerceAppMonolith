@@ -4,11 +4,6 @@ using ECommerce.Shared.Abstractions.Auth;
 using ECommerce.Shared.Abstractions.Contexts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Users.Api.Controllers
 {
@@ -28,6 +23,7 @@ namespace ECommerce.Modules.Users.Api.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         public async Task<ActionResult<AccountDto>> GetAsync()
             => OkOrNotFound(await _identityService.GetAsync(_context.Identity.Id));
 
@@ -47,8 +43,11 @@ namespace ECommerce.Modules.Users.Api.Controllers
             => Ok(await _identityService.SignInAsync(dto));
 
         [HttpPost("change-credentials")]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         public async Task<ActionResult<JsonWebToken>> ChangeCredentialsAsync(ChangeCredentialsDto dto)
             => Ok(await _identityService.ChangeCredentialsAsync(dto));
     }

@@ -1,11 +1,7 @@
-﻿using ECommerce.Modules.Users.Core.Entities;
+﻿using ECommerce.Modules.Users.Core.DTO;
+using ECommerce.Modules.Users.Core.Entities;
 using ECommerce.Modules.Users.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Users.Core.DAL.Repositories
 {
@@ -40,6 +36,20 @@ namespace ECommerce.Modules.Users.Core.DAL.Repositories
         {
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<User>> GetAllAsync()
+        {
+            var users = await _context.Users.ToListAsync();
+            return users;
+        }
+
+        public async Task<IEnumerable<User>> GetAllByEmailAsync(string email)
+        {
+            var users = await _context.Users
+                            .Where(u => u.Email.StartsWith(email) || u.Email.EndsWith(email))
+                            .ToListAsync();
+            return users;
         }
     }
 }

@@ -2,7 +2,8 @@
 @email = test@gmail.com
 @password = password
 @role = user
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NjgzZDNjYi02ODkwLTQ4ZTgtOTM2Ni05ODA3NGM1MjQ4NTQiLCJ1bmlxdWVfbmFtZSI6IjU2ODNkM2NiLTY4OTAtNDhlOC05MzY2LTk4MDc0YzUyNDg1NCIsImp0aSI6Ijg0ZmFlZThhLWVhYmQtNDkxYS1hYTcwLWEzMjRiM2FiZjE0YiIsImlhdCI6IjE2NDU1NjMzOTgwNjkiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOiJ1c2VycyIsIm5iZiI6MTY0NTU2MzM5OCwiZXhwIjoxNjQ1NTY2OTk4LCJpc3MiOiJlY29tbWVyY2UifQ.k1VO52rgY2DymC4dix4RRC3smKAAM90ZJ532I0lsu_k
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NjgzZDNjYi02ODkwLTQ4ZTgtOTM2Ni05ODA3NGM1MjQ4NTQiLCJ1bmlxdWVfbmFtZSI6IjU2ODNkM2NiLTY4OTAtNDhlOC05MzY2LTk4MDc0YzUyNDg1NCIsImp0aSI6IjM4ZWZlZTA2LWJlMmItNDA5NS05ZDY2LTdmZDFlMTc1Nzg5NCIsImlhdCI6IjE2NTE0MzMyNTE5OTkiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJhZG1pbiIsInBlcm1pc3Npb25zIjpbInVzZXJzIiwiaXRlbXMiLCJpdGVtLXNhbGUiLCJjdXJyZW5jaWVzIl0sIm5iZiI6MTY1MTQzMzI1MSwiZXhwIjoxNjUxNDM2ODUxLCJpc3MiOiJlY29tbWVyY2UifQ.kzj15fhbXEKyE07GkNKwXsB4HCnEFTHVKdZ0F_Ue5yI
+@searchEmail = t
 
 ### 
 GET {{url}}
@@ -32,3 +33,11 @@ Content-Type: application/json
     "email": "{{email}}",
     "password": "{{password}}"
 }
+
+###
+GET {{url}}/accounts
+Authorization: Bearer {{accessToken}}
+
+###
+GET {{url}}/accounts/search?email={{searchEmail}}
+Authorization: Bearer {{accessToken}}
