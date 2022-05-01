@@ -1,13 +1,13 @@
 import axios from "../../../axios-setup";
 import { useEffect, useState } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
-import { Color } from "../../../components/Notification/Notification";
-import { mapToType } from "../../../helpers/mapper";
+import { mapToBrand } from "../../../helpers/mapper";
 import { mapToMessage } from "../../../helpers/validation";
 import useNotification from "../../../hooks/useNotification";
-import TypeForm from "../TypeForm";
+import { Color } from "../../../components/Notification/Notification";
+import BrandForm from "../BrandForm";
 
-function TypeEdit(props) {
+function EditBrand(props) {
     const { id } = useParams();
     const [type, setType] = useState([]);
     const navigate = useNavigate();
@@ -15,10 +15,10 @@ function TypeEdit(props) {
     const { addAction } = useOutletContext();
     const [error, setError] = useState('');
 
-    const fetchType = async () => {
+    const fetchBrand = async () => {
         try {
-            const response = await axios.get(`/items-module/types/${id}`);
-            setType(mapToType(response.data));
+            const response = await axios.get(`/items-module/brands/${id}`);
+            setType(mapToBrand(response.data));
         } catch (exception) {
             console.log(exception);
             let errorMessage = '';
@@ -30,15 +30,15 @@ function TypeEdit(props) {
     }
 
     const submit = async form => {
-        await axios.put(`/items-module/types`, form);
+        await axios.put(`/items-module/brands`, form);
         const notification = { color: Color.success, id: new Date().getTime(), text: 'Pomyślnie zaaktualizowano', timeToClose: 5000 };
         addNotification(notification);
-        addAction(`Updated-type-${id}`);
-        navigate('/types');
+        addAction(`Updated-brand-${id}`);
+        navigate('/brands');
     }
 
     useEffect(() => {
-        fetchType();
+        fetchBrand();
     }, []);
 
     return (
@@ -51,15 +51,15 @@ function TypeEdit(props) {
 
             <p className="text-muted">Uzupełnij dane typu przedmiotu</p>
 
-                <TypeForm 
-                    type = {type}
+                <BrandForm 
+                    brand = {type}
                     buttonText = "Zapisz"
                     cancelButtonText = "Anuluj"
                     onSubmit = {submit}
-                    cancelEditUrl = "/types" />
+                    cancelEditUrl = "/brands" />
             </div>
         </div>
     )
 }
 
-export default TypeEdit;
+export default EditBrand;

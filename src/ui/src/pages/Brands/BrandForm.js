@@ -26,7 +26,7 @@ function BrandForm(props) {
         
         try {
             await props.onSubmit({
-                id: form.id.value,
+                brandId: form.id.value,
                 name: form.name.value
             });
         } catch (exception) {

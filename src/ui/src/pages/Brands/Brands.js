@@ -39,11 +39,11 @@ function Brands(props) {
         setIsOpen(!isOpen);
     }
 
-    const handleDeleteBrand = () => {
+    const handleDeleteBrand = async () => {
         setIsOpen(!isOpen);
 
         try {
-            axios.delete(`/items-module/brands/${currentId}`);
+            await axios.delete(`/items-module/brands/${currentId}`);
         } catch(exception) {
             let errorMessage = '';
             const status = exception.response.status;
@@ -61,8 +61,9 @@ function Brands(props) {
 
     const addAction = (action) => {
         if (actions.length < 5) {
-            actions.push(action);
-            setActions(actions);
+            const actionsModify = [...actions];
+            actionsModify.push(action);
+            setActions(actionsModify);
             return;
         }
 
@@ -93,7 +94,7 @@ function Brands(props) {
                                       handleClose = {closePopUp}
                                       type = {Type.alert}
                                       content = {<>
-                                          <p>Czy chcesz usunąć typ?</p>
+                                          <p>Czy chcesz usunąć firmę?</p>
                                       </>}
                     /> }
 
@@ -113,7 +114,7 @@ function Brands(props) {
                             {brands.map(b => (
                                 <tr id ={b.id} key={new Date().getTime() + Math.random() + Math.random() + b.id}>
                                     <td>{b.name}</td>
-                                    <td><NavLink className="btn btn-warning" end to={`/types/edit/${b.id}`} >Edytuj</NavLink></td>
+                                    <td><NavLink className="btn btn-warning" end to={`/brands/edit/${b.id}`} >Edytuj</NavLink></td>
                                     <td><button className="btn btn-danger" onClick={() => clickHandler(b.id)}>Usuń</button></td>
                                 </tr>
                             ))}
