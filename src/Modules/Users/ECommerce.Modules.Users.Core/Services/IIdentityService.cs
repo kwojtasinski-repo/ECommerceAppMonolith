@@ -12,5 +12,6 @@ namespace ECommerce.Modules.Users.Core.Services
         Task<IEnumerable<AccountDto>> GetAllAsync();
         Task<IEnumerable<AccountDto>> GetAllByEmailAsync(string email);
         Task<JsonWebToken> ChangeUserActiveAsync(ChangeUserActive changeUserActive);
+        Task<JsonWebToken> UpdatePoliciesAsync(UpdatePolicies updatePolicies);
     }
 }

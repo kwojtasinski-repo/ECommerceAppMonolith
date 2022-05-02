@@ -259,5 +259,46 @@ namespace ECommerce.Modules.Users.Core.Services
             await _userRepository.UpdateAsync(user);
             return GenerateToken(user);
         }
+
+        public async Task<JsonWebToken> UpdatePoliciesAsync(UpdatePolicies updatePolicies)
+        {
+            var user = await _userRepository.GetAsync(updatePolicies.UserId);
+
+            if (user is null)
+            {
+                throw new UserNotFoundException(updatePolicies.UserId);
+            }
+
+            user.Role = updatePolicies.Role;
+
+            if (updatePolicies.Claims is not null && user.Claims is not null)
+            {
+                if (user.Claims.TryGetValue("permissions", out var claims))
+                {
+                    var permissions = new List<string>(claims);
+
+                    foreach (var claim in updatePolicies.Claims)
+                    {
+                        if (!permissions.Any(c => c == claim))
+                        {
+                            permissions.Add(claim);
+                        }
+                    }
+
+                    foreach (var claim in claims)
+                    {
+                        if (!updatePolicies.Claims.Any(c => c == claim))
+                        {
+                            permissions.Remove(claim);
+                        }
+                    }
+
+                    user.Claims.Add("permissions", permissions);
+                }
+            }
+
+            await _userRepository.UpdateAsync(user);
+            return GenerateToken(user);
+        }
     }
 }
