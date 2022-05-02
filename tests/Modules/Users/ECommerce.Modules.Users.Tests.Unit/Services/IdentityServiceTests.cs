@@ -279,6 +279,35 @@ namespace ECommerce.Modules.Users.Tests.Unit.Services
             exception.Message.ShouldBe(expectedException.Message);
         }
 
+        [Fact]
+        public async Task given_valid_dto_should_change_user_activity()
+        {
+            var dto = new ChangeUserActive { UserId = Guid.NewGuid(), Active = false };
+            var claims = new Dictionary<string, IEnumerable<string>>();
+            var user = GetSampleUser("email@email.com", "PasW0Rd!abc123", "admin", claims);
+            _userRepository.GetAsync(dto.UserId).Returns(user); 
+            var token = CreateToken(user.Role);
+            _authManager.CreateToken(Arg.Any<string>(), user.Role, claims: claims).Returns(token);
+
+            await _service.ChangeUserActiveAsync(dto);
+
+            user.IsActive.ShouldBeFalse();
+            await _userRepository.Received(1).UpdateAsync(user);
+        }
+        
+        [Fact]
+        public async Task given_invalid_user_id_when_change_activity_should_throw_an_exception()
+        {
+            var dto = new ChangeUserActive { UserId = Guid.NewGuid(), Active = false };
+            var expectedException = new UserNotFoundException(dto.UserId);
+
+            var exception = await Record.ExceptionAsync(() => _service.ChangeUserActiveAsync(dto));
+
+            exception.ShouldNotBeNull();
+            exception.ShouldBeOfType(expectedException.GetType());
+            exception.Message.ShouldBe(expectedException.Message);
+        }
+
         private static User GetSampleUser(string email, string password, string role, Dictionary<string, IEnumerable<string>> claims)
         {
             return new User
