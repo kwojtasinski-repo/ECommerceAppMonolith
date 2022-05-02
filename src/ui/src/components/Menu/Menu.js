@@ -28,10 +28,6 @@ function Menu() {
         const notification = { color: Color.info, id: new Date().getTime(), text: 'Wylogowano', timeToClose: 5000 };
         addNotification(notification);
     }
-
-    const clickMenuHandler = () => {
-        setMenuOpened(!menuOpened);
-    }
     
     const onClick = (event) => {
         if (event.detail === 1 && menuOpened > 0) {

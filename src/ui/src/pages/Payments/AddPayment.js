@@ -12,7 +12,20 @@ function AddPayment(props) {
     const [loading, setLoading] = useState(true);
     const [notifications, addNotification] = useNotification();
     const navigate = useNavigate();
-    const [action, setAction] = useState('');
+    const [actions, setActions] = useState([]);
+
+    const addAction = action => {
+        let newActions = [...actions];
+
+        if (newActions.length === 5) {
+            newActions = [];
+            newActions.push(action);
+        } else {
+            newActions.push(action);
+        }
+
+        setActions(newActions);
+    }
 
     const fetchOrder = async () => {
         const response = await axios.get(`/sales-module/orders/${id}`);
@@ -31,7 +44,7 @@ function AddPayment(props) {
 
     useEffect(() => {
         fetchOrder();
-    }, [action]);
+    }, [actions]);
 
     return (
         <>
@@ -72,7 +85,7 @@ function AddPayment(props) {
                                 <Outlet context={{
                                     orderId: order.id,
                                     code: order.code,
-                                    setAction: setAction
+                                    setAction: addAction
                                 }}/>
                             </div>
                             <div className="text-center mb-5">
