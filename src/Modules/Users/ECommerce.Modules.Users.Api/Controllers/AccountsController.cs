@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ECommerce.Shared.Infrastructure.Filters.ActionFilters;
 using ECommerce.Modules.Users.Core.Services;
+using ECommerce.Shared.Abstractions.Auth;
 
 namespace ECommerce.Modules.Users.Api.Controllers
 {
@@ -42,10 +43,9 @@ namespace ECommerce.Modules.Users.Api.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
-        public async Task<ActionResult> ChangeUserActiveAsync(ChangeUserActive changeUserActive)
+        public async Task<ActionResult<JsonWebToken>> ChangeUserActiveAsync(ChangeUserActive changeUserActive)
         {
-            await _identityService.ChangeUserActiveAsync(changeUserActive);
-            return Ok();
+            return Ok(await _identityService.ChangeUserActiveAsync(changeUserActive));
         }
 
 
@@ -57,6 +57,17 @@ namespace ECommerce.Modules.Users.Api.Controllers
         public async Task<ActionResult<AccountDto>> GetUserAsync(Guid id)
         {
             return OkOrNotFound(await _identityService.GetAsync(id));
+        }
+
+
+        [HttpPut("policies")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        public async Task<ActionResult<JsonWebToken>> UpdatePoliciesAsync(UpdatePolicies updatePolicies)
+        {
+            return Ok(await _identityService.UpdatePoliciesAsync(updatePolicies));
         }
     }
 }
