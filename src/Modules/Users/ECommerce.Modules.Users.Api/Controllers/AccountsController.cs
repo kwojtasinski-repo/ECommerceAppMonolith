@@ -1,26 +1,23 @@
 ﻿using ECommerce.Modules.Users.Core.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ECommerce.Shared.Abstractions.Filters.ActionFilters;
+using ECommerce.Shared.Infrastructure.Filters.ActionFilters;
 using ECommerce.Modules.Users.Core.Services;
-using ECommerce.Shared.Abstractions.Contexts;
 
 namespace ECommerce.Modules.Users.Api.Controllers
 {
+    [Authorize(Roles = "admin")]
+    [CheckPermissions("users")]
     internal class AccountsController : BaseController
     {
         private readonly IIdentityService _identityService;
-        private readonly IContext _context;
 
-        public AccountsController(IIdentityService identityService, IContext context)
+        public AccountsController(IIdentityService identityService)
         {
             _identityService = identityService;
-            _context = context;
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin")]
-        [CheckPermissions("users")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -31,8 +28,6 @@ namespace ECommerce.Modules.Users.Api.Controllers
         }
 
         [HttpGet("search")]
-        [Authorize(Roles = "admin")]
-        [CheckPermissions("users")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -40,6 +35,17 @@ namespace ECommerce.Modules.Users.Api.Controllers
         public async Task<ActionResult<IEnumerable<AccountDto>>> GetAllByEmailAsync([FromQuery] string email)
         {
             return Ok(await _identityService.GetAllByEmailAsync(email));
+        }
+
+        [HttpPatch("active")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        public async Task<ActionResult> ChangeUserActiveAsync(ChangeUserActive changeUserActive)
+        {
+            await _identityService.ChangeUserActiveAsync(changeUserActive);
+            return Ok();
         }
     }
 }

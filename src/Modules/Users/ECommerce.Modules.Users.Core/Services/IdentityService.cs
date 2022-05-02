@@ -6,12 +6,7 @@ using ECommerce.Modules.Users.Core.Repositories;
 using ECommerce.Shared.Abstractions.Auth;
 using ECommerce.Shared.Abstractions.Time;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Users.Core.Services
 {
@@ -249,6 +244,20 @@ namespace ECommerce.Modules.Users.Core.Services
             }
 
             return accounts;
+        }
+
+        public async Task<JsonWebToken> ChangeUserActiveAsync(ChangeUserActive changeUserActive)
+        {
+            var user = await _userRepository.GetAsync(changeUserActive.UserId);
+
+            if (user is null)
+            {
+                throw new UserNotFoundException(changeUserActive.UserId);
+            }
+
+            user.IsActive = changeUserActive.Active;
+            await _userRepository.UpdateAsync(user);
+            return GenerateToken(user);
         }
     }
 }

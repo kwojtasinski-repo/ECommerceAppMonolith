@@ -2,8 +2,9 @@
 @email = test@gmail.com
 @password = password
 @role = user
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NjgzZDNjYi02ODkwLTQ4ZTgtOTM2Ni05ODA3NGM1MjQ4NTQiLCJ1bmlxdWVfbmFtZSI6IjU2ODNkM2NiLTY4OTAtNDhlOC05MzY2LTk4MDc0YzUyNDg1NCIsImp0aSI6IjM4ZWZlZTA2LWJlMmItNDA5NS05ZDY2LTdmZDFlMTc1Nzg5NCIsImlhdCI6IjE2NTE0MzMyNTE5OTkiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJhZG1pbiIsInBlcm1pc3Npb25zIjpbInVzZXJzIiwiaXRlbXMiLCJpdGVtLXNhbGUiLCJjdXJyZW5jaWVzIl0sIm5iZiI6MTY1MTQzMzI1MSwiZXhwIjoxNjUxNDM2ODUxLCJpc3MiOiJlY29tbWVyY2UifQ.kzj15fhbXEKyE07GkNKwXsB4HCnEFTHVKdZ0F_Ue5yI
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NjgzZDNjYi02ODkwLTQ4ZTgtOTM2Ni05ODA3NGM1MjQ4NTQiLCJ1bmlxdWVfbmFtZSI6IjU2ODNkM2NiLTY4OTAtNDhlOC05MzY2LTk4MDc0YzUyNDg1NCIsImp0aSI6IjMwOWQ1NWVjLWNkNGUtNGZjZS04NDEyLWVhZmIyMDMxYWZmNyIsImlhdCI6IjE2NTE0ODY4MDE5NzIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJhZG1pbiIsInBlcm1pc3Npb25zIjpbInVzZXJzIiwiaXRlbXMiLCJpdGVtLXNhbGUiLCJjdXJyZW5jaWVzIl0sIm5iZiI6MTY1MTQ4NjgwMSwiZXhwIjoxNjUxNDkwNDAxLCJpc3MiOiJlY29tbWVyY2UifQ.L75G4ALHSDrdDHWqzxuCJs_QdINCD61AyYSX7GuCnAw
 @searchEmail = t
+@userId = 434aeb4a-1de9-4d64-a662-723408650823
 
 ### 
 GET {{url}}
@@ -40,4 +41,32 @@ Authorization: Bearer {{accessToken}}
 
 ###
 GET {{url}}/accounts/search?email={{searchEmail}}
+Authorization: Bearer {{accessToken}}
+
+###
+PATCH {{url}}/accounts/active
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "userId": "{{userId}}",
+    "active": false
+}
+
+###
+GET {{url}}/accounts
+Authorization: Bearer {{accessToken}}
+
+###
+PATCH {{url}}/accounts/active
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "userId": "{{userId}}",
+    "active": true
+}
+
+###
+GET {{url}}/accounts
 Authorization: Bearer {{accessToken}}

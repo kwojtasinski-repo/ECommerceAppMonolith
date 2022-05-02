@@ -1,10 +1,5 @@
 ﻿using ECommerce.Modules.Users.Core.DTO;
 using ECommerce.Shared.Abstractions.Auth;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Users.Core.Services
 {
@@ -16,5 +11,6 @@ namespace ECommerce.Modules.Users.Core.Services
         Task<JsonWebToken> ChangeCredentialsAsync(ChangeCredentialsDto dto);
         Task<IEnumerable<AccountDto>> GetAllAsync();
         Task<IEnumerable<AccountDto>> GetAllByEmailAsync(string email);
+        Task<JsonWebToken> ChangeUserActiveAsync(ChangeUserActive changeUserActive);
     }
 }

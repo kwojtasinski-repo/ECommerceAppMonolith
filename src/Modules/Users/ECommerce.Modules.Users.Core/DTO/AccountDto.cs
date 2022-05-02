@@ -13,5 +13,6 @@ namespace ECommerce.Modules.Users.Core.DTO
         public string Role { get; set; }
         public Dictionary<string, IEnumerable<string>> Claims { get; set; }
         public DateTime CreatedAt { get; set; }
+        public bool IsActive { get; set; }
     }
 }

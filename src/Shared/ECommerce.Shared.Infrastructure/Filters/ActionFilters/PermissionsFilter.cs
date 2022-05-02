@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace ECommerce.Shared.Abstractions.Filters.ActionFilters
+namespace ECommerce.Shared.Infrastructure.Filters.ActionFilters
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public sealed class CheckPermissions : Attribute, IAuthorizationFilter
+    internal sealed class PermissionsFilter : IAuthorizationFilter
     {
         private readonly IEnumerable<string> _permissions;
 
-        public CheckPermissions(string permission) : this(new string [] { permission })
+        public PermissionsFilter(string permission) : this(new string[] { permission })
         {
         }
 
-        public CheckPermissions(IEnumerable<string> permissions)
+        public PermissionsFilter(IEnumerable<string> permissions)
         {
             _permissions = permissions;
         }

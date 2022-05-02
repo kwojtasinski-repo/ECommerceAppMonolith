@@ -18,7 +18,8 @@ namespace ECommerce.Modules.Users.Core.Mappgins
                 Email = user.Email,
                 Role = user.Role,
                 Claims = user.Claims,
-                CreatedAt = user.CreatedAt
+                CreatedAt = user.CreatedAt,
+                IsActive = user.IsActive
             };
 
             return dto;
