@@ -9,6 +9,8 @@ import useWebsiteTitle from "../../hooks/useWebsiteTitle";
 import { mapToMessage } from "../../helpers/validation";
 import useCart from "../../hooks/useCart";
 import ReducerContext from "../../context/ReducerContext";
+import { calculateItem } from "../../helpers/calculationCost";
+import { getRates } from "../../helpers/getRates";
 
 function Item(props) {
     const { id } = useParams();
@@ -20,9 +22,12 @@ function Item(props) {
     const context = useContext(ReducerContext);
 
     const fetchItem = async () => {
-        try {
+        try {  
+            const rates = await getRates();
             const response = await axios.get(`/items-module/item-sales/${id}`);
-            setItem(mapToItem(response.data));
+            let item = mapToItem(response.data);
+            calculateItem(item, rates);
+            setItem(item);
             setTitle(`Przedmiot - ${response.data.item.itemName}`);
         } catch (exception) {
             console.log(exception);
@@ -40,7 +45,6 @@ function Item(props) {
     }, []);
 
     const onClickHandler = (item) => {
-        console.log(item);
         addItem({
             id: item.id,
             cost: item.cost,

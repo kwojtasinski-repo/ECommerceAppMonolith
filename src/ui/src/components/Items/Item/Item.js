@@ -9,7 +9,6 @@ function Item(props) {
     const context = useContext(ReducerContext);
 
     const onClickHandler = (item) => {
-        console.log(item);
         addItem(item);
         context.dispatch({ type: "modifiedState", currentEvent: 'addItem' });
     }
