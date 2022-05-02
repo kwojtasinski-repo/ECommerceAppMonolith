@@ -55,7 +55,6 @@ function Cart(props) {
                 itemsToSend.push(items[key].id);
             }
         }
-        debugger;
         return itemsToSend;
     }
 

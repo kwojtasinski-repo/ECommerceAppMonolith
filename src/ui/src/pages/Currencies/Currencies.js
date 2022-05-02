@@ -32,7 +32,6 @@ function Currencies(props) {
 
     const clickHandler = (id) => {
         setCurrentId(id);
-        console.log(id);
         setIsOpen(!isOpen);
     }
 

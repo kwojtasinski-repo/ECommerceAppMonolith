@@ -80,7 +80,7 @@ function Item(props) {
                                     <div>
                                         <div className={`${styles.costTheme} float-end`}>
                                             <p>Cena:</p>
-                                            <p className={styles.cost}>{item.cost} {item.code}</p>
+                                            <p className={styles.cost}>{item.cost} PLN</p>
                                         </div>
                                     </div>
                                     <div>
