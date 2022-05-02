@@ -3,15 +3,27 @@ import { NavLink } from "react-router-dom";
 import axios from "../../axios-setup";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import { mapToUsers } from "../../helpers/mapper";
+import { mapToMessage } from "../../helpers/validation";
+import RequireAuth from "../../hoc/RequireAuth";
 
 function Users(props) {
     const [loading, setLoading] = useState(true);
-    const [users, setUsers] = useState();
+    const [users, setUsers] = useState([]);
     const [error, setError] = useState('');
 
     const fetchUsers = async () => {
-        const response = await axios.get('/users-module/accounts');
-        setUsers(mapToUsers(response.data));
+        try {
+            const response = await axios.get('/users-module/accounts');
+            setUsers(mapToUsers(response.data));
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            errorMessage += mapToMessage(errors, status);
+            setError(errorMessage);
+        }
+
         setLoading(false);
     }
 
@@ -38,6 +50,7 @@ function Users(props) {
                                     <th scope="col">Email</th>
                                     <th scope="col">Rola</th>
                                     <th scope="col">Utworzony</th>
+                                    <th scope="col">Aktywny</th>
                                     <th scope="col">Akcja</th>
                                 </tr>
                             </thead>
@@ -47,8 +60,9 @@ function Users(props) {
                                         <td>{u.email}</td>
                                         <td>{u.role}</td>
                                         <td>{u.createdAt}</td>
+                                        <td>{u.isActive ? "Tak" : "Nie"}</td>
                                         <td>
-                                            <NavLink to="#" className="btn btn-warning me-2">Edytuj</NavLink>
+                                            <NavLink to={`edit/${u.id}`} className="btn btn-warning me-2">Edytuj</NavLink>
                                         </td>
                                     </tr>
                                 ))}

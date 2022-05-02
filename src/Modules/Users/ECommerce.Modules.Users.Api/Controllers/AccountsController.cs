@@ -47,5 +47,16 @@ namespace ECommerce.Modules.Users.Api.Controllers
             await _identityService.ChangeUserActiveAsync(changeUserActive);
             return Ok();
         }
+
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        public async Task<ActionResult<AccountDto>> GetUserAsync(Guid id)
+        {
+            return OkOrNotFound(await _identityService.GetAsync(id));
+        }
     }
 }

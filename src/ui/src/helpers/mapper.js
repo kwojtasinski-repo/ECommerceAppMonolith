@@ -314,7 +314,8 @@ export const mapToUser = (obj) => {
         email: obj.email,
         role: obj.role,
         claims: obj.claims,
-        createdAt: new Date(obj.createdAt).toLocaleString()
+        createdAt: new Date(obj.createdAt).toLocaleString(),
+        isActive: obj.isActive
     }
 
     return user;
