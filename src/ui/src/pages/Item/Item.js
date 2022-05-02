@@ -1,5 +1,5 @@
 import axios from "../../axios-setup";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styles from './Item.module.css';
 import Gallery from "../../components/Gallery/Gallery";
@@ -7,6 +7,8 @@ import { mapToItem } from "../../helpers/mapper";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import useWebsiteTitle from "../../hooks/useWebsiteTitle";
 import { mapToMessage } from "../../helpers/validation";
+import useCart from "../../hooks/useCart";
+import ReducerContext from "../../context/ReducerContext";
 
 function Item(props) {
     const { id } = useParams();
@@ -14,6 +16,8 @@ function Item(props) {
     const [loading, setLoading] = useState(true);
     const setTitle = useWebsiteTitle();
     const [error, setError] = useState('');
+    const [itemsInCart, addItem] = useCart();
+    const context = useContext(ReducerContext);
 
     const fetchItem = async () => {
         try {
@@ -34,6 +38,18 @@ function Item(props) {
     useEffect(() => {
         fetchItem();
     }, []);
+
+    const onClickHandler = (item) => {
+        console.log(item);
+        addItem({
+            id: item.id,
+            cost: item.cost,
+            code: item.code,
+            imageUrl: item.imagesUrl.find(im => im.mainImage).url,
+            name: item.name
+        });
+        context.dispatch({ type: "modifiedState", currentEvent: 'addItem' });
+    }
 
     return (
         <>
@@ -64,7 +80,9 @@ function Item(props) {
                                         </div>
                                     </div>
                                     <div>
-                                        <button className="btn btn-primary float-end">Dodaj do koszyka</button>
+                                        <button className="btn btn-primary float-end"
+                                                onClick={() => onClickHandler(item)}>
+                                            Dodaj do koszyka</button>
                                     </div>
                                 </div>
                             </div>
