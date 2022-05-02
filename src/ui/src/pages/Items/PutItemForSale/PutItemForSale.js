@@ -29,8 +29,6 @@ function PutItemForSale(props) {
             errorMessage += mapToMessage(errors, status);            
             setError(errorMessage);
         }
-        
-        setLoading(false);
     }
 
     const fetchCurrencies = async () => {
@@ -48,12 +46,23 @@ function PutItemForSale(props) {
         }        
     }
 
+    const fetchData = async () => {
+        await fetchItem();
+        await fetchCurrencies();
+    }
+
     useEffect(() => {
-        fetchItem();
-        fetchCurrencies();        
+        fetchData();
     }, []);
 
+    useEffect(() => {
+        if (item && currencies.length > 0) {
+            setLoading(false);
+        }
+    }, [item, currencies]);
+
     const submit = async (form) => {
+        debugger;
         await axios.post('/items-module/item-sales', form);
         navigate('/items');
     }
@@ -96,7 +105,13 @@ function PutItemForSale(props) {
                 </div>
                 <Tags tags = {item.tags} canEdit = {false} />
                 <Gallery items = {item.imagesUrl.map(i => i.url)} />
-                <ItemSaleForm onSubmit = {submit}
+                <ItemSaleForm itemSale ={{
+                                id: '',
+                                itemId: id,
+                                cost: '',
+                                code: ''
+                              }}
+                              onSubmit = {submit}
                               currencies = {currencies}
                               textSubmit = "Wystaw"
                               textCancel = "Anuluj" />

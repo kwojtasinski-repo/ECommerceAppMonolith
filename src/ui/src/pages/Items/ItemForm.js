@@ -133,14 +133,12 @@ function ItemForm(props) {
 
     const handleSendImages = () => {
         setLoadingImages(true);
-        setTimeout(() => {
-            setLoadingImages(false);
-            setIsOpen(false);
-            setImageAddSource('');
-            const imagesToUpdate = [...form.imagesUrl.value, ...shareImages];
-            changeHandler(imagesToUpdate, 'imagesUrl');
-            setLimitImages(limitImages - shareImages.length);
-        }, 1000);
+        setLoadingImages(false);
+        setIsOpen(false);
+        setImageAddSource('');
+        const imagesToUpdate = [...form.imagesUrl.value, ...shareImages];
+        changeHandler(imagesToUpdate, 'imagesUrl');
+        setLimitImages(limitImages - shareImages.length);
     }
 
     const handleCloseSendImages = () => {

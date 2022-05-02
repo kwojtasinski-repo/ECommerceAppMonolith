@@ -1,17 +1,20 @@
 import axios from "../../../axios-setup";
-import { useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { mapToUser } from "../../../helpers/mapper";
 import { mapToMessage, validate } from "../../../helpers/validation";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import Input from "../../../components/Input/Input";
+import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
 
 function EditUser(props) {
     const { id } = useParams();
     const [user, setUser] = useState();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
-    const [claims, setClaims] = useState([
+    const [loadinButton, setLoadingButton] = useState(false);
+    const navigate = useNavigate();
+    const claims = [
     {
         label: "Waluty",
         value: "currencies"
@@ -27,7 +30,7 @@ function EditUser(props) {
     {   
         label: "Użytkownicy",
         value: "users"
-    }]);
+    }];
     const [form, setForm] = useState({
         id: {
             value: ''
@@ -96,7 +99,49 @@ function EditUser(props) {
 
     const onSubmit = async (event) => {
         event.preventDefault();
-        console.log('sending');
+        setLoadingButton(true);
+
+        try {
+            await axios.put('/users-module/accounts/policies', {
+                userId: id,
+                role: form.role.value,
+                claims: form.claims.value
+            });
+            navigate('/users');
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            
+            for(const errMsg in errors) {
+                errorMessage += mapToMessage(errors[errMsg].code, status);
+            }
+            
+            setError(errorMessage);
+            setLoadingButton(false);
+        }
+    }
+
+    const changeActive = async (active) => {
+        try {
+            await axios.patch('/users-module/accounts/active', {
+                userId: id,
+                active
+            });
+            navigate('/users');
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            
+            for(const errMsg in errors) {
+                errorMessage += mapToMessage(errors[errMsg].code, status);
+            }
+            
+            setError(errorMessage);
+        }
     }
 
     return (
@@ -105,8 +150,14 @@ function EditUser(props) {
                 <div>
                     <h5>Edycja użytkownika</h5>
                     {user && user?.isActive ? 
-                        <button className="btn btn-danger mt-2 mb-2">Dezaktywuj</button>
-                        : <button className="btn btn-success mt-2 mb-2">Aktywuj</button>
+                        <button className="btn btn-danger mt-2 mb-2"
+                                onClick={() => changeActive(false)}>
+                                    Dezaktywuj
+                        </button>
+                        : <button className="btn btn-success mt-2 mb-2"
+                                  onClick={() => changeActive(true)} >
+                                      Aktywuj
+                        </button>
                     }
                     {error ? (
                         <div className="alert alert-danger mb-2">
@@ -155,11 +206,12 @@ function EditUser(props) {
                                 </form>
                             </div>
                             <div className="text-end mt-2">
-                                <button type="submit" className="btn btn-success me-2"
-                                        onClick={onSubmit} >
+                                <LoadingButton type="submit" className="btn btn-success me-2"
+                                               onClick={onSubmit}
+                                               loading={loadinButton} >
                                             Zatwierdź
-                                </button>
-                                <button type="button" className="btn btn-secondary">Anuluj</button>
+                                </LoadingButton>
+                                <NavLink type="button" className="btn btn-secondary" to='/users'>Anuluj</NavLink>
                             </div>
                         </div>
                     : null}

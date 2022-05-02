@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Input from "../../components/Input/Input";
 import LoadingButton from "../../components/UI/LoadingButton/LoadingButton";
+import { isEmpty } from "../../helpers/stringExtensions";
 import { mapToMessage, validate } from "../../helpers/validation";
 
 function ItemSaleForm(props) {
     const [currencies, setCurrencies] = useState(props.currencies);
     const [loadingButton, setLoadingButton] = useState(false);
     const [form, setForm] = useState({
+        itemSaleId: {
+            value: ''
+        },
         itemId: {
             value: ''
         }, 
@@ -40,24 +44,15 @@ function ItemSaleForm(props) {
     };
 
     useEffect(() => {
-        if (currencies && currencies.length > 0) {
-            const currency = currencies.find(c => true);
+        if (props.itemSale && props.currencies && props.currencies.length > 0) {
+            const currency = isEmpty(props.itemSale.code) ?  props.currencies.find(c => true).code : props.itemSale.code;
             setForm({
                 ...form,
-                currencyCode: {
-                    ...form.currencyCode,
-                    value: currency.code
-                }
-            })
-        }
-    }, [currencies])
-
-    useEffect(() => {
-        if (props.itemSale) {
-            setForm({
-                ...form,
-                itemId: {
+                itemSaleId: {
                     value: props.itemSale.id
+                },
+                itemId: {
+                    value: props.itemSale.itemId
                 },
                 itemCost: {
                     ...form.itemCost,
@@ -65,11 +60,11 @@ function ItemSaleForm(props) {
                 },
                 currencyCode: {
                     ...form.currencyCode,
-                    value: props.itemSale.code
+                    value: currency
                 }
             })
         }
-    }, [props.itemSale])
+    }, [props.itemSale, props.currencies])
 
     const submit = async (event) => {
         event.preventDefault();
