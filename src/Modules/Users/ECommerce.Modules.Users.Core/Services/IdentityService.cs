@@ -293,7 +293,7 @@ namespace ECommerce.Modules.Users.Core.Services
                         }
                     }
 
-                    user.Claims.Add("permissions", permissions);
+                    user.Claims["permissions"] = permissions;
                 }
             }
 

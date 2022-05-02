@@ -10,6 +10,7 @@ using NSubstitute;
 using Shouldly;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -285,7 +286,7 @@ namespace ECommerce.Modules.Users.Tests.Unit.Services
             var dto = new ChangeUserActive { UserId = Guid.NewGuid(), Active = false };
             var claims = new Dictionary<string, IEnumerable<string>>();
             var user = GetSampleUser("email@email.com", "PasW0Rd!abc123", "admin", claims);
-            _userRepository.GetAsync(dto.UserId).Returns(user); 
+            _userRepository.GetAsync(dto.UserId).Returns(user);
             var token = CreateToken(user.Role);
             _authManager.CreateToken(Arg.Any<string>(), user.Role, claims: claims).Returns(token);
 
@@ -308,6 +309,111 @@ namespace ECommerce.Modules.Users.Tests.Unit.Services
             exception.Message.ShouldBe(expectedException.Message);
         }
 
+        [Fact]
+        public async Task given_valid_dto_should_update_policies()
+        {
+            var dto = new UpdatePolicies
+            {
+                UserId = Guid.NewGuid(),
+                Role = "admin",
+                Claims = new string[]
+                {
+                    "currency", "sale", "integration"
+                }
+            };
+            var claims = CreateSampleClaims();
+            var user = GetSampleUser("email@email.com", "PasW0Rd!abc123", "user", claims);
+            _userRepository.GetAsync(dto.UserId).Returns(user);
+            var token = CreateToken(user.Role, claims);
+            _authManager.CreateToken(Arg.Any<string>(), Arg.Any<string>(), claims: Arg.Any<IDictionary<string, IEnumerable<string>>>()).Returns(token);
+
+            await _service.UpdatePoliciesAsync(dto);
+
+            user.Role.ShouldBe(dto.Role);
+            var claimsUpdated = user.Claims.Where(c => c.Key == "permissions")
+                       .Select(c => c.Value)
+                       .First()
+                       .Where(c => dto.Claims.Contains(c));
+            claimsUpdated.Count().ShouldBe(dto.Claims.Count());
+            await _userRepository.Received(1).UpdateAsync(user);
+        }
+
+        [Fact]
+        public async Task given_valid_dto_should_update_claims()
+        {
+            var dto = new UpdatePolicies
+            {
+                UserId = Guid.NewGuid(),
+                Role = "admin",
+                Claims = new string[] { }
+            };
+            var claims = CreateSampleClaims();
+            var user = GetSampleUser("email@email.com", "PasW0Rd!abc123", "admin", claims);
+            _userRepository.GetAsync(dto.UserId).Returns(user);
+            var token = CreateToken(user.Role, claims);
+            _authManager.CreateToken(Arg.Any<string>(), Arg.Any<string>(), claims: Arg.Any<IDictionary<string, IEnumerable<string>>>()).Returns(token);
+
+            await _service.UpdatePoliciesAsync(dto);
+
+            user.Claims.Where(c => c.Key == "permissions")
+                       .Select(c => c.Value)
+                       .First()
+                       .Count().ShouldBe(dto.Claims.Count());
+            await _userRepository.Received(1).UpdateAsync(user);
+        }
+
+        [Fact]
+        public async Task given_valid_dto_should_update_role()
+        {
+            var dto = new UpdatePolicies
+            {
+                UserId = Guid.NewGuid(),
+                Role = "admin"
+            };
+            var user = GetSampleUser("email@email.com", "PasW0Rd!abc123", "user", new Dictionary<string, IEnumerable<string>>());
+            _userRepository.GetAsync(dto.UserId).Returns(user);
+            var token = CreateToken(user.Role);
+            _authManager.CreateToken(Arg.Any<string>(), Arg.Any<string>(), claims: Arg.Any<IDictionary<string, IEnumerable<string>>>()).Returns(token);
+
+            await _service.UpdatePoliciesAsync(dto);
+
+            user.Role.ShouldBe(dto.Role);
+            await _userRepository.Received(1).UpdateAsync(user);
+        }
+
+        [Fact]
+        public async Task given_invalid_id_when_update_policies_should_throw_an_exception()
+        {
+            var dto = new UpdatePolicies
+            {
+                UserId = Guid.NewGuid(),
+                Role = "admin"
+            };
+            var expectedException = new UserNotFoundException(dto.UserId);
+
+            var exception = await Record.ExceptionAsync(() => _service.UpdatePoliciesAsync(dto));
+
+            exception.ShouldNotBeNull();
+            exception.ShouldBeOfType(expectedException.GetType());
+            exception.Message.ShouldBe(expectedException.Message);
+        }
+
+        private static Dictionary<string, IEnumerable<string>> CreateSampleClaims(IEnumerable<string>? claims = null)
+        {
+            var policies = new Dictionary<string, IEnumerable<string>>();
+
+            if (claims is not null)
+            {
+                policies.Add("permissions", claims);
+            }
+            else
+            {
+                policies.Add("permissions", new string[] { "currency", "item" });
+            }
+
+            return policies;
+        }
+
         private static User GetSampleUser(string email, string password, string role, Dictionary<string, IEnumerable<string>> claims)
         {
             return new User
@@ -322,15 +428,15 @@ namespace ECommerce.Modules.Users.Tests.Unit.Services
             };
         }
 
-        private static JsonWebToken CreateToken(string role = null)
+        private static JsonWebToken CreateToken(string role = null, Dictionary<string, IEnumerable<string>> claims = null)
         {
             var token = new JsonWebToken
             {
                 Id = Guid.NewGuid().ToString(),
                 AccessToken = Guid.NewGuid().ToString("N"),
-                Claims = new Dictionary<string, IEnumerable<string>>(),
+                Claims = claims ?? new Dictionary<string, IEnumerable<string>>(),
                 Expires = 100000000,
-                Role = role != null ? role : "user"
+                Role = role != null ? role : "user",
             };
             return token;
         }
