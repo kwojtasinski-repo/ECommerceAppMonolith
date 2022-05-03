@@ -198,7 +198,6 @@ function ContactForm(props) {
     }
 
     useEffect(() => {
-        debugger;
         if (props.contact) {
             const newCustomerForm = {...customerForm};
             for (const key in props.contact.customer) {

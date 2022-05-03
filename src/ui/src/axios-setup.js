@@ -19,7 +19,7 @@ instance.interceptors.request.use((req) => {
 })
 
 axios.interceptors.response.use(function (response) {
-    if(response.headers.location) {
+    if (response.headers.location) {
         return axios.get(response.headers.location);
     }
 
