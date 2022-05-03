@@ -6,17 +6,29 @@ import Gallery from "../../components/Gallery/Gallery";
 import { mapToOrderItem } from "../../helpers/mapper";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import useWebsiteTitle from "../../hooks/useWebsiteTitle";
+import { mapToMessage } from "../../helpers/validation";
 
 function OrderItemArchive(props) {
     const { id } = useParams();
     const [item, setItem] = useState(null);
     const [loading, setLoading] = useState(true);
     const setTitle = useWebsiteTitle();
+    const [error, setError] = useState('');
 
     const fetchItem = async () => {
-        const response = await axios.get(`/sales-module/order-items/${id}`);
-        setItem(mapToOrderItem(response.data));
-        setTitle(`Przedmiot - ${response.data.itemCart.itemName}`);
+        try {
+            const response = await axios.get(`/sales-module/order-items/${id}`);
+            setItem(mapToOrderItem(response.data));
+            setTitle(`Przedmiot - ${response.data.itemCart.itemName}`);
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            errorMessage += mapToMessage(errors, status);
+            setError(errorMessage);
+        }
+
         setLoading(false);
     }
 
@@ -27,6 +39,10 @@ function OrderItemArchive(props) {
     return (
         <>
             {loading ? <LoadingIcon /> : (
+                <>
+                {error ? (
+                    <div className="alert alert-danger">{error}</div>
+                ) : 
                 <div className={`card ${styles.item}`}>
                     <div className="card-body">
                         <div className="row">
@@ -68,6 +84,8 @@ function OrderItemArchive(props) {
                         </div>
                     </div>
                 </div>
+                }
+                </>
                 )
             }
         </>

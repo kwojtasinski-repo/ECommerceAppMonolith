@@ -10,7 +10,7 @@ import ItemSaleForm from "../ItemSaleForm";
 
 function PutItemForSale(props) {
     const { id } = useParams();
-    const [item, setItem] = useState();
+    const [item, setItem] = useState(null);
     const [currencies, setCurrencies] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -74,46 +74,50 @@ function PutItemForSale(props) {
                 {error ? (
                     <div className="alert alert-danger">{error}</div>
                 ) : null}
-                <div className="form-group">
-                    <label>Nazwa przedmiotu</label>
-                    <input type = "text"
-                            value = {item.name}
-                            className = "form-control"
-                            readOnly />
-                </div>
-                <div className="form-group">
-                    <label>Opis</label>
-                    <input type = "textarea"
-                            value = {item.description}
-                            className = "form-control"
-                            readOnly />
-                </div>    
-                <div className="form-group">
-                    <label>Firma</label>
-                    <input type = "text" 
-                            value = {item.brand}
-                            className = "form-control"
-                            readOnly />
-                </div>
-                <div className="form-group">
-                    <label>Typ</label>
-                    <input type = "text"
-                            value = {item.type}
-                            className = "form-control"
-                            readOnly />
-                </div>
-                <Tags tags = {item.tags} canEdit = {false} />
-                <Gallery items = {item.imagesUrl.map(i => i.url)} />
-                <ItemSaleForm itemSale ={{
-                                id: '',
-                                itemId: id,
-                                cost: '',
-                                code: ''
-                              }}
-                              onSubmit = {submit}
-                              currencies = {currencies}
-                              textSubmit = "Wystaw"
-                              textCancel = "Anuluj" />
+                {item ?
+                <>
+                    <div className="form-group">
+                        <label>Nazwa przedmiotu</label>
+                        <input type = "text"
+                                value = {item.name}
+                                className = "form-control"
+                                readOnly />
+                    </div>
+                    <div className="form-group">
+                        <label>Opis</label>
+                        <input type = "textarea"
+                                value = {item.description}
+                                className = "form-control"
+                                readOnly />
+                    </div>    
+                    <div className="form-group">
+                        <label>Firma</label>
+                        <input type = "text" 
+                                value = {item.brand}
+                                className = "form-control"
+                                readOnly />
+                    </div>
+                    <div className="form-group">
+                        <label>Typ</label>
+                        <input type = "text"
+                                value = {item.type}
+                                className = "form-control"
+                                readOnly />
+                    </div>
+                    <Tags tags = {item.tags} canEdit = {false} />
+                    <Gallery items = {item.imagesUrl.map(i => i.url)} />
+                    <ItemSaleForm itemSale ={{
+                                    id: '',
+                                    itemId: id,
+                                    cost: '',
+                                    code: ''
+                                  }}
+                                  onSubmit = {submit}
+                                  currencies = {currencies}
+                                  textSubmit = "Wystaw"
+                                  textCancel = "Anuluj" />
+                </>
+                : null}
             </div>
         }
         </>

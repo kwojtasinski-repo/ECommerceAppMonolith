@@ -5,6 +5,7 @@ import { mapToOrder } from "../../helpers/mapper";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import useNotification from "../../hooks/useNotification";
 import { Color } from "../../components/Notification/Notification";
+import { mapToMessage } from "../../helpers/validation";
 
 function AddPayment(props) {
     const { id } = useParams();
@@ -13,6 +14,7 @@ function AddPayment(props) {
     const [notifications, addNotification] = useNotification();
     const navigate = useNavigate();
     const [actions, setActions] = useState([]);
+    const [error, setError] = useState('');
 
     const addAction = action => {
         let newActions = [...actions];
@@ -28,8 +30,18 @@ function AddPayment(props) {
     }
 
     const fetchOrder = async () => {
-        const response = await axios.get(`/sales-module/orders/${id}`);
-        setOrder(mapToOrder(response.data));
+        try {
+            const response = await axios.get(`/sales-module/orders/${id}`);
+            setOrder(mapToOrder(response.data));
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            errorMessage += mapToMessage(errors, status);
+            setError(errorMessage);
+        }
+
         setLoading(false);
     }
 
@@ -49,6 +61,12 @@ function AddPayment(props) {
     return (
         <>
             {loading ? <LoadingIcon /> : (
+                <>
+                {error ? (
+                    <div className="alert alert-danger">{error}</div>
+                ) : null}
+
+                {order ? 
                 <div className="pt-2">
                     {order.paid ? 
                         <div>
@@ -101,6 +119,8 @@ function AddPayment(props) {
                         </div>
                 )}
                 </div>
+                : null}
+                </>
             )}
         </>
     )

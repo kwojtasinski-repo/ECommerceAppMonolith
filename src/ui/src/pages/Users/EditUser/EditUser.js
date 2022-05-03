@@ -9,7 +9,7 @@ import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
 
 function EditUser(props) {
     const { id } = useParams();
-    const [user, setUser] = useState();
+    const [user, setUser] = useState(null);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
     const [loadinButton, setLoadingButton] = useState(false);

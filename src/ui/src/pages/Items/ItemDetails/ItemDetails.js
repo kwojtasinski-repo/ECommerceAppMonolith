@@ -49,6 +49,8 @@ function ItemDetails(props) {
                         {error ? (
                             <div className="alert alert-danger">{error}</div>
                         ) : null}
+                        {item ?
+                        <>
                         <div className="row">
                             <div className="col-4">
                                 {mainImage ?
@@ -88,6 +90,7 @@ function ItemDetails(props) {
                                     Edytuj
                             </NavLink>
                         </div>
+                    </> : null}
                     </div>
                 </div>
             )}

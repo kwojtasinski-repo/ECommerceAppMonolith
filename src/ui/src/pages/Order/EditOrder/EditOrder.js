@@ -129,52 +129,52 @@ function EditOrder(props) {
                             </tbody>
                         </table>
                     </div>
+                    {customers.length > 0 ? 
+                    <>
+                        <div>
+                            <h5>
+                                {customer !== null && typeof(customer) !== "undefined" ? `Wybrano: ${customer.firstName} ${customer.lastName} ${customer.companyName ? customer.companyName : ""}` : "Wybierz kontakt lub dodaj nowy:"}
+                            </h5>
+                        </div>
+                        <div>
+                            <table className="table table-striped">
+                                <thead className="table-dar">
+                                    <tr>
+                                        <th scope="col">Imię</th>
+                                        <th scope="col">Nazwisko</th>
+                                        <th scope="col">Firma</th>
+                                        <th scope="col">Nazwa Firmy</th>
+                                        <th scope="col">NIP</th>
+                                        <th scope="col">Numer kontaktowy</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {customers.map(c => (
+                                        <tr id ={c.id} key={new Date().getTime() + Math.random() + Math.random()} 
+                                            onClick = { () => rowClicked(c.id) } 
+                                            className = {customer?.id === c.id ? "bg-success" : null} >
+                                            <td>{c.firstName}</td>
+                                            <td>{c.lastName}</td>
+                                            <td>
+                                                {c.company ? (
+                                                        <input type="checkbox" 
+                                                                class="custom-control-input text-primary ms-1" 
+                                                                onclick="return false;" 
+                                                                checked />
+                                                )
+                                                : null}
+                                            </td>
+                                            <td>{c.companyName}</td>
+                                            <td>{c.nip}</td>
+                                            <td>{c.phoneNumber}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </> : null}
                 </>
                 : null}
-                {customers.length > 0 ? 
-                <>
-                <div>
-                    <h5>
-                        {customer !== null && typeof(customer) !== "undefined" ? `Wybrano: ${customer.firstName} ${customer.lastName} ${customer.companyName ? customer.companyName : ""}` : "Wybierz kontakt lub dodaj nowy:"}
-                    </h5>
-                </div>
-                <div>
-                    <table className="table table-striped">
-                        <thead className="table-dar">
-                            <tr>
-                                <th scope="col">Imię</th>
-                                <th scope="col">Nazwisko</th>
-                                <th scope="col">Firma</th>
-                                <th scope="col">Nazwa Firmy</th>
-                                <th scope="col">NIP</th>
-                                <th scope="col">Numer kontaktowy</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {customers.map(c => (
-                                <tr id ={c.id} key={new Date().getTime() + Math.random() + Math.random()} 
-                                    onClick = { () => rowClicked(c.id) } 
-                                    className = {customer?.id === c.id ? "bg-success" : null} >
-                                    <td>{c.firstName}</td>
-                                    <td>{c.lastName}</td>
-                                    <td>
-                                        {c.company ? (
-                                                <input type="checkbox" 
-                                                        class="custom-control-input text-primary ms-1" 
-                                                        onclick="return false;" 
-                                                        checked />
-                                        )
-                                        : null}
-                                    </td>
-                                    <td>{c.companyName}</td>
-                                    <td>{c.nip}</td>
-                                    <td>{c.phoneNumber}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-                </> : null}
             </div>
         )}
         </>

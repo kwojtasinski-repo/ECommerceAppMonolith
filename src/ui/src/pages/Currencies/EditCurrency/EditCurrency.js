@@ -9,7 +9,7 @@ import CurrencyForm from "../CurrencyForm";
 
 function EditCurrency(props) {
     const { id } = useParams();
-    const [currency, setCurrency] = useState([]);
+    const [currency, setCurrency] = useState(null);
     const navigate = useNavigate();
     const [notifications, addNotification] = useNotification();
     const { setRefresh } = useOutletContext();
@@ -49,14 +49,18 @@ function EditCurrency(props) {
                 <div className="alert alert-danger">{error}</div>
             ) : null}
 
-            <p className="text-muted">Uzupełnij dane waluty</p>
+            {currency ?
+            <>
+                <p className="text-muted">Uzupełnij dane waluty</p>
 
-                <CurrencyForm 
-                    currency = {currency}
-                    buttonText = "Zapisz!"
-                    cancelButtonText = "Anuluj"
-                    onSubmit = {submit}
-                    cancelEditUrl = "/currencies" />
+                    <CurrencyForm 
+                        currency = {currency}
+                        buttonText = "Zapisz!"
+                        cancelButtonText = "Anuluj"
+                        onSubmit = {submit}
+                        cancelEditUrl = "/currencies" />
+            </>
+            : null}
             </div>
         </div>
     )

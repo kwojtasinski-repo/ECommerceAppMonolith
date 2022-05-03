@@ -63,14 +63,16 @@ function EditContactForm(props) {
                     {error}
                 </div>
             ) : null}
-            <div className="card-body">
-                <ContactForm
-                    contact = {contact}
-                    buttonText = "Zatwierdź"
-                    onSubmit = {submit}
-                    cancelEditUrl = {props.cancelEditUrl}
-                    cancelButtonText = {props.cancelButtonText} />
-            </div>
+            {contact ?
+                <div className="card-body">
+                    <ContactForm
+                        contact = {contact}
+                        buttonText = "Zatwierdź"
+                        onSubmit = {submit}
+                        cancelEditUrl = {props.cancelEditUrl}
+                        cancelButtonText = {props.cancelButtonText} />
+                </div>
+            : null}
         </div>
     )
 }

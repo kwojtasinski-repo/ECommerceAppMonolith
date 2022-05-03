@@ -9,7 +9,7 @@ import BrandForm from "../BrandForm";
 
 function EditBrand(props) {
     const { id } = useParams();
-    const [type, setType] = useState([]);
+    const [type, setType] = useState(null);
     const navigate = useNavigate();
     const [notifications, addNotification] = useNotification();
     const { addAction } = useOutletContext();
@@ -45,18 +45,22 @@ function EditBrand(props) {
         <div className="card">
             <div className="card-header">Edytuj walutę</div>
             <div className="card-body">
-            {error ? (
-                <div className="alert alert-danger">{error}</div>
-            ) : null}
+                {error ? (
+                    <div className="alert alert-danger">{error}</div>
+                ) : null}
 
-            <p className="text-muted">Uzupełnij dane typu przedmiotu</p>
+                {type ?
+                    <>
+                        <p className="text-muted">Uzupełnij dane typu przedmiotu</p>
 
-                <BrandForm 
-                    brand = {type}
-                    buttonText = "Zapisz"
-                    cancelButtonText = "Anuluj"
-                    onSubmit = {submit}
-                    cancelEditUrl = "/brands" />
+                        <BrandForm 
+                            brand = {type}
+                            buttonText = "Zapisz"
+                            cancelButtonText = "Anuluj"
+                            onSubmit = {submit}
+                            cancelEditUrl = "/brands" />
+                    </>
+                : null}
             </div>
         </div>
     )

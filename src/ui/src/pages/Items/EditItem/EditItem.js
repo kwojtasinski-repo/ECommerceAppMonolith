@@ -12,7 +12,7 @@ function EditItem(props) {
     const { id } = useParams();
     const navigate = useNavigate();
     const [error, setError] = useState();
-    const [item, setItem] = useState();
+    const [item, setItem] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const onSubmit = async (form) => {
