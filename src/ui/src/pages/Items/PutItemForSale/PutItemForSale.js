@@ -26,7 +26,7 @@ function PutItemForSale(props) {
             let errorMessage = '';
             const status = exception.response?.status;
             const errors = exception.response?.data.errors;
-            errorMessage += mapToMessage(errors, status);            
+            errorMessage += mapToMessage(errors, status) + '\n';            
             setError(errorMessage);
         }
     }
@@ -41,7 +41,7 @@ function PutItemForSale(props) {
             let errorMessage = '';
             const status = exception.response?.status;
             const errors = exception.response?.data.errors;
-            errorMessage += mapToMessage(errors, status);            
+            errorMessage += mapToMessage(errors, status) + '\n';            
             setError(errorMessage);
         }        
     }
@@ -62,7 +62,6 @@ function PutItemForSale(props) {
     }, [item, currencies]);
 
     const submit = async (form) => {
-        debugger;
         await axios.post('/items-module/item-sales', form);
         navigate('/items');
     }

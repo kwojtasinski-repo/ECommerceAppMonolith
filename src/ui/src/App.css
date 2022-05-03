@@ -29,3 +29,7 @@ code {
 textarea[type="textarea"] {
   resize: none;
 }
+
+.alert.alert-danger {
+  white-space: pre-line;
+}

@@ -20,7 +20,7 @@ function MyOrders(props) {
             let errorMessage = 'Zamówienie: ';
             const status = exception.response.status;
             const error = exception.response.data.errors;
-            errorMessage += mapToMessage(error, status);
+            errorMessage += mapToMessage(error, status) + '\n';
             setError(errorMessage);
         }
     }

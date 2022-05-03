@@ -37,7 +37,7 @@ function Contacts(props) {
             let errorMessage = '';
             const status = exception.response.status;
             const errors = exception.response.data.errors;
-            errorMessage += mapToMessage(errors.code, status);
+            errorMessage += mapToMessage(errors.code, status) + '\n';
             setError(errorMessage);
         }
         setLoading(false);
@@ -58,7 +58,7 @@ function Contacts(props) {
             const errors = exception.response.data.errors;
             
             for(const errMsg in errors) {
-                errorMessage += mapToMessage(errors[errMsg].code, status);
+                errorMessage += mapToMessage(errors[errMsg].code, status) + '\n';
             }
             
             setError(errorMessage);
@@ -86,10 +86,6 @@ function Contacts(props) {
                     <div>
                         <NavLink to = "add-contact" className="btn btn-primary mb-2" >Dodaj nowy kontakt</NavLink>
                     </div>
-
-                    {error ? (
-                        <div className="alert alert-danger">{error}</div>
-                    ) : null}
 
                     {isOpen && <Popup handleConfirm = {handleDeleteContact}
                                       handleClose = {closePopUp}

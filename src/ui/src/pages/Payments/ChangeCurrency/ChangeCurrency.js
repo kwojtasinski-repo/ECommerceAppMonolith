@@ -25,7 +25,7 @@ function ChangeCurrency(props) {
             let errorMessage = '';
             const status = exception.response.status;
             const errors = exception.response.data.errors;
-            errorMessage += mapToMessage(errors, status);
+            errorMessage += mapToMessage(errors, status) + '\n';
             setError(errorMessage);
         }
 
@@ -59,7 +59,7 @@ function ChangeCurrency(props) {
             const errors = exception.response.data.errors;
             
             for(const errMsg in errors) {
-                errorMessage += mapToMessage(errors[errMsg].code, status);
+                errorMessage += mapToMessage(errors[errMsg].code, status) + '\n';
             }
             
             setError(errorMessage);

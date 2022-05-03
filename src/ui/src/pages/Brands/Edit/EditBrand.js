@@ -24,7 +24,7 @@ function EditBrand(props) {
             let errorMessage = '';
             const status = exception.response.status;
             const errors = exception.response.data.errors;
-            errorMessage += mapToMessage(errors, status);
+            errorMessage += mapToMessage(errors, status) + '\n';
             setError(errorMessage);
         }
     }

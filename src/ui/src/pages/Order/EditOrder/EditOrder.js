@@ -22,7 +22,7 @@ function EditOrder(props) {
             let errorMessage = 'Zamówienia: ';
             const status = exception.response.status;
             const error = exception.response.data.errors;
-            errorMessage += mapToMessage(error, status);
+            errorMessage += mapToMessage(error, status) + '\n';
             setError(errorMessage);
         }
     }
@@ -36,7 +36,7 @@ function EditOrder(props) {
             let errorMessage = 'Dane kontaktowe: ';
             const status = exception.response.status;
             const error = exception.response.data.errors;
-            errorMessage += mapToMessage(error, status);
+            errorMessage += mapToMessage(error, status) + '\n';
             setError(errorMessage);
         }
     }
@@ -75,7 +75,7 @@ function EditOrder(props) {
             const errors = exception.response.data.errors;
             
             for(const errMsg in errors) {
-                errorMessage += mapToMessage(errors[errMsg].code, status);
+                errorMessage += mapToMessage(errors[errMsg].code, status) + '\n';
             }
             
             setError(errorMessage);

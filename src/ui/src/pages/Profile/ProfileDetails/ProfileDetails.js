@@ -64,7 +64,7 @@ function ProfileDetails(props) {
             const errorsFromApi = exception.response.data.errors;
             
             for(const errMsg in errorsFromApi) {
-                errorMessage += mapToMessage(errorsFromApi[errMsg].code, status);
+                errorMessage += mapToMessage(errorsFromApi[errMsg].code, status) + '\n';
             }
             
             setError(errorMessage);

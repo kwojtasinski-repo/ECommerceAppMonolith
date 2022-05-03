@@ -34,7 +34,7 @@ function Item(props) {
             let errorMessage = '';
             const status = exception.response.status;
             const errors = exception.response.data.errors;
-            errorMessage += mapToMessage(errors, status);            
+            errorMessage += mapToMessage(errors, status) + '\n';            
             setError(errorMessage);
         }
         setLoading(false);
@@ -63,6 +63,8 @@ function Item(props) {
                         {error ? (
                             <div className="alert alert-danger">{error}</div>
                         ) : null}
+
+                        {item ?
                         <div className="row">
                             <div className="col-4">
                                 <img src={item.imagesUrl.find(im => im.mainImage).url} alt=""
@@ -99,6 +101,7 @@ function Item(props) {
                                 <Gallery items={item.imagesUrl.filter(im => !im.mainImage).map(im => im.url)} />
                             </div>
                         </div>
+                        : null }
                     </div>
                 </div>
                 )

@@ -4,7 +4,6 @@ import axios from "../../axios-setup";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import { mapToUsers } from "../../helpers/mapper";
 import { mapToMessage } from "../../helpers/validation";
-import RequireAuth from "../../hoc/RequireAuth";
 
 function Users(props) {
     const [loading, setLoading] = useState(true);
@@ -20,7 +19,7 @@ function Users(props) {
             let errorMessage = '';
             const status = exception.response.status;
             const errors = exception.response.data.errors;
-            errorMessage += mapToMessage(errors, status);
+            errorMessage += mapToMessage(errors, status) + '\n';
             setError(errorMessage);
         }
 

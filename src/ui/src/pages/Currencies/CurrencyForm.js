@@ -42,7 +42,7 @@ function CurrencyForm(props) {
             const errors = exception.response.data.errors;
             
             for(const errMsg in errors) {
-                errorMessage += mapToMessage(errors[errMsg].code, status);
+                errorMessage += mapToMessage(errors[errMsg].code, status) + '\n';
             }
             
             setError(errorMessage);

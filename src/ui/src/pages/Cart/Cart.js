@@ -35,8 +35,8 @@ function Cart(props) {
             const status = exception.response.status;
             const errors = exception.response.data.errors;
             
-            for(const errMsg in errors) {
-                errorMessage += mapToMessage(errors[errMsg].code, status);
+            for (const errMsg in errors) {
+                errorMessage += mapToMessage(errors[errMsg].code, status) + '\n';
             }
 
             console.log(errorMessage);

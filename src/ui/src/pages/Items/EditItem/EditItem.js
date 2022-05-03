@@ -17,7 +17,7 @@ function EditItem(props) {
 
     const onSubmit = async (form) => {
         console.log(form);
-        const response = await axios.put('/items-module/items', form);
+        await axios.put('/items-module/items', form);
     }
 
     const redirectAfterSuccess = () => {
@@ -25,13 +25,33 @@ function EditItem(props) {
     }
 
     const fetchBrands = async () => {
-        const response = await axios.get('/items-module/brands');
-        setBrands(mapToBrands(response.data));
+        try {
+            const response = await axios.get('/items-module/brands');
+            setBrands(mapToBrands(response.data));
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            errorMessage += mapToMessage(errors, status) + '\n';
+            setError(errorMessage);
+        }
+        setLoading(false);
     }
 
     const fetchTypes = async () => {
-        const response = await axios.get('/items-module/types');
-        setTypes(mapToTypes(response.data));
+        try {
+            const response = await axios.get('/items-module/types');
+            setTypes(mapToTypes(response.data));
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            errorMessage += mapToMessage(errors, status) + '\n';
+            setError(errorMessage);
+        }
+        setLoading(false);
     }
 
     const fetchItem = async () => {
@@ -44,7 +64,7 @@ function EditItem(props) {
             let errorMessage = '';
             const status = exception.response?.status;
             const errors = exception.response?.data.errors;
-            errorMessage += mapToMessage(errors, status);            
+            errorMessage += mapToMessage(errors, status) + '\n';            
             setError(errorMessage);
         }
         

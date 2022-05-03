@@ -34,14 +34,13 @@ function FilesUploadComponent(props) {
             const response = await axios.post(apiUrl, formData);
             props.urlImagesToReturn(response.data);
         } catch (exception) {
-            debugger;
             console.log(exception);
             let errorMessage = '';
             const status = exception.response.status;
             const errors = exception.response.data.errors;
             
             for(const errMsg in errors) {
-                errorMessage += mapToMessage(errors[errMsg].code, status);
+                errorMessage += mapToMessage(errors[errMsg].code, status) + '\n';
             }
             
             setError(errorMessage);

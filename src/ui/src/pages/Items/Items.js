@@ -16,8 +16,17 @@ function Items(props) {
     const [actions, setActions] = useState([]);
 
     const fetchItems = async () => {
-        const response = await axios.get('/items-module/items/not-put-up-for-sale');
-        setItems(mapToItemsDetails(response.data));
+        try {
+            const response = await axios.get('/items-module/items/not-put-up-for-sale');
+            setItems(mapToItemsDetails(response.data));
+        } catch (exception) {
+            console.log(exception);
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            errorMessage += mapToMessage(errors, status) + '\n';
+            setError(errorMessage);
+        }
         setLoading(false);
     }
 
@@ -45,7 +54,7 @@ function Items(props) {
             const errors = exception.response.data.errors;
             
             for(const errMsg in errors) {
-                errorMessage += mapToMessage(errors[errMsg].code, status);
+                errorMessage += mapToMessage(errors[errMsg].code, status) + '\n';
             }
             
             setError(errorMessage);
