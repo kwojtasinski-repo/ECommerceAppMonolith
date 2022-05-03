@@ -42,14 +42,11 @@ function Login() {
             const status = exception.response.status;
             const errors = exception.response.data.errors;
             
-            if (exception.response.status !== 400) {
-                for(const errMsg in errors) {
-                    errorMessage += mapToMessage(errors[errMsg].code, status) + '\n';
-                }
-                
-                setError(errorMessage);
+            for (const errMsg in errors) {
+                errorMessage += mapToMessage(errors[errMsg].code, status) + '\n';
             }
-
+            
+            setError(errorMessage);
             setValid(false);
             setLoading(false);
         }

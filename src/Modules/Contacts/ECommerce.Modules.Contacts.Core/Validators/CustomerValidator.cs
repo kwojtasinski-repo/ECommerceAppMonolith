@@ -136,7 +136,7 @@ namespace ECommerce.Modules.Contacts.Core.Validators
 
             if (string.IsNullOrWhiteSpace(validator.PhoneNumber))
             {
-                exceptionList.Add(new PhoneNumberCannotBeNull());
+                exceptionList.Add(new PhoneNumberCannotBeNullException());
             }
 
             if (validator.PhoneNumber is not null)

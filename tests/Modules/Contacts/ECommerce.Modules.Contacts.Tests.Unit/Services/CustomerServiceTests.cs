@@ -61,7 +61,7 @@ namespace ECommerce.Modules.Contacts.Tests.Unit.Services
             {
                 new FirstNameCannotBeNullException(),
                 new LastNameCannotBeNullException(),
-                new PhoneNumberCannotBeNull()
+                new PhoneNumberCannotBeNullException()
             };
             var expectedException = new ValidationException(expectedExceptions);
 
