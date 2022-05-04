@@ -22,12 +22,10 @@ function Login() {
         setLoading(true);
         
         try {
-            console.log(window.location.pathname);
             const response = await axios.post('users-module/account/sign-in', {
                 email,
                 password
             });
-            console.log(response.data);
             setAuth({
                 email: response.data.email,
                 token: response.data.accessToken,
