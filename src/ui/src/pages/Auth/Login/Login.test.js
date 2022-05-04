@@ -63,4 +63,33 @@ describe('Login component', () => {
 
         expect(screen.getByText(mapCodeToMessage(errorCode))).toBeInTheDocument();
     });
+
+    test('should login after fill form with valid data', async () => {
+        const utils = render( <Router> <Login/> </Router> );
+        const emailInput = utils.getByLabelText('Email');
+        const email = 'example@gmail.com';
+        const passwordInput = utils.getByLabelText('Hasło');
+        const password = 'PasW0Rd!@241abc';
+        axios.post.mockImplementationOnce(() => 
+            Promise.resolve({
+                data: {
+                    email,
+                    accessToken: 'token',
+                    id: 1,
+                    claims: [],
+                    expires: 1
+                }
+            }
+        ));
+        const submitButton = utils.getByText('Zaloguj');
+        console.log(window.location.pathname);
+        fireEvent.change(emailInput, {target: {value: email} });
+        fireEvent.change(passwordInput, {target: {value: password} });
+
+        fireEvent.click(submitButton);
+        await waitFor(() => expect(axios.post).toHaveBeenCalledTimes(1));
+
+        const linkElement = screen.getByText(/Ładowanie/i);
+        expect(linkElement).toBeInTheDocument();
+    });
 });

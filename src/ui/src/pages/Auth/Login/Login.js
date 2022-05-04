@@ -56,7 +56,7 @@ function Login() {
         if (auth) {
             navigate('/');
         }
-    }, [auth]);
+    }, []);
 
     return (
         <div>
