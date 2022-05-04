@@ -1,8 +1,10 @@
 const InputTextArea = props => {
+    const htmlFor = replacePolishCharacters(props.label) + '-input';
     return (
         <div className="form-group">
-            <label>{props.label}</label>
+            <label htmlFor={htmlFor}>{props.label}</label>
             <textarea
+                id={htmlFor}
                 value={props.value}
                 onChange={event => props.onChange(event.target.value)}
                 type={props.type}
@@ -15,10 +17,12 @@ const InputTextArea = props => {
 }
 
 const InputText = props => {
+    const htmlFor = replacePolishCharacters(props.label) + '-input';
     return (
         <div className="form-group">
-            <label>{props.label}</label>
+            <label htmlFor={htmlFor}>{props.label}</label>
             <input 
+                id={htmlFor}
                 type = {props.type}
                 value = {props.value}
                 className = {`form-control ${props.error && props.showError ? 'is-invalid' : ''}`}
@@ -31,6 +35,8 @@ const InputText = props => {
 }
 
 const InputZipCode = props => {
+    const htmlFor = replacePolishCharacters(props.label) + '-input';
+
     const keyPress = event => {
         const regex = new RegExp(pattern);
         const key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
@@ -59,8 +65,9 @@ const InputZipCode = props => {
 
     return (
         <div className="form-group">
-            <label>{props.label}</label>
+            <label htmlFor={htmlFor}>{props.label}</label>
             <input 
+                id={htmlFor}
                 type = {props.type}
                 value = {props.value}
                 className = {`form-control ${props.error && props.showError ? 'is-invalid' : ''}`}
@@ -76,10 +83,12 @@ const InputZipCode = props => {
 }
 
 const InputSelect = props => {
+    const htmlFor = replacePolishCharacters(props.label) + '-input';
     return (
         <div className="form-group">
-            <label>{props.label}</label>
+            <label htmlFor={htmlFor}>{props.label}</label>
             <select 
+                id={htmlFor}
                 value={props.value} 
                 onChange={event => props.onChange(event.target.value)}
                 className={`form-control ${props.error && props.showError ? 'is-invalid' : ''}`}>
@@ -132,10 +141,13 @@ const InputInteger = props => {
         return Math.round(value);
     }
 
+    const htmlFor = replacePolishCharacters(props.label) + '-input';
+
     return (
         <div className="form-group">
-            <label>{props.label}</label>
-            <input type = "number"
+            <label htmlFor={htmlFor}>{props.label}</label>
+            <input id={htmlFor}
+                   type = "number"
                    value = {props.value}
                    className = {`form-control ${props.error && props.showError ? 'is-invalid' : ''}`}
                    onChange = { event => props.onChange(event.target.value) } 
@@ -175,3 +187,26 @@ Input.defaultProps = {
 }
 
 export default Input;
+
+function replacePolishCharacters(text) {
+    let textModified = text.replace('ą', 'a');
+    textModified = textModified.replace('ć', 'c');
+    textModified = textModified.replace('ę', 'e');
+    textModified = textModified.replace('ł', 'l');
+    textModified = textModified.replace('ń', 'n');
+    textModified = textModified.replace('ó', 'o');
+    textModified = textModified.replace('ś', 's');
+    textModified = textModified.replace('ż', 'z');
+    textModified = textModified.replace('ź', 'z');
+    textModified = textModified.replace('Ą', 'A');
+    textModified = textModified.replace('Ć', 'C');
+    textModified = textModified.replace('Ę', 'E');
+    textModified = textModified.replace('Ł', 'L');
+    textModified = textModified.replace('Ń', 'N');
+    textModified = textModified.replace('Ó', 'O');
+    textModified = textModified.replace('Ś', 'S');
+    textModified = textModified.replace('Ż', 'Z');
+    textModified = textModified.replace('Ź', 'Z');
+    
+    return textModified;
+} 

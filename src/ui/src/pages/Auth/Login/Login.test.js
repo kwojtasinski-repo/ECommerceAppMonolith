@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Login from "./Login";
 import { BrowserRouter as Router } from "react-router-dom";
 import axios from "../../../axios-setup";
+import { mapCodeToMessage } from "../../../helpers/errorCodeMapper";
 
 jest.mock('axios', () => {
     return {
@@ -39,14 +40,15 @@ describe('Login component', () => {
     })
 
     test('pass invalid credentials should show error', async () => {
-        axios.post.mockImplementation(() => 
+        const errorCode = 'invalid_credentials';
+        axios.post.mockImplementationOnce(() => 
             Promise.reject({
                 response: {
                     status: 400,
                     data: {
                         errors: [
                             {
-                                code: 'invalid_credentials'
+                                code: errorCode
                             }
                         ]
                     }
@@ -59,6 +61,6 @@ describe('Login component', () => {
         fireEvent.click(submitButton);
         await waitFor(() => expect(axios.post).toHaveBeenCalledTimes(1));
 
-        expect(screen.getByText('Niepoprawne dane logowania, sprawdź czy email i hasło są poprawne')).toBeInTheDocument();
+        expect(screen.getByText(mapCodeToMessage(errorCode))).toBeInTheDocument();
     });
 });
