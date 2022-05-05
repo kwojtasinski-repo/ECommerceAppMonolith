@@ -1,25 +1,6 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import BrandForm from "./BrandForm";
-import axios from "../../axios-setup";
-
-jest.mock('axios', () => {
-    return {
-        create: () => {
-            return {
-                post: jest.fn(() => Promise.resolve('')),
-                interceptors: {
-                    request: { use: jest.fn(), eject: jest.fn() },
-                    response: { use: jest.fn(), eject: jest.fn() }
-                }
-            }
-        },
-        interceptors: {
-            request: { use: jest.fn(), eject: jest.fn() },
-            response: { use: jest.fn(), eject: jest.fn() }
-        }
-    }
-});
 
 describe('BrandForm component', () => {
     test('renders BrandForm', () => {
