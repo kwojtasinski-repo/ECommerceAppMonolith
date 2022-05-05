@@ -29,8 +29,8 @@ describe('Register component', () => {
     });
 
     test('should change Email', () => {
-        const utils = render( <Router> <Register/> </Router> );
-        const emailInput = utils.getByLabelText('Email');
+        render( <Router> <Register/> </Router> );
+        const emailInput = screen.getByLabelText('Email');
         const email = 'example@gmail.com';
 
         fireEvent.change(emailInput, {target: {value: email} });
@@ -39,8 +39,8 @@ describe('Register component', () => {
     });
 
     test('should change password', () => {
-        const utils = render( <Router> <Register/> </Router> );
-        const passwordInput = utils.getByLabelText('Hasło');
+        render( <Router> <Register/> </Router> );
+        const passwordInput = screen.getByLabelText('Hasło');
         const password = 'PasW0Rd!@241abc';
 
         fireEvent.change(passwordInput, {target: {value: password} });
@@ -49,8 +49,8 @@ describe('Register component', () => {
     });
 
     test('should show error when passed invalid email', () => {
-        const utils = render( <Router> <Register/> </Router> );
-        const emailInput = utils.getByLabelText('Email');
+        render( <Router> <Register/> </Router> );
+        const emailInput = screen.getByLabelText('Email');
         const email = 'example';
 
         fireEvent.change(emailInput, {target: {value: email} });
@@ -59,8 +59,8 @@ describe('Register component', () => {
     });
 
     test('should show error when passed invalid password', () => {
-        const utils = render( <Router> <Register/> </Router> );
-        const passwordInput = utils.getByLabelText('Hasło');
+        render( <Router> <Register/> </Router> );
+        const passwordInput = screen.getByLabelText('Hasło');
         const password = 'password';
 
         fireEvent.change(passwordInput, {target: {value: password} });
@@ -69,15 +69,15 @@ describe('Register component', () => {
     });
 
     test('should send data to Api with valid data', async () => {
-        const utils = render( <Router> <Register/> </Router> );
-        const emailInput = utils.getByLabelText('Email');
+        render( <Router> <Register/> </Router> );
+        const emailInput = screen.getByLabelText('Email');
         const email = 'example@gmail.com';
-        const passwordInput = utils.getByLabelText('Hasło');
+        const passwordInput = screen.getByLabelText('Hasło');
         const password = 'PasW0Rd!@241abc';
         axios.post.mockImplementation(() => 
             Promise.resolve()
         );
-        const submitButton = utils.getByText('Zarejestruj');
+        const submitButton = screen.getByText('Zarejestruj');
 
         fireEvent.change(emailInput, {target: {value: email} });
         fireEvent.change(passwordInput, {target: {value: password} });

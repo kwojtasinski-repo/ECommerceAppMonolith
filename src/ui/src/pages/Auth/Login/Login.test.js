@@ -30,8 +30,8 @@ describe('Login component', () => {
     });
 
     test('should change email', () => {
-        const utils = render( <Router> <Login/> </Router> );
-        const emailInput = utils.getByLabelText('Email');
+        render( <Router> <Login/> </Router> );
+        const emailInput = screen.getByLabelText('Email');
         const email = 'example@gmail.com';
 
         fireEvent.change(emailInput, {target: {value: email} });
@@ -55,8 +55,8 @@ describe('Login component', () => {
                 }
             })
         );
-        const utils = render( <Router> <Login/> </Router> );
-        const submitButton = utils.getByText('Zaloguj');
+        render( <Router> <Login/> </Router> );
+        const submitButton = screen.getByText('Zaloguj');
 
         fireEvent.click(submitButton);
         await waitFor(() => expect(axios.post).toHaveBeenCalledTimes(1));
@@ -65,10 +65,10 @@ describe('Login component', () => {
     });
 
     test('should login after fill form with valid data', async () => {
-        const utils = render( <Router> <Login/> </Router> );
-        const emailInput = utils.getByLabelText('Email');
+        render( <Router> <Login/> </Router> );
+        const emailInput = screen.getByLabelText('Email');
         const email = 'example@gmail.com';
-        const passwordInput = utils.getByLabelText('Hasło');
+        const passwordInput = screen.getByLabelText('Hasło');
         const password = 'PasW0Rd!@241abc';
         axios.post.mockImplementationOnce(() => 
             Promise.resolve({
@@ -81,8 +81,7 @@ describe('Login component', () => {
                 }
             }
         ));
-        const submitButton = utils.getByText('Zaloguj');
-        console.log(window.location.pathname);
+        const submitButton = screen.getByText('Zaloguj');
         fireEvent.change(emailInput, {target: {value: email} });
         fireEvent.change(passwordInput, {target: {value: password} });
 
