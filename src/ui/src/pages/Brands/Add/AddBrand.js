@@ -19,7 +19,7 @@ function AddBrand(props) {
 
     return (
         <div className="card">
-            <div className="card-header">Dodaj walutę</div>
+            <div className="card-header">Dodaj firmę</div>
             <div className="card-body">
             
             <p className="text-muted">Uzupełnij dane firmy</p>

@@ -19,7 +19,7 @@ function TypeAdd(props) {
 
     return (
         <div className="card">
-            <div className="card-header">Dodaj walutę</div>
+            <div className="card-header">Dodaj typ przedmiotu</div>
             <div className="card-body">
             
             <p className="text-muted">Uzupełnij dane typu przedmiotu</p>
