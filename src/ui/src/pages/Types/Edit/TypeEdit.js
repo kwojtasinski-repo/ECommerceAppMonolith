@@ -43,7 +43,7 @@ function TypeEdit(props) {
 
     return (
         <div className="card">
-            <div className="card-header">Edytuj walutę</div>
+            <div className="card-header">Edytuj typ przedmiotu</div>
             <div className="card-body">
                 {error ? (
                     <div className="alert alert-danger">{error}</div>

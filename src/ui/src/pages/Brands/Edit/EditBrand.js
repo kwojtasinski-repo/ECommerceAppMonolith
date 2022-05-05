@@ -43,7 +43,7 @@ function EditBrand(props) {
 
     return (
         <div className="card">
-            <div className="card-header">Edytuj walutę</div>
+            <div className="card-header">Edytuj firmę</div>
             <div className="card-body">
                 {error ? (
                     <div className="alert alert-danger">{error}</div>
