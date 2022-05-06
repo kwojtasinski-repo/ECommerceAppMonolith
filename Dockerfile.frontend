@@ -1,0 +1,13 @@
+FROM node:alpine
+WORKDIR /app
+COPY src/ui .
+
+ENV API_URL=http://test:1234/api
+
+# change line to UNIX (problem with finding files...)
+RUN sed -i 's/\r$//' .env.production && \  
+        chmod +x .env.production
+RUN ["/bin/sh", "-c", "changeBackendUrl.sh"]
+
+RUN npm i
+CMD ["npm", "run", "start"]

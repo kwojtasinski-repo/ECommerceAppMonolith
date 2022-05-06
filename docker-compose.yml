@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+    db:
+        image: postgres
+        container_name: postgres
+        restart: always
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: admin
+        volumes:
+            - dbdata:/var/lib/postgresql/data
+        ports:
+            - 5432:5432
+        networks:
+          - ecommerce
+    
+    backend-service:
+        build:
+            context: .
+            dockerfile: Dockerfile.backend
+        container_name: backend-service
+        ports:
+          - 5010:80
+        depends_on:
+            - db
+        networks:
+          - ecommerce
+          
+    gateway-service:
+        build:
+            context: .
+            dockerfile: Dockerfile.gateway
+        container_name: gateway-service
+        ports:
+          - 5000:80
+        depends_on:
+            - backend-service
+        networks:
+          - ecommerce
+          
+    frontend-service:
+        build:
+            context: .
+            dockerfile: Dockerfile.frontend
+        container_name: frontend-service
+        ports:
+          - 3000:3000
+        environment:
+            API_URL: "http://backend-service"
+        volumes:
+          - /app/node_modules
+          - ./src/ui:/app
+        depends_on:
+            - gateway-service
+        networks:
+          - ecommerce
+
+volumes:
+  dbdata:
+
+networks:
+  ecommerce:
+    name: ecommerce-network
+    external: true
