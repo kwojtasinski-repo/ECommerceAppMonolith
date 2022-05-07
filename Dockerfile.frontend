@@ -1,13 +1,27 @@
-FROM node:alpine
+# get the base node image
+FROM node:alpine as builder
+
+# set the working dir for container
 WORKDIR /app
+
+# copy the json file first
+COPY src/ui/package.json /app
+
+# install npm dependencies
+RUN npm install
+
 COPY src/ui .
 
 ENV API_URL=http://test:1234/api
-
 # change line to UNIX (problem with finding files...)
 RUN sed -i 's/\r$//' .env.production && \  
         chmod +x .env.production
 RUN ["/bin/sh", "-c", "changeBackendUrl.sh"]
 
-RUN npm i
-CMD ["npm", "run", "start"]
+# build the folder
+RUN npm run build
+
+# Handle Nginx
+FROM nginx
+COPY --from=builder /app/build /usr/share/nginx/html
+COPY ./default.conf /etc/nginx/conf.d/default.conf

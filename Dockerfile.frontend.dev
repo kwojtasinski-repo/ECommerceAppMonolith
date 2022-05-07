@@ -1,0 +1,19 @@
+# get the base node image
+FROM node:alpine as builder
+
+# set the working dir for container
+WORKDIR /app
+
+# copy the json file first
+COPY src/ui/package.json /app
+
+# install npm dependencies
+RUN npm install
+
+COPY src/ui .
+
+ENV API_URL=http://test:1234/api
+RUN sed -i '/\(REACT_APP_BACKEND_URL=\).*/\1${API_URL}/g' .env.local
+
+# build the folder
+CMD [ "npm", "run", "start" ]
