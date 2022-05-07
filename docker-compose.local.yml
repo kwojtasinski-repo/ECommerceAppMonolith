@@ -42,16 +42,16 @@ services:
     frontend-service:
         build:
             context: .
-            dockerfile: Dockerfile.frontend
+            dockerfile: Dockerfile.frontend.dev
             args:
                 API_URL: http://gateway-service
-                API_ADDRESS: gateway-service
-                SERVER_NAME: ecommerce-app
         container_name: frontend-service
+        command: npm run start
         ports:
-          - 3000:80
+          - 3000:3000
         volumes:
           - /app/node_modules
+          - ./src/ui:/app
         depends_on:
             - gateway-service
         networks:
