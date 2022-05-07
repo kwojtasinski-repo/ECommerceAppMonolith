@@ -1,3 +1,6 @@
+import { createGuid } from "../../helpers/createGuid";
+import { isEmpty } from "../../helpers/stringExtensions";
+
 const InputTextArea = props => {
     const htmlFor = replacePolishCharacters(props.label) + '-input';
     return (
@@ -83,7 +86,7 @@ const InputZipCode = props => {
 }
 
 const InputSelect = props => {
-    const htmlFor = replacePolishCharacters(props.label) + '-input';
+    const htmlFor = createGuid('N');
     return (
         <div className="form-group">
             <label htmlFor={htmlFor}>{props.label}</label>
@@ -189,6 +192,10 @@ Input.defaultProps = {
 export default Input;
 
 function replacePolishCharacters(text) {
+    if (isEmpty(text)) {
+        return text;
+    }
+
     let textModified = text.replace('ą', 'a');
     textModified = textModified.replace('ć', 'c');
     textModified = textModified.replace('ę', 'e');
