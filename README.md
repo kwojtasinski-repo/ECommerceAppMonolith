@@ -8,6 +8,24 @@ Every module has its own scheme in database.
 - Sales based on the data of module Item shows which products is ordered or is in ItemCart. Additionally after add item to ItemCart the copy of Item is created as a snapshot in db. Module also responds to Currencies events especially on new currency rates events.
 - Users stores information about permissions, role of users
 
-Below shwon schema of contacts 
+Below shown db schemas of modules:
 
-![]()
+- Contacts 
+
+![](https://raw.githubusercontent.com/kamasjdev/ECommerceAppMonolith/main/contacts_diagram.png)
+
+- Currencies
+
+![](https://raw.githubusercontent.com/kamasjdev/ECommerceAppMonolith/main/currencies_diagram.png)
+
+- Items
+
+![](https://raw.githubusercontent.com/kamasjdev/ECommerceAppMonolith/main/items_diagram.png)
+
+- Sales
+
+![](https://raw.githubusercontent.com/kamasjdev/ECommerceAppMonolith/main/sales_diagram.png)
+
+- Users
+
+![](https://raw.githubusercontent.com/kamasjdev/ECommerceAppMonolith/main/users_diagram.png)
