@@ -5,16 +5,17 @@ Every module has its own scheme in database.
 - Contacts module has information about customer. 
 - Currencies cyclically downloads data from API NBP using custom background job. Every new rate publish new event.
 - Items module stores data about items in ECommerceApp
-- Sales based on the data of module Item shows which products is ordered or is in ItemCart. Additionally after add item to ItemCart the copy of Item is created as a snapshot in db. Module also responds to Currencies events especially on new currency rates events and subcribes one events to items module events like create, update item to sale. This provides the sales module to have the items that have been approved in the Items module, locally at in the own schema
+- Sales based on the data of module Item shows which products is ordered or is in ItemCart and shows which order is paid. Additionally after add item to ItemCart the copy of Item is created as a snapshot in db. Module also responds to Currencies events especially on new currency rates events and subcribes on events from 'Items module' events like create, update item to sale. This provides the sales module to have the items that have been approved in the Items module, locally at in the own schema
 - Users stores information about permissions, role of users
 
 AppInitlizer is responsible for migration data. Its implementation is located in folder 'src/Shared/ECommerce.Shared.Infrastructure'. This project has unit and integration tests written using xUnit. Every module has example scenario in rest file like for example Currencies module in the file 'Currencies.rest'. 
 Due to the future changes to the current architecture into microservices, decided to add Gateway to this project.
 
-#Technologies:
+# Technologies:
 - .Net 6
 - Postgres
 - React
+- Docker
 - Yarp
 - Axios
 - Humanizer
@@ -24,7 +25,7 @@ Due to the future changes to the current architecture into microservices, decide
 - Cronos
 - Jest
 
-#Database
+# Database
 Below shown db schemas of modules:
 
 - Contacts 
@@ -47,7 +48,7 @@ Below shown db schemas of modules:
 
 ![](https://raw.githubusercontent.com/kamasjdev/ECommerceAppMonolith/main/images/users_diagram.png)
 
-#Screens
+# Screens
 
 ![](https://raw.githubusercontent.com/kamasjdev/ECommerceAppMonolith/main/images/image_1.png)
 ![](https://raw.githubusercontent.com/kamasjdev/ECommerceAppMonolith/main/images/image_2.png)
