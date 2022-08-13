@@ -4,7 +4,8 @@ using ECommerce.Shared.Infrastructure.Api;
 using ECommerce.Shared.Infrastructure.Auth;
 using ECommerce.Shared.Infrastructure.Commands;
 using ECommerce.Shared.Infrastructure.Contexts;
-using ECommerce.Shared.Infrastructure.Conventions;
+using ECommerce.Shared.Infrastructure.Controllers;
+using ECommerce.Shared.Infrastructure.Documentations;
 using ECommerce.Shared.Infrastructure.Events;
 using ECommerce.Shared.Infrastructure.Exceptions;
 using ECommerce.Shared.Infrastructure.Kernel;
@@ -15,15 +16,11 @@ using ECommerce.Shared.Infrastructure.Queries;
 using ECommerce.Shared.Infrastructure.Services;
 using ECommerce.Shared.Infrastructure.Time;
 using ECommerce.Shared.Infrastructure.Validators;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
@@ -40,26 +37,7 @@ namespace ECommerce.Shared.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services,
             IList<Assembly> assemblies, IList<IModule> modules)
         {
-            var disabledModules = new List<string>();
-            using (var serviceProvider = services.BuildServiceProvider())
-            {
-                var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                var configurations = configuration.AsEnumerable();
-
-                foreach (var (key, value) in configurations)
-                {
-                    if (!key.Contains("modules:enabled"))
-                    {
-                        continue;
-                    }
-
-                    if (!bool.Parse(value))
-                    {
-                        disabledModules.Add(key.Split(":")[0]);
-                    }
-                }
-            }
-
+            services.AddControllersFromModules();
             services.AddCors(cors =>
             {
                 cors.AddPolicy(CorsPolicy, policy =>
@@ -71,37 +49,7 @@ namespace ECommerce.Shared.Infrastructure
                 });
             });
 
-            services.AddSwaggerGen(swagger =>
-            {
-                swagger.CustomSchemaIds(s => s.FullName);
-                swagger.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "ECommerce API",
-                    Version = "v1"
-                });
-                // Include 'SecurityScheme' to use JWT Authentication
-                var jwtSecurityScheme = new OpenApiSecurityScheme
-                {
-                    Scheme = "bearer",
-                    BearerFormat = "JWT",
-                    Name = "JWT Authentication",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                    Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
-
-                    Reference = new OpenApiReference
-                    {
-                        Id = JwtBearerDefaults.AuthenticationScheme,
-                        Type = ReferenceType.SecurityScheme
-                    }
-                };
-                swagger.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-                swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    { jwtSecurityScheme, Array.Empty<string>() }
-                });
-            });
-
+            services.AddSwagger();
             services.AddSingleton<IContextFactory, ContextFactory>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(sp => sp.GetRequiredService<IContextFactory>().Create());
@@ -119,33 +67,6 @@ namespace ECommerce.Shared.Infrastructure
             services.AddTransactionalDecorators();
             services.AddSingleton<IClock, UtcClock>();
             services.AddHostedService<AppInitializer>();
-            services.AddControllers(options =>
-            {
-                options.UseDateOnlyTimeOnlyStringConverters();
-                options.Conventions.Add(new RouteTokenTransformerConvention(new DashedConvention()));
-            })
-                .AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
-                })
-                .ConfigureApplicationPartManager(manager =>
-                {
-                    var removedParts = new List<ApplicationPart>();
-
-                    foreach (var disabledModule in disabledModules)
-                    {
-                        var parts = manager.ApplicationParts.Where(app => app.Name.Contains(disabledModule, StringComparison.InvariantCultureIgnoreCase));
-                        removedParts.AddRange(parts);
-                    }
-
-                    foreach (var removePart in removedParts)
-                    {
-                        manager.ApplicationParts.Remove(removePart);
-                    }
-
-                    // change detection of controllers
-                    manager.FeatureProviders.Add(new InternalControllerFeatureProvider());
-                });
 
             return services;
         }
@@ -153,20 +74,10 @@ namespace ECommerce.Shared.Infrastructure
         public static WebApplication UseInfrastructure(this WebApplication app)
         {
             app.UseCors(CorsPolicy);
-            app.UseErrorHandling(); 
+            app.UseErrorHandling();
             app.UseSwagger();
-            app.UseSwaggerUI(swaggerUI =>
-            {
-                swaggerUI.RoutePrefix = "swagger";
-                swaggerUI.SwaggerEndpoint("/swagger/v1/swagger.json", "ECommerce API v1");
-                swaggerUI.DocumentTitle = "ECommerce API";
-            });
-            app.UseReDoc(reDoc =>
-            {
-                reDoc.RoutePrefix = "docs";
-                reDoc.SpecUrl("/swagger/v1/swagger.json");
-                reDoc.DocumentTitle = "ECommerce API";
-            });
+            app.UseSwaggerUserInterface();
+            app.UseReDocDocumentation();
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
