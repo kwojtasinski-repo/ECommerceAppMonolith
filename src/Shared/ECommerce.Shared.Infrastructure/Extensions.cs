@@ -169,20 +169,5 @@ namespace ECommerce.Shared.Infrastructure
 
             return type.Namespace.StartsWith("ECommerce.Modules") ? type.Namespace.Split(".")[2].ToLowerInvariant() : string.Empty;
         }
-
-        private static void SetDefaultJsonSerializerOptions()
-        {
-            var globalOptions = (JsonSerializerOptions?)typeof(JsonSerializerOptions)
-                .GetField(
-                    "s_defaultOptions",
-                    BindingFlags.Static | BindingFlags.NonPublic
-                )?.GetValue(null);
-
-            if (globalOptions == null)
-                throw new InvalidOperationException("Could not find property for global JsonSerializerOptions");
-
-            globalOptions.Converters.Add(new DateOnlyJsonConverter());
-            globalOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-        }
     }
 }
