@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\Modules\Sales\ECommerce.Modules.Sales.Application\ECommerce.Modules.Sales.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Backend\Modules\Sales\ECommerce.Modules.Sales.Application\ECommerce.Modules.Sales.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -35,7 +35,7 @@ namespace ECommerce.Modules.Users.Tests.Integration.Controllers
         [Fact]
         public async Task given_valid_user_should_change_activity()
         {
-            var signUpDto = new SignUpDto { Email = "test@testowy.pl", Password = "Password123", Role = "user", Claims = new Dictionary<string, IEnumerable<string>>() };
+            var signUpDto = new SignUpDto { Email = "test@testowyAbc123.pl", Password = "Password123", Role = "user", Claims = new Dictionary<string, IEnumerable<string>>() };
             await _identityService.SignUpAsync(signUpDto);
             var userAdded = await _identityService.SignInAsync(new SignInDto { Email = signUpDto.Email, Password = signUpDto.Password });
             Authenticate(Guid.NewGuid(), _client);

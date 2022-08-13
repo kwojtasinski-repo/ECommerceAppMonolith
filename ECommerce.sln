@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Bootstrapper", "src\Bootstrapper\ECommerce.Bootstrapper\ECommerce.Bootstrapper.csproj", "{9CDD8D78-EFBC-4809-827A-EB6E7FFB4E41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Bootstrapper", "src\Backend\Bootstrapper\ECommerce.Bootstrapper\ECommerce.Bootstrapper.csproj", "{9CDD8D78-EFBC-4809-827A-EB6E7FFB4E41}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bootstrapper", "Bootstrapper", "{6388238F-AF88-4FB0-AB5D-B7AEA6931009}"
 EndProject
@@ -15,15 +15,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{65ED
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{C8D9557E-542B-4F77-B26B-88C2976C0F66}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Shared.Abstractions", "src\Shared\ECommerce.Shared.Abstractions\ECommerce.Shared.Abstractions.csproj", "{B00B264B-248A-4E11-9A4B-96C45FE15449}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Shared.Abstractions", "src\Backend\Shared\ECommerce.Shared.Abstractions\ECommerce.Shared.Abstractions.csproj", "{B00B264B-248A-4E11-9A4B-96C45FE15449}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Shared.Infrastructure", "src\Shared\ECommerce.Shared.Infrastructure\ECommerce.Shared.Infrastructure.csproj", "{C498D6F6-ADB8-4140-A716-CEB7AC5006BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Shared.Infrastructure", "src\Backend\Shared\ECommerce.Shared.Infrastructure\ECommerce.Shared.Infrastructure.csproj", "{C498D6F6-ADB8-4140-A716-CEB7AC5006BE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Shared.Tests", "src\Shared\ECommerce.Shared.Tests\ECommerce.Shared.Tests.csproj", "{0DAE7E96-7FED-4183-BA3D-62F3AD68AE8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Shared.Tests", "src\Backend\Shared\ECommerce.Shared.Tests\ECommerce.Shared.Tests.csproj", "{0DAE7E96-7FED-4183-BA3D-62F3AD68AE8D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Currencies.Api", "src\Modules\Currencies\ECommerce.Modules.Currencies.Api\ECommerce.Modules.Currencies.Api.csproj", "{FEB8A6A9-8346-4267-8FFF-61076C3E2EC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Currencies.Api", "src\Backend\Modules\Currencies\ECommerce.Modules.Currencies.Api\ECommerce.Modules.Currencies.Api.csproj", "{FEB8A6A9-8346-4267-8FFF-61076C3E2EC8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Currencies.Core", "src\Modules\Currencies\ECommerce.Modules.Currencies.Core\ECommerce.Modules.Currencies.Core.csproj", "{EC484DE3-C360-49BA-B5B3-3EE87C35791F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Currencies.Core", "src\Backend\Modules\Currencies\ECommerce.Modules.Currencies.Core\ECommerce.Modules.Currencies.Core.csproj", "{EC484DE3-C360-49BA-B5B3-3EE87C35791F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Currencies", "Currencies", "{1A647363-51CA-414E-B366-59E39173903C}"
 EndProject
@@ -33,21 +33,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Currencies", "Currencies", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Users", "Users", "{87E44BC2-A76C-4D07-9BE2-E08093DCA4C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Users.Api", "src\Modules\Users\ECommerce.Modules.Users.Api\ECommerce.Modules.Users.Api.csproj", "{39CD4571-632E-4A39-B60A-DE1E7C25AD40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Users.Api", "src\Backend\Modules\Users\ECommerce.Modules.Users.Api\ECommerce.Modules.Users.Api.csproj", "{39CD4571-632E-4A39-B60A-DE1E7C25AD40}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Users.Core", "src\Modules\Users\ECommerce.Modules.Users.Core\ECommerce.Modules.Users.Core.csproj", "{D8B6E36F-2453-4634-A231-6B5B74370291}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Users.Core", "src\Backend\Modules\Users\ECommerce.Modules.Users.Core\ECommerce.Modules.Users.Core.csproj", "{D8B6E36F-2453-4634-A231-6B5B74370291}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Currencies.Tests.Unit", "tests\Modules\Currencies\ECommerce.Modules.Currencies.Tests.Unit\ECommerce.Modules.Currencies.Tests.Unit.csproj", "{B5038DBB-F77D-41F5-A372-5B97160F0FB6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{D498AFA5-B135-447B-8580-11FDD22FB692}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Items.Api", "src\Modules\Items\ECommerce.Modules.Items.Api\ECommerce.Modules.Items.Api.csproj", "{B8A265C0-8DD7-4047-9585-2FF49B714396}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Items.Api", "src\Backend\Modules\Items\ECommerce.Modules.Items.Api\ECommerce.Modules.Items.Api.csproj", "{B8A265C0-8DD7-4047-9585-2FF49B714396}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Items.Domain", "src\Modules\Items\ECommerce.Modules.Items.Domain\ECommerce.Modules.Items.Domain.csproj", "{681F0D00-EC32-49D6-9E20-EC93DA8B8BC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Items.Domain", "src\Backend\Modules\Items\ECommerce.Modules.Items.Domain\ECommerce.Modules.Items.Domain.csproj", "{681F0D00-EC32-49D6-9E20-EC93DA8B8BC0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Items.Application", "src\Modules\Items\ECommerce.Modules.Items.Application\ECommerce.Modules.Items.Application.csproj", "{66C2C671-7FD6-4D7C-9D94-347745F31689}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Items.Application", "src\Backend\Modules\Items\ECommerce.Modules.Items.Application\ECommerce.Modules.Items.Application.csproj", "{66C2C671-7FD6-4D7C-9D94-347745F31689}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Items.Infrastructure", "src\Modules\Items\ECommerce.Modules.Items.Infrastructure\ECommerce.Modules.Items.Infrastructure.csproj", "{F1CE727E-4A5F-4B67-9C55-D767F5A20106}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Items.Infrastructure", "src\Backend\Modules\Items\ECommerce.Modules.Items.Infrastructure\ECommerce.Modules.Items.Infrastructure.csproj", "{F1CE727E-4A5F-4B67-9C55-D767F5A20106}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Currencies.Tests.Integration", "tests\Modules\Currencies\ECommerce.Modules.Currencies.Tests.Integration\ECommerce.Modules.Currencies.Tests.Integration.csproj", "{BCA36D42-BA08-4014-B185-D56E74C47F4F}"
 EndProject
@@ -65,9 +65,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Items.Tes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contacts", "Contacts", "{AB44658F-0BA4-490F-98F6-6184C15DE154}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Contacts.Api", "src\Modules\Contacts\ECommerce.Modules.Contacts.Api\ECommerce.Modules.Contacts.Api.csproj", "{C968D67B-2A0F-4220-8A9B-21C9133A1F97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Contacts.Api", "src\Backend\Modules\Contacts\ECommerce.Modules.Contacts.Api\ECommerce.Modules.Contacts.Api.csproj", "{C968D67B-2A0F-4220-8A9B-21C9133A1F97}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Contacts.Core", "src\Modules\Contacts\ECommerce.Modules.Contacts.Core\ECommerce.Modules.Contacts.Core.csproj", "{A0F374AB-2AA7-4DB3-B1E8-D3101AF9FED4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Contacts.Core", "src\Backend\Modules\Contacts\ECommerce.Modules.Contacts.Core\ECommerce.Modules.Contacts.Core.csproj", "{A0F374AB-2AA7-4DB3-B1E8-D3101AF9FED4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contacts", "Contacts", "{534ABC55-27AC-4B48-AF15-88FB29D8ACAA}"
 EndProject
@@ -77,13 +77,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Contacts.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sales", "Sales", "{CA1D055B-E768-469A-B48B-080EC0645FBE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Sales.Domain", "src\Modules\Sales\ECommerce.Modules.Sales.Domain\ECommerce.Modules.Sales.Domain.csproj", "{1AFB9FBA-A8C9-4503-AF0C-785BE85CA169}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Sales.Domain", "src\Backend\Modules\Sales\ECommerce.Modules.Sales.Domain\ECommerce.Modules.Sales.Domain.csproj", "{1AFB9FBA-A8C9-4503-AF0C-785BE85CA169}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Sales.Application", "src\Modules\Sales\ECommerce.Modules.Sales.Application\ECommerce.Modules.Sales.Application.csproj", "{BA1DE685-6A82-4532-A6DD-264DFA0568D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Sales.Application", "src\Backend\Modules\Sales\ECommerce.Modules.Sales.Application\ECommerce.Modules.Sales.Application.csproj", "{BA1DE685-6A82-4532-A6DD-264DFA0568D6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Sales.Infrastructure", "src\Modules\Sales\ECommerce.Modules.Sales.Infrastructure\ECommerce.Modules.Sales.Infrastructure.csproj", "{56C60475-001C-4513-9E8A-C3CEE294FBC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Sales.Infrastructure", "src\Backend\Modules\Sales\ECommerce.Modules.Sales.Infrastructure\ECommerce.Modules.Sales.Infrastructure.csproj", "{56C60475-001C-4513-9E8A-C3CEE294FBC2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Sales.Api", "src\Modules\Sales\ECommerce.Modules.Sales.Api\ECommerce.Modules.Sales.Api.csproj", "{A57B5CD7-5CE9-4490-9C9D-FF5DD925B242}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Modules.Sales.Api", "src\Backend\Modules\Sales\ECommerce.Modules.Sales.Api\ECommerce.Modules.Sales.Api.csproj", "{A57B5CD7-5CE9-4490-9C9D-FF5DD925B242}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sales", "Sales", "{91406996-86CE-4586-9CEE-6B495381CFB3}"
 EndProject

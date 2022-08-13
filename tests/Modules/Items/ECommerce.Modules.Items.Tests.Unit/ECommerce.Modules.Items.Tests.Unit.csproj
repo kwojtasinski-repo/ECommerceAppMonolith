@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\Modules\Items\ECommerce.Modules.Items.Domain\ECommerce.Modules.Items.Domain.csproj" />
-    <ProjectReference Include="..\..\..\..\src\Modules\Items\ECommerce.Modules.Items.Infrastructure\ECommerce.Modules.Items.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Backend\Modules\Items\ECommerce.Modules.Items.Domain\ECommerce.Modules.Items.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Backend\Modules\Items\ECommerce.Modules.Items.Infrastructure\ECommerce.Modules.Items.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

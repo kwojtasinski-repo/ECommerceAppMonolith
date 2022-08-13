@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\Modules\Contacts\ECommerce.Modules.Contacts.Core\ECommerce.Modules.Contacts.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Backend\Modules\Contacts\ECommerce.Modules.Contacts.Core\ECommerce.Modules.Contacts.Core.csproj" />
   </ItemGroup>
 
 </Project>

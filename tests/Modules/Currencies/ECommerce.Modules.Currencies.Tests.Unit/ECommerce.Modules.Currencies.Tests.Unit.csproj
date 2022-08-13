@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\Modules\Currencies\ECommerce.Modules.Currencies.Core\ECommerce.Modules.Currencies.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Backend\Modules\Currencies\ECommerce.Modules.Currencies.Core\ECommerce.Modules.Currencies.Core.csproj" />
   </ItemGroup>
 
 </Project>

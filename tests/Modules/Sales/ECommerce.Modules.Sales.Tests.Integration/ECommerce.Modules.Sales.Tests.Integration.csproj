@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\Shared\ECommerce.Shared.Tests\ECommerce.Shared.Tests.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Backend\Shared\ECommerce.Shared.Tests\ECommerce.Shared.Tests.csproj" />
   </ItemGroup>
 
 </Project>
