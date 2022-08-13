@@ -1,4 +1,5 @@
 ﻿using ECommerce.Modules.Users.Core.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,20 @@ namespace ECommerce.Modules.Users.Core.DAL
         {
             modelBuilder.HasDefaultSchema("users");
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+
+            modelBuilder.Entity<User>().HasData(new User() 
+            { 
+                Id = Guid.NewGuid(),
+                CreatedAt = DateTime.Now,
+                Email = "admin@admin.com",
+                Role = "admin",
+                Password = new PasswordHasher<User>().HashPassword(default, "PasW0Rd!26"),
+                Claims = new Dictionary<string, IEnumerable<string>>
+                {
+                    { "permissions", new string[] { "users", "items", "item-sale", "currencies" } }
+                },
+                IsActive = true
+            });
         }
     }
 }
