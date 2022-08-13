@@ -2,6 +2,7 @@
 using ECommerce.Shared.Infrastructure.Api;
 using ECommerce.Shared.Infrastructure.Conventions;
 using ECommerce.Shared.Infrastructure.Time;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
@@ -11,31 +12,25 @@ namespace ECommerce.Shared.Infrastructure.Controllers
 {
     internal static class Extensions
     {
-        public static IServiceCollection AddControllersFromModules(this IServiceCollection services)
+        public static ApplicationPartManager UseInternalControllers(this ApplicationPartManager applicationPartManager)
         {
-            var disabledModules = new List<string>();
-            using (var serviceProvider = services.BuildServiceProvider())
-            {
-                var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                var configurations = configuration.AsEnumerable();
+            // change detection of controllers
+            applicationPartManager.FeatureProviders.Add(new InternalControllerFeatureProvider());
+            return applicationPartManager;
+        }
 
-                foreach (var (key, value) in configurations)
-                {
-                    if (!key.Contains("modules:enabled"))
-                    {
-                        continue;
-                    }
+        public static MvcOptions UseDashedConventionInRouting(this MvcOptions options)
+        {
+            options.Conventions.Add(new RouteTokenTransformerConvention(new DashedConvention()));
+            return options;
+        }
 
-                    if (!bool.Parse(value))
-                    {
-                        disabledModules.Add(key.Split(":")[0]);
-                    }
-                }
-            }
-            services.AddControllers(options =>
+        public static IMvcBuilder AddAllControllers(this IServiceCollection services, IEnumerable<string> disabledModules)
+        {
+            var mvcBuilder = services.AddControllers(options =>
             {
                 options.UseDateOnlyTimeOnlyStringConverters();
-                options.Conventions.Add(new RouteTokenTransformerConvention(new DashedConvention()));
+                options.UseDashedConventionInRouting();
             })
                 .AddJsonOptions(options =>
                 {
@@ -57,10 +52,10 @@ namespace ECommerce.Shared.Infrastructure.Controllers
                     }
 
                     // change detection of controllers
-                    manager.FeatureProviders.Add(new InternalControllerFeatureProvider());
+                    manager.UseInternalControllers();
                 });
 
-            return services;
+            return mvcBuilder;
         }
     }
 }

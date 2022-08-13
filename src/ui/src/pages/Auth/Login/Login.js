@@ -19,6 +19,7 @@ function Login() {
 
     const submit = async (event) => {
         event.preventDefault();
+        setValid(true);
         setLoading(true);
         
         try {
@@ -43,11 +44,15 @@ function Login() {
             const errors = exception.response.data.errors;
             
             for (const errMsg in errors) {
+                if (!errors[errMsg].code) {
+                    setValid(false);
+                    continue;
+                }
+
                 errorMessage += mapToMessage(errors[errMsg].code, status) + '\n';
             }
             
             setError(errorMessage);
-            setValid(false);
             setLoading(false);
         }
     }
@@ -61,13 +66,6 @@ function Login() {
     return (
         <div>
             <h2>Logowanie</h2>
-
-            {valid === false ? (
-                <div className="alert alert-danger">
-                    Niepoprawne dane logowania
-                </div>
-            ) : null}
-
             <form onSubmit={submit}>
                 <div className="form-group">
                     <label htmlFor="email-input" >Email</label>
@@ -88,6 +86,12 @@ function Login() {
                         className="form-control" />
                 </div>
 
+                {valid === false ? (
+                    <div className="alert alert-danger">
+                        Niepoprawne dane logowania
+                    </div>
+                ) : null}
+                
                 {error ? (
                     <div className="alert alert-danger">
                         {error}

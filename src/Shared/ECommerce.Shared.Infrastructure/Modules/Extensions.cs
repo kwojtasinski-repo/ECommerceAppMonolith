@@ -94,5 +94,30 @@ namespace ECommerce.Shared.Infrastructure.Modules
                 return registry;
             });
         }
+
+        public static IEnumerable<string> GetAllDisabledModules(this IServiceCollection services)
+        {
+            var disabledModules = new List<string>();
+            using (var serviceProvider = services.BuildServiceProvider())
+            {
+                var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                var configurations = configuration.AsEnumerable();
+
+                foreach (var (key, value) in configurations)
+                {
+                    if (!key.Contains("modules:enabled"))
+                    {
+                        continue;
+                    }
+
+                    if (!bool.Parse(value))
+                    {
+                        disabledModules.Add(key.Split(":")[0]);
+                    }
+                }
+            }
+
+            return disabledModules;
+        }
     }
 }

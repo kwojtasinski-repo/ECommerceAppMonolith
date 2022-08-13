@@ -23,7 +23,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text.Json;
 
 [assembly: InternalsVisibleTo("ECommerce.Bootstrapper")]
 [assembly: InternalsVisibleTo("ECommerce.Shared.Tests")]
@@ -37,7 +36,8 @@ namespace ECommerce.Shared.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services,
             IList<Assembly> assemblies, IList<IModule> modules)
         {
-            services.AddControllersFromModules();
+            var disabledModules = services.GetAllDisabledModules();
+            services.AddAllControllers(disabledModules);
             services.AddCors(cors =>
             {
                 cors.AddPolicy(CorsPolicy, policy =>
