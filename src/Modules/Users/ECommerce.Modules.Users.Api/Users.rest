@@ -44,7 +44,7 @@ GET {{url}}/accounts/search?email={{searchEmail}}
 Authorization: Bearer {{accessToken}}
 
 ###
-PATCH {{url}}/accounts/active
+PATCH {{url}}/accounts/{{userId}}/active
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
@@ -58,7 +58,7 @@ GET {{url}}/accounts
 Authorization: Bearer {{accessToken}}
 
 ###
-PATCH {{url}}/accounts/active
+PATCH {{url}}/accounts/{{userId}}/active
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 

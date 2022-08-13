@@ -94,7 +94,7 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### Update item
-PUT {{url}}/items
+PUT {{url}}/items/{{itemId}}
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
@@ -139,7 +139,7 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### Update item sale
-PUT {{url}}/item-sales
+PUT {{url}}/item-sales/{{itemSaleId}}
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
@@ -158,7 +158,7 @@ DELETE {{url}}/items/{{itemId}}
 Authorization: Bearer {{accessToken}}
 
 ### Update brand
-PUT {{url}}/brands
+PUT {{url}}/brands/{{brandId}}
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
@@ -172,7 +172,7 @@ DELETE {{url}}/brands/{{brandId}}
 Authorization: Bearer {{accessToken}}
 
 ### Update type
-PUT {{url}}/types
+PUT {{url}}/types/{{typeId}}
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 

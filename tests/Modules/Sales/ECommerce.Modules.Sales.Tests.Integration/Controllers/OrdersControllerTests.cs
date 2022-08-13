@@ -27,7 +27,7 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
             var request = new AddOrderItemToOrder(order.Id, itemSaleId);
             Authenticate(_userId, _client);
 
-            var response = await _client.Request($"{Path}/positions/add").PatchJsonAsync(request);
+            var response = await _client.Request($"{Path}/{order.Id.Value}/positions/add").PatchJsonAsync(request);
 
             var orderFromDb = _dbContext.Orders.Include(oi => oi.OrderItems).Where(o => o.Id == order.Id).AsNoTracking().SingleOrDefault();
             orderFromDb.ShouldNotBeNull();
@@ -67,7 +67,7 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
             var requestDelete = new DeleteOrderItemFromOrder(order.Id, orderItemToDetele.Id);
             var expectedCost = 8500;
 
-            var responseDeletedPosition = await _client.Request($"{Path}/positions/delete").PatchJsonAsync(requestDelete);
+            var responseDeletedPosition = await _client.Request($"{Path}/{order.Id.Value}/positions/delete").PatchJsonAsync(requestDelete);
 
             var orderFromDb = _dbContext.Orders.Include(oi => oi.OrderItems).Where(o => o.Id == order.Id).AsNoTracking().SingleOrDefault();
             orderFromDb.ShouldNotBeNull();
@@ -100,7 +100,7 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
             var request = new ChangeCustomerInOrder(order.Id, customerId);
             Authenticate(_userId, _client);
 
-            var response = await _client.Request($"{Path}/customer/change").PatchJsonAsync(request);
+            var response = await _client.Request($"{Path}/{order.Id.Value}/customer/change").PatchJsonAsync(request);
 
             var orderAfterUpdate = await _dbContext.Orders.Where(o => o.Id == order.Id).AsNoTracking().SingleOrDefaultAsync();
             orderAfterUpdate.ShouldNotBeNull();
@@ -121,7 +121,7 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
             var order = await _client.Request($"{Path}/{id}").GetJsonAsync<OrderDetailsDto>();
             var command = new ChangeCurrencyInOrder(id, currency);
 
-            var responseCurrencyChanged = await _client.Request($"{Path}/currency/change").PatchJsonAsync(command);
+            var responseCurrencyChanged = await _client.Request($"{Path}/{order.Id}/currency/change").PatchJsonAsync(command);
 
             responseCurrencyChanged.StatusCode.ShouldBe((int)HttpStatusCode.OK);
             var orderUpdated = await _dbContext.Orders.Where(o => o.Id == id).AsNoTracking().SingleOrDefaultAsync();

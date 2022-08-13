@@ -77,7 +77,7 @@ namespace ECommerce.Modules.Contacts.Tests.Integration.Controllers
             Authenticate(_userId, _client);
             var dto = new CustomerDto { Id = customer.Id, FirstName = "Michael", LastName = "Employer", PhoneNumber = "123456789", Company = false };
 
-            var response = await _client.Request($"{Path}").PutJsonAsync(dto);
+            var response = await _client.Request($"{Path}/{customer.Id}").PutJsonAsync(dto);
             var customerUpdated = await (await _client.Request($"{Path}/{customer.Id}").GetAsync()).GetJsonAsync<CustomerDto>();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);

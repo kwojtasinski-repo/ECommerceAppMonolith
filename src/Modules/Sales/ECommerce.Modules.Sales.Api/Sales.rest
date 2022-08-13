@@ -62,7 +62,7 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### Add position to order
-PATCH {{url}}/orders/positions/add
+PATCH {{url}}/orders/{{orderId}}/positions/add
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
@@ -72,7 +72,7 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### Delete position from order
-PATCH {{url}}/orders/positions/delete
+PATCH {{url}}/orders/{{orderId}}/positions/delete
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 

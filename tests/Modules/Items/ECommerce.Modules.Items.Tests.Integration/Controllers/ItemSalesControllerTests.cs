@@ -58,7 +58,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var command = new UpdateItemSale(id, 10000M, "PLN");
             Authenticate(Guid.NewGuid(), _client);
 
-            var response = (await _client.Request($"{Path}").PutJsonAsync(command));
+            var response = (await _client.Request($"{Path}/{id}").PutJsonAsync(command));
             var itemFromDb = await _dbContext.ItemSales.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);

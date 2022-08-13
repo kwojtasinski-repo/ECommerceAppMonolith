@@ -2,11 +2,6 @@
 using ECommerce.Modules.Contacts.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Contacts.Api.Controllers
 {
@@ -40,11 +35,12 @@ namespace ECommerce.Modules.Contacts.Api.Controllers
             return CreatedAtAction(nameof(GetAsync), new { id = address.Id }, null);
         }
 
-        [HttpPut]
+        [HttpPut("{id:guid}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult> PutAsync(AddressDto address)
+        public async Task<ActionResult> PutAsync(Guid id, AddressDto address)
         {
+            address.Id = id;
             await _addressService.UpdateAsync(address);
             return Ok();
         }

@@ -59,14 +59,14 @@ namespace ECommerce.Modules.Items.Api.Controllers
             return CreatedAtAction(nameof(GetAsync), new { typeId = command.TypeId }, null);
         }
 
-        [HttpPut]
+        [HttpPut("{id:guid}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
-        public async Task<ActionResult> UpdateAsync(UpdateType command)
+        public async Task<ActionResult> UpdateAsync(Guid id, UpdateType command)
         {
-            await _commandDispatcher.SendAsync(command);
+            await _commandDispatcher.SendAsync(new UpdateType(id, command.Name));
             return Ok();
         }
 

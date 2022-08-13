@@ -102,7 +102,7 @@ function EditUser(props) {
         setLoadingButton(true);
 
         try {
-            await axios.put('/users-module/accounts/policies', {
+            await axios.put(`/users-module/accounts/${id}/policies`, {
                 userId: id,
                 role: form.role.value,
                 claims: form.claims.value
@@ -125,7 +125,7 @@ function EditUser(props) {
 
     const changeActive = async (active) => {
         try {
-            await axios.patch('/users-module/accounts/active', {
+            await axios.patch(`/users-module/accounts/${id}/active`, {
                 userId: id,
                 active
             });

@@ -64,7 +64,7 @@ function EditOrder(props) {
 
     const changeConcactData = async () => {
         try {
-            await axios.patch("/sales-module/orders/customer/change", {
+            await axios.patch(`/sales-module/orders/${order.id}/customer/change`, {
                 orderId: order.id,
                 customerId: order.customerId
             });

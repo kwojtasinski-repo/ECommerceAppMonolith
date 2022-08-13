@@ -30,7 +30,7 @@ function TypeEdit(props) {
     }
 
     const submit = async form => {
-        await axios.put(`/items-module/types`, form);
+        await axios.put(`/items-module/types/${id}`, form);
         const notification = { color: Color.success, id: new Date().getTime(), text: 'Pomyślnie zaaktualizowano', timeToClose: 5000 };
         addNotification(notification);
         addAction(`Updated-type-${id}`);

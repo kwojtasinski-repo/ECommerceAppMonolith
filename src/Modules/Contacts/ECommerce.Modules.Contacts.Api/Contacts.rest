@@ -51,7 +51,7 @@ GET {{url}}/customers/{{customerId}}
 Authorization: Bearer {{accessToken}}
 
 ### Update customer
-PUT {{url}}/customers
+PUT {{url}}/customers/{{customerId}}
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
@@ -64,7 +64,7 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### Update address
-PUT {{url}}/addresses
+PUT {{url}}/addresses/{{addressId}}
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 

@@ -17,7 +17,7 @@ function EditItem(props) {
 
     const onSubmit = async (form) => {
         console.log(form);
-        await axios.put('/items-module/items', form);
+        await axios.put(`/items-module/items/${id}`, form);
     }
 
     const redirectAfterSuccess = () => {

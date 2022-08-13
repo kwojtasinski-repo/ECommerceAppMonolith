@@ -17,7 +17,7 @@ using Xunit;
 
 namespace ECommerce.Modules.Users.Tests.Integration.Controllers
 {
-    public class AccountControllerTests : IClassFixture<TestApplicationFactory<Program>>,
+    public class AccountControllerTests : BaseIntegrationTest, IClassFixture<TestApplicationFactory<Program>>,
         IClassFixture<TestUsersDbContext>
     {
         [Fact]
@@ -132,6 +132,7 @@ namespace ECommerce.Modules.Users.Tests.Integration.Controllers
                 _passwordHasher.HashPassword(default, dto.OldPassword), "user", new Dictionary<string, IEnumerable<string>>());
             await _dbContext.AddAsync(user);
             await _dbContext.SaveChangesAsync();
+            Authenticate(Guid.NewGuid(), _client);
 
             var response = await _client.Request($"{Path}/change-credentials").PostJsonAsync(dto);
 
@@ -151,6 +152,7 @@ namespace ECommerce.Modules.Users.Tests.Integration.Controllers
                 _passwordHasher.HashPassword(default, dto.OldPassword), "user", new Dictionary<string, IEnumerable<string>>());
             await _dbContext.AddAsync(user);
             await _dbContext.SaveChangesAsync();
+            Authenticate(Guid.NewGuid(), _client);
 
             var response = await _client.Request($"{Path}/change-credentials").PostJsonAsync(dto);
             var responseSignIn = await _client.Request($"{Path}/sign-in").PostJsonAsync(new SignInDto { Email = dto.NewEmail, Password = dto.NewPassword });

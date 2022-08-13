@@ -63,7 +63,7 @@ namespace ECommerce.Modules.Contacts.Tests.Integration
             Authenticate(_userId, _client);
             var addressDto = new AddressDto { Id = address.Id, BuildingNumber = "123", LocaleNumber = "54", CityName = "Zielona Gora", CountryName = address.CountryName, CustomerId = address.CustomerId, StreetName = address.StreetName, ZipCode = address.ZipCode };
             
-            var response = await _client.Request($"{Path}").PutJsonAsync(addressDto);
+            var response = await _client.Request($"{Path}/{address.Id}").PutJsonAsync(addressDto);
             var addressUpdated = await (await _client.Request($"{Path}/{address.Id}").GetAsync()).GetJsonAsync<AddressDto>();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);

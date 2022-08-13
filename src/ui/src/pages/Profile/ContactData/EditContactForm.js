@@ -31,8 +31,8 @@ function EditContactForm(props) {
     
     const submit = async (form) => {
         try {
-            await axios.put('/contacts-module/customers', form.customer);
-            await axios.put('/contacts-module/addresses', form.address);
+            await axios.put(`/contacts-module/customers/${form.customer.id}`, form.customer);
+            await axios.put(`/contacts-module/addresses/${form.address.id}`, form.address);
             addAction('editContact');
             navigate(props.navigateAfterSend);
         } catch (exception) {

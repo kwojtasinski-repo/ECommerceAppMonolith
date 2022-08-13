@@ -54,43 +54,43 @@ namespace ECommerce.Modules.Sales.Api.Controllers
             return CreatedAtAction(nameof(GetAsync), new { orderId = command.Id }, null);
         }
 
-        [HttpPatch("positions/add")]
+        [HttpPatch("{id:guid}/positions/add")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult> AddPositionToOrderAsync(AddOrderItemToOrder command)
+        public async Task<ActionResult> AddPositionToOrderAsync(Guid id, AddOrderItemToOrder command)
         {
-            await _commandDispatcher.SendAsync(command);
+            await _commandDispatcher.SendAsync(new AddOrderItemToOrder(id, command.ItemSaleId));
             return Ok();
         }
 
-        [HttpPatch("positions/delete")]
+        [HttpPatch("{id:guid}/positions/delete")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult> DeletePositionToOrderAsync(DeleteOrderItemFromOrder command)
+        public async Task<ActionResult> DeletePositionFromOrderAsync(Guid id, DeleteOrderItemFromOrder command)
         {
-            await _commandDispatcher.SendAsync(command);
+            await _commandDispatcher.SendAsync(new DeleteOrderItemFromOrder(id, command.OrderItemId));
             return Ok();
         }
 
-        [HttpPatch("customer/change")]
+        [HttpPatch("{id:guid}/customer/change")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult> ChangeCustomerAsync(ChangeCustomerInOrder command)
+        public async Task<ActionResult> ChangeCustomerAsync(Guid id, ChangeCustomerInOrder command)
         {
-            await _commandDispatcher.SendAsync(command);
+            await _commandDispatcher.SendAsync(new ChangeCustomerInOrder(id, command.CustomerId));
             return Ok();
         }
 
-        [HttpPatch("currency/change")]
+        [HttpPatch("{id:guid}/currency/change")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult> ChangeCurrencyAsync(ChangeCurrencyInOrder command)
+        public async Task<ActionResult> ChangeCurrencyAsync(Guid id, ChangeCurrencyInOrder command)
         {
-            await _commandDispatcher.SendAsync(command);
+            await _commandDispatcher.SendAsync(new ChangeCurrencyInOrder(id, command.CurrencyCode));
             return Ok();
         }
 

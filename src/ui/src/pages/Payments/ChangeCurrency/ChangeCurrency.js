@@ -45,7 +45,7 @@ function ChangeCurrency(props) {
         setLoading(true);
         
         try {
-            await axios.patch('/sales-module/orders/currency/change', {
+            await axios.patch(`/sales-module/orders/${order.orderId}/currency/change`, {
                 orderId: order.orderId, 
                 currencyCode: currency
             });

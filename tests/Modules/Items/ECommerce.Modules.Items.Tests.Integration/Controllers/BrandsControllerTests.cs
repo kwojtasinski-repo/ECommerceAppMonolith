@@ -57,7 +57,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var command = new UpdateBrand(id, "Brand #1234");
             Authenticate(Guid.NewGuid(), _client);
 
-            var response = (await _client.Request($"{Path}").PutJsonAsync(command));
+            var response = (await _client.Request($"{Path}/{id}").PutJsonAsync(command));
             var brandFromDb = await _dbContext.Brands.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);

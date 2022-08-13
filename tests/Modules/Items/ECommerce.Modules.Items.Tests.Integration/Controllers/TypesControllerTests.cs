@@ -57,7 +57,7 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var command = new UpdateType(id, "Type #1234");
             Authenticate(Guid.NewGuid(), _client);
 
-            var response = (await _client.Request($"{Path}").PutJsonAsync(command));
+            var response = (await _client.Request($"{Path}/{id}").PutJsonAsync(command));
             var typeFromDb = await _dbContext.Types.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);

@@ -38,13 +38,14 @@ namespace ECommerce.Modules.Users.Api.Controllers
             return Ok(await _identityService.GetAllByEmailAsync(email));
         }
 
-        [HttpPatch("active")]
+        [HttpPatch("{id:guid}/active")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
-        public async Task<ActionResult<JsonWebToken>> ChangeUserActiveAsync(ChangeUserActive changeUserActive)
+        public async Task<ActionResult<JsonWebToken>> ChangeUserActiveAsync(Guid id, ChangeUserActive changeUserActive)
         {
+            changeUserActive.UserId = id;
             return Ok(await _identityService.ChangeUserActiveAsync(changeUserActive));
         }
 
@@ -60,13 +61,14 @@ namespace ECommerce.Modules.Users.Api.Controllers
         }
 
 
-        [HttpPut("policies")]
+        [HttpPut("{id:guid}/policies")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
-        public async Task<ActionResult<JsonWebToken>> UpdatePoliciesAsync(UpdatePolicies updatePolicies)
+        public async Task<ActionResult<JsonWebToken>> UpdatePoliciesAsync(Guid id, UpdatePolicies updatePolicies)
         {
+            updatePolicies.UserId = id;
             return Ok(await _identityService.UpdatePoliciesAsync(updatePolicies));
         }
     }

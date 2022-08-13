@@ -5,11 +5,6 @@ using ECommerce.Shared.Abstractions.Commands;
 using ECommerce.Shared.Abstractions.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Api.Controllers
 {
@@ -59,14 +54,14 @@ namespace ECommerce.Modules.Items.Api.Controllers
             return CreatedAtAction(nameof(GetAsync), new { brandId = command.BrandId }, null);
         }
 
-        [HttpPut]
+        [HttpPut("{id:guid}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
-        public async Task<ActionResult> UpdateAsync(UpdateBrand command)
+        public async Task<ActionResult> UpdateAsync(Guid id, UpdateBrand command)
         {
-            await _commandDispatcher.SendAsync(command);
+            await _commandDispatcher.SendAsync(new UpdateBrand(id, command.Name));
             return Ok();
         }
 
