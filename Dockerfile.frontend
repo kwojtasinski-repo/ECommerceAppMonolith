@@ -19,13 +19,20 @@ RUN npm run build
 FROM nginx:1.21.6
 COPY --from=builder /app/build /usr/share/nginx/html
 
-RUN mkdir -p /var/run/nginx /var/tmp/nginx
+RUN useradd -u 5000 app \
+    && mkdir -p /var/run/nginx /var/tmp/nginx \
+    && chown -R app:app /usr/share/nginx /var/run/nginx /var/tmp/nginx
+
 COPY ./nginx.conf /etc/nginx/nginx.conf
 COPY ./default.conf ./default.conf.template /etc/nginx/conf.d
+
+RUN chown -R app:app /etc/nginx/conf.d
 
 WORKDIR /usr/share/nginx/html
 COPY src/ui/env.sh src/ui/.env.production ./
 RUN chmod +x env.sh
+
+USER app:app
 
 EXPOSE 80
 CMD ["/bin/sh", "-c", "/usr/share/nginx/html/env.sh && envsubst '${API_DNS} ${SERVER_NAME}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g \"daemon off;\""]
