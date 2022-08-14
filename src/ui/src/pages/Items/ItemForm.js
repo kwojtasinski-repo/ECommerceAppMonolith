@@ -132,8 +132,6 @@ function ItemForm(props) {
     }
 
     const handleSendImages = () => {
-        setLoadingImages(true);
-        setLoadingImages(false);
         setIsOpen(false);
         setImageAddSource('');
         const imagesToUpdate = [...form.imagesUrl.value, ...shareImages];
@@ -310,7 +308,7 @@ function ItemForm(props) {
                                                 </>
                                             ) : (imageAddSource === 'addresses' ? 
                                                         <AddImagesFromAddresses setShareImages = {setShareImages}/> : 
-                                                        <AddImagesFromFiles limit = {limitImages} setShareImages = {setShareImages} />) }
+                                                        <AddImagesFromFiles limit = {limitImages} setShareImages = {setShareImages} setLoadingImages = {setLoadingImages} />) }
                                         </div>
                                       </>}
                     /> }
@@ -388,8 +386,10 @@ function AddImagesFromFiles(props) {
     const fetchUrls = (urls) => {
         const urlsToSet = [];
         for(const url of urls) {
+            const baseUrl = window._env_?.REACT_APP_BACKEND_URL ? window._env_.REACT_APP_BACKEND_URL : process.env.REACT_APP_BACKEND_URL;
+            const urlToImages = baseUrl + url;
             urlsToSet.push({
-                url,
+                url: urlToImages,
                 mainImage: false
             });
         }
@@ -407,7 +407,8 @@ function AddImagesFromFiles(props) {
         <div>
             <FilesUploadComponent apiUrl = '/items-module/images'
                                   limit = {props.limit}
-                                  urlImagesToReturn = {fetchUrls} />
+                                  urlImagesToReturn = {fetchUrls}
+                                  setLoadingImages = {props.setLoadingImages} />
         </div>
     )
 }

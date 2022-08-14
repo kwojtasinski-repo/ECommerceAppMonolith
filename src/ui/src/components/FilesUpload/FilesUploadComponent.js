@@ -22,9 +22,25 @@ function FilesUploadComponent(props) {
         setImageCollection({ imgCollection: e.target.files });
     }
 
+    const setLoadingImages = (loading) => {
+        if (props.setLoadingImages) {
+            props.setLoadingImages(loading);
+        }
+    }
+
     const onSubmit = async (e) => {
         e.preventDefault();
+        setError('');
         setLoading(true);
+        setLoadingImages(true);
+        
+        if (!imageCollection.imgCollection) {
+            setError('Nie wybrano plików do wysłania');
+            setLoading(false);
+            setLoadingImages(false);
+            return;
+        }
+
         var formData = new FormData();
         for (const file of imageCollection.imgCollection) {
             formData.append('files', file);
@@ -45,9 +61,11 @@ function FilesUploadComponent(props) {
             
             setError(errorMessage);
             setLoading(false);
+            setLoadingImages(false);
         }
 
         setLoading(false);
+        setLoadingImages(false);
     }
 
     return (

@@ -36,8 +36,7 @@ namespace ECommerce.Modules.Items.Api.Controllers
         {
             var ids = await _commandDispatcher.SendAsync<IEnumerable<string>>(new CreateImages(files));
             var urls = new List<string>();
-            var scheme = Request.Scheme;
-            var baseUrl = $"{scheme}://{Request.Host}{Request.Path}";
+            var baseUrl = $"{Request.Path}";
 
             foreach (var id in ids)
             {
