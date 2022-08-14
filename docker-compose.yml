@@ -43,10 +43,6 @@ services:
         build:
             context: .
             dockerfile: Dockerfile.frontend
-            args:
-                API_URL: http://gateway-service
-                API_ADDRESS: gateway-service
-                SERVER_NAME: ecommerce-app
         container_name: frontend-service
         ports:
           - 3000:80
@@ -56,6 +52,10 @@ services:
             - gateway-service
         networks:
           - ecommerce
+        environment:
+          - REACT_APP_BACKEND_URL=/api
+          - API_DNS=gateway-service
+          - SERVER_NAME=ecommerce-app
 
 volumes:
   dbdata:
