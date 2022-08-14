@@ -1,0 +1,5 @@
+# Never modify line endings of env.sh
+env.sh -crlf
+
+# Never modify line endings of .env.production
+.env.production -crlf
