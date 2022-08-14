@@ -145,7 +145,7 @@ export function DropdownMenu(props) {
 
     useEffect(() => {
         document.body.addEventListener('click', function(e) {
-            if (!e.target.classList.contains(props.classNameMenu) && e.target.id !== id) {
+            if (e.target.id !== id) {
                 onClick(e);
             }
         });
