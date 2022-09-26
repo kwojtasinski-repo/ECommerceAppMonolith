@@ -24,9 +24,9 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Common
         {
             WireMockServer = WireMockServer.Start();
             // override config nbpClientOptions
-            var options = factory.Services.GetRequiredService<IOptions<NbpClientOptions>>();
-            options.Value.BaseUrl = WireMockServer.Urls.Single();
-            options.Value.Timeout = 2;
+            var options = factory.Services.GetRequiredService<IOptionsMonitor<NbpClientOptions>>();
+            options.CurrentValue.BaseUrl = WireMockServer.Urls.Single();
+            options.CurrentValue.Timeout = 2;
             var client = factory.CreateClient();
             Client = new FlurlClient(client);
             DbContext = dbContext.DbContext;

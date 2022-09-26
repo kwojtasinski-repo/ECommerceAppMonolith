@@ -9,10 +9,10 @@ namespace ECommerce.Modules.Currencies.Core.Clients.External
         private readonly IFlurlClient _flurlClient;
         private readonly NbpClientOptions _clientOptions;
 
-        public NbpClient(IHttpClientFactory httpClient, IOptions<NbpClientOptions> clientOptions)
+        public NbpClient(IHttpClientFactory httpClient, IOptionsMonitor<NbpClientOptions> clientOptions)
         {
             _flurlClient = new FlurlClient(httpClient.CreateClient());
-            _clientOptions = clientOptions.Value;
+            _clientOptions = clientOptions.CurrentValue;
             _flurlClient.WithTimeout(_clientOptions.Timeout);
         }
 

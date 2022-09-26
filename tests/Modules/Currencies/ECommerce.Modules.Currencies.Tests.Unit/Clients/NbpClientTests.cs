@@ -21,13 +21,13 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.Clients
     public class NbpClientTests
     {
         private readonly IHttpClientFactory _httpClient;
-        private readonly IOptions<NbpClientOptions> _clientOptions;
+        private readonly IOptionsMonitor<NbpClientOptions> _clientOptions;
 
         public NbpClientTests()
         {
             _httpClient = Substitute.For<IHttpClientFactory>();
-            _clientOptions = Substitute.For<IOptions<NbpClientOptions>>();
-            _clientOptions.Value.Returns(new NbpClientOptions() { BaseUrl = "http://localhost", Timeout = 10 });
+            _clientOptions = Substitute.For<IOptionsMonitor<NbpClientOptions>>();
+            _clientOptions.CurrentValue.Returns(new NbpClientOptions() { BaseUrl = "http://localhost", Timeout = 10 });
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
             {
                 Converters = new List<JsonConverter> { new DateOnlyJsonConverter() }
