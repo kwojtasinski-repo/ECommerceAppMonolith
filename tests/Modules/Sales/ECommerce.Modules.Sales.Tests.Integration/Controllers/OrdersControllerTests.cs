@@ -21,7 +21,7 @@ namespace ECommerce.Modules.Sales.Tests.Integration.Controllers
         {
             var itemSales = await AddSampleData();
             var order = Order.Create(Guid.NewGuid(), "ORD/123/123", "EUR", Guid.NewGuid(), _userId, DateTime.UtcNow);
-            _dbContext.Add(order);
+            await _dbContext.AddAsync(order);
             await _dbContext.SaveChangesAsync();
             var itemSaleId = itemSales.Where(i => i.CurrencyCode == "USD").FirstOrDefault().Id; // 4000 USD // rate 2 USD 4 EUR
             var request = new AddOrderItemToOrder(order.Id, itemSaleId);

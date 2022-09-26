@@ -43,7 +43,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             ValidateOrderNumber(orderNumber);
             Id = id;
             OrderNumber = orderNumber;
-            Price = Money.Zero;
+            Price = new Money(0); // integration tests problem with Money.Zero when multiple instances probably Bug EF Core
             Currency = new Currency(currencyCode, rate);
             Paid = paid;
             CustomerId = customerId;
