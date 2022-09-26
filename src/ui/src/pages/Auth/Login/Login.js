@@ -14,7 +14,6 @@ function Login() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [valid, setValid] = useState(null);
-    const [error, setError] = useState('');
     const [notifications, addNotification] = useNotification();
 
     const submit = async (event) => {
@@ -39,20 +38,7 @@ function Login() {
             navigate('/');
         } catch (exception) {
             console.log(exception);
-            let errorMessage = '';
-            const status = exception.response.status;
-            const errors = exception.response.data.errors;
-            
-            for (const errMsg in errors) {
-                if (!errors[errMsg].code) {
-                    setValid(false);
-                    continue;
-                }
-
-                errorMessage += mapToMessage(errors[errMsg].code, status) + '\n';
-            }
-            
-            setError(errorMessage);
+            setValid(false);            
             setLoading(false);
         }
     }
@@ -89,12 +75,6 @@ function Login() {
                 {valid === false ? (
                     <div className="alert alert-danger">
                         Niepoprawne dane logowania
-                    </div>
-                ) : null}
-                
-                {error ? (
-                    <div className="alert alert-danger">
-                        {error}
                     </div>
                 ) : null}
 
