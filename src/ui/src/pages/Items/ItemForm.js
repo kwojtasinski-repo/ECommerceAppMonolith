@@ -6,19 +6,19 @@ import Popup, { Type } from "../../components/Popup/Popup";
 import LoadingButton from "../../components/UI/LoadingButton/LoadingButton";
 import { mapToMessage, validate } from "../../helpers/validation";
 import useNotification from "../../hooks/useNotification";
-import style from "./ItemForm.module.css";
 import FilesUploadComponent from "../../components/FilesUpload/FilesUploadComponent";
 import Tags from "../../components/Tags/Tags";
 import PropTypes from 'prop-types';
 import { isEmpty } from "../../helpers/stringExtensions";
+import Images from "./Images/Images";
+import AddImages from "./Images/AddImages";
 
 function ItemForm(props) {
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [loadingImages, setLoadingImages] = useState(false);
-    const [imageAddSource, setImageAddSource] = useState('');
     const [shareImages, setShareImages] = useState([]);
-    const [limitImages, setLimitImages] = useState(process.env.REACT_APP_ALLOWED_MAX_IMAGES);
+    const [limitImages, setLimitImages] = useState(Number(process.env.REACT_APP_ALLOWED_MAX_IMAGES));
     const [brands, setBrands] = useState(props.brands);
     const [types, setTypes] = useState(props.types);
     const [error, setError] = useState('');
@@ -133,15 +133,13 @@ function ItemForm(props) {
 
     const handleSendImages = () => {
         setIsOpen(false);
-        setImageAddSource('');
         const imagesToUpdate = [...form.imagesUrl.value, ...shareImages];
         changeHandler(imagesToUpdate, 'imagesUrl');
         setLimitImages(limitImages - shareImages.length);
     }
 
-    const handleCloseSendImages = () => {
+    const handleClosePopup = () => {
         setIsOpen(false);
-        setImageAddSource('');
     }
 
     const handleAddImages = () => {
@@ -223,7 +221,8 @@ function ItemForm(props) {
                 },
                 imagesUrl: {
                     value: props.item.imagesUrl
-                }})
+                }});
+            setLimitImages(limitImages - props.item.imagesUrl.length);
         }
     }, [props.item])
 
@@ -233,6 +232,16 @@ function ItemForm(props) {
             {error ? (
                 <div className="alert alert-danger">{error}</div>
             ) : null}
+            {isOpen && <Popup handleConfirm = {handleSendImages}
+                                  textConfirm = "Ok"  
+                                  handleClose = {handleClosePopup}// handleClosePopup
+                                  popupType = "send"
+                                  type = {Type.info}
+                                  loading = {loadingImages}
+                                  content = {<>
+                                        <AddImages setShareImages = {setShareImages} limit = {limitImages} setLoadingImages = {setLoadingImages}  /> 
+                                      </>}
+                    /> }
             <form onSubmit={submit} >
                 <Input label = "Nazwa przedmiotu"
                         type = "text"
@@ -280,57 +289,8 @@ function ItemForm(props) {
                     Dodaj obrazki
                 </button>
 
-                {isOpen && <Popup handleConfirm = {handleSendImages}
-                                  textConfirm = "Ok"  
-                                  handleClose = {handleCloseSendImages}
-                                  popupType = "send"
-                                  type = {Type.info}
-                                  loading = {loadingImages}
-                                  content = {<>
-                                        <div className="mt-2 mb-2">
-                                            {!imageAddSource ? (
-                                                <>
-                                                <p>Wybierz jak chcesz dodawać obrazki:</p>
-                                                <div className="mb-2">
-                                                    <button type="button" 
-                                                            className="btn btn-primary"
-                                                            onClick={() => setImageAddSource('files')}>
-                                                                Z pliku
-                                                    </button>
-                                                </div>
-                                                <div className="mb-2">
-                                                    <button type="button"
-                                                            className="btn btn-primary"
-                                                            onClick={() => setImageAddSource('addresses')} >
-                                                        Z adresu
-                                                    </button>
-                                                </div>
-                                                </>
-                                            ) : (imageAddSource === 'addresses' ? 
-                                                        <AddImagesFromAddresses setShareImages = {setShareImages}/> : 
-                                                        <AddImagesFromFiles limit = {limitImages} setShareImages = {setShareImages} setLoadingImages = {setLoadingImages} />) }
-                                        </div>
-                                      </>}
-                    /> }
-
                 <div className="mt-2 mb-2">
-                    {form.imagesUrl.value.map(i => (
-                        <div key={new Date().getTime() + Math.random()}
-                             style={i.mainImage ? { display: "inline-block", border: "3px solid rgb(25, 135, 84)" } : { display: "inline-block" }}
-                             className="me-2">
-                            <img key={new Date().getTime() + (Math.random() * (99999 - 1) + 1)}
-                                className = {style.imageSmall}
-                                src={i.url}
-                                alt="imgSmall"
-                                onClick={() => setMainImage(i)}/>
-                            <button key={new Date().getTime() + Math.random()} 
-                                    type="button" 
-                                    className={`${style.xButton}`}
-                                    onClick = {() => handleDeleteImage(i)}>
-                                        X
-                            </button>
-                        </div>
-                    ))}
+                    <Images imagesUrl={form.imagesUrl.value} setMainImage={setMainImage} handleDeleteImage={handleDeleteImage}/>
                     <br style={{clear:"both"}}/>
                 </div>
 
@@ -345,72 +305,6 @@ function ItemForm(props) {
             </form>
         </div>
     )   
-}
-
-function AddImagesFromAddresses(props) {
-    const [images, setImages] = useState({
-        image: {
-            url: '',
-            mainImage: false
-        }
-    })
-
-    const changeHandler = (value, fieldName) => {
-        setImages({
-            ...images, 
-            [fieldName]: {
-                ...images[fieldName],
-                url: value
-            } 
-        });
-    };
-
-    useEffect(()=> {
-        props.setShareImages([{
-            ...images.image
-        }])
-    }, [images]);
-
-    return (
-        <div>
-            <Input label = "Podaj adres"
-                   onChange = {val => changeHandler(val, 'image')}
-                   value = {images.image.url} />
-        </div>
-    )
-}
-
-function AddImagesFromFiles(props) {
-    const [images, setImages] = useState([]);
-
-    const fetchUrls = (urls) => {
-        const urlsToSet = [];
-        for(const url of urls) {
-            const baseUrl = window._env_?.REACT_APP_BACKEND_URL ? window._env_.REACT_APP_BACKEND_URL : process.env.REACT_APP_BACKEND_URL;
-            const urlToImages = baseUrl + url;
-            urlsToSet.push({
-                url: urlToImages,
-                mainImage: false
-            });
-        }
-
-        setImages(urlsToSet);
-    }
-    
-    useEffect(()=> {
-        props.setShareImages([
-            ...images
-        ])
-    }, [images]);
-
-    return (
-        <div>
-            <FilesUploadComponent apiUrl = '/items-module/images'
-                                  limit = {props.limit}
-                                  urlImagesToReturn = {fetchUrls}
-                                  setLoadingImages = {props.setLoadingImages} />
-        </div>
-    )
 }
 
 export default ItemForm;
