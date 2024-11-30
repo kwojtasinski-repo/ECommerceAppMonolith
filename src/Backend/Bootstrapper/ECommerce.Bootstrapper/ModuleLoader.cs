@@ -12,7 +12,7 @@ namespace ECommerce.Bootstrapper
             var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
             var locations = assemblies.Where(a => !a.IsDynamic).Select(l => l.Location).ToList();
             var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll")
-                .Where(f => !locations.Contains(f, StringComparer.InvariantCultureIgnoreCase))
+                .Where(f => !locations.Contains(f, StringComparer.InvariantCultureIgnoreCase) && f.Contains(modulePart))
                 .ToList();
 
             var disabledModules = new List<string>();
