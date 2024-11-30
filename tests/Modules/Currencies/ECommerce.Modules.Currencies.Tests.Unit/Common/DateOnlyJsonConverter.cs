@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Currencies.Tests.Unit.Common
 {
-    public sealed class DateOnlyJsonConverter : JsonConverter<DateOnly>
+    /*public sealed class DateOnlyJsonConverter : JsonConverter<DateOnly>
     {
         public override DateOnly ReadJson(JsonReader reader, Type objectType, DateOnly existingValue, bool hasExistingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
@@ -22,5 +22,5 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.Common
             var isoDate = value.ToString("O");
             writer.WriteValue(isoDate);
         }
-    }
+    }*/
 }

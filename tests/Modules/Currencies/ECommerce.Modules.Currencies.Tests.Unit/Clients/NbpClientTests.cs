@@ -30,7 +30,7 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.Clients
             _clientOptions.CurrentValue.Returns(new NbpClientOptions() { BaseUrl = "http://localhost", Timeout = 10 });
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
             {
-                Converters = new List<JsonConverter> { new DateOnlyJsonConverter() }
+              //  Converters = new List<JsonConverter> { new DateOnlyJsonConverter() }
             };
         }
 
