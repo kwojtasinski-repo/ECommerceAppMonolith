@@ -6,11 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using WireMock.Server;
-using Xunit;
 
 namespace ECommerce.Modules.Currencies.Tests.Integration.Common
 {
-    public class CurrenciesBaseTest : BaseIntegrationTest
+    public class CurrenciesBaseTest : BaseTest
     {
         /// <summary>
         /// Used WireMock to create plugs
@@ -21,6 +20,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Common
         internal readonly TestApplicationFactory<Program> Factory;
 
         public CurrenciesBaseTest(TestApplicationFactory<Program> factory, TestCurrenciesDbContext dbContext)
+            : base(factory, dbContext)
         {
             WireMockServer = WireMockServer.Start();
             // override config nbpClientOptions

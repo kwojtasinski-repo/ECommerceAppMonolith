@@ -1,5 +1,6 @@
 ﻿using ECommerce.Modules.Currencies.Core.Entities;
 using ECommerce.Modules.Currencies.Core.Repositories;
+using ECommerce.Shared.Abstractions.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

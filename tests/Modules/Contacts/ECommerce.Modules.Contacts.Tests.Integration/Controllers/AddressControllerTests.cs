@@ -1,4 +1,3 @@
-using ECommerce.Modules.Contacts.Core.DAL;
 using ECommerce.Modules.Contacts.Core.DTO;
 using ECommerce.Modules.Contacts.Core.Entities;
 using ECommerce.Modules.Contacts.Tests.Integration.Common;
@@ -15,18 +14,15 @@ using Xunit;
 
 namespace ECommerce.Modules.Contacts.Tests.Integration
 {
-    [Collection("integrationAddresses")]
-    public class AddressControllerTests : BaseIntegrationTest, IClassFixture<TestApplicationFactory<Program>>,
-           IClassFixture<TestContactsDbContext>
+    public class AddressControllerTests : BaseTest, IAsyncLifetime
     {
         [Fact]
         public async Task given_valid_id_should_return_address()
         {
-            var addresses = await AddSampleData();
-            var address = addresses[0];
-            Authenticate(_userId, _client);
+            var address = _addresses[0];
+            Authenticate(_userId, client);
 
-            var response = (await _client.Request($"{Path}/{address.Id}").GetAsync());
+            var response = (await client.Request($"{Path}/{address.Id}").GetAsync());
             var addressFromDb = await response.GetJsonAsync<AddressDto>();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
@@ -40,14 +36,14 @@ namespace ECommerce.Modules.Contacts.Tests.Integration
         public async Task given_valid_address_dto_should_add()
         {
             var customer = new Customer { Id = Guid.NewGuid(), FirstName = "Filip", LastName = "Szary", PhoneNumber = "123456789", Company = false, Active = true };
-            _dbContext.Customers.Add(customer);
-            await _dbContext.SaveChangesAsync();
+            dbContext.Customers.Add(customer);
+            await dbContext.SaveChangesAsync();
             var addressDto = new AddressDto { CountryName = "Poland", CityName = "Nowa Sol", BuildingNumber = "1", CustomerId = customer.Id, StreetName = "Szkolna", ZipCode = "67-100" };
-            Authenticate(_userId, _client);
+            Authenticate(_userId, client);
 
-            var response = await _client.Request($"{Path}").PostJsonAsync(addressDto);
+            var response = await client.Request($"{Path}").PostJsonAsync(addressDto);
             var id = response.GetIdFromHeaders<Guid>(Path);
-            var addressFromDb = _dbContext.Addresses.Where(c => c.Id == id).AsNoTracking().SingleOrDefault();
+            var addressFromDb = dbContext.Addresses.Where(c => c.Id == id).AsNoTracking().SingleOrDefault();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.Created);
             addressFromDb.ShouldNotBeNull();
@@ -58,13 +54,12 @@ namespace ECommerce.Modules.Contacts.Tests.Integration
         [Fact]
         public async Task given_valid_address_dto_should_update()
         {
-            var addresses = await AddSampleData();
-            var address = addresses[1];
-            Authenticate(_userId, _client);
+            var address = _addresses[1];
+            Authenticate(_userId, client);
             var addressDto = new AddressDto { Id = address.Id, BuildingNumber = "123", LocaleNumber = "54", CityName = "Zielona Gora", CountryName = address.CountryName, CustomerId = address.CustomerId, StreetName = address.StreetName, ZipCode = address.ZipCode };
             
-            var response = await _client.Request($"{Path}/{address.Id}").PutJsonAsync(addressDto);
-            var addressUpdated = await (await _client.Request($"{Path}/{address.Id}").GetAsync()).GetJsonAsync<AddressDto>();
+            var response = await client.Request($"{Path}/{address.Id}").PutJsonAsync(addressDto);
+            var addressUpdated = await (await client.Request($"{Path}/{address.Id}").GetAsync()).GetJsonAsync<AddressDto>();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
             addressUpdated.ShouldNotBeNull();
@@ -74,15 +69,23 @@ namespace ECommerce.Modules.Contacts.Tests.Integration
             addressUpdated.CountryName.ShouldBe(address.CountryName);
         }
 
+        public async Task InitializeAsync()
+        {
+            _addresses = await AddSampleData();
+        }
+
+        public Task DisposeAsync()
+        {
+            return Task.CompletedTask;
+        }
+
         private const string Path = "contacts-module/addresses";
-        private readonly IFlurlClient _client;
-        private readonly ContactsDbContext _dbContext;
         private readonly Guid _userId;
+        private List<Address> _addresses = [];
 
         public AddressControllerTests(TestApplicationFactory<Program> factory, TestContactsDbContext dbContext)
+            : base(factory, dbContext)
         {
-            _client = new FlurlClient(factory.CreateClient());
-            _dbContext = dbContext.DbContext;
             _userId = dbContext.UserId;
         }
 
@@ -91,9 +94,9 @@ namespace ECommerce.Modules.Contacts.Tests.Integration
             var addresses = GetSampleData();
             var address1 = addresses[0];
             var address2 = addresses[1];
-            await _dbContext.Addresses.AddAsync(address1);
-            await _dbContext.Addresses.AddAsync(address2);
-            await _dbContext.SaveChangesAsync();
+            await dbContext.Addresses.AddAsync(address1);
+            await dbContext.Addresses.AddAsync(address2);
+            await dbContext.SaveChangesAsync();
             return addresses;
         }
 
@@ -126,7 +129,5 @@ namespace ECommerce.Modules.Contacts.Tests.Integration
             };
             return new List<Address> { address1, address2 };
         }
-
-
     }
 }

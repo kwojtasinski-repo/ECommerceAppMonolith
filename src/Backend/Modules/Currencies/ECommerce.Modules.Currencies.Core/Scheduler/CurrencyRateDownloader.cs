@@ -38,7 +38,7 @@ namespace ECommerce.Modules.Currencies.Core.Scheduler
                 return;
             }
 
-            var rates = currencyRates.SingleOrDefault().Rates;
+            var rates = currencyRates.SingleOrDefault()?.Rates ?? [];
             if (rates.Count == 0)
             {
                 var message = $"There is no Rates for '{date}'. Please check your address";
@@ -61,7 +61,12 @@ namespace ECommerce.Modules.Currencies.Core.Scheduler
             foreach (var currencyRate in ratesFiltered)
             {
                 var currency = currencies.FirstOrDefault(c => c.Code == currencyRate.Code);
-                var rateInDb = ratesInDb.SingleOrDefault(cr => cr.CurrencyDate == rateDate && cr.CurrencyId == currency.Id);
+                if (currency is null)
+                {
+                    continue;
+                }
+
+                var rateInDb = ratesInDb.FirstOrDefault(cr => cr.CurrencyDate == rateDate && cr.CurrencyId == currency.Id);
                 
                 if (rateInDb is null)
                 {

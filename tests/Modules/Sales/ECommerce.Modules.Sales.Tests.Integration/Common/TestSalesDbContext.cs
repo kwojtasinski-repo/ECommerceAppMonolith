@@ -1,11 +1,5 @@
 ﻿using ECommerce.Modules.Sales.Infrastructure.EF;
 using ECommerce.Shared.Tests;
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Tests.Integration.Common
 {

@@ -1,6 +1,5 @@
 ﻿using ECommerce.Modules.Items.Application.Commands.Types;
 using ECommerce.Modules.Items.Application.DTO;
-using ECommerce.Modules.Items.Infrastructure.EF.DAL;
 using ECommerce.Modules.Items.Tests.Integration.Common;
 using ECommerce.Shared.Tests;
 using Flurl.Http;
@@ -15,16 +14,12 @@ using Xunit;
 
 namespace ECommerce.Modules.Items.Tests.Integration.Controllers
 {
-    [Collection("integrationTypes")]
-    public class TypesControllerTests : BaseIntegrationTest, IClassFixture<TestApplicationFactory<Program>>,
-        IClassFixture<TestItemsDbContext>
+    public class TypesControllerTests : BaseTest, IAsyncLifetime
     {
         [Fact]
         public async Task should_return_types()
         {
-            await AddSampleData();
-
-            var response = (await _client.Request($"{Path}").GetAsync());
+            var response = (await client.Request($"{Path}").GetAsync());
             var typeFromDb = await response.GetJsonAsync<IEnumerable<TypeDto>>();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
@@ -35,11 +30,10 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
         [Fact]
         public async Task given_valid_id_should_return_type()
         {
-            var types = await AddSampleData();
-            var type = types[1];
+            var type = _types[1];
             var id = type.Id.Value;
 
-            var response = (await _client.Request($"{Path}/{id}").GetAsync());
+            var response = (await client.Request($"{Path}/{id}").GetAsync());
             var typeFromDb = await response.GetJsonAsync<TypeDto>();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
@@ -51,14 +45,13 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
         [Fact]
         public async Task given_valid_command_should_update()
         {
-            var types = await AddSampleData();
-            var type = types[1];
+            var type = _types[1];
             var id = type.Id.Value;
             var command = new UpdateType(id, "Type #1234");
-            Authenticate(Guid.NewGuid(), _client);
+            Authenticate(Guid.NewGuid(), client);
 
-            var response = (await _client.Request($"{Path}/{id}").PutJsonAsync(command));
-            var typeFromDb = await _dbContext.Types.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
+            var response = (await client.Request($"{Path}/{id}").PutJsonAsync(command));
+            var typeFromDb = await dbContext.Types.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
             typeFromDb.ShouldNotBeNull();
@@ -69,13 +62,12 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
         [Fact]
         public async Task given_valid_id_should_delete()
         {
-            var types = await AddSampleData();
-            var type = types[1];
+            var type = _types[1];
             var id = type.Id.Value;
-            Authenticate(Guid.NewGuid(), _client);
+            Authenticate(Guid.NewGuid(), client);
 
-            var response = (await _client.Request($"{Path}/{id}").DeleteAsync());
-            var typeFromDb = await _dbContext.Types.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
+            var response = (await client.Request($"{Path}/{id}").DeleteAsync());
+            var typeFromDb = await dbContext.Types.Where(b => b.Id == id).AsNoTracking().SingleOrDefaultAsync();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
             typeFromDb.ShouldBeNull();
@@ -85,14 +77,24 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
         public async Task given_valid_command_should_add()
         {
             var command = new CreateType("Type #251234");
-            Authenticate(Guid.NewGuid(), _client);
+            Authenticate(Guid.NewGuid(), client);
 
-            var response = (await _client.Request($"{Path}").PostJsonAsync(command));
+            var response = (await client.Request($"{Path}").PostJsonAsync(command));
             var id = response.GetIdFromHeaders<Guid>(Path);
-            var type = _dbContext.Types.Where(c => c.Id == id).SingleOrDefault();
+            var type = dbContext.Types.Where(c => c.Id == id).SingleOrDefault();
 
             type.ShouldNotBeNull();
             type.Name.ShouldBe(command.Name);
+        }
+
+        public async Task InitializeAsync()
+        {
+            _types = await AddSampleData();
+        }
+
+        public Task DisposeAsync()
+        {
+            return Task.CompletedTask;
         }
 
         private async Task<List<Domain.Entities.Type>> AddSampleData()
@@ -100,9 +102,9 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var types = GetSampleData();
             var type1 = types[0];
             var type2 = types[1];
-            await _dbContext.Types.AddAsync(type1);
-            await _dbContext.Types.AddAsync(type2);
-            await _dbContext.SaveChangesAsync();
+            await dbContext.Types.AddAsync(type1);
+            await dbContext.Types.AddAsync(type2);
+            await dbContext.SaveChangesAsync();
             return types;
         }
 
@@ -114,13 +116,11 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
         }
 
         private const string Path = "items-module/types";
-        private readonly IFlurlClient _client;
-        private readonly ItemsDbContext _dbContext;
+        private List<Domain.Entities.Type> _types;
 
         public TypesControllerTests(TestApplicationFactory<Program> factory, TestItemsDbContext dbContext)
+            : base(factory, dbContext)
         {
-            _client = new FlurlClient(factory.CreateClient());
-            _dbContext = dbContext.DbContext;
         }
     }
 }

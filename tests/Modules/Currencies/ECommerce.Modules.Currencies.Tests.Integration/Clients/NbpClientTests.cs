@@ -15,9 +15,7 @@ using ECommerce.Modules.Currencies.Tests.Integration.Common;
 
 namespace ECommerce.Modules.Currencies.Tests.Integration.Clients
 {
-    [Collection("integrationNBP")]
-    public class NbpClientTests : CurrenciesBaseTest, IClassFixture<TestApplicationFactory<Program>>,
-        IClassFixture<TestCurrenciesDbContext>
+    public class NbpClientTests : CurrenciesBaseTest
     {
         [Fact]
         public async Task given_valid_code_should_return_rate()

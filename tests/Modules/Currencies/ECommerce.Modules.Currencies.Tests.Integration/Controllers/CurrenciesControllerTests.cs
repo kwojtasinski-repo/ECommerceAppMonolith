@@ -1,5 +1,4 @@
-﻿using ECommerce.Modules.Currencies.Core.DAL;
-using ECommerce.Modules.Currencies.Core.DTO;
+﻿using ECommerce.Modules.Currencies.Core.DTO;
 using ECommerce.Modules.Currencies.Tests.Integration.Common;
 using ECommerce.Shared.Tests;
 using Flurl.Http;
@@ -13,22 +12,17 @@ using Xunit;
 
 namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
 {
-    [Collection("integrationCurrencies")]
-    public class CurrenciesControllerTests : CurrenciesBaseTest, IClassFixture<TestApplicationFactory<Program>>,
-        IClassFixture<TestCurrenciesDbContext>
+    public class CurrenciesControllerTests : CurrenciesBaseTest
     {
         [Fact]
         public async Task should_return_currencies()
         {
-            var currencies = GetSampleData();
-            await AddSampleData();
-
-            var response = (await _client.Request($"{Path}").GetAsync());
+            var response = (await client.Request($"{Path}").GetAsync());
             var currenciesFromDb = await response.GetJsonAsync<IEnumerable<CurrencyDto>>();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
             currenciesFromDb.ShouldNotBeNull();
-            currenciesFromDb.Count().ShouldBe(currencies.Count);
+            currenciesFromDb.Count().ShouldBe(currencies.Count());
         }
 
         [Fact]
@@ -36,7 +30,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         {
             var currencyDto = new CurrencyDto { Code = "USD", Description = "Dolar" };
 
-            var response = await Record.ExceptionAsync(() => _client.Request($"{Path}").PostJsonAsync(currencyDto));
+            var response = await Record.ExceptionAsync(() => client.Request($"{Path}").PostJsonAsync(currencyDto));
 
             ((FlurlHttpException) response).StatusCode.ShouldBe((int)HttpStatusCode.Unauthorized);
         }
@@ -46,9 +40,9 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         {
             var currencyDto = new CurrencyDto { Code = "CZK", Description = "Czeska korona" };
             var userId = Guid.NewGuid();
-            Authenticate(userId, _client);
+            Authenticate(userId, client);
 
-            var response = (await _client.Request($"{Path}").PostJsonAsync(currencyDto));
+            var response = (await client.Request($"{Path}").PostJsonAsync(currencyDto));
 
             response.StatusCode.ShouldBe((int) HttpStatusCode.Created);
             var (responseHeaderName, responseHeaderValue) = response.Headers.Where(h => h.Name == "Location").FirstOrDefault();
@@ -61,13 +55,13 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         [Fact]
         public async Task given_valid_currency_should_add_to_db()
         {
-            var currencyDto = new CurrencyDto { Code = "GBP", Description = "Funt brytyjski" };
+            var currencyDto = new CurrencyDto { Code = "OIU", Description = "Funt brytyjski" };
             var userId = Guid.NewGuid();
-            Authenticate(userId, _client);
+            Authenticate(userId, client);
 
-            var response = (await _client.Request($"{Path}").PostJsonAsync(currencyDto));
+            var response = (await client.Request($"{Path}").PostJsonAsync(currencyDto));
             var id = response.GetIdFromHeaders<Guid>(Path);
-            var currency = _dbContext.Currencies.Where(c => c.Id == id).SingleOrDefault();
+            var currency = dbContext.Currencies.Where(c => c.Id == id).SingleOrDefault();
 
             currency.ShouldNotBeNull();
             currency.Code.ShouldBe(currencyDto.Code);
@@ -78,14 +72,14 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         public async Task given_valid_currency_should_update()
         {
             var currency = new Core.Entities.Currency { Id = Guid.NewGuid(), Code = "ABC", Description = "Abcedfgh" };
-            await _dbContext.Currencies.AddAsync(currency);
-            await _dbContext.SaveChangesAsync();
-            var dto = new CurrencyDto { Id = currency.Id, Code = "CHF", Description = "Frank szwajcarski" };
+            await dbContext.Currencies.AddAsync(currency);
+            await dbContext.SaveChangesAsync();
+            var dto = new CurrencyDto { Id = currency.Id, Code = "CAO", Description = "Frank szwajcarski" };
             var userId = Guid.NewGuid();
-            Authenticate(userId, _client);
+            Authenticate(userId, client);
 
-            await _client.Request($"{Path}/{dto.Id}").PutJsonAsync(dto);
-            var dtoUpdated = await _client.Request($"{Path}/{dto.Id}").GetJsonAsync<CurrencyDto>();
+            await client.Request($"{Path}/{dto.Id}").PutJsonAsync(dto);
+            var dtoUpdated = await client.Request($"{Path}/{dto.Id}").GetJsonAsync<CurrencyDto>();
 
             dtoUpdated.ShouldNotBeNull();
             dtoUpdated.Code.ShouldBe(dto.Code);
@@ -96,42 +90,22 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         public async Task given_valid_id_should_delete()
         {
             var currency = new Core.Entities.Currency { Id = Guid.NewGuid(), Code = "BUG", Description = "Abcedfgh" };
-            await _dbContext.Currencies.AddAsync(currency);
-            await _dbContext.SaveChangesAsync();
+            await dbContext.Currencies.AddAsync(currency);
+            await dbContext.SaveChangesAsync();
             var userId = Guid.NewGuid();
-            Authenticate(userId, _client);
+            Authenticate(userId, client);
 
-            await _client.Request($"{Path}/{currency.Id}").DeleteAsync();
-            var response = await Record.ExceptionAsync(() => _client.Request($"{Path}/{currency.Id}").GetJsonAsync<CurrencyDto>());
+            await client.Request($"{Path}/{currency.Id}").DeleteAsync();
+            var response = await Record.ExceptionAsync(() => client.Request($"{Path}/{currency.Id}").GetJsonAsync<CurrencyDto>());
 
             ((FlurlHttpException) response).StatusCode.ShouldBe((int) HttpStatusCode.NotFound);
         }
 
-        private async Task AddSampleData()
-        {
-            var currencies = GetSampleData();
-            var currency1 = currencies[0];
-            var currency2 = currencies[1];
-            await _dbContext.Currencies.AddAsync(currency1);
-            await _dbContext.Currencies.AddAsync(currency2);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        private List<Core.Entities.Currency> GetSampleData()
-        {
-            var currency1 = new Core.Entities.Currency { Id = Guid.NewGuid(), Code = "PLN", Description = "Złoty" };
-            var currency2 = new Core.Entities.Currency { Id = Guid.NewGuid(), Code = "USD", Description = "Dolar" };
-            return new List<Core.Entities.Currency> { currency1, currency2 };
-        }
-
         private const string Path = "currencies-module/currencies";
-        private readonly IFlurlClient _client;
-        private readonly CurrenciesDbContext _dbContext;
 
-        public CurrenciesControllerTests(TestApplicationFactory<Program> factory, TestCurrenciesDbContext dbContext) : base(factory, dbContext)
+        public CurrenciesControllerTests(TestApplicationFactory<Program> factory, TestCurrenciesDbContext dbContext)
+            : base(factory, dbContext)
         {
-            _client = Client;
-            _dbContext = DbContext;
         }
     }
 }

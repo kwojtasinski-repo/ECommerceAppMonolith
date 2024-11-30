@@ -1,5 +1,4 @@
-﻿using ECommerce.Modules.Contacts.Core.DAL;
-using ECommerce.Modules.Contacts.Core.DTO;
+﻿using ECommerce.Modules.Contacts.Core.DTO;
 using ECommerce.Modules.Contacts.Core.Entities;
 using ECommerce.Modules.Contacts.Tests.Integration.Common;
 using ECommerce.Shared.Tests;
@@ -10,24 +9,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace ECommerce.Modules.Contacts.Tests.Integration.Controllers
 {
-    [Collection("integrationCustomer")]
 
-    public class CustomerControllerTests : BaseIntegrationTest, IClassFixture<TestApplicationFactory<Program>>,
-           IClassFixture<TestContactsDbContext>
+    public class CustomerControllerTests : BaseTest, IAsyncLifetime
     {
         [Fact]
         public async Task given_valid_user_id_should_return_address()
         {
-            await AddSampleData();
-            Authenticate(_userId, _client);
+            Authenticate(_userId, client);
 
-            var response = (await _client.Request($"{Path}/me").GetAsync());
+            var response = (await client.Request($"{Path}/me").GetAsync());
             var addressesFromDb = await response.GetJsonAsync<IEnumerable<CustomerDto>>();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
@@ -38,11 +33,10 @@ namespace ECommerce.Modules.Contacts.Tests.Integration.Controllers
         [Fact]
         public async Task given_valid_id_should_return_address()
         {
-            var customers = await AddSampleData();
-            var customer = customers.FirstOrDefault();
-            Authenticate(_userId, _client);
+            var customer = _customers.FirstOrDefault();
+            Authenticate(_userId, client);
 
-            var response = (await _client.Request($"{Path}/{customer.Id}").GetAsync());
+            var response = (await client.Request($"{Path}/{customer.Id}").GetAsync());
             var customerFromDb = await response.GetJsonAsync<CustomerDto>();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
@@ -55,11 +49,11 @@ namespace ECommerce.Modules.Contacts.Tests.Integration.Controllers
         public async Task given_valid_dto_should_add()
         {
             var dto = new CustomerDto { FirstName = "Michael", LastName = "Employer", PhoneNumber = "123456789", Company = false };
-            Authenticate(_userId, _client);
+            Authenticate(_userId, client);
 
-            var response = await _client.Request($"{Path}").PostJsonAsync(dto);
+            var response = await client.Request($"{Path}").PostJsonAsync(dto);
             var id = response.GetIdFromHeaders<Guid>(Path);
-            var customerFromDb = _dbContext.Customers.Where(c => c.Id == id).AsNoTracking().SingleOrDefault();
+            var customerFromDb = dbContext.Customers.Where(c => c.Id == id).AsNoTracking().SingleOrDefault();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.Created);
             customerFromDb.ShouldNotBeNull();
@@ -72,13 +66,12 @@ namespace ECommerce.Modules.Contacts.Tests.Integration.Controllers
         [Fact]
         public async Task given_valid_dto_should_update()
         {
-            var customers = await AddSampleData();
-            var customer = customers[1];
-            Authenticate(_userId, _client);
+            var customer = _customers[1];
+            Authenticate(_userId, client);
             var dto = new CustomerDto { Id = customer.Id, FirstName = "Michael", LastName = "Employer", PhoneNumber = "123456789", Company = false };
 
-            var response = await _client.Request($"{Path}/{customer.Id}").PutJsonAsync(dto);
-            var customerUpdated = await (await _client.Request($"{Path}/{customer.Id}").GetAsync()).GetJsonAsync<CustomerDto>();
+            var response = await client.Request($"{Path}/{customer.Id}").PutJsonAsync(dto);
+            var customerUpdated = await (await client.Request($"{Path}/{customer.Id}").GetAsync()).GetJsonAsync<CustomerDto>();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
             customerUpdated.FirstName.ShouldNotBe(customer.FirstName);
@@ -91,27 +84,34 @@ namespace ECommerce.Modules.Contacts.Tests.Integration.Controllers
         [Fact]
         public async Task given_valid_id_should_delete()
         {
-            var customers = await AddSampleData();
-            Authenticate(_userId, _client);
-            var customer = customers[1];
+            Authenticate(_userId, client);
+            var customer = _customers[1];
 
-            var response = await _client.Request($"{Path}/{customer.Id}").DeleteAsync();
-            var customerFromDb = await _dbContext.Customers.Where(c => c.Id == customer.Id).AsNoTracking().SingleOrDefaultAsync();
+            var response = await client.Request($"{Path}/{customer.Id}").DeleteAsync();
+            var customerFromDb = await dbContext.Customers.Where(c => c.Id == customer.Id).AsNoTracking().SingleOrDefaultAsync();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
             customerFromDb.ShouldNotBeNull();
             customerFromDb.Active.ShouldBeFalse();
         }
 
+        public async Task InitializeAsync()
+        {
+            _customers = await AddSampleData();
+        }
+
+        public Task DisposeAsync()
+        {
+            return Task.CompletedTask;
+        }
+
         private const string Path = "contacts-module/customers";
-        private readonly IFlurlClient _client;
-        private readonly ContactsDbContext _dbContext;
         private readonly Guid _userId;
+        private List<Customer> _customers = [];
 
         public CustomerControllerTests(TestApplicationFactory<Program> factory, TestContactsDbContext dbContext)
+            : base(factory, dbContext)
         {
-            _client = new FlurlClient(factory.CreateClient());
-            _dbContext = dbContext.DbContext;
             _userId = dbContext.UserId;
         }
 
@@ -120,9 +120,9 @@ namespace ECommerce.Modules.Contacts.Tests.Integration.Controllers
             var customers = GetSampleData();
             var customer1 = customers[0];
             var customer2 = customers[1];
-            await _dbContext.Customers.AddAsync(customer1);
-            await _dbContext.Customers.AddAsync(customer2);
-            await _dbContext.SaveChangesAsync();
+            await dbContext.Customers.AddAsync(customer1);
+            await dbContext.Customers.AddAsync(customer2);
+            await dbContext.SaveChangesAsync();
             return customers;
         }
 

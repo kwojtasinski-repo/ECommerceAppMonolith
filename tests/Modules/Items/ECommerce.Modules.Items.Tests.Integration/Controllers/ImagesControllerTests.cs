@@ -1,5 +1,4 @@
-﻿using ECommerce.Modules.Items.Infrastructure.EF.DAL;
-using ECommerce.Modules.Items.Tests.Integration.Common;
+﻿using ECommerce.Modules.Items.Tests.Integration.Common;
 using ECommerce.Shared.Tests;
 using Flurl.Http;
 using System;
@@ -15,9 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Modules.Items.Tests.Integration.Controllers
 {
-    [Collection("integrationImages")]
-    public class ImagesControllerTests : IClassFixture<TestApplicationFactory<Program>>,
-        IClassFixture<TestItemsDbContext>
+    public class ImagesControllerTests : BaseTest
     {
         [Fact]
         public async Task given_valid_images_should_add()
@@ -25,11 +22,11 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var images = _imagesDir.GetFiles("*.jpg");
             var multiPart = await CreateMultipartFormDataContent(images);
 
-            var response = (await _client.Request(Path).PostAsync(multiPart, completionOption: HttpCompletionOption.ResponseHeadersRead));
+            var response = (await client.Request(Path).PostAsync(multiPart, completionOption: HttpCompletionOption.ResponseHeadersRead));
             var content = await response.GetJsonAsync<List<string>>();
             
             var ids = content.Select(c => Guid.Parse(c.Split(Path + '/')[1]));
-            var imgsDb = _dbContext.Images.AsQueryable();
+            var imgsDb = dbContext.Images.AsQueryable();
             var imagesFromDb = (from id in ids
                           join image in imgsDb
                             on id equals image.Id.Value
@@ -44,11 +41,11 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
             var images = _imagesDir.GetFiles("Samsung.jpg").First();
             var multiPart = await CreateMultipartFormDataContent(images);
 
-            var response = (await _client.Request(Path).PostAsync(multiPart, completionOption: HttpCompletionOption.ResponseHeadersRead));
+            var response = (await client.Request(Path).PostAsync(multiPart, completionOption: HttpCompletionOption.ResponseHeadersRead));
             var content = await response.GetJsonAsync<List<string>>();
             Guid.TryParse(content[0].Split(Path + '/')[1], out var id);
 
-            var imageFromDb = await _dbContext.Images.Where(i => i.Id == id).SingleOrDefaultAsync();
+            var imageFromDb = await dbContext.Images.Where(i => i.Id == id).SingleOrDefaultAsync();
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
             imageFromDb.ImageName.ShouldContain("Samsung");
         }
@@ -58,12 +55,12 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
         {
             var images = _imagesDir.GetFiles("*.jpg");
             var multiPart = await CreateMultipartFormDataContent(images);
-            var responseImagesAdded = (await _client.Request(Path).PostAsync(multiPart, completionOption: HttpCompletionOption.ResponseHeadersRead));
+            var responseImagesAdded = (await client.Request(Path).PostAsync(multiPart, completionOption: HttpCompletionOption.ResponseHeadersRead));
             var contentImagesAdded = await responseImagesAdded.GetJsonAsync<List<string>>();
             var ids = contentImagesAdded.Select(c => Guid.Parse(c.Split(Path + '/')[1]));
             var id = ids.First();
 
-            var response = await _client.Request($"{Path}/{id}").GetAsync();
+            var response = await client.Request($"{Path}/{id}").GetAsync();
             var inputStream = await response.ResponseMessage.Content.ReadAsStreamAsync();
 
             response.StatusCode.ShouldBe((int)HttpStatusCode.OK);
@@ -76,11 +73,9 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
 
         private static byte[] ReadFully(Stream input)
         {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                input.CopyTo(ms);
-                return ms.ToArray();
-            }
+            using MemoryStream ms = new MemoryStream();
+            input.CopyTo(ms);
+            return ms.ToArray();
         }
 
         private async Task<MultipartFormDataContent> CreateMultipartFormDataContent(FileInfo[] fileInfos)
@@ -111,14 +106,11 @@ namespace ECommerce.Modules.Items.Tests.Integration.Controllers
         }
 
         private const string Path = "items-module/images";
-        private readonly IFlurlClient _client;
-        private readonly ItemsDbContext _dbContext;
         private readonly DirectoryInfo _imagesDir;
 
         public ImagesControllerTests(TestApplicationFactory<Program> factory, TestItemsDbContext dbContext)
+            : base(factory, dbContext)
         {
-            _client = new FlurlClient(factory.CreateClient());
-            _dbContext = dbContext.DbContext;
             _imagesDir = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.GetDirectories().Where(d => d.Name == "TestData").FirstOrDefault();
         }
     }

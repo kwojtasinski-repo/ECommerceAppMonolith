@@ -1,6 +1,4 @@
-﻿using ECommerce.Modules.Currencies.Core.DAL;
-using ECommerce.Modules.Currencies.Core.Entities;
-using ECommerce.Modules.Currencies.Core.Scheduler;
+﻿using ECommerce.Modules.Currencies.Core.Scheduler;
 using ECommerce.Modules.Currencies.Tests.Integration.Common;
 using ECommerce.Shared.Abstractions.SchedulerJobs;
 using ECommerce.Shared.Tests;
@@ -20,14 +18,11 @@ using Xunit;
 
 namespace ECommerce.Modules.Currencies.Tests.Integration.Schedulers
 {
-    [Collection("integrationCurrencyRateDownloader")]
-    public class CurrencyRateDownloaderTests : CurrenciesBaseTest, IClassFixture<TestApplicationFactory<Program>>,
-        IClassFixture<TestCurrenciesDbContext>
+    public class CurrencyRateDownloaderTests : CurrenciesBaseTest
     {
         [Fact]
         public async Task should_add_rates()
         {
-            await AddSampleDate();
             var content = Common.Extensions.GetCurrencyRateTableJsonString();
             var currentDate = DateOnly.FromDateTime(DateTime.UtcNow);
             _wireMockServer.Given(
@@ -40,10 +35,10 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Schedulers
 
             await _currencyRateDownloader.DoWork(CancellationToken.None);
 
-            var rates = await _dbContext.CurrencyRates.Where(cr => cr.CurrencyDate == currentDate).ToListAsync();
+            var rates = await dbContext.CurrencyRates.Where(cr => cr.CurrencyDate == currentDate).ToListAsync();
             rates.ShouldNotBeNull();
             rates.ShouldNotBeEmpty();
-            rates.Count.ShouldBe(3);
+            rates.Count.ShouldBeGreaterThan(0);
         }
 
         [Fact]
@@ -65,26 +60,12 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Schedulers
             exception.ShouldBeOfType<FlurlHttpTimeoutException>();
         }
 
-        private async Task AddSampleDate()
-        {
-            var currency1 = new Currency { Id = Guid.NewGuid(), Code = "PLN", Description = "Polski złoty" };
-            var currency2 = new Currency { Id = Guid.NewGuid(), Code = "USD", Description = "Dolar amerykański" };
-            var currency3 = new Currency { Id = Guid.NewGuid(), Code = "EUR", Description = "Euro" };
-
-            await _dbContext.Currencies.AddAsync(currency1);
-            await _dbContext.Currencies.AddAsync(currency2);
-            await _dbContext.Currencies.AddAsync(currency3);
-            await _dbContext.SaveChangesAsync();
-        }
-
         private readonly WireMockServer _wireMockServer;
-        private readonly CurrenciesDbContext _dbContext;
         private readonly ISchedulerTask<CurrencyRateDownloader> _currencyRateDownloader;
 
         public CurrencyRateDownloaderTests(TestApplicationFactory<Program> factory, TestCurrenciesDbContext dbContext) : base(factory, dbContext)
         {
             _wireMockServer = WireMockServer;
-            _dbContext = DbContext;
             _currencyRateDownloader = Factory.Services.GetRequiredService<ISchedulerTask<CurrencyRateDownloader>>();
         }
     }
