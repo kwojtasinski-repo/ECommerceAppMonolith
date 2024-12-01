@@ -110,7 +110,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Clients
         private readonly WireMockServer _wireMockServer;
         private readonly INbpClient _service;
 
-        public NbpClientTests(TestApplicationFactory<Program> factory, TestCurrenciesDbContext dbContext) : base(factory, dbContext)
+        public NbpClientTests(TestCurrenciesAppFactory factory, TestCurrenciesDbContext dbContext) : base(factory, dbContext)
         {
             _wireMockServer = WireMockServer;
             _service = Factory.Services.GetRequiredService<INbpClient>();

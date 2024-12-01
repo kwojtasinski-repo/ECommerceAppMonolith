@@ -103,7 +103,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
 
         private const string Path = "currencies-module/currencies";
 
-        public CurrenciesControllerTests(TestApplicationFactory<Program> factory, TestCurrenciesDbContext dbContext)
+        public CurrenciesControllerTests(TestCurrenciesAppFactory factory, TestCurrenciesDbContext dbContext)
             : base(factory, dbContext)
         {
         }

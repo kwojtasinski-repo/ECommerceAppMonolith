@@ -63,7 +63,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Schedulers
         private readonly WireMockServer _wireMockServer;
         private readonly ISchedulerTask<CurrencyRateDownloader> _currencyRateDownloader;
 
-        public CurrencyRateDownloaderTests(TestApplicationFactory<Program> factory, TestCurrenciesDbContext dbContext) : base(factory, dbContext)
+        public CurrencyRateDownloaderTests(TestCurrenciesAppFactory factory, TestCurrenciesDbContext dbContext) : base(factory, dbContext)
         {
             _wireMockServer = WireMockServer;
             _currencyRateDownloader = Factory.Services.GetRequiredService<ISchedulerTask<CurrencyRateDownloader>>();

@@ -98,7 +98,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Controllers
         private readonly WireMockServer _wireMockServer;
         private const string Path = "currencies-module/currency-rates";
 
-        public CurrencyRatesControllerTests(TestApplicationFactory<Program> factory, TestCurrenciesDbContext dbContext) : base(factory, dbContext)
+        public CurrencyRatesControllerTests(TestCurrenciesAppFactory factory, TestCurrenciesDbContext dbContext) : base(factory, dbContext)
         {
             _wireMockServer = WireMockServer;
         }

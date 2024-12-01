@@ -19,7 +19,7 @@ namespace ECommerce.Modules.Currencies.Tests.Integration.Common
         internal readonly CurrenciesDbContext DbContext;
         internal readonly TestApplicationFactory<Program> Factory;
 
-        public CurrenciesBaseTest(TestApplicationFactory<Program> factory, TestCurrenciesDbContext dbContext)
+        public CurrenciesBaseTest(TestCurrenciesAppFactory factory, TestCurrenciesDbContext dbContext)
             : base(factory, dbContext)
         {
             WireMockServer = WireMockServer.Start();
