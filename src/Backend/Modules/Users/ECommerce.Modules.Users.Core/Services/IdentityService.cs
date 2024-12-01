@@ -1,7 +1,7 @@
 ﻿using ECommerce.Modules.Users.Core.DTO;
 using ECommerce.Modules.Users.Core.Entities;
 using ECommerce.Modules.Users.Core.Exceptions;
-using ECommerce.Modules.Users.Core.Mappgins;
+using ECommerce.Modules.Users.Core.Mappings;
 using ECommerce.Modules.Users.Core.Repositories;
 using ECommerce.Shared.Abstractions.Auth;
 using ECommerce.Shared.Abstractions.Time;

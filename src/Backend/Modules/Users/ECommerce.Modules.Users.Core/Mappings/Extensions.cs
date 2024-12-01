@@ -1,12 +1,7 @@
 ﻿using ECommerce.Modules.Users.Core.DTO;
 using ECommerce.Modules.Users.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ECommerce.Modules.Users.Core.Mappgins
+namespace ECommerce.Modules.Users.Core.Mappings
 {
     internal static class Extensions
     {
@@ -17,7 +12,7 @@ namespace ECommerce.Modules.Users.Core.Mappgins
                 Id = user.Id,
                 Email = user.Email,
                 Role = user.Role,
-                Claims = user.Claims,
+                Claims = user.Claims ?? [],
                 CreatedAt = user.CreatedAt,
                 IsActive = user.IsActive
             };
