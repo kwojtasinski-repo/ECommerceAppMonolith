@@ -1,0 +1,8 @@
+{
+  "purchaseprofiler": {
+    "module": {
+      "name": "Purchase Profiler",
+      "enabled": true
+    }
+  }
+}
