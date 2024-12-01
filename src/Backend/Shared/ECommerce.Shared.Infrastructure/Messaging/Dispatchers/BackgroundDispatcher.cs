@@ -1,11 +1,6 @@
 ﻿using ECommerce.Shared.Abstractions.Modules;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Shared.Infrastructure.Messaging.Dispatchers
 {
@@ -26,7 +21,7 @@ namespace ECommerce.Shared.Infrastructure.Messaging.Dispatchers
         {
             _logger.LogInformation("Running the background dispatcher");
 
-            await foreach (var message in _messageChannel.Reader.ReadAllAsync())
+            await foreach (var message in _messageChannel.Reader.ReadAllAsync(stoppingToken))
             {
                 try
                 {
