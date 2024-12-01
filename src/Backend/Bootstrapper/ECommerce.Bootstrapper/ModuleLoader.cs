@@ -12,12 +12,13 @@ namespace ECommerce.Bootstrapper
             var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
             var locations = assemblies.Where(a => !a.IsDynamic).Select(l => l.Location).ToList();
             var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll")
+                .AsParallel()
                 .Where(f => !locations.Contains(f, StringComparer.InvariantCultureIgnoreCase) && f.Contains(modulePart))
                 .ToList();
 
             var disabledModules = new List<string>();
 
-            foreach(var file in files)
+            foreach (var file in files)
             {
                 if (!file.Contains(modulePart))
                 {
@@ -33,7 +34,7 @@ namespace ECommerce.Bootstrapper
                 }
             }
 
-            foreach(var disabledModule in disabledModules)
+            foreach (var disabledModule in disabledModules)
             {
                 files.Remove(disabledModule);
             }
@@ -45,13 +46,12 @@ namespace ECommerce.Bootstrapper
         public static IList<IModule> LoadModules(IEnumerable<Assembly> assemblies)
         {
             var types = assemblies.SelectMany(a => a.GetTypes());
-            var modules = types.Where(t => typeof(IModule).IsAssignableFrom(t) && !t.IsInterface)
-                            .OrderBy(t => t.Name)
-                            .Select(Activator.CreateInstance)
-                            .Cast<IModule>()
-                            .ToList();
-                            
-            return modules;
+            return types.AsParallel()
+                        .Where(t => typeof(IModule).IsAssignableFrom(t) && !t.IsInterface)
+                        .OrderBy(t => t.Name)
+                        .Select(Activator.CreateInstance)
+                        .Cast<IModule>()
+                        .ToList();
         }
     }
 }
