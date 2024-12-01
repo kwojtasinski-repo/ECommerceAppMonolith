@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Modules.PurchaseProfiler.Api.Controllers
 {
-    internal class RecomendationsController : BaseController
+    internal class RecomendationsController(TrainModelService trainModelService)
+        : BaseController
     {
         [HttpGet]
         public ActionResult GetProfiler()
@@ -33,6 +34,13 @@ namespace ECommerce.Modules.PurchaseProfiler.Api.Controllers
                 { customer1.CustomerId, recommendationsForCustomer1.Select(r => r.Name) },
                 { customer2.CustomerId, recommendationsForCustomer2.Select(r => r.Name) },
             });
+        }
+
+        [HttpGet("predict")]
+        public IActionResult Predict(int customerId, int itemId)
+        {
+            var score = trainModelService.Predict(customerId, itemId);
+            return Ok(new { CustomerId = customerId, ItemId = itemId, Score = score });
         }
     }
 }

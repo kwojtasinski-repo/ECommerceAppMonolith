@@ -1,4 +1,5 @@
-﻿using ECommerce.Shared.Abstractions.Modules;
+﻿using ECommerce.Modules.PurchaseProfiler.Api.Profiler;
+using ECommerce.Shared.Abstractions.Modules;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +16,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Api
 
         public void Register(IServiceCollection services)
         {
+            services.AddTransient<TrainModelService>();
         }
 
         public void Use(IApplicationBuilder app)
