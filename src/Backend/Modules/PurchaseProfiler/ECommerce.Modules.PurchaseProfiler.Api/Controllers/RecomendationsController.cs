@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Modules.PurchaseProfiler.Api.Controllers
 {
-    internal class RecomendationsController(TrainModelService trainModelService)
+    internal class RecomendationsController(TrainModelService trainModelService,
+        RecommendationService recommendationService)
         : BaseController
     {
         [HttpGet]
@@ -19,10 +20,10 @@ namespace ECommerce.Modules.PurchaseProfiler.Api.Controllers
                 new ("4", "Headphones", "BrandD", "Accessories", 99.99m, new List<string> { "music", "audio", "headphones" }),
                 new ("5", "Smartwatch", "BrandE", "Accessories", 199.99m, new List<string> { "technology", "smartwatch", "wearable" })
             };
-            var customer1 = new Customer("1");
+            var customer1 = new CustomerPurchaser("1");
             customer1.AddPurchasedProduct(products[0]);
 
-            var customer2 = new Customer("2");
+            var customer2 = new CustomerPurchaser("2");
             customer2.AddPurchasedProduct(products[3]);
 
             var recommendationEngine = new RecommendationEngine(products);
@@ -41,6 +42,18 @@ namespace ECommerce.Modules.PurchaseProfiler.Api.Controllers
         {
             var score = trainModelService.Predict(customerId, itemId);
             return Ok(new { CustomerId = customerId, ItemId = itemId, Score = score });
+        }
+
+        [HttpGet("{customerId}")]
+        public IActionResult GetRecommendations(Guid customerId)
+        {
+            var recommendations = recommendationService.GetRecommendations(customerId);
+            if (recommendations == null || recommendations.Count == 0)
+            {
+                return NotFound("No recommendations found.");
+            }
+
+            return Ok(recommendations);
         }
     }
 }

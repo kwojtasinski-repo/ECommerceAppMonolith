@@ -6,7 +6,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Api.Profiler
     {
         private readonly List<Product> _allProducts = allProducts;
 
-        public List<Product> RecommendProducts(Customer customer)
+        public List<Product> RecommendProducts(CustomerPurchaser customer)
         {
             var recommendedProducts = new List<Product>();
 
