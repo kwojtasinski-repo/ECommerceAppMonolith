@@ -16,7 +16,6 @@ namespace ECommerce.Modules.PurchaseProfiler.Api
 
         public void Register(IServiceCollection services)
         {
-            services.AddTransient<TrainModelService>();
             services.AddTransient<RecommendationService>();
         }
 

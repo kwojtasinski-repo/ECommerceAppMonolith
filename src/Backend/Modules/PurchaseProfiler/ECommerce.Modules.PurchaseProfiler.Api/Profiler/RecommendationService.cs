@@ -1,18 +1,11 @@
-﻿using ECommerce.Modules.PurchaseProfiler.Api.Data;
-using ECommerce.Modules.PurchaseProfiler.Api.Entities;
-using Microsoft.ML;
-using Microsoft.ML.Data;
-using Microsoft.ML.Trainers;
-using Microsoft.ML.Trainers.FastTree;
-using Microsoft.ML.Trainers.LightGbm;
-using static ECommerce.Modules.PurchaseProfiler.Api.Data.StaticData;
+﻿using Microsoft.ML;
 
 namespace ECommerce.Modules.PurchaseProfiler.Api.Profiler
 {
     internal class RecommendationService
     {
         private readonly MLContext _mlContext;
-        private ITransformer _fastTreeModel;
+        private readonly ITransformer _fastTreeModel;
         private readonly List<CustomerData> _customerData;
 
         public RecommendationService()
@@ -40,9 +33,6 @@ namespace ECommerce.Modules.PurchaseProfiler.Api.Profiler
 
         public List<Dictionary<string, object>> GetRecommendations(Guid customerId)
         {
-            var customer = StaticData.Customers.FirstOrDefault(c => c.Id == customerId);
-            if (customer == null) return new List<Dictionary<string, object>>();
-            
             var predictionData = new List<CustomerData>
             {
                 new CustomerData { CustomerId = 12, ProductId = 10, Price = 100, PurchaseFrequency = 200 },
@@ -61,46 +51,6 @@ namespace ECommerce.Modules.PurchaseProfiler.Api.Profiler
                     { "predictions", predictedResults }
                 }
             };
-            /*
-    
-            // Create the customer profile
-            var customerProfile = CreateCustomerProfile(customer);
-
-            // Prepare the recommendation list
-            var recommendations = new List<Dictionary<string, object>>();
-
-            foreach (var item in StaticData.Items)
-            {
-                // Skip inactive items
-                if (!item.IsActive) continue;
-
-                // Create the item profile
-                var itemProfile = CreateItemProfile(item);
-
-                // Combine customer profile and item profile into a feature vector
-                var features = new ModelInput
-                {
-                    PurchaseFrequency = customerProfile.PurchaseFrequency,
-                    TotalSpent = customerProfile.TotalSpent,
-                    DaysSinceLastPurchase = customerProfile.DaysSinceLastPurchase,
-                    Price = itemProfile.Price
-                };
-
-                // Predict the score using the ML model
-                var predictionEngine = _mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(_fastTreeModel);
-                var prediction = predictionEngine.Predict(features);
-
-                // Add the recommendation to the list
-                recommendations.Add(new Dictionary<string, object>
-                {
-                    { "ItemId", item.Id },
-                    { "ItemName", item.ItemName },
-                    { "Score", prediction.Score }
-                });
-            }
-
-            // Sort recommendations by prediction score in descending order
-            return recommendations.OrderByDescending(r => (float)r["Score"]).ToList();*/
         }
 
         private static Random random = new Random();
@@ -164,121 +114,5 @@ namespace ECommerce.Modules.PurchaseProfiler.Api.Profiler
                 return 1 / (1 + (float)Math.Exp(-x));  // Sigmoid function
             }
         }
-
-        public List<RecommendedItem> GetRecommendationsWithDiscounts(Guid customerId)
-        {
-            var customerSales = StaticData.Sales
-                .Where(s => s.CustomerId == customerId)
-                .ToList();
-
-            var purchaseFrequency = customerSales.Count;
-            var totalPurchaseValue = customerSales.Sum(s => StaticData.Items.First(i => i.Id == s.ItemId).Price * s.PurchaseCount);
-            var daysSinceLastPurchase = (DateTime.Now - customerSales.Max(s => s.LastPurchaseDate)).Days;
-
-            // Predict discount
-            var discount = new DiscountPredictionService().PredictDiscount(purchaseFrequency, totalPurchaseValue, daysSinceLastPurchase);
-
-            // Generate recommendations
-            var recommendedItems = StaticData.Items
-                .Where(i => !customerSales.Any(s => s.ItemId == i.Id))
-                .Select(item => new RecommendedItem
-                {
-                    Item = item,
-                    Discount = discount
-                })
-                .Take(3)
-                .ToList();
-
-            return recommendedItems;
-        }
-
-        private CustomerProfile CreateCustomerProfile(Customer customer)
-        {
-            // Create profile based on purchases
-            var profile = new CustomerProfile
-            {
-                // 1. Calculate PurchaseFrequency (number of transactions)
-                PurchaseFrequency = StaticData.Sales.Count(s => s.CustomerId == customer.Id),
-
-                // 2. Calculate TotalSpent (sum of all purchases)
-                TotalSpent = (float)StaticData.Sales.Where(s => s.CustomerId == customer.Id)
-                                             .Sum(s => StaticData.Items.First(i => i.Id == s.ItemId).Price * s.PurchaseCount),
-
-                // 3. Calculate LastPurchaseRecency (days since last purchase)
-                DaysSinceLastPurchase = (DateTime.Now - StaticData.Sales.Where(s => s.CustomerId == customer.Id)
-                                                              .Max(s => s.LastPurchaseDate)).Days
-            };
-
-            return profile;
-        }
-
-        private ItemProfile CreateItemProfile(Item item)
-        {
-            // Create item profile
-            return new ItemProfile
-            {
-                Price = (float) item.Price,
-                Type = item.Type,
-                Brand = item.Brand
-            };
-        }
-    }
-
-    public class CustomerWeeklyData
-    {
-        public float WeekNumber { get; set; }
-        public float PurchaseFrequency { get; set; }
-        public float TotalSpent { get; set; }
-        public float DaysSinceLastPurchase { get; set; }
-        public float ProductTypeCount { get; set; }
-        public float TotalProductCount { get; set; }
-        [LoadColumn(0), ColumnName("Label")]
-        public float NumberOfPurchases { get; set; }
-        public float ProductId { get; set; } // Zamiana ProductId na float
-    }
-
-    public class CustomerPrediction
-    {
-        // Predykcja liczby zakupów
-        public float NumberOfPurchases { get; set; }
-    }
-
-    public class ItemProfile
-    {
-        public string Brand { get; set; }
-        public string Type { get; set; }
-        public float  Price { get; set; }
-    }
-
-    public class CustomerProfile
-    {
-        public float PurchaseFrequency { get; set; }
-        public float TotalSpent { get; set; }
-        public float DaysSinceLastPurchase { get; set; }
-        public float Price { get; set; }
-        public float Label { get; set; }
-    }
-
-    internal class LightGbmPrediction
-    {
-        public float Score { get; set; }
-    }
-
-    internal class FastTreePrediction
-    {
-        public float Score { get; set; }
-    }
-
-    public class ModelInput
-    {
-        public float PurchaseFrequency { get; set; }
-        public float TotalSpent { get; set; }
-        public float DaysSinceLastPurchase { get; set; }
-        public float Price { get; set; }
-    }
-
-    public class ModelOutput
-    {
-        public float Score { get; set; }
     }
 }
