@@ -2,11 +2,12 @@
 
 namespace ECommerce.Modules.PurchaseProfiler.Api.Profiler
 {
-    internal class RecommendationService
+    internal partial class RecommendationService
     {
         private readonly MLContext _mlContext;
         private readonly ITransformer _fastTreeModel;
         private readonly List<CustomerData> _customerData;
+        private static readonly Random random = new();
 
         public RecommendationService()
         {
@@ -25,7 +26,6 @@ namespace ECommerce.Modules.PurchaseProfiler.Api.Profiler
             var dataSplit = _mlContext.Data.TrainTestSplit(trainData, testFraction: 0.2);
             // Split the data into training and testing sets (80% train, 20% test)
             var trainDataSplit = dataSplit.TrainSet;
-            var testDataSplit = dataSplit.TestSet;
 
             // Train the model
             _fastTreeModel = pipeline.Fit(trainDataSplit);
@@ -35,25 +35,23 @@ namespace ECommerce.Modules.PurchaseProfiler.Api.Profiler
         {
             var predictionData = new List<CustomerData>
             {
-                new CustomerData { CustomerId = 12, ProductId = 10, Price = 100, PurchaseFrequency = 200 },
-                new CustomerData { CustomerId = 2, ProductId = 3, Price = 150, PurchaseFrequency = 1000 },
-                new CustomerData { CustomerId = 100, ProductId = 300, Price = 150, PurchaseFrequency = 1 },
+                new () { CustomerId = 12, ProductId = 10, Price = 100, PurchaseFrequency = 200 },
+                new () { CustomerId = 2, ProductId = 3, Price = 150, PurchaseFrequency = 1000 },
+                new () { CustomerId = 100, ProductId = 300, Price = 150, PurchaseFrequency = 1 },
             };
 
             var predictions = _fastTreeModel.Transform(_mlContext.Data.LoadFromEnumerable(predictionData));
 
             // Display the results
             var predictedResults = _mlContext.Data.CreateEnumerable<CustomerPrediction>(predictions, reuseRowObject: false).ToList();
-            return new List<Dictionary<string, object>>
-            {
-                new Dictionary<string, object>
+            return
+            [
+                new ()
                 {
                     { "predictions", predictedResults }
                 }
-            };
+            ];
         }
-
-        private static Random random = new Random();
 
         // Generate random customer purchase data
         public static List<CustomerData> GenerateSamples(int sampleSize, float priceMin = 50, float priceMax = 500, int customerCount = 10, int productCount = 5)
@@ -84,35 +82,6 @@ namespace ECommerce.Modules.PurchaseProfiler.Api.Profiler
             }
 
             return data;
-        }
-
-
-        public class CustomerData
-        {
-            public float CustomerId { get; set; }  // Customer ID
-            public float ProductId { get; set; }   // Product ID
-            public float Price { get; set; }       // Product price
-            public float PurchaseFrequency { get; set; }  // Purchase frequency 
-            public bool PurchasedProduct { get; set; } // New label (binary outcome) (target variable)
-        }
-
-        public class CustomerPrediction
-        {  
-            // The raw score (log-odds)
-            public float Score { get; set; }
-
-            // Additional field for the probability if needed
-            public float Probability => Sigmoid(Score);  // Calculate probability from score
-
-            // Sigmoid function to convert the score to a probability
-            private static float Sigmoid(float x)
-            {
-                if (x < 0) // Adjust threshold based on your data
-                {
-                    return 0; // Default value for edge cases
-                }
-                return 1 / (1 + (float)Math.Exp(-x));  // Sigmoid function
-            }
         }
     }
 }

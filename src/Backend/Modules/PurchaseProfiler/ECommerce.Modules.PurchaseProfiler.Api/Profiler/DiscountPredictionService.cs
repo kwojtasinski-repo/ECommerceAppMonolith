@@ -4,14 +4,14 @@ namespace ECommerce.Modules.PurchaseProfiler.Api.Profiler
 {
     internal class DiscountPredictionService
     {
-        public static List<CustomerDiscountData> HistoricalDiscountData = new List<CustomerDiscountData>
-        {
-            new CustomerDiscountData { PurchaseFrequency = 10, TotalPurchaseValue = 1200, DaysSinceLastPurchase = 5, Discount = 0.40f },
-            new CustomerDiscountData { PurchaseFrequency = 5, TotalPurchaseValue = 600, DaysSinceLastPurchase = 15, Discount = 0.30f },
-            new CustomerDiscountData { PurchaseFrequency = 3, TotalPurchaseValue = 300, DaysSinceLastPurchase = 30, Discount = 0.20f },
-            new CustomerDiscountData { PurchaseFrequency = 1, TotalPurchaseValue = 100, DaysSinceLastPurchase = 60, Discount = 0.10f },
-            new CustomerDiscountData { PurchaseFrequency = 0, TotalPurchaseValue = 50, DaysSinceLastPurchase = 90, Discount = 0.05f }
-        };
+        public static List<CustomerDiscountData> HistoricalDiscountData =
+        [
+            new () { PurchaseFrequency = 10, TotalPurchaseValue = 1200, DaysSinceLastPurchase = 5, Discount = 0.40f },
+            new () { PurchaseFrequency = 5, TotalPurchaseValue = 600, DaysSinceLastPurchase = 15, Discount = 0.30f },
+            new () { PurchaseFrequency = 3, TotalPurchaseValue = 300, DaysSinceLastPurchase = 30, Discount = 0.20f },
+            new () { PurchaseFrequency = 1, TotalPurchaseValue = 100, DaysSinceLastPurchase = 60, Discount = 0.10f },
+            new () { PurchaseFrequency = 0, TotalPurchaseValue = 50, DaysSinceLastPurchase = 90, Discount = 0.05f }
+        ];
 
         private readonly MLContext _mlContext;
         private readonly ITransformer _model;
@@ -46,18 +46,5 @@ namespace ECommerce.Modules.PurchaseProfiler.Api.Profiler
 
             return (decimal)Math.Round(prediction.Discount, 2, MidpointRounding.AwayFromZero);
         }
-    }
-
-    public class CustomerDiscountData
-    {
-        public float PurchaseFrequency { get; set; }
-        public float TotalPurchaseValue { get; set; }
-        public float DaysSinceLastPurchase { get; set; }
-        public float Discount { get; set; } // Changed from decimal to float
-    }
-
-    public class DiscountPrediction
-    {
-        public float Discount { get; set; } // Changed from decimal to float
     }
 }
