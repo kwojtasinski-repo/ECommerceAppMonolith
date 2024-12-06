@@ -13,7 +13,7 @@ namespace ECommerce.Modules.Sales.Api
 
         public string Name { get; } = "Sales";
         public string Path => BasePath;
-        public IEnumerable<string> Policies { get; }
+        public IEnumerable<string> Policies { get; } = [];
 
         public void Register(IServiceCollection services)
         {
