@@ -3,11 +3,6 @@ using ECommerce.Modules.Items.Domain.Entities;
 using ECommerce.Modules.Items.Domain.Events;
 using ECommerce.Shared.Abstractions.Kernel;
 using ECommerce.Shared.Abstractions.Messagging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Application.Services
 {
@@ -35,7 +30,7 @@ namespace ECommerce.Modules.Items.Application.Services
                 ItemSaleActivate e => new ItemSaleActivated(e.ItemSale.Id),
                 ItemSaleDeactivate e => new ItemSaleDeactivated(e.ItemSale.Id),
 
-                _ => null
+                _ => throw new ArgumentNullException(nameof(@event))
             };
 
             return mappedEvent;
