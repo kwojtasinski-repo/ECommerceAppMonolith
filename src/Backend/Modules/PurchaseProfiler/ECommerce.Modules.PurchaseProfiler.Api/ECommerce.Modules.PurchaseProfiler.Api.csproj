@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Shared\ECommerce.Shared.Infrastructure\ECommerce.Shared.Infrastructure.csproj" />
+    <ProjectReference Include="..\ECommerce.Modules.PurchaseProfiler.Core\ECommerce.Modules.PurchaseProfiler.Core.csproj" />
   </ItemGroup>
 
 </Project>

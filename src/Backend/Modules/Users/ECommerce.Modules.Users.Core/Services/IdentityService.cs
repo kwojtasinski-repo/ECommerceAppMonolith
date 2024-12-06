@@ -1,9 +1,11 @@
 ﻿using ECommerce.Modules.Users.Core.DTO;
 using ECommerce.Modules.Users.Core.Entities;
+using ECommerce.Modules.Users.Core.Events;
 using ECommerce.Modules.Users.Core.Exceptions;
 using ECommerce.Modules.Users.Core.Mappings;
 using ECommerce.Modules.Users.Core.Repositories;
 using ECommerce.Shared.Abstractions.Auth;
+using ECommerce.Shared.Abstractions.Messagging;
 using ECommerce.Shared.Abstractions.Time;
 using Microsoft.AspNetCore.Identity;
 using System.Text.RegularExpressions;
@@ -16,14 +18,16 @@ namespace ECommerce.Modules.Users.Core.Services
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IAuthManager _authManager;
         private readonly IClock _clock;
+        private readonly IMessageBroker _messageBroker;
 
         public IdentityService(IUserRepository userRepository, IPasswordHasher<User> passwordHasher,
-            IAuthManager authManager, IClock clock)
+            IAuthManager authManager, IClock clock, IMessageBroker messageBroker)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
             _authManager = authManager;
             _clock = clock;
+            _messageBroker = messageBroker;
         }
 
         public async Task<JsonWebToken> ChangeCredentialsAsync(ChangeCredentialsDto dto)
@@ -129,6 +133,7 @@ namespace ECommerce.Modules.Users.Core.Services
                 Claims = dto.Claims ?? new Dictionary<string, IEnumerable<string>>()
             };
             await _userRepository.AddAsync(user);
+            await _messageBroker.PublishAsync(new SignedUp(user.Id, email));
         }
 
         private static void CheckPassword(string password)
