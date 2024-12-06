@@ -1,9 +1,11 @@
 using ECommerce.Modules.Users.Core.DTO;
 using ECommerce.Modules.Users.Core.Entities;
+using ECommerce.Modules.Users.Core.Events;
 using ECommerce.Modules.Users.Core.Exceptions;
 using ECommerce.Modules.Users.Core.Repositories;
 using ECommerce.Modules.Users.Core.Services;
 using ECommerce.Shared.Abstractions.Auth;
+using ECommerce.Shared.Abstractions.Messagging;
 using ECommerce.Shared.Abstractions.Time;
 using Microsoft.AspNetCore.Identity;
 using NSubstitute;
@@ -27,6 +29,7 @@ namespace ECommerce.Modules.Users.Tests.Unit.Services
 
             await _userRepository.Received(1).GetAsync(Arg.Any<string>());
             _passwordHasher.Received(1).HashPassword(Arg.Any<User>(), Arg.Any<string>());
+            await _messageBroker.Received(1).PublishAsync(Arg.Any<SignedUp>());
         }
 
         [Fact]
@@ -444,6 +447,7 @@ namespace ECommerce.Modules.Users.Tests.Unit.Services
         private readonly IIdentityService _service;
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly IMessageBroker _messageBroker;
         private readonly IAuthManager _authManager;
         private readonly IClock _clock;
 
@@ -454,7 +458,8 @@ namespace ECommerce.Modules.Users.Tests.Unit.Services
             _authManager = Substitute.For<IAuthManager>();
             _clock = Substitute.For<IClock>();
             _clock.CurrentDate().Returns(DateTime.UtcNow);
-            _service = new IdentityService(_userRepository, _passwordHasher, _authManager, _clock);
+            _messageBroker = Substitute.For<IMessageBroker>();
+            _service = new IdentityService(_userRepository, _passwordHasher, _authManager, _clock, _messageBroker);
         }
     }
 }

@@ -8,9 +8,9 @@ namespace ECommerce.Modules.Items.Application.Services
 {
     internal class EventMapper : IEventMapper
     {
-        public IMessage Map(IDomainEvent @event)
+        public IMessage? Map(IDomainEvent @event)
         {
-            IMessage mappedEvent = @event switch
+            IMessage? mappedEvent = @event switch
             {
                 // Brand
                 BrandCreated e => new BrandAdded(e.Brand.Id),
@@ -30,7 +30,7 @@ namespace ECommerce.Modules.Items.Application.Services
                 ItemSaleActivate e => new ItemSaleActivated(e.ItemSale.Id),
                 ItemSaleDeactivate e => new ItemSaleDeactivated(e.ItemSale.Id),
 
-                _ => throw new ArgumentNullException(nameof(@event))
+                _ => null
             };
 
             return mappedEvent;
@@ -38,7 +38,7 @@ namespace ECommerce.Modules.Items.Application.Services
 
         public IEnumerable<IMessage> MapAll(IEnumerable<IDomainEvent> events)
         {
-            var mappedEvents = events.Select(Map);
+            IEnumerable<IMessage> mappedEvents = events.Select(Map).OfType<IMessage>() ?? [];
             return mappedEvents;
         }
     }
