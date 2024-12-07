@@ -4,16 +4,16 @@ using ECommerce.Shared.Abstractions.Events;
 
 namespace ECommerce.Modules.Sales.Application.Orders.Events.Handlers
 {
-    internal class PaymentDeletedHandler : IEventHandler<PaymentDeleted>
+    internal class PaymentRefundedHandler : IEventHandler<PaymentRefunded>
     {
         private readonly IOrderRepository _orderRepository;
 
-        public PaymentDeletedHandler(IOrderRepository orderRepository)
+        public PaymentRefundedHandler(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
         }
 
-        public async Task HandleAsync(PaymentDeleted @event)
+        public async Task HandleAsync(PaymentRefunded @event)
         {
             var order = await _orderRepository.GetAsync(@event.OrderId);
 

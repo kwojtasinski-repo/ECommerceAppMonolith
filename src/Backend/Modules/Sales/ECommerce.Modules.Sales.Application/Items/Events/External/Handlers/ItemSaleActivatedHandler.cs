@@ -1,5 +1,4 @@
-﻿using ECommerce.Modules.Items.Application.Events;
-using ECommerce.Modules.Sales.Domain.ItemSales.Repositories;
+﻿using ECommerce.Modules.Sales.Domain.ItemSales.Repositories;
 using ECommerce.Shared.Abstractions.Events;
 using Microsoft.Extensions.Logging;
 
