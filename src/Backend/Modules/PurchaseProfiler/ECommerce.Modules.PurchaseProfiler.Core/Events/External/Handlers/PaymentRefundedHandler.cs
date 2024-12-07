@@ -3,7 +3,7 @@ using ECommerce.Shared.Abstractions.Events;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
-namespace ECommerce.Modules.PurchaseProfiler.Core.Events.Events.External.Handlers
+namespace ECommerce.Modules.PurchaseProfiler.Core.Events.External.Handlers
 {
     internal class PaymentRefundedHandler : IEventHandler<PaymentRefunded>
     {
