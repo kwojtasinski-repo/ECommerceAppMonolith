@@ -55,7 +55,7 @@ namespace ECommerce.Modules.Sales.Application.Payments.Commands.Handlers
 
             var payment = Payment.Create(command.Id, paymentNumber, order, _context.Identity.Id, currentDate);
             await _paymentRepository.AddAsync(payment);
-            await _messageBroker.PublishAsync(new PaymentAdded(payment.Id, command.OrderId));
+            await _messageBroker.PublishAsync(new PaymentAdded(payment.Id, command.OrderId, _clock.CurrentDate()));
         }
     }
 }

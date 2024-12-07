@@ -1,61 +1,46 @@
 ﻿using ECommerce.Modules.Sales.Domain.Orders.Entities;
 using ECommerce.Modules.Sales.Domain.Orders.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Sales.Infrastructure.EF.Repositories
 {
-    internal class OrderRepository : IOrderRepository
+    internal class OrderRepository(SalesDbContext salesDbContext) : IOrderRepository
     {
-        private readonly SalesDbContext _salesDbContext;
-
-        public OrderRepository(SalesDbContext salesDbContext)
-        {
-            _salesDbContext = salesDbContext;
-        }
-
         public async Task AddAsync(Order order)
         {
-            await _salesDbContext.Orders.AddAsync(order);
-            await _salesDbContext.SaveChangesAsync();
+            await salesDbContext.Orders.AddAsync(order);
+            await salesDbContext.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(Order order)
         {
-            _salesDbContext.Orders.Remove(order);
-            await _salesDbContext.SaveChangesAsync();
+            salesDbContext.Orders.Remove(order);
+            await salesDbContext.SaveChangesAsync();
         }
 
-        public Task<Order> GetAsync(Guid id)
+        public async Task<Order?> GetAsync(Guid id)
         {
-            var order = _salesDbContext.Orders.Where(o => o.Id == id).SingleOrDefaultAsync();
-            return order;
+            return await salesDbContext.Orders.Where(o => o.Id == id).FirstOrDefaultAsync();
         }
 
-        public Task<Order> GetDetailsAsync(Guid id)
+        public async Task<Order?> GetDetailsAsync(Guid id)
         {
-            var order = _salesDbContext.Orders.Where(o => o.Id == id)
+            return await salesDbContext.Orders.Where(o => o.Id == id)
                 .Include(oi => oi.OrderItems)
                 .Include(oi => oi.OrderItems).ThenInclude(i => i.ItemCart)
                 .Include(p => p.Payments)
-                .SingleOrDefaultAsync();
-            return order;
+                .FirstOrDefaultAsync();
         }
 
-        public Task<Order> GetLatestOrderOnDateAsync(DateTime dateTime)
+        public Task<Order?> GetLatestOrderOnDateAsync(DateTime dateTime)
         {
-            var order = _salesDbContext.Orders.Where(o => o.CreateOrderDate.Date == dateTime.Date).OrderByDescending(o => o.CreateOrderDate).FirstOrDefaultAsync();
-            return order;
+            return salesDbContext.Orders.Where(o => o.CreateOrderDate.Date == dateTime.Date).OrderByDescending(o => o.CreateOrderDate).FirstOrDefaultAsync();
         }
 
         public async Task UpdateAsync(Order order)
         {
-            _salesDbContext.Orders.Update(order);
-            await _salesDbContext.SaveChangesAsync();
+            salesDbContext.Orders.Update(order);
+            await salesDbContext.SaveChangesAsync();
         }
     }
 }

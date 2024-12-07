@@ -1,8 +1,9 @@
-﻿using ECommerce.Shared.Abstractions.Events;
+﻿using ECommerce.Modules.Sales.Application.Items.Events.External;
+using ECommerce.Shared.Abstractions.Events;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
-namespace ECommerce.Modules.Sales.Application.Items.Events.External.Handlers
+namespace ECommerce.Modules.PurchaseProfiler.Core.Events.Events.External.Handlers
 {
     internal sealed class SignedUpHandler : IEventHandler<SignedUp>
     {

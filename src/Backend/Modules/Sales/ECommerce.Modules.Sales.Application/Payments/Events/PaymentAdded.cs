@@ -2,5 +2,5 @@
 
 namespace ECommerce.Modules.Sales.Application.Payments.Events
 {
-    public record PaymentAdded(Guid PaymentId, Guid OrderId) : IEvent;
+    public record PaymentAdded(Guid PaymentId, Guid OrderId, DateTime PaymentDate) : IEvent;
 }

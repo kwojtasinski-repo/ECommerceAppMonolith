@@ -54,8 +54,8 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Payments.Handlers
 
             await _handler.HandleAsync(command);
 
-            var @event = new PaymentAdded(command.Id, command.OrderId);
-            await _messageBroker.Received(1).PublishAsync(new IMessage[] { @event });
+            var @event = new PaymentAdded(command.Id, command.OrderId, _clock.CurrentDate());
+            await _messageBroker.Received(1).PublishAsync([@event]);
         }
 
         private readonly IPaymentRepository _paymentRepository;
