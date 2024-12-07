@@ -32,7 +32,7 @@ namespace ECommerce.Modules.Sales.Application.Payments.Commands.Handlers
             }
 
             await _paymentRepository.DeleteAsync(payment);
-            await _messageBroker.PublishAsync(new PaymentDeleted(payment.Id, payment.Order.Id));
+            await _messageBroker.PublishAsync(new PaymentRefunded(payment.Id, payment.Order.Id));
         }
     }
 }

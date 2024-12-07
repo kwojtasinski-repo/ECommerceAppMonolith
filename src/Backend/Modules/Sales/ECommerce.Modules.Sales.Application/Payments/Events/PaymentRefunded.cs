@@ -2,5 +2,5 @@
 
 namespace ECommerce.Modules.Sales.Application.Payments.Events
 {
-    public record PaymentDeleted(Guid PaymentId, Guid OrderId) : IEvent;
+    public record PaymentRefunded(Guid PaymentId, Guid OrderId) : IEvent;
 }

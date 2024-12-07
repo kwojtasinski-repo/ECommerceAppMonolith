@@ -53,7 +53,7 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Payments.Handlers
 
             await _handler.HandleAsync(command);
 
-            var @event = new PaymentDeleted(payment.Id, payment.Order.Id);
+            var @event = new PaymentRefunded(payment.Id, payment.Order.Id);
             await _messageBroker.Received(1).PublishAsync(new IMessage[] { @event });
         }
 
