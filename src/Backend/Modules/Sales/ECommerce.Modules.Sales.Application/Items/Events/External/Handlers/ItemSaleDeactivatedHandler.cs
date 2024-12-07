@@ -8,9 +8,9 @@ namespace ECommerce.Modules.Sales.Application.Items.Events.External.Handlers
     internal sealed class ItemSaleDeactivatedHandler : IEventHandler<ItemSaleDeactivated>
     {
         private IItemSaleRepository _itemSaleRepository;
-        private ILogger<ItemSaleActivatedHandler> _logger;
+        private ILogger<ItemSaleDeactivatedHandler> _logger;
 
-        public ItemSaleDeactivatedHandler(IItemSaleRepository itemSaleRepository, ILogger<ItemSaleActivatedHandler> logger)
+        public ItemSaleDeactivatedHandler(IItemSaleRepository itemSaleRepository, ILogger<ItemSaleDeactivatedHandler> logger)
         {
             _itemSaleRepository = itemSaleRepository;
             _logger = logger;
