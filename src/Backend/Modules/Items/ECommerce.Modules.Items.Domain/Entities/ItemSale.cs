@@ -1,11 +1,6 @@
 ﻿using ECommerce.Modules.Items.Domain.Events;
 using ECommerce.Modules.Items.Domain.Exceptions;
 using ECommerce.Shared.Abstractions.Kernel.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Domain.Entities
 {

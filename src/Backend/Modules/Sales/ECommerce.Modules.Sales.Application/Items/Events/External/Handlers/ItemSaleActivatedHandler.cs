@@ -27,6 +27,8 @@ namespace ECommerce.Modules.Sales.Application.Items.Events.External.Handlers
             }
 
             itemSale.Active = true;
+            itemSale.Cost = @event.Cost;
+            itemSale.CurrencyCode = @event.CurrencyCode;
             await _itemSaleRepository.UpdateAsync(itemSale);
             _logger.LogInformation($"Activated an ItemSale with id '{itemSale.Id}'");
         }

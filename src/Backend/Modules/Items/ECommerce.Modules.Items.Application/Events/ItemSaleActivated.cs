@@ -2,5 +2,5 @@
 
 namespace ECommerce.Modules.Items.Application.Events
 {
-    public record ItemSaleActivated(Guid Id) : IEvent;
+    public record ItemSaleActivated(Guid Id, decimal Cost, string CurrencyCode) : IEvent;
 }

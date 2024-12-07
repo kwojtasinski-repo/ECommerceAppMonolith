@@ -27,7 +27,7 @@ namespace ECommerce.Modules.Items.Application.Services
 
                 // ItemSale
                 ItemSaleCreated e => new ItemSaleAdded(e.ItemSale.Id, e.ItemSale.ItemId, e.ItemSale.Cost, e.ItemSale.CurrencyCode),
-                ItemSaleActivate e => new ItemSaleActivated(e.ItemSale.Id),
+                ItemSaleActivate e => new ItemSaleActivated(e.ItemSale.Id, e.ItemSale.Cost, e.ItemSale.CurrencyCode),
                 ItemSaleDeactivate e => new ItemSaleDeactivated(e.ItemSale.Id),
 
                 _ => null

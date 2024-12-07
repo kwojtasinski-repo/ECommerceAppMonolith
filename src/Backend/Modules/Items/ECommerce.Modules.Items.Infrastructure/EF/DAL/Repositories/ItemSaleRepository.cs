@@ -4,47 +4,38 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Modules.Items.Infrastructure.EF.DAL.Repositories
 {
-    internal sealed class ItemSaleRepository : IItemSaleRepository
+    internal sealed class ItemSaleRepository(ItemsDbContext dbContext) : IItemSaleRepository
     {
-        private readonly ItemsDbContext _dbContext;
-
-        public ItemSaleRepository(ItemsDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
-
         public async Task AddAsync(ItemSale itemSale)
         {
-            await _dbContext.ItemSales.AddAsync(itemSale);
-            await _dbContext.SaveChangesAsync();
+            await dbContext.ItemSales.AddAsync(itemSale);
+            await dbContext.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(ItemSale itemSale)
         {
-            _dbContext.ItemSales.Remove(itemSale);
-            await _dbContext.SaveChangesAsync();
+            dbContext.ItemSales.Remove(itemSale);
+            await dbContext.SaveChangesAsync();
         }
 
         public async Task<IReadOnlyList<ItemSale>> GetAllAsync()
         {
-            var itemSales = await _dbContext.ItemSales.Include(i => i.Item)
+            return await dbContext.ItemSales.Include(i => i.Item)
                                                       .ToListAsync();
-            return itemSales;
         }
 
-        public async Task<ItemSale> GetAsync(Guid id)
+        public async Task<ItemSale?> GetAsync(Guid id)
         {
-            var itemSale = await _dbContext.ItemSales.Include(i => i.Item)
+            return await dbContext.ItemSales.Include(i => i.Item)
                                                .Include(i => i.Item).ThenInclude(b => b.Brand)
                                                .Include(i => i.Item).ThenInclude(b => b.Type)
-                                               .Where(i => i.Id == id).SingleOrDefaultAsync();
-            return itemSale;
+                                               .Where(i => i.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task UpdateAsync(ItemSale itemSale)
         {
-            _dbContext.ItemSales.Update(itemSale);
-            await _dbContext.SaveChangesAsync();
+            dbContext.ItemSales.Update(itemSale);
+            await dbContext.SaveChangesAsync();
         }
     }
 }
