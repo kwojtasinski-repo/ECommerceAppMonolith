@@ -4,5 +4,11 @@
       "name": "Purchase Profiler",
       "enabled": true
     }
+  },
+  "arangoDB": {
+    "url": "http://localhost:8529",
+    "database": "my_database",
+    "username": "username",
+    "password": "password"
   }
 }

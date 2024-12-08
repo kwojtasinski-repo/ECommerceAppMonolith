@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Shared.Abstractions.Modules
 {
@@ -12,7 +7,7 @@ namespace ECommerce.Shared.Abstractions.Modules
     {
         string Name { get; }
         string Path { get; }
-        IEnumerable<string> Policies => null;
+        IEnumerable<string> Policies => [];
         void Register(IServiceCollection services);
         void Use(IApplicationBuilder app);
     }

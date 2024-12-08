@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using ECommerce.Modules.Currencies.Core.Exceptions;
-using Flurl.Http;
 
 namespace ECommerce.Modules.Currencies.Core.Clients.External
 {
