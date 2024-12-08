@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\Backend\Modules\PurchaseProfiler\ECommerce.Modules.PurchaseProfiler.Api\ECommerce.Modules.PurchaseProfiler.Api.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 

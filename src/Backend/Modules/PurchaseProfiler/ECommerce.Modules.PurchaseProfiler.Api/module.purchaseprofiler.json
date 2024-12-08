@@ -9,6 +9,7 @@
     "url": "http://localhost:8529",
     "database": "my_database",
     "username": "username",
-    "password": "password"
+    "password": "password",
+    "initializeDatabaseOnStart": true
   }
 }
