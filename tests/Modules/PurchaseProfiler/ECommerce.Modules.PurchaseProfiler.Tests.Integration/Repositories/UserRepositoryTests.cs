@@ -26,6 +26,37 @@ namespace ECommerce.Modules.PurchaseProfiler.Tests.Integration.Repositories
             Assert.NotNull(userAdded);
             Assert.True(userAdded.Id > 0);
             Assert.NotNull(userFromDb);
+            Assert.True(userFromDb.Id > 0);
+        }
+
+        [Fact]
+        public async Task given_valid_id_should_update()
+        {
+            var user = new User
+            {
+                Id = 1,
+                Email = "email@email22.com",
+                UserId = Guid.NewGuid()
+            };
+
+            var userUpdated = await _userRepository.UpdateAsync(user);
+
+            Assert.NotNull(userUpdated);
+            var userFromDb = await _userRepository.GetByIdAsync(user.Id);
+            Assert.NotNull(userFromDb);
+            Assert.True(userFromDb.Id > 0);
+        }
+
+        [Fact]
+        public async Task given_valid_id_should_delete()
+        {
+            var id = 4;
+
+            var deleted = await _userRepository.DeleteAsync(id);
+
+            var userFromDb = await _userRepository.GetByIdAsync(id);
+            Assert.True(deleted);
+            Assert.Null(userFromDb);
         }
 
         private readonly IConfiguration _inMemoryConfiguration;

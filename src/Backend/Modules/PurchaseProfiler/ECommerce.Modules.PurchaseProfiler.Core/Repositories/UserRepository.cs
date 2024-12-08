@@ -22,7 +22,15 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
 
         public async Task<bool> DeleteAsync(long id)
         {
-            return (await dBClient.Document.DeleteDocumentAsync(collectionName, id.ToString())).Old is null;
+            try
+            {
+                await dBClient.Document.DeleteDocumentAsync(collectionName, id.ToString());
+                return true;
+            }
+            catch (ApiErrorException)
+            {
+                return false;
+            }
         }
 
         public async Task<User?> GetByEmailAsync(string email)
@@ -49,7 +57,8 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
 
         public async Task<User> UpdateAsync(User user)
         {
-            return (await dBClient.Document.PutDocumentAsync(collectionName, user)).New;
+            await dBClient.Document.PutDocumentAsync(collectionName, user.Id.ToString(), user);
+            return user;
         }
     }
 }
