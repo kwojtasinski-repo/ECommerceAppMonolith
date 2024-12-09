@@ -2,6 +2,8 @@
 {
     public class UserModel : DocumentEntity, IDocumentEntity<long>
     {
+        public override string CollectionName => "userModels";
+
         public string UserId { get; set; }
         public string ModelId { get; set; }
         public int ModelVersion { get; set; }

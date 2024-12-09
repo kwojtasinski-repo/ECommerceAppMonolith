@@ -2,6 +2,8 @@
 {
     public class Order : DocumentEntity, IDocumentEntity<long>
     {
+        public override string CollectionName => "orders";
+
         public Guid OrderId { get; set; }
         public Guid UserId { get; set; }
         public DateTime OrderDate { get; set; }

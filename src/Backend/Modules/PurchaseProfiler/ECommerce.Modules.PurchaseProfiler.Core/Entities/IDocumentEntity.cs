@@ -3,6 +3,7 @@
     internal interface IDocumentEntity<T>
         where T : struct
     {
+        public string CollectionName { get; }
         public string? Id { get; }
         public T KeyValue { get; }
         public string? Key { get; }

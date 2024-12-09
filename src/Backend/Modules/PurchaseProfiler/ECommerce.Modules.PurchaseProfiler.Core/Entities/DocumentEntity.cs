@@ -1,11 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using ECommerce.Modules.PurchaseProfiler.Core.Database;
+using Newtonsoft.Json;
 
 namespace ECommerce.Modules.PurchaseProfiler.Core.Entities
 {
-    public class DocumentEntity : IDocumentEntity<long>
+    [KeyGenerationType(KeyGenerationType.Autoincrement)]
+    public abstract class DocumentEntity : IDocumentEntity<long>
     {
+        public abstract string CollectionName { get; }
+
         [JsonProperty("_id")]
         public string? Id { get; set; }
+
         [JsonProperty("_key")]
         public string? Key { get; set; }
 
@@ -13,6 +18,9 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Entities
         public long KeyValue => GetKeyValue();
 
         private long _keyParsed;
+
+        protected DocumentEntity()
+        { }
 
         private long GetKeyValue()
         {

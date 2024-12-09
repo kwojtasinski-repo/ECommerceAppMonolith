@@ -7,9 +7,11 @@
   },
   "arangoDB": {
     "url": "http://localhost:8529",
-    "database": "my_database",
-    "username": "username",
-    "password": "password",
-    "initializeDatabaseOnStart": true
+    "database": "ECommerceApp.PurchaseProfiler",
+    "userName": "root",
+    "password": "P4SSW0Rd!1",
+    "initializeDatabaseOnStart": true,
+    "rootUserName": "root",
+    "rootPassword": "P4SSW0Rd!1"
   }
 }

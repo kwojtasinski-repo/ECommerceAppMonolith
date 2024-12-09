@@ -2,6 +2,8 @@
 {
     public class Product : DocumentEntity, IDocumentEntity<long>
     {
+        public override string CollectionName => "products";
+
         public Guid ProductId { get; set; }
         public decimal Cost { get; set; }
         public bool IsActivated { get; set; }

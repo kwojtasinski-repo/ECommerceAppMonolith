@@ -70,8 +70,10 @@ namespace ECommerce.Modules.PurchaseProfiler.Tests.Integration.Repositories
                 {
                     { "arangoDB:url", "http://localhost:8529" },
                     { "arangoDB:database", "ECommerceApp.PurchaseProfiler" },
-                    { "arangoDB:username", "root" },
+                    { "arangoDB:userName", "root" },
                     { "arangoDB:password", "P4SSW0Rd!1" },
+                    { "arangoDB:rootUsername", "root" },
+                    { "arangoDB:rootPassword", "P4SSW0Rd!1" },
                     { "arangoDB:initializeDatabaseOnStart", "true" }
                 }).Build();
             var serviceCollection = new ServiceCollection();

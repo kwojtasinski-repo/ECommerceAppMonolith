@@ -2,6 +2,8 @@
 {
     public class PurchaseData : DocumentEntity, IDocumentEntity<long>
     {
+        public override string CollectionName => "purchaseDatas";
+
         public string CustomerId { get; set; }
         public string ProductId { get; set; }
         public float Price { get; set; }
