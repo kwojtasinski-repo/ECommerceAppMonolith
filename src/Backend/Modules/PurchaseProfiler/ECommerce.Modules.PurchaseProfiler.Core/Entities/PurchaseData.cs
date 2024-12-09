@@ -1,6 +1,6 @@
 ﻿namespace ECommerce.Modules.PurchaseProfiler.Core.Entities
 {
-    public class PurchaseData
+    public class PurchaseData : DocumentEntity, IDocumentEntity<long>
     {
         public string CustomerId { get; set; }
         public string ProductId { get; set; }

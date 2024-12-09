@@ -1,6 +1,6 @@
 ﻿namespace ECommerce.Modules.PurchaseProfiler.Core.Entities
 {
-    public class UserModel
+    public class UserModel : DocumentEntity, IDocumentEntity<long>
     {
         public string UserId { get; set; }
         public string ModelId { get; set; }

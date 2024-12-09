@@ -22,19 +22,18 @@ namespace ECommerce.Modules.PurchaseProfiler.Tests.Integration.Repositories
 
             var userAdded = await _userRepository.AddAsync(user);
 
-            var userFromDb = await _userRepository.GetByIdAsync(userAdded.Id);
+            var userFromDb = await _userRepository.GetByIdAsync(userAdded.KeyValue);
             Assert.NotNull(userAdded);
-            Assert.True(userAdded.Id > 0);
+            Assert.True(userAdded.KeyValue > 0);
             Assert.NotNull(userFromDb);
-            Assert.True(userFromDb.Id > 0);
+            Assert.True(userFromDb.KeyValue > 0);
         }
 
         [Fact]
         public async Task given_valid_id_should_update()
         {
-            var user = new User
+            var user = new User(key: "1")
             {
-                Id = 1,
                 Email = "email@email22.com",
                 UserId = Guid.NewGuid()
             };
@@ -42,9 +41,9 @@ namespace ECommerce.Modules.PurchaseProfiler.Tests.Integration.Repositories
             var userUpdated = await _userRepository.UpdateAsync(user);
 
             Assert.NotNull(userUpdated);
-            var userFromDb = await _userRepository.GetByIdAsync(user.Id);
+            var userFromDb = await _userRepository.GetByIdAsync(user.KeyValue);
             Assert.NotNull(userFromDb);
-            Assert.True(userFromDb.Id > 0);
+            Assert.True(userFromDb.KeyValue > 0);
         }
 
         [Fact]

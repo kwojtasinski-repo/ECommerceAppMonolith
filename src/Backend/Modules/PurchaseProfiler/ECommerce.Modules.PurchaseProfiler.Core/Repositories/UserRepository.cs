@@ -12,11 +12,8 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
         public async Task<User> AddAsync(User user)
         {
             var response = await dBClient.Document.PostDocumentAsync(collectionName, user);
-            if (!long.TryParse(response._key, out var key))
-            {
-                logger.LogError("User's key: {key} cannot parse to long", key);
-            }
-            user.Id = key;
+            user.SetKey(response._key);
+            user.SetId(response._id);
             return user;
         }
 
@@ -47,17 +44,12 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
             var bindVars = new Dictionary<string, object> { { "id", id.ToString() } };
             var response = await dBClient.Cursor.PostCursorAsync<User>(query, bindVars);
             var user = response.Result.FirstOrDefault();
-            if (user is not null)
-            {
-                user.Id = id;
-            }
-
             return user;
         }
 
         public async Task<User> UpdateAsync(User user)
         {
-            await dBClient.Document.PutDocumentAsync(collectionName, user.Id.ToString(), user);
+            await dBClient.Document.PutDocumentAsync(collectionName, user.KeyValue.ToString(), user);
             return user;
         }
     }

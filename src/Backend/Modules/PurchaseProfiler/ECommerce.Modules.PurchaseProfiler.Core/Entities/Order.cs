@@ -1,8 +1,7 @@
 ﻿namespace ECommerce.Modules.PurchaseProfiler.Core.Entities
 {
-    public class Order
+    public class Order : DocumentEntity, IDocumentEntity<long>
     {
-        public long Id { get; set; }
         public Guid OrderId { get; set; }
         public Guid UserId { get; set; }
         public DateTime OrderDate { get; set; }

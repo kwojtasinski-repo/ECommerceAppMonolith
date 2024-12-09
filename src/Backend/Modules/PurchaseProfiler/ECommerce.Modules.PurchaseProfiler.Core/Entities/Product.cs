@@ -1,6 +1,6 @@
 ﻿namespace ECommerce.Modules.PurchaseProfiler.Core.Entities
 {
-    public class Product
+    public class Product : DocumentEntity, IDocumentEntity<long>
     {
         public Guid ProductId { get; set; }
         public decimal Cost { get; set; }
