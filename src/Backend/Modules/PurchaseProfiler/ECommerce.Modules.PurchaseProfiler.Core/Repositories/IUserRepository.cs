@@ -4,10 +4,10 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
 {
     public interface IUserRepository
     {
-        Task<User?> GetByIdAsync(long id);
+        Task<User?> GetByIdAsync(string id);
         Task<User?> GetByEmailAsync(string email);
         Task<User> AddAsync(User user);
         Task<User> UpdateAsync(User user);
-        Task<bool> DeleteAsync(long id);
+        Task<bool> DeleteAsync(string id);
     }
 }

@@ -22,7 +22,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Tests.Integration.Repositories
 
             var userAdded = await _userRepository.AddAsync(user);
 
-            var userFromDb = await _userRepository.GetByIdAsync(userAdded.KeyValue);
+            var userFromDb = await _userRepository.GetByIdAsync(userAdded.Key!);
             Assert.NotNull(userAdded);
             Assert.True(userAdded.KeyValue > 0);
             Assert.NotNull(userFromDb);
@@ -32,8 +32,9 @@ namespace ECommerce.Modules.PurchaseProfiler.Tests.Integration.Repositories
         [Fact]
         public async Task given_valid_id_should_update()
         {
-            var user = new User(key: "1")
+            var user = new User
             {
+                Key = "1",
                 Email = "email@email22.com",
                 UserId = Guid.NewGuid()
             };
@@ -41,7 +42,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Tests.Integration.Repositories
             var userUpdated = await _userRepository.UpdateAsync(user);
 
             Assert.NotNull(userUpdated);
-            var userFromDb = await _userRepository.GetByIdAsync(user.KeyValue);
+            var userFromDb = await _userRepository.GetByIdAsync(user.Key);
             Assert.NotNull(userFromDb);
             Assert.True(userFromDb.KeyValue > 0);
         }
@@ -49,7 +50,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Tests.Integration.Repositories
         [Fact]
         public async Task given_valid_id_should_delete()
         {
-            var id = 4;
+            var id = "13";
 
             var deleted = await _userRepository.DeleteAsync(id);
 

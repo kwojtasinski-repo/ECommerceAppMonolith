@@ -12,16 +12,16 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
         public async Task<User> AddAsync(User user)
         {
             var response = await dBClient.Document.PostDocumentAsync(collectionName, user);
-            user.SetKey(response._key);
-            user.SetId(response._id);
+            user.Key = response._key;
+            user.Id = response._id;
             return user;
         }
 
-        public async Task<bool> DeleteAsync(long id)
+        public async Task<bool> DeleteAsync(string id)
         {
             try
             {
-                await dBClient.Document.DeleteDocumentAsync(collectionName, id.ToString());
+                await dBClient.Document.DeleteDocumentAsync(collectionName, id);
                 return true;
             }
             catch (ApiErrorException)
@@ -38,10 +38,10 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
             return result.Result.FirstOrDefault();
         }
 
-        public async Task<User?> GetByIdAsync(long id)
+        public async Task<User?> GetByIdAsync(string id)
         {
             var query = string.Format("FOR u IN {0} FILTER u._key == @id RETURN u", collectionName);
-            var bindVars = new Dictionary<string, object> { { "id", id.ToString() } };
+            var bindVars = new Dictionary<string, object> { { "id", id } };
             var response = await dBClient.Cursor.PostCursorAsync<User>(query, bindVars);
             var user = response.Result.FirstOrDefault();
             return user;
