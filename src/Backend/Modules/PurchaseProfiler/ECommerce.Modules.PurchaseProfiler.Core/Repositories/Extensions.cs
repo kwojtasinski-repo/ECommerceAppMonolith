@@ -8,6 +8,10 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
         {
             services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IPurchaseDataRepository, PurchaseDataRepository>();
+            services.AddScoped<IUserModelRepository, UserModelRepository>();
             return services;
         }
     }
