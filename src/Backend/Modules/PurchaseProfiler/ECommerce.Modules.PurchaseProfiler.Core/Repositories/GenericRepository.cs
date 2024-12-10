@@ -48,7 +48,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
 
         public async Task<T?> GetByKeyAsync(string key)
         {
-            var query = string.Format("FOR u IN {0} FILTER entity._key == @key RETURN entity", CollectionName);
+            var query = string.Format("FOR entity IN {0} FILTER entity._key == @key RETURN entity", CollectionName);
             var bindVars = new Dictionary<string, object> { { "key", key } };
             var response = await DbClient.Cursor.PostCursorAsync<T>(query, bindVars);
             if (response is null || response.Error)
@@ -57,8 +57,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
                 return null;
             }
 
-            var entity = response.Result.FirstOrDefault();
-            return entity;
+            return response.Result.FirstOrDefault();
         }
 
         public async Task<T?> UpdateAsync(T entity)

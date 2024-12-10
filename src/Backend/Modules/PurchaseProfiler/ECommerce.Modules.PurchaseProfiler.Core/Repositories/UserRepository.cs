@@ -1,58 +1,39 @@
-﻿using ArangoDBNetStandard;
-using ECommerce.Modules.PurchaseProfiler.Core.Database;
-using ECommerce.Modules.PurchaseProfiler.Core.Entities;
+﻿using ECommerce.Modules.PurchaseProfiler.Core.Entities;
 
 namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
 {
     internal sealed class UserRepository(
-        IArangoDBClient dBClient,
-        DbConfiguration dbConfiguration)
+        IGenericRepository<User, long> genericRepository)
         : IUserRepository
     {
-        private readonly string _collectionName = dbConfiguration.GetCollectionName(typeof(User));
+        private readonly string _collectionName = genericRepository.CollectionName;
 
         public async Task<User> AddAsync(User user)
         {
-            var response = await dBClient.Document.PostDocumentAsync(_collectionName, user);
-            user.Key = response._key;
-            user.Id = response._id;
-            return user;
+            return await genericRepository.AddAsync(user);
         }
 
-        public async Task<bool> DeleteAsync(string id)
+        public async Task<bool> DeleteAsync(string key)
         {
-            try
-            {
-                await dBClient.Document.DeleteDocumentAsync(_collectionName, id);
-                return true;
-            }
-            catch (ApiErrorException)
-            {
-                return false;
-            }
+            return await genericRepository.DeleteAsync(key);
         }
 
         public async Task<User?> GetByEmailAsync(string email)
         {
             var query = string.Format("FOR u IN {0} FILTER u.email == @email RETURN u", _collectionName);
             var bindVars = new Dictionary<string, object> { { "email", email } };
-            var result = await dBClient.Cursor.PostCursorAsync<User>(query, bindVars);
+            var result = await genericRepository.DbClient.Cursor.PostCursorAsync<User>(query, bindVars);
             return result.Result.FirstOrDefault();
         }
 
-        public async Task<User?> GetByIdAsync(string id)
+        public async Task<User?> GetByKeyAsync(string key)
         {
-            var query = string.Format("FOR u IN {0} FILTER u._key == @id RETURN u", _collectionName);
-            var bindVars = new Dictionary<string, object> { { "id", id } };
-            var response = await dBClient.Cursor.PostCursorAsync<User>(query, bindVars);
-            var user = response.Result.FirstOrDefault();
-            return user;
+            return await genericRepository.GetByKeyAsync(key);
         }
 
-        public async Task<User> UpdateAsync(User user)
+        public async Task<User?> UpdateAsync(User user)
         {
-            await dBClient.Document.PutDocumentAsync(_collectionName, user.KeyValue.ToString(), user);
-            return user;
+            return await genericRepository.UpdateAsync(user);
         }
     }
 }
