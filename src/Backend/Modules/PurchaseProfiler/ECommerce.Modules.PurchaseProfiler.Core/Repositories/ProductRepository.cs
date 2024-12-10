@@ -34,7 +34,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
             var response = await genericRepository.DbClient.Cursor.PostCursorAsync<Product>(query, bindVars);
             if (response is null || response.Error)
             {
-                logger.LogError("There was an error while getting collection '{collection}' with key '{key}', status code: '{statusCode}'", CollectionName, productSaleId, (int)(response?.Code ?? 0));
+                logger.LogError("There was an error while getting collection '{collection}' with productSaleId '{productSaleId}', status code: '{statusCode}'", CollectionName, productSaleId, (int)(response?.Code ?? 0));
                 return null;
             }
 

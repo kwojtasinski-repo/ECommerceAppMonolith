@@ -20,12 +20,19 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Events.External.Handlers
         public async Task HandleAsync(ItemSaleAdded @event)
         {
             _logger.LogInformation("Received event: {eventName}, value: {eventValue}", nameof(SignedUp), JsonSerializer.Serialize(@event));
-            await _productRepository.AddAsync(new Entities.Product
+            try
             {
-                ProductId = @event.ItemId,
-                Cost = @event.Cost,
-                IsActivated = true
-            });
+                await _productRepository.AddAsync(new Entities.Product
+                {
+                    ProductId = @event.ItemId,
+                    Cost = @event.Cost,
+                    IsActivated = true
+                });
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "{handler}: There was an error", nameof(ItemSaleAddedHandler));
+            }
         }
     }
 }

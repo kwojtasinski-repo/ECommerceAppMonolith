@@ -20,15 +20,22 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Events.External.Handlers
         public async Task HandleAsync(ItemSaleActivated @event)
         {
             _logger.LogInformation("Received event: {eventName}, value: {eventValue}", nameof(SignedUp), JsonSerializer.Serialize(@event));
-            var product = await _productRepository.GetByProductSaleIdAsync(@event.Id);
-            if (product is null)
+            try
             {
-                _logger.LogWarning("Product with itemSaleId '{itemSale}' was not found", @event.Id);
-                return;
-            }
+                var product = await _productRepository.GetByProductSaleIdAsync(@event.Id);
+                if (product is null)
+                {
+                    _logger.LogWarning("Product with itemSaleId '{itemSale}' was not found", @event.Id);
+                    return;
+                }
 
-            product.IsActivated = true;
-            await _productRepository.UpdateAsync(product);
+                product.IsActivated = true;
+                await _productRepository.UpdateAsync(product);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "{handler}: There was an error", nameof(ItemSaleActivatedHandler));
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using ECommerce.Modules.Sales.Application.Items.Events.External;
 using ECommerce.Shared.Abstractions.Events;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Text.Json;
 
 namespace ECommerce.Modules.PurchaseProfiler.Core.Events.External.Handlers
@@ -20,15 +21,22 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Events.External.Handlers
         public async Task HandleAsync(ItemSaleUpdated @event)
         {
             _logger.LogInformation("Received event: {eventName}, value: {eventValue}", nameof(SignedUp), JsonSerializer.Serialize(@event));
-            var product = await _productRepository.GetByProductSaleIdAsync(@event.ItemSaleId);
-            if (product is null)
+            try
             {
-                _logger.LogWarning("Product with itemSaleId '{itemSale}' was not found", @event.ItemSaleId);
-                return;
-            }
+                var product = await _productRepository.GetByProductSaleIdAsync(@event.ItemSaleId);
+                if (product is null)
+                {
+                    _logger.LogWarning("Product with itemSaleId '{itemSale}' was not found", @event.ItemSaleId);
+                    return;
+                }
 
-            product.Cost = @event.ItemCost;
-            await _productRepository.UpdateAsync(product);
+                product.Cost = @event.ItemCost;
+                await _productRepository.UpdateAsync(product);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "{handler}: There was an error", nameof(ItemSaleUpdatedHandler));
+            }
         }
     }
 }
