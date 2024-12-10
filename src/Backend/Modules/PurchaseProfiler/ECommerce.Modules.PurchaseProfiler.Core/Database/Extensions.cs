@@ -39,6 +39,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Database
 
                                     return new CollectionInfo
                                     {
+                                        CollectionType = type,
                                         CollectionName = instance?.CollectionName ?? string.Empty,
                                         KeyGenerationType = keyGenerationType ?? KeyGenerationType.Autoincrement
                                     };
