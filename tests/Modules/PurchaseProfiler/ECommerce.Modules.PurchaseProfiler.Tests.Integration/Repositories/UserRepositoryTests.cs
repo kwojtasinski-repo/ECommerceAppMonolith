@@ -1,11 +1,14 @@
 ﻿using ArangoDBNetStandard;
+using ArangoDBNetStandard.Transport.Http;
 using ECommerce.Modules.PurchaseProfiler.Core.Database;
 using ECommerce.Modules.PurchaseProfiler.Core.Entities;
 using ECommerce.Modules.PurchaseProfiler.Core.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 
 namespace ECommerce.Modules.PurchaseProfiler.Tests.Integration.Repositories
 {
@@ -14,15 +17,11 @@ namespace ECommerce.Modules.PurchaseProfiler.Tests.Integration.Repositories
         [Fact]
         public async Task given_user_entity_should_add_to_database()
         {
-            var user = new User
-            {
-                Email = "email@email.com",
-                UserId = Guid.NewGuid()
-            };
+            var user = CreateUser("email@email.com");
 
             var userAdded = await _userRepository.AddAsync(user);
 
-            var userFromDb = await _userRepository.GetByIdAsync(userAdded.Key!);
+            var userFromDb = await _userRepository.GetByKeyAsync(userAdded.Key!);
             Assert.NotNull(userAdded);
             Assert.True(userAdded.KeyValue > 0);
             Assert.NotNull(userFromDb);
@@ -32,17 +31,13 @@ namespace ECommerce.Modules.PurchaseProfiler.Tests.Integration.Repositories
         [Fact]
         public async Task given_valid_id_should_update()
         {
-            var user = new User
-            {
-                Key = "1",
-                Email = "email@email22.com",
-                UserId = Guid.NewGuid()
-            };
+            var user = await AddUser();
+            user.Email = "email@email22.com";
 
             var userUpdated = await _userRepository.UpdateAsync(user);
 
             Assert.NotNull(userUpdated);
-            var userFromDb = await _userRepository.GetByIdAsync(user.Key);
+            var userFromDb = await _userRepository.GetByKeyAsync(user.Key!);
             Assert.NotNull(userFromDb);
             Assert.True(userFromDb.KeyValue > 0);
         }
@@ -50,11 +45,11 @@ namespace ECommerce.Modules.PurchaseProfiler.Tests.Integration.Repositories
         [Fact]
         public async Task given_valid_id_should_delete()
         {
-            var id = "13";
+            var user = await AddUser();
 
-            var deleted = await _userRepository.DeleteAsync(id);
+            var deleted = await _userRepository.DeleteAsync(user.Key!);
 
-            var userFromDb = await _userRepository.GetByIdAsync(id);
+            var userFromDb = await _userRepository.GetByKeyAsync(user.Key!);
             Assert.True(deleted);
             Assert.Null(userFromDb);
         }
@@ -62,6 +57,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Tests.Integration.Repositories
         private readonly IConfiguration _inMemoryConfiguration;
         private readonly IUserRepository _userRepository;
         private readonly IServiceProvider _serviceProvider;
+        private const string databaseName = "ECommerceApp.PurchaseProfiler.Test";
 
         public UserRepositoryTests()
         {
@@ -69,7 +65,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Tests.Integration.Repositories
                 .AddInMemoryCollection(new Dictionary<string, string?>
                 {
                     { "arangoDB:url", "http://localhost:8529" },
-                    { "arangoDB:database", "ECommerceApp.PurchaseProfiler" },
+                    { "arangoDB:database", databaseName },
                     { "arangoDB:userName", "root" },
                     { "arangoDB:password", "P4SSW0Rd!1" },
                     { "arangoDB:rootUsername", "root" },
@@ -79,8 +75,8 @@ namespace ECommerce.Modules.PurchaseProfiler.Tests.Integration.Repositories
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(_inMemoryConfiguration);
             serviceCollection.AddArrangoDb();
-            serviceCollection.AddSingleton<ILogger<UserRepository>>((_) => NullLogger<UserRepository>.Instance);
-            serviceCollection.AddScoped<IUserRepository, UserRepository>();
+            serviceCollection.AddRepositories();
+            serviceCollection.AddSingleton(typeof(ILogger<>), typeof(NullLogger<>));
             _serviceProvider = serviceCollection.BuildServiceProvider();
             _userRepository = _serviceProvider.GetRequiredService<IUserRepository>();
         }
@@ -103,27 +99,31 @@ namespace ECommerce.Modules.PurchaseProfiler.Tests.Integration.Repositories
 
         public async Task InitializeAsync()
         {
-            var client = _serviceProvider.GetRequiredService<IArangoDBClient>();
-            var collections = await client.Collection.GetCollectionsAsync();
-            var collectionName = "users";
-            // TODO: Think how to handle this situation, maybe on startup?
-            if (!collections.Result.Any(c => string.Equals(c.Name, collectionName)))
-            {
-                await client.Collection.PostCollectionAsync(new ArangoDBNetStandard.CollectionApi.Models.PostCollectionBody
-                {
-                    Name = collectionName,
-                    KeyOptions = new ArangoDBNetStandard.CollectionApi.Models.CollectionKeyOptions
-                    {
-                        Increment = 1,
-                        Type = "autoincrement"
-                    }
-                });
-            }
+            var hostedServices = _serviceProvider.GetServices<IHostedService>();
+            var dbInitializer = hostedServices.FirstOrDefault(c => typeof(DbInitializer).IsAssignableFrom(c.GetType()))
+                ?? throw new InvalidOperationException("Unable to load integration tests, check if DbInitializer was registered");
+            await dbInitializer.StartAsync(CancellationToken.None);
         }
 
-        Task IAsyncLifetime.DisposeAsync()
+        async Task IAsyncLifetime.DisposeAsync()
         {
-            return Task.CompletedTask;
+            var config = _serviceProvider.GetRequiredService<IOptions<ArangoDatabaseConfig>>();
+            using var client = new ArangoDBClient(HttpApiTransport.UsingBasicAuth(new Uri(config.Value.Url), config.Value.RootUserName, config.Value.RootPassword));
+            await client.Database.DeleteDatabaseAsync(databaseName);
+        }
+
+        private async Task<User> AddUser(string email = "email@email.com", Guid? userId = null)
+        {
+            return await _userRepository.AddAsync(CreateUser(email, userId));
+        }
+
+        private User CreateUser(string email = "email@email.com", Guid? userId = null)
+        {
+            return new User
+            {
+                Email = "email@email22.com",
+                UserId = userId ?? Guid.NewGuid()
+            };
         }
     }
 }
