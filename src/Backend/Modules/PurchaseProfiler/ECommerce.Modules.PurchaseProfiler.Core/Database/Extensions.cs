@@ -72,17 +72,15 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Database
             return options;
         }
 
-        private static KeyGenerationTypeAttribute GetKeyGenerationTypeAttribute(Type type)
+        private static KeyGenerationTypeAttribute? GetKeyGenerationTypeAttribute(Type type)
         {
-            // Check for the attribute on the current type
             var attribute = type.GetCustomAttributes(typeof(KeyGenerationTypeAttribute), false)
                                 .FirstOrDefault() as KeyGenerationTypeAttribute;
             if (attribute != null)
             {
-                return attribute; // Found on the current type
+                return attribute;
             }
 
-            // Traverse the inheritance hierarchy to find the attribute on a base type
             var baseType = type.BaseType;
             while (baseType != null)
             {
@@ -90,12 +88,12 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Database
                                     .FirstOrDefault() as KeyGenerationTypeAttribute;
                 if (attribute != null)
                 {
-                    return attribute; // Found on a base type
+                    return attribute;
                 }
-                baseType = baseType.BaseType; // Move up the hierarchy
+                baseType = baseType.BaseType;
             }
 
-            return null; // No attribute found
+            return null;
         }
     }
 }
