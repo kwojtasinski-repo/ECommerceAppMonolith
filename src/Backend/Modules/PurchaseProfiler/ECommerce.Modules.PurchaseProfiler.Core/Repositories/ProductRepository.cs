@@ -43,12 +43,13 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
 
         public async Task<List<Product>> GetProductsByItemsIdsAsync(IEnumerable<Guid> itemsId)
         {
+            var itemsIdsString = itemsId.Select(i => i.ToString());
             var query = string.Format("FOR product IN {0} FILTER product.ProductId IN @itemsId RETURN product", _collectionName);
-            var bindVars = new Dictionary<string, object> { { "itemsId", itemsId.Select(i => i.ToString()) } };
+            var bindVars = new Dictionary<string, object> { { "itemsId", itemsIdsString } };
             var response = await genericRepository.DbClient.Cursor.PostCursorAsync<Product>(query, bindVars);
             if (response is null || response.Error)
             {
-                logger.LogError("There was an error while getting collection '{collection}' with productSaleId '{productSaleId}', status code: '{statusCode}'", _collectionName, productSaleId, (int)(response?.Code ?? 0));
+                logger.LogError("There was an error while getting collection '{collection}' with productSaleId '{productSaleId}', status code: '{statusCode}'", _collectionName, string.Join(',', itemsIdsString), (int)(response?.Code ?? 0));
                 return [];
             }
             return response.Result.ToList();

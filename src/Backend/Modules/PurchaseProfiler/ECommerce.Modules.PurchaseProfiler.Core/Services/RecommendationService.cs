@@ -1,5 +1,7 @@
-﻿using ECommerce.Modules.PurchaseProfiler.Core.Repositories;
+﻿using ECommerce.Modules.PurchaseProfiler.Core.Entities;
+using ECommerce.Modules.PurchaseProfiler.Core.Repositories;
 using Microsoft.ML;
+using System.Globalization;
 
 namespace ECommerce.Modules.PurchaseProfiler.Core.Services
 {
@@ -26,13 +28,8 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
                 return CreateEmptyRecommendationResult();
             }
 
-            var predictionData = new List<CustomerData>
-            {
-                new () { CustomerId = 12, ProductId = 10, Price = 100, PurchaseFrequency = 200 },
-                new () { CustomerId = 2, ProductId = 3, Price = 150, PurchaseFrequency = 1000 },
-                new () { CustomerId = 100, ProductId = 300, Price = 150, PurchaseFrequency = 1 },
-            };
-
+            var groupedOrders = GroupOrdersByWeek(orders);
+            var predictionData = GetCustomerData(groupedOrders);
             var model = await fastTreePurchaseProfilerModel.GetModel(userId);
             if (model is null)
             {
@@ -59,6 +56,81 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
                     { "predictions", Enumerable.Empty<CustomerPrediction>() }
                 }
             ];
+        }
+
+        private List<CustomerData> GetCustomerData(IEnumerable<IGrouping<WeeklyOrderSummary, Order>> groupedOrders)
+        {
+            var result = new Dictionary<WeeklyOrderSummary, List<CustomerData>>();
+
+            foreach (var groupOrder in groupedOrders)
+            {
+                if (!result.TryGetValue(groupOrder.Key, out var customerList))
+                {
+                    customerList = [];
+                    result[groupOrder.Key] = customerList;
+                }
+
+                foreach (var order in groupOrder)
+                {
+                    if (order.CustomerKey <= 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (var item in order.Items)
+                    {
+                        if (item.ItemKey <= 0)
+                        {
+                            continue;
+                        }
+
+                        var product = customerList.FirstOrDefault(i => i.ProductId == item.ItemKey);
+                        if (product is null)
+                        {
+                            product = CreateCustomerData(order, item);
+                            customerList.Add(product);
+                        }
+                        else
+                        {
+                            product.PurchaseFrequency++;
+                        }
+                    }
+                }
+            }
+
+            return result.Values.SelectMany(customerList => customerList).ToList();
+        }
+
+        private CustomerData CreateCustomerData(Order order, OrderItem item)
+        {
+            return new CustomerData
+            {
+                CustomerId = order.CustomerKey,
+                Price = (float)item.Cost,
+                ProductId = item.ItemKey,
+                PurchasedProduct = true,
+                PurchaseFrequency = 1
+            };
+        }
+
+        private List<IGrouping<WeeklyOrderSummary,Order>> GroupOrdersByWeek(List<Order> orders)
+        {
+            return orders.GroupBy(order => {
+                            var calendar = CultureInfo.CurrentCulture.Calendar;
+                            var dateTime = order.OrderDate;
+                            var weekNumber = calendar.GetWeekOfYear(dateTime, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+                            return new WeeklyOrderSummary { Year = dateTime.Year, WeekNumber = weekNumber };
+                        })
+                        .OrderBy(summary => summary.Key.Year)
+                        .ThenBy(summary => summary.Key.WeekNumber)
+                        .ToList();
+        }
+
+
+        private class WeeklyOrderSummary
+        {
+            public int Year { get; set; }
+            public int WeekNumber { get; set; }
         }
     }
 }
