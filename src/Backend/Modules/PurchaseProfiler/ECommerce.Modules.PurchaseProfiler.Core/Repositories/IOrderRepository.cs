@@ -9,5 +9,6 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
         Task<Order> AddAsync(Order order);
         Task<Order?> UpdateAsync(Order order);
         Task<bool> DeleteAsync(string key);
+        Task<List<Order>> GetOrdersByUserId(Guid userId);
     }
 }

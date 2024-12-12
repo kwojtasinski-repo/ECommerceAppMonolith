@@ -7,6 +7,7 @@
         public Guid OrderId { get; set; }
         public Guid UserId { get; set; }
         public DateTime OrderDate { get; set; }
+        public Guid CustomerId { get; set; }
         public decimal TotalCost { get; set; }
         public List<OrderItem> Items { get; set; } = [];
     }

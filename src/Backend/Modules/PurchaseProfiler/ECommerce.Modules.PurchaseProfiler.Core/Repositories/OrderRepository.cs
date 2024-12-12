@@ -40,6 +40,19 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
             return response.Result.FirstOrDefault();
         }
 
+        public async Task<List<Order>> GetOrdersByUserId(Guid userId)
+        {
+            var query = string.Format("FOR order IN {0} FILTER order.UserId == @userId RETURN order", CollectionName);
+            var bindVars = new Dictionary<string, object> { { "userId", userId } };
+            var response = await genericRepository.DbClient.Cursor.PostCursorAsync<Order>(query, bindVars);
+            if (response is null || response.Error)
+            {
+                logger.LogError("There was an error while getting collections '{collection}' with userId '{userId}', status code: '{statusCode}'", CollectionName, userId, (int)(response?.Code ?? 0));
+                return [];
+            }
+            return response.Result.ToList();
+        }
+
         public async Task<Order?> UpdateAsync(Order order)
         {
             return await genericRepository.UpdateAsync(order);

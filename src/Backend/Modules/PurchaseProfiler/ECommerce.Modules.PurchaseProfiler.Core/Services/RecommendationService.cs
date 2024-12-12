@@ -1,10 +1,13 @@
-﻿using Microsoft.ML;
+﻿using ECommerce.Modules.PurchaseProfiler.Core.Repositories;
+using Microsoft.ML;
 
 namespace ECommerce.Modules.PurchaseProfiler.Core.Services
 {
     internal sealed class RecommendationService
         (
-            IFastTreePurchaseProfilerModel fastTreePurchaseProfilerModel
+            IFastTreePurchaseProfilerModel fastTreePurchaseProfilerModel,
+            IUserRepository userRepository,
+            IOrderRepository orderRepository
         )
         : IRecommendationService
     {
@@ -12,6 +15,17 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
 
         public async Task<List<Dictionary<string, object>>> GetRecommendations(Guid userId)
         {
+            if (!await userRepository.ExistsAsync(userId))
+            {
+                return CreateEmptyRecommendationResult();
+            }
+
+            var orders = await orderRepository.GetOrdersByUserId(userId);
+            if (orders is null || orders.Count == 0)
+            {
+                return CreateEmptyRecommendationResult();
+            }
+
             var predictionData = new List<CustomerData>
             {
                 new () { CustomerId = 12, ProductId = 10, Price = 100, PurchaseFrequency = 200 },
@@ -22,13 +36,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
             var model = await fastTreePurchaseProfilerModel.GetModel(userId);
             if (model is null)
             {
-                return
-               [
-                   new ()
-                    {
-                        { "predictions", Enumerable.Empty<CustomerPrediction>() }
-                    }
-               ];
+                return CreateEmptyRecommendationResult();
             }
 
             var predictions = model.Transform(_mlContext.Data.LoadFromEnumerable(predictionData));
@@ -38,6 +46,17 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
                 new ()
                 {
                     { "predictions", predictedResults }
+                }
+            ];
+        }
+
+        private List<Dictionary<string, object>> CreateEmptyRecommendationResult()
+        {
+            return
+            [
+                new ()
+                {
+                    { "predictions", Enumerable.Empty<CustomerPrediction>() }
                 }
             ];
         }
