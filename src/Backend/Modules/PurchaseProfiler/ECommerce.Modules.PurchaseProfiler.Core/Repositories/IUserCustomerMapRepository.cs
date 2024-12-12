@@ -5,6 +5,6 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
     public interface IUserCustomerMapRepository
     {
         Task<UserCustomersMap> AddAsync(UserCustomersMap userCustomersMap);
-        Task<List<UserCustomersMap>> GetUserCustomersMapByUserIdAsync(Guid userId);
+        Task<List<UserCustomersMap>> GetAllByUserIdAsync(Guid userId);
     }
 }

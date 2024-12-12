@@ -10,5 +10,6 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
         Task<User?> UpdateAsync(User user);
         Task<bool> DeleteAsync(string key);
         Task<bool> ExistsAsync(Guid userId);
+        Task<User?> GetByIdAsync(Guid userId);
     }
 }

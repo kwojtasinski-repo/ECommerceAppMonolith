@@ -43,5 +43,13 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
             var cursorResult = await genericRepository.DbClient.Cursor.PostCursorAsync<int>(query, bindVars, batchSize: 1);
             return cursorResult.Result.Any();
         }
+
+        public async Task<User?> GetByIdAsync(Guid userId)
+        {
+            var query = string.Format("FOR u IN {0} FILTER u.UserId == @userId RETURN u", _collectionName);
+            var bindVars = new Dictionary<string, object> { { "userId", userId } };
+            var cursorResult = await genericRepository.DbClient.Cursor.PostCursorAsync<User>(query, bindVars, batchSize: 1);
+            return cursorResult.Result.FirstOrDefault();
+        }
     }
 }

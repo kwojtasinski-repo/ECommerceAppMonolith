@@ -17,7 +17,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
             return await genericRepository.AddAsync(userCustomersMap);
         }
 
-        public async Task<List<UserCustomersMap>> GetUserCustomersMapByUserIdAsync(Guid userId)
+        public async Task<List<UserCustomersMap>> GetAllByUserIdAsync(Guid userId)
         {
             var query = string.Format("FOR userCustomerMap IN {0} FILTER userCustomerMap.UserId == @userId RETURN userCustomerMap", _collectionName);
             var bindVars = new Dictionary<string, object> { { "userId", userId } };
