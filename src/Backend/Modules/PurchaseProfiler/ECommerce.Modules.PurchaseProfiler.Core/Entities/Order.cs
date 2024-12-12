@@ -8,6 +8,7 @@
         public Guid UserId { get; set; }
         public DateTime OrderDate { get; set; }
         public Guid CustomerId { get; set; }
+        public long CustomerKey { get; set; }
         public decimal TotalCost { get; set; }
         public List<OrderItem> Items { get; set; } = [];
     }
@@ -15,7 +16,7 @@
     public class OrderItem
     {
         public Guid ItemId { get; set; }
+        public long ItemKey { get; set; }
         public decimal Cost { get; set; }
-        // other fields?
     }
 }

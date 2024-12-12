@@ -20,7 +20,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
                 return CreateEmptyRecommendationResult();
             }
 
-            var orders = await orderRepository.GetOrdersByUserId(userId);
+            var orders = await orderRepository.GetOrdersByUserIdAsync(userId);
             if (orders is null || orders.Count == 0)
             {
                 return CreateEmptyRecommendationResult();

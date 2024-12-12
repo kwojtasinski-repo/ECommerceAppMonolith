@@ -10,7 +10,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
         )
         : IOrderRepository
     {
-        private string CollectionName => genericRepository.CollectionName;
+        private readonly string _collectionName = genericRepository.CollectionName;
 
         public async Task<Order> AddAsync(Order order)
         {
@@ -29,25 +29,25 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
 
         public async Task<Order?> GetByOrderIdAsync(Guid orderId)
         {
-            var query = string.Format("FOR order IN {0} FILTER order.OrderId == @orderId RETURN order", CollectionName);
+            var query = string.Format("FOR order IN {0} FILTER order.OrderId == @orderId RETURN order", _collectionName);
             var bindVars = new Dictionary<string, object> { { "orderId", orderId } };
             var response = await genericRepository.DbClient.Cursor.PostCursorAsync<Order>(query, bindVars);
             if (response is null || response.Error)
             {
-                logger.LogError("There was an error while getting collection '{collection}' with orderId '{orderId}', status code: '{statusCode}'", CollectionName, orderId, (int)(response?.Code ?? 0));
+                logger.LogError("There was an error while getting collection '{collection}' with orderId '{orderId}', status code: '{statusCode}'", _collectionName, orderId, (int)(response?.Code ?? 0));
                 return null;
             }
             return response.Result.FirstOrDefault();
         }
 
-        public async Task<List<Order>> GetOrdersByUserId(Guid userId)
+        public async Task<List<Order>> GetOrdersByUserIdAsync(Guid userId)
         {
-            var query = string.Format("FOR order IN {0} FILTER order.UserId == @userId RETURN order", CollectionName);
+            var query = string.Format("FOR order IN {0} FILTER order.UserId == @userId RETURN order", _collectionName);
             var bindVars = new Dictionary<string, object> { { "userId", userId } };
             var response = await genericRepository.DbClient.Cursor.PostCursorAsync<Order>(query, bindVars);
             if (response is null || response.Error)
             {
-                logger.LogError("There was an error while getting collections '{collection}' with userId '{userId}', status code: '{statusCode}'", CollectionName, userId, (int)(response?.Code ?? 0));
+                logger.LogError("There was an error while getting collections '{collection}' with userId '{userId}', status code: '{statusCode}'", _collectionName, userId, (int)(response?.Code ?? 0));
                 return [];
             }
             return response.Result.ToList();

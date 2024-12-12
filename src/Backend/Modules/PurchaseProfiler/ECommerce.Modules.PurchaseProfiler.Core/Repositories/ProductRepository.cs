@@ -10,7 +10,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
         )
         : IProductRepository
     {
-        private string CollectionName => genericRepository.CollectionName;
+        private readonly string _collectionName = genericRepository.CollectionName;
 
         public async Task<Product> AddAsync(Product product)
         {
@@ -29,12 +29,12 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
 
         public async Task<Product?> GetByProductSaleIdAsync(Guid productSaleId)
         {
-            var query = string.Format("FOR product IN {0} FILTER product.ProductSaleId == @productSaleId RETURN product", CollectionName);
+            var query = string.Format("FOR product IN {0} FILTER product.ProductSaleId == @productSaleId RETURN product", _collectionName);
             var bindVars = new Dictionary<string, object> { { "productSaleId", productSaleId } };
             var response = await genericRepository.DbClient.Cursor.PostCursorAsync<Product>(query, bindVars);
             if (response is null || response.Error)
             {
-                logger.LogError("There was an error while getting collection '{collection}' with productSaleId '{productSaleId}', status code: '{statusCode}'", CollectionName, productSaleId, (int)(response?.Code ?? 0));
+                logger.LogError("There was an error while getting collection '{collection}' with productSaleId '{productSaleId}', status code: '{statusCode}'", _collectionName, productSaleId, (int)(response?.Code ?? 0));
                 return null;
             }
 
