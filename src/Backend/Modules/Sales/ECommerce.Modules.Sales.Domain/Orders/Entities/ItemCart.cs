@@ -16,11 +16,12 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
         public DateTime Created { get; private set; }
         public bool Active { get; private set; }
         public OrderItem? OrderItem { get; private set; }
+        public Guid ItemId { get; private set; }
 
         private ItemCart() { }
 
         public ItemCart(Guid id, string itemName, string brandName, string typeName, string description, IEnumerable<string>? tags, IEnumerable<string> imagesUrls,
-            decimal cost, string currencyCode, DateTime created, bool active = true, OrderItem? orderItem = null)
+            decimal cost, string currencyCode, DateTime created, Guid itemId, bool active = true, OrderItem? orderItem = null)
         {
             Id = id;
             ItemName = itemName;
@@ -34,6 +35,7 @@ namespace ECommerce.Modules.Sales.Domain.Orders.Entities
             Created = created;
             Active = active;
             OrderItem = orderItem;
+            ItemId = itemId;
         }
     }
 }

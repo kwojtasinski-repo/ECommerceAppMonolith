@@ -1,5 +1,4 @@
-﻿using ECommerce.Modules.Sales.Domain.Currencies.Entities;
-using ECommerce.Modules.Sales.Domain.Orders.Common.ValueObjects;
+﻿using ECommerce.Modules.Sales.Domain.Orders.Common.ValueObjects;
 using ECommerce.Modules.Sales.Domain.Orders.Exceptions;
 
 namespace ECommerce.Modules.Sales.Domain.Orders.Entities

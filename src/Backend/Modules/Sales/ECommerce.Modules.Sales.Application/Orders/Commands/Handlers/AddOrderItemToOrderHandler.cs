@@ -57,8 +57,8 @@ namespace ECommerce.Modules.Sales.Application.Orders.Commands.Handlers
 
             // snapshot
             var itemCart = new ItemCart(Guid.NewGuid(), itemSale.Item.ItemName, itemSale.Item.BrandName, itemSale.Item.TypeName,
-                                        itemSale.Item.Description, itemSale.Item.Tags, itemSale.Item.ImagesUrl, itemSale.Cost, itemSale.CurrencyCode,
-                                        _clock.CurrentDate());
+                                        itemSale.Item.Description ?? string.Empty, itemSale.Item.Tags, itemSale.Item.ImagesUrl ?? [],
+                                        itemSale.Cost, itemSale.CurrencyCode, _clock.CurrentDate(), itemSale.ItemId);
             await _itemCartRepository.AddAsync(itemCart);
             var cost = itemSale.Cost;
             var orderItem = OrderItem.Create(Guid.NewGuid(), itemCart, cost, order.Currency.CurrencyCode, order.Currency.Rate, _context.Identity.Id);

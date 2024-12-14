@@ -25,6 +25,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Events.External.Handlers
                 await _productRepository.AddAsync(new Entities.Product
                 {
                     ProductId = @event.ItemId,
+                    ProductSaleId = @event.Id,
                     Cost = @event.Cost,
                     IsActivated = true
                 });
