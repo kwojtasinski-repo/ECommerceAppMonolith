@@ -2,6 +2,6 @@
 {
     internal interface IUserApiClient
     {
-        Task<GetUserResponse> GetUser(Guid userId);
+        Task<GetUserResponse?> GetUser(Guid userId);
     }
 }

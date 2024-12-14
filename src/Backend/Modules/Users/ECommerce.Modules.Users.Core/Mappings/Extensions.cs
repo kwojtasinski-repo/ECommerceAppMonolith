@@ -7,7 +7,7 @@ namespace ECommerce.Modules.Users.Core.Mappings
     {
         public static AccountDto AsAccountDto(this User user)
         {
-            var dto = new AccountDto
+            return new AccountDto
             {
                 Id = user.Id,
                 Email = user.Email,
@@ -16,8 +16,11 @@ namespace ECommerce.Modules.Users.Core.Mappings
                 CreatedAt = user.CreatedAt,
                 IsActive = user.IsActive
             };
+        }
 
-            return dto;
+        public static UserDataDto AsUserData(this User user)
+        {
+            return new UserDataDto(user.Id, user.Email, user.IsActive, user.CreatedAt);
         }
     }
 }

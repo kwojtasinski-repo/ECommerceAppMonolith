@@ -9,7 +9,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Clients
         )
         : IUserApiClient
     {
-        public async Task<GetUserResponse> GetUser(Guid userId)
+        public async Task<GetUserResponse?> GetUser(Guid userId)
         {
             return await moduleClient.SendAsync<GetUserResponse>("/users/get", new GetUser(userId));
         }

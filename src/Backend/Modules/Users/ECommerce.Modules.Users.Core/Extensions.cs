@@ -19,8 +19,7 @@ namespace ECommerce.Modules.Users.Core
         public static IServiceCollection AddCore(this IServiceCollection services)
         {
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
-            services.AddScoped<IIdentityService, IdentityService>();
+            services.AddServices();
             services.AddPostgres<UsersDbContext>();
             return services;
         }

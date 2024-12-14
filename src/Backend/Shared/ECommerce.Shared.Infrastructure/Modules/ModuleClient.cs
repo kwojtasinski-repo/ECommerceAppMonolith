@@ -1,9 +1,4 @@
 ﻿using ECommerce.Shared.Abstractions.Modules;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Shared.Infrastructure.Modules
 {
@@ -37,14 +32,10 @@ namespace ECommerce.Shared.Infrastructure.Modules
 
         public Task SendAsync(string path, object request) => SendAsync<object>(path, request);
 
-        public async Task<TResult> SendAsync<TResult>(string path, object request) where TResult : class
+        public async Task<TResult?> SendAsync<TResult>(string path, object request) where TResult : class
         {
-            var registration = _moduleRegistry.GetRequestRegistration(path);
-            if (registration is null)
-            {
-                throw new InvalidOperationException("No action has been defined for path");
-            }
-
+            var registration = _moduleRegistry.GetRequestRegistration(path)
+                ?? throw new InvalidOperationException(string.Format("{0}: No action has been defined for path", nameof(SendAsync)));
             var receiverRequest = TranslateType(request, registration.RequestType);
             var result = await registration.Action(receiverRequest);
 

@@ -19,7 +19,7 @@ namespace ECommerce.Shared.Infrastructure.Modules
             _serviceProvider = serviceProvider;
         }
 
-        public IModuleSubscriber Subscribe<TRequest, TResponse>(string path, Func<TRequest, IServiceProvider, Task<TResponse>> action)
+        public IModuleSubscriber Subscribe<TRequest, TResponse>(string path, Func<TRequest, IServiceProvider, Task<TResponse?>> action)
             where TRequest : class
             where TResponse : class
         {

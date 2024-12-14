@@ -28,14 +28,9 @@ namespace ECommerce.Modules.Users.Api
         public void Use(IApplicationBuilder app)
         {
             app.UseModuleRequests()
-                .Subscribe<GetUser, GetUserResponse>("/users/get", async (command, sp) => {
-                    var account = await sp.GetRequiredService<IIdentityService>().GetAsync(command.UserId);
-                    if (account == null)
-                    {
-                        return null;
-                    }
-                    return new GetUserResponse(command.UserId, account.Email, account.IsActive);
-                });
+                .Subscribe<GetUserDataDto, UserDataDto>("/users/get", (command, sp) =>
+                    sp.GetRequiredService<IUserDataProvider>().GetUserDataAsync(command)
+                );
         }
     }
 }

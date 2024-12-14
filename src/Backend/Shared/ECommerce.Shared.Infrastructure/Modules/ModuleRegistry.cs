@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Concurrent;
 
 namespace ECommerce.Shared.Infrastructure.Modules
 {
@@ -23,11 +18,16 @@ namespace ECommerce.Shared.Infrastructure.Modules
             _broadcastRegistrations.Add(registration);
         }
 
-        public void AddRequestAction(string path, Type requestType, Type responseType, Func<object, Task<object>> action)
+        public void AddRequestAction(string path, Type requestType, Type responseType, Func<object, Task<object?>> action)
         {
             if (path is null)
             {
-                throw new InvalidOperationException("Request path cannot be null.");
+                throw new InvalidOperationException(string.Format("{0}: Request path cannot be null.", nameof(AddRequestAction)));
+            }
+            
+            if (action is null)
+            {
+                throw new InvalidOperationException(string.Format("{0}: Action cannot be null", nameof(AddRequestAction)));
             }
 
             var registration = new ModuleRequestRegistration(requestType, responseType, action);
@@ -37,7 +37,7 @@ namespace ECommerce.Shared.Infrastructure.Modules
         public IEnumerable<ModuleBroadcastRegistration> GetBroadcastRegistrations(string key)
             => _broadcastRegistrations.Where(t => t.Key == key);
 
-        public ModuleRequestRegistration GetRequestRegistration(string path)
+        public ModuleRequestRegistration? GetRequestRegistration(string path)
             => _requestRegistrations.TryGetValue(path, out var registration) ? registration : null;
     }
 
