@@ -29,20 +29,19 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
             }
 
             var groupedOrders = GroupOrdersByWeek(orders);
-            var predictionData = GetCustomerData(groupedOrders);
+            var trainingData = GetCustomerData(groupedOrders);
             var model = await fastTreePurchaseProfilerModel.GetModel(userId);
-            if (model is null)
-            {
-                return CreateEmptyRecommendationResult();
-            }
-
-            var predictions = model.Transform(_mlContext.Data.LoadFromEnumerable(predictionData));
+            model ??= await fastTreePurchaseProfilerModel.GenerateModel(trainingData, userId);
+            var itemsMap = CreateItemsMap(orders);
+            var inputData = GetCustomerData([groupedOrders[^1]]);
+            var predictions = model.Transform(_mlContext.Data.LoadFromEnumerable(inputData));
             var predictedResults = _mlContext.Data.CreateEnumerable<CustomerPrediction>(predictions, reuseRowObject: false).ToList();
+
             return
             [
                 new ()
                 {
-                    { "predictions", predictedResults }
+                    { "predictions", ExtractPredictedResults(predictedResults, inputData, itemsMap) }
                 }
             ];
         }
@@ -126,6 +125,40 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
                         .ToList();
         }
 
+        private Dictionary<long, Guid> CreateItemsMap(List<Order> orders)
+        {
+            return orders.SelectMany(order => order.Items)
+                .Select(item => new { ProductKey = item.ItemKey, ProductId = item.ItemId })
+                .ToDictionary(key => key.ProductKey, value => value.ProductId);
+        }
+
+        private List<Guid> ExtractPredictedResults(List<CustomerPrediction> customerPredictions, List<CustomerData> inputData, Dictionary<long, Guid> itemMap)
+        {
+            var results = new List<Guid>();
+            var index = -1;
+            foreach (var customerPrediction in customerPredictions)
+            {
+                index++;
+                if (customerPrediction.Probability <= 0)
+                {
+                    continue;
+                }
+
+                if (index >= inputData.Count)
+                {
+                    continue;
+                }
+
+                if (!itemMap.TryGetValue((long)inputData[index].ProductId, out var productId))
+                {
+                    continue;
+                }
+
+                results.Add(productId);
+            }
+
+            return results;
+        }
 
         private class WeeklyOrderSummary
         {
