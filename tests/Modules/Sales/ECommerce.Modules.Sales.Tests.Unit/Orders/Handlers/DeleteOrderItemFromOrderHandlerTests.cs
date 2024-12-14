@@ -108,7 +108,7 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Handlers
         private ItemCart CreateSampleItemCart(Guid id)
         {
             var itemCart = new ItemCart(id, "Item #1", "Brand #1", "Type #1", "description",
-                                    null, null, 100M, "PLN", DateTime.UtcNow);
+                                    null, null, 100M, "PLN", DateTime.UtcNow, Guid.NewGuid());
             return itemCart;
         }
 

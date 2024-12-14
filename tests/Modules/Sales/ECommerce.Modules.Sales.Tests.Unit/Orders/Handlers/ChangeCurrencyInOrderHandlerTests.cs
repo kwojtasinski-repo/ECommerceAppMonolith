@@ -101,10 +101,10 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Handlers
             {
                 new OrderItem(Guid.NewGuid(), Guid.NewGuid(),
                             new ItemCart(Guid.NewGuid(), "Name #1", "Brand #1", "Type #1", "This is description", null, null,
-                                         100M, "PLN", DateTime.UtcNow), 100M, "PLN", decimal.One, Guid.NewGuid()),
+                                         100M, "PLN", DateTime.UtcNow, Guid.NewGuid()), 100M, "PLN", decimal.One, Guid.NewGuid()),
                 new OrderItem(Guid.NewGuid(), Guid.NewGuid(),
                             new ItemCart(Guid.NewGuid(), "Name #2", "Brand #2", "Type #2", "This is description", null, null,
-                                         200M, "PLN", DateTime.UtcNow), 200M, "PLN", decimal.One, Guid.NewGuid())
+                                         200M, "PLN", DateTime.UtcNow, Guid.NewGuid()), 200M, "PLN", decimal.One, Guid.NewGuid())
             };
             var order = new Order(Guid.NewGuid(), "ORDER", 300M, "PLN", 1M, Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow,
                                     orderItems: orderItems);

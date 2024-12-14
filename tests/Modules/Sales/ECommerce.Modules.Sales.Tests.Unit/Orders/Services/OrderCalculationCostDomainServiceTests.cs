@@ -59,16 +59,16 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Services
         private IEnumerable<OrderItem> CreateSampleOrderItems()
         {
             var itemCart1 = new ItemCart(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1",
-                                "Description", null, null, 100M, "PLN", _clock.CurrentDate());
+                                "Description", null, null, 100M, "PLN", _clock.CurrentDate(), Guid.NewGuid());
             var date = DateTime.UtcNow;
             var orderItem1 = new OrderItem(Guid.NewGuid(), itemCart1.Id, itemCart1, 100M, "PLN", decimal.One, _userId);
 
             var itemCart2 = new ItemCart(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1",
-                                "Description", null, null, 200M, "USD", _clock.CurrentDate());
+                                "Description", null, null, 200M, "USD", _clock.CurrentDate(), Guid.NewGuid());
             var orderItem2 = new OrderItem(Guid.NewGuid(), itemCart2.Id, itemCart2, 200M, "USD", 2M, _userId);
 
             var itemCart3 = new ItemCart(Guid.NewGuid(), "Item #1", "Brand #1", "Type #1",
-                            "Description", null, null, 300M, "EUR", _clock.CurrentDate());
+                            "Description", null, null, 300M, "EUR", _clock.CurrentDate(), Guid.NewGuid());
             var orderItem3 = new OrderItem(Guid.NewGuid(), itemCart3.Id, itemCart3, 300M, "EUR", 4M, _userId);
 
             return new OrderItem[] { orderItem1, orderItem2, orderItem3 };

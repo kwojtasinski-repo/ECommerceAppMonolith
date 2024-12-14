@@ -48,7 +48,7 @@ namespace ECommerce.Modules.Sales.Tests.Unit.Orders.Entities
         private ItemCart CreateSampleItemCart(Guid id, decimal cost, string currencyCode)
         {
             var itemCart = new ItemCart(id, "Item #1", "Brand #1", "Type #1", "description",
-                            null, null, cost, currencyCode, DateTime.UtcNow);
+                            null, null, cost, currencyCode, DateTime.UtcNow, Guid.NewGuid());
             return itemCart;
         }
     }
