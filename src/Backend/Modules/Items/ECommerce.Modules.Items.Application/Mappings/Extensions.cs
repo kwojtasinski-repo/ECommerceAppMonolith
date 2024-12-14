@@ -1,18 +1,12 @@
-﻿using ECommerce.Modules.Items.Application.Commands.Types;
-using ECommerce.Modules.Items.Application.DTO;
+﻿using ECommerce.Modules.Items.Application.DTO;
 using ECommerce.Modules.Items.Domain.Entities;
 using ECommerce.Modules.Items.Domain.Entities.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Application.Mappings
 {
     public static class Extensions
     {
-        public static Dictionary<string, IEnumerable<ItemImage>>? ToImageDictionary(this IEnumerable<ImageUrl> imagesUrl)
+        public static Dictionary<string, IEnumerable<ItemImage>>? ToImageDictionary(this IEnumerable<ImageUrl>? imagesUrl)
         {
             Dictionary<string, IEnumerable<ItemImage>>? urls = imagesUrl is not null ? new Dictionary<string, IEnumerable<ItemImage>>
                 (new List<KeyValuePair<string, IEnumerable<ItemImage>>>() { new KeyValuePair<string, IEnumerable<ItemImage>>(Item.IMAGES,
@@ -21,15 +15,15 @@ namespace ECommerce.Modules.Items.Application.Mappings
             return urls;
         }
 
-        public static IEnumerable<ImageUrl>? ToImagesEnumerable(this Dictionary<string, IEnumerable<ItemImage>> images)
+        public static IEnumerable<ImageUrl> ToImagesEnumerable(this Dictionary<string, IEnumerable<ItemImage>>? images)
         {
-            if (!images.Any())
+            if (images is null || images.Count == 0)
             {
-                return Enumerable.Empty<ImageUrl>();
+                return [];
             }
 
             images.TryGetValue(Item.IMAGES, out var enumerableImages);
-            return enumerableImages?.Select(im => im.AsImageUrl());
+            return enumerableImages?.Select(im => im.AsImageUrl()) ?? [];
         }
 
         public static ImageUrl AsImageUrl(this ItemImage itemImage)
@@ -75,7 +69,7 @@ namespace ECommerce.Modules.Items.Application.Mappings
                 Brand = item.Brand.AsDto(),
                 ItemName = item.ItemName,
                 Type = item.Type.AsDto(),
-                ImagesUrl = item.ImagesUrl?.ToImagesEnumerable().Where(i => i.MainImage == true).SingleOrDefault()
+                ImagesUrl = item.ImagesUrl.ToImagesEnumerable().Where(i => i.MainImage == true).SingleOrDefault()
             };
             return itemDto;
         }
@@ -111,10 +105,16 @@ namespace ECommerce.Modules.Items.Application.Mappings
                 Id = itemSale.Id,
                 Cost = itemSale.Cost,
                 CurrencyCode = itemSale.CurrencyCode,
-                Active = itemSale.Active.Value != null && itemSale.Active.Value is true,
+                Active = itemSale.Active.GetValueOrDefault() is true,
                 Item = itemSale.Item.AsDetailsDto()
             };
             return itemSaleDto;
+        }
+
+        public static ProductDataDto AsProductDataDto(this Item item)
+        {
+            return new ProductDataDto(item.Id, item.ItemSale?.Id ?? Guid.Empty,
+                            item.ItemSale?.Cost ?? decimal.Zero, item.ItemSale?.Active.GetValueOrDefault() ?? false);
         }
     }
 }

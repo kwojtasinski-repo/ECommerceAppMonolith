@@ -2,16 +2,10 @@
 using ECommerce.Modules.Items.Application.Exceptions;
 using ECommerce.Modules.Items.Application.Mappings;
 using ECommerce.Modules.Items.Application.Policies.Items;
-using ECommerce.Modules.Items.Application.Services;
 using ECommerce.Modules.Items.Domain.Entities;
 using ECommerce.Modules.Items.Domain.Repositories;
 using ECommerce.Shared.Abstractions.Commands;
 using ECommerce.Shared.Abstractions.Messagging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Application.Commands.Items.Handlers
 {

@@ -1,7 +1,11 @@
 ﻿using ECommerce.Modules.Items.Application;
+using ECommerce.Modules.Items.Application.Commands.Items;
+using ECommerce.Modules.Items.Application.DTO;
 using ECommerce.Modules.Items.Domain;
 using ECommerce.Modules.Items.Infrastructure;
+using ECommerce.Shared.Abstractions.Commands;
 using ECommerce.Shared.Abstractions.Modules;
+using ECommerce.Shared.Infrastructure.Modules;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,6 +32,10 @@ namespace ECommerce.Modules.Items.Api
 
         public void Use(IApplicationBuilder app)
         {
+            app.UseModuleRequests()
+                .Subscribe<GetProductData, ProductDataDto>("/products/get", (command, sp) =>
+                    sp.GetRequiredService<ICommandDispatcher>().SendAsync<ProductDataDto?>(command)
+                );
         }
     }
 }

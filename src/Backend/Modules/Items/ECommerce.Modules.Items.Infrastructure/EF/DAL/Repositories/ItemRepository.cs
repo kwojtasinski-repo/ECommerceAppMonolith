@@ -33,14 +33,21 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.DAL.Repositories
             return items;
         }
 
-        public async Task<Item> GetAsync(Guid id)
+        public async Task<Item?> GetAsync(Guid id)
         {
-            var item = await _dbContext.Items.Include(b => b.Brand)
+            return await _dbContext.Items.Include(b => b.Brand)
                                              .Include(t => t.Type)
                                              .Include(i => i.ItemSale)
                                              .Where(i => i.Id == id)
-                                             .SingleOrDefaultAsync();
-            return item;
+                                             .FirstOrDefaultAsync();
+        }
+
+        public async Task<Item?> GetProductDataAsync(Guid id)
+        {
+            return await _dbContext.Items.Include(b => b.Brand)
+                                             .Include(t => t.Type)
+                                             .Include(i => i.ItemSale)
+                                             .FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public async Task UpdateAsync(Item item)

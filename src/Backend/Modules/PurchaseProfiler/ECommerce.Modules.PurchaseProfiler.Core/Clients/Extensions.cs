@@ -7,6 +7,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Clients
         public static IServiceCollection AddClients(this IServiceCollection services)
         {
             services.AddScoped<IUserApiClient, UserApiClient>();
+            services.AddScoped<IProductApiClient, ProductApiClient>();
             return services;
         }
     }

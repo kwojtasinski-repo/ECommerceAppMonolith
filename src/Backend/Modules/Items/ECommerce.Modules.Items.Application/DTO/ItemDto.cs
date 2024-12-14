@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ECommerce.Modules.Items.Application.DTO
+﻿namespace ECommerce.Modules.Items.Application.DTO
 {
     public class ItemDto
     {
         public Guid Id { get; set; }
-        public string ItemName { get; set; }
-        public BrandDto Brand { get; set; }
-        public TypeDto Type { get; set; }
-        public ImageUrl ImagesUrl { get; set; }
+        public string ItemName { get; set; } = string.Empty;
+        public BrandDto Brand { get; set; } = null!;
+        public TypeDto Type { get; set; } = null!;
+        public ImageUrl? ImagesUrl { get; set; } = null!;
     }
 }

@@ -14,5 +14,6 @@ namespace ECommerce.Modules.Items.Domain.Repositories
         Task AddAsync(Item item);
         Task UpdateAsync(Item item);
         Task DeleteAsync(Item item);
+        Task<Item?> GetProductDataAsync(Guid id);
     }
 }
