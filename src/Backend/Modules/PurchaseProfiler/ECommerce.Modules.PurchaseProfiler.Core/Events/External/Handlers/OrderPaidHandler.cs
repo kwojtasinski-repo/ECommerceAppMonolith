@@ -16,10 +16,11 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Events.External.Handlers
         private readonly IProductRepository _productRepository;
         private readonly IUserCustomerMapRepository _userCustomerMapRepository;
         private readonly IUserApiClient _userApiClient;
+        private readonly IProductApiClient _productApiClient;
 
         public OrderPaidHandler(ILogger<OrderPaidHandler> logger, IOrderRepository orderRepository,
             IUserRepository userRepository, IProductRepository productRepository, IUserCustomerMapRepository userCustomerMapRepository,
-            IUserApiClient userApiClient)
+            IUserApiClient userApiClient, IProductApiClient productApiClient)
         {
             _logger = logger;
             _orderRepository = orderRepository;
@@ -27,6 +28,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Events.External.Handlers
             _productRepository = productRepository;
             _userCustomerMapRepository = userCustomerMapRepository;
             _userApiClient = userApiClient;
+            _productApiClient = productApiClient;
         }
 
         public async Task HandleAsync(OrderPaid @event)
@@ -46,7 +48,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Events.External.Handlers
                 userCustomerMap ??= await _userCustomerMapRepository.AddAsync(new UserCustomersMap { CustomerId = @event.CustomerId, UserId = @event.UserId });
 
                 var boughtItemsId = @event.OrderItems.Select(oi => oi.ItemId).Distinct().ToList();
-                var boughtItems = await _productRepository.GetProductsByItemsIdsAsync(boughtItemsId);
+                var boughtItems = await GetProducts(boughtItemsId);
 
                 await _orderRepository.AddAsync(new Entities.Order
                 {
@@ -59,7 +61,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Events.External.Handlers
                     Items = @event.OrderItems.Select(oi => new OrderItem
                     {
                         ItemId = oi.ItemId,
-                        ItemKey = boughtItems.FirstOrDefault(i => oi.ItemId == i.ProductId)?.KeyValue ?? 0,
+                        ItemKey = boughtItemsId.Contains(oi.ItemId) ? boughtItems[oi.ItemId]?.KeyValue ?? 0 : 0,
                         Cost = oi.Price
                     }).ToList() ?? []
                 });
@@ -87,6 +89,48 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Events.External.Handlers
             user = new User { UserId = userFromApi.UserId, Email = userFromApi.Email };
             await _userRepository.AddAsync(user);
             return user;
+        }
+
+        private async Task<Dictionary<Guid, Product>> GetProducts(List<Guid> productsId)
+        {
+            var products = (await _productRepository.GetProductsByItemsIdsAsync(productsId))
+                    .ToDictionary(key => key.ProductId) ?? [];
+
+            foreach (var productId in productsId)
+            {
+                if (products.ContainsKey(productId))
+                {
+                    continue;
+                }
+
+                var product = await GetProduct(productId);
+                if (product is null)
+                {
+                    _logger.LogError("Product with id '{productId}' was not found", productId);
+                    continue;
+                }
+
+                products.Add(productId, product);
+            }
+
+            return products;
+        }
+
+        private async Task<Product?> GetProduct(Guid productId)
+        {
+            var productFromApi = await _productApiClient.GetProduct(productId);
+            if (productFromApi is null)
+            {
+                return null;
+            }
+
+            return await _productRepository.AddAsync(new Product
+            {
+                ProductId = productFromApi.ProductId,
+                ProductSaleId = productFromApi.ProductSaleId,
+                Cost = productFromApi.Cost,
+                IsActivated = productFromApi.IsActivated,
+            });
         }
     }
 }
