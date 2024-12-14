@@ -8,6 +8,9 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Clients
         )
         : IProductApiClient
     {
-
+        public async Task<GetProductResponse?> GetProduct(Guid productId)
+        {
+            return await moduleClient.SendAsync<GetProductResponse>("/products/get", new GetProduct(productId));
+        }
     }
 }

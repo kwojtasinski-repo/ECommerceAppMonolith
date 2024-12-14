@@ -2,5 +2,6 @@
 {
     internal interface IProductApiClient
     {
+        Task<GetProductResponse?> GetProduct(Guid productId);
     }
 }
