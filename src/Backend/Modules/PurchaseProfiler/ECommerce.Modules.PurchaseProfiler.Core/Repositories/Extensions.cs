@@ -12,6 +12,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IPurchaseDataRepository, PurchaseDataRepository>();
             services.AddScoped<IUserModelRepository, UserModelRepository>();
+            services.AddScoped<IUserCustomerMapRepository, UserCustomerMapRepository>();
             return services;
         }
     }

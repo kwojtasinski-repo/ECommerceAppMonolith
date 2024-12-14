@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace ECommerce.Shared.Infrastructure.Modules
 {
-    internal static class Extensions
+    public static class Extensions
     {
         internal static IServiceCollection AddModuleInfo(this IServiceCollection services, IList<IModule> modules)
         {
@@ -70,32 +70,7 @@ namespace ECommerce.Shared.Infrastructure.Modules
             return moduleSubscriber;
         }
 
-        private static void AddModuleRegistry(this IServiceCollection services, IEnumerable<Assembly> assemblies)
-        {
-            var registry = new ModuleRegistry();
-
-            var types = assemblies.SelectMany(t => t.GetTypes()).ToArray();
-            var eventTypes = types.Where(et => et.IsClass && typeof(IEvent).IsAssignableFrom(et))
-                .ToArray();
-
-            services.AddSingleton<IModuleRegistry>(sp =>
-            {
-                var eventDispatcher = sp.GetRequiredService<IEventDispatcher>();
-                var eventDispatcherType = eventDispatcher.GetType();
-
-                foreach (var type in eventTypes)
-                {
-                    registry.AddBroadcastAction(type, @event =>
-                        (Task)eventDispatcherType.GetMethod(nameof(eventDispatcher.PublishAsync))
-                            ?.MakeGenericMethod(type)
-                            .Invoke(eventDispatcher, new[] { @event }));
-                }
-
-                return registry;
-            });
-        }
-
-        public static IEnumerable<string> GetAllDisabledModules(this IServiceCollection services)
+        internal static IEnumerable<string> GetAllDisabledModules(this IServiceCollection services)
         {
             var disabledModules = new List<string>();
             using (var serviceProvider = services.BuildServiceProvider())
@@ -119,5 +94,42 @@ namespace ECommerce.Shared.Infrastructure.Modules
 
             return disabledModules;
         }
+
+        private static void AddModuleRegistry(this IServiceCollection services, IEnumerable<Assembly> assemblies)
+        {
+            var registry = new ModuleRegistry();
+
+            var types = assemblies.SelectMany(t => t.GetTypes()).ToArray();
+            var eventTypes = types.Where(et => et.IsClass && typeof(IEvent).IsAssignableFrom(et))
+                .ToArray();
+
+            services.AddSingleton<IModuleRegistry>(sp =>
+            {
+                var eventDispatcher = sp.GetRequiredService<IEventDispatcher>();
+                var eventDispatcherType = eventDispatcher.GetType();
+
+                foreach (var type in eventTypes)
+                {
+                    if (type is null)
+                    {
+                        continue;
+                    }
+
+                    registry.AddBroadcastAction(type, @event =>
+                    {
+                        var methodInfo = eventDispatcherType.GetMethod(nameof(eventDispatcher.PublishAsync))
+                            ?? throw new InvalidOperationException($"Method '{nameof(eventDispatcher.PublishAsync)}' not found on type '{eventDispatcherType}'.");
+                        var genericMethod = methodInfo.MakeGenericMethod(type)
+                            ?? throw new InvalidOperationException($"Failed to create a generic method for '{nameof(eventDispatcher.PublishAsync)}' with type '{type}'.");
+                        var result = genericMethod.Invoke(eventDispatcher, [@event]) as Task
+                            ?? throw new InvalidOperationException($"Invocation of '{genericMethod.Name}' returned null.");
+                        return result;
+                    });
+                }
+
+                return registry;
+            });
+        }
+
     }
 }
