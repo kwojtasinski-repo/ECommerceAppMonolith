@@ -129,12 +129,13 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
         {
             return orders.SelectMany(order => order.Items)
                 .Select(item => new { ProductKey = item.ItemKey, ProductId = item.ItemId })
+                .DistinctBy(item => item.ProductKey)
                 .ToDictionary(key => key.ProductKey, value => value.ProductId);
         }
 
-        private List<Guid> ExtractPredictedResults(List<CustomerPrediction> customerPredictions, List<CustomerData> inputData, Dictionary<long, Guid> itemMap)
+        private Dictionary<Guid, float> ExtractPredictedResults(List<CustomerPrediction> customerPredictions, List<CustomerData> inputData, Dictionary<long, Guid> itemMap)
         {
-            var results = new List<Guid>();
+            var results = new Dictionary<Guid, float>();
             var index = -1;
             foreach (var customerPrediction in customerPredictions)
             {
@@ -154,7 +155,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
                     continue;
                 }
 
-                results.Add(productId);
+                results.Add(productId, customerPrediction.Probability);
             }
 
             return results;

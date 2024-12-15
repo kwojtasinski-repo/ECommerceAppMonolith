@@ -1,6 +1,7 @@
 ﻿using ECommerce.Modules.PurchaseProfiler.Core.Clients;
 using ECommerce.Modules.PurchaseProfiler.Core.Database;
 using ECommerce.Modules.PurchaseProfiler.Core.Repositories;
+using ECommerce.Modules.PurchaseProfiler.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;
 
@@ -14,6 +15,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core
             services.AddArrangoDb();
             services.AddRepositories();
             services.AddClients();
+            services.AddServices();
             return services;
         }
     }

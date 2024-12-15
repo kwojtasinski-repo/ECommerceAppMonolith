@@ -1,15 +1,15 @@
-﻿using ECommerce.Modules.PurchaseProfiler.Api.Profiler;
+﻿using ECommerce.Modules.PurchaseProfiler.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Modules.PurchaseProfiler.Api.Controllers
 {
-    internal class RecomendationsController(RecommendationService recommendationService)
+    internal class RecomendationsController(IRecommendationService recommendationService)
         : BaseController
     {
-        [HttpGet("{customerId}")]
-        public IActionResult GetRecommendations(Guid customerId)
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetRecommendations(Guid userId)
         {
-            var recommendations = recommendationService.GetRecommendations(customerId);
+            var recommendations = await recommendationService.GetRecommendations(userId);
             if (recommendations == null || recommendations.Count == 0)
             {
                 return NotFound("No recommendations found.");

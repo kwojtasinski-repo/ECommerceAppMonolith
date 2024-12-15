@@ -59,6 +59,8 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
                 UserId = userId,
                 Version = 1,
                 TrainingDataSet = trainingData,
+                ModelData = base64Model,
+                // ModelVersion -> check versioning
             });
         }
 
