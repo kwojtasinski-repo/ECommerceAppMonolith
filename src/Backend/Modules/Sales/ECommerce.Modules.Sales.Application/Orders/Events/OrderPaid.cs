@@ -53,7 +53,7 @@ namespace ECommerce.Modules.Sales.Application.Orders.Events
                         Rate = oi.Currency?.Rate ?? 1,
                         Price = oi.Price.Value,
                         UserId = oi.UserId,
-                        ItemId = oi.ItemCart?.Id ?? Guid.Empty
+                        ItemId = oi.ItemCart?.ItemId ?? Guid.Empty
                     }) ?? []
                 };
             }
