@@ -29,13 +29,16 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
         public async Task<ITransformer> GenerateModel(IEnumerable<CustomerData> trainData, Guid userId)
         {
             var trainingData = _mlContext.Data.LoadFromEnumerable(trainData);
-            var pipeline = _mlContext.Transforms.Concatenate("Features", "CustomerId", "ProductId", "Price", "PurchaseFrequency")
+            var pipeline = _mlContext.Transforms.Conversion
+                    .MapValueToKey("Label", nameof(CustomerData.ProductId))
+                    .Append(_mlContext.Transforms.Concatenate("Features", nameof(CustomerData.CustomerId), nameof(CustomerData.Price), nameof(CustomerData.PurchaseFrequency)))
                     .Append(_mlContext.Transforms.NormalizeMinMax("Features"))
-                    .Append(_mlContext.BinaryClassification.Trainers.FastTree(labelColumnName: "PurchasedProduct", featureColumnName: "Features",
-                                                                                    numberOfLeaves: 25,
-                                                                                    numberOfTrees: 150,
+                    .Append(_mlContext.MulticlassClassification.Trainers.OneVersusAll(_mlContext.BinaryClassification.Trainers.FastTree(
+                                                                                    numberOfLeaves: 100,
+                                                                                    numberOfTrees: 200,
                                                                                     minimumExampleCountPerLeaf: 10,
-                                                                                    learningRate: 0.05));
+                                                                                    learningRate: 0.05), "Label"))
+                    .Append(_mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
             var dataSplit = _mlContext.Data.TrainTestSplit(trainingData, testFraction: 0.2);
             var trainDataSplit = dataSplit.TrainSet;
             var fastTreeModel = pipeline.Fit(trainDataSplit);
