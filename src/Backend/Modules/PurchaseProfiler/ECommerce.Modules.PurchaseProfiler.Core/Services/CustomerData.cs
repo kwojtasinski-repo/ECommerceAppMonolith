@@ -6,6 +6,5 @@
         public float ProductId { get; set; }
         public float Price { get; set; }
         public float PurchaseFrequency { get; set; }
-        public bool PurchasedProduct { get; set; }
     }
 }

@@ -92,6 +92,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
                         else
                         {
                             product.PurchaseFrequency++;
+                            product.Price += product.Price;
                         }
                     }
                 }
@@ -107,7 +108,6 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
                 CustomerId = order.CustomerKey,
                 Price = (float)item.Cost,
                 ProductId = item.ItemKey,
-                PurchasedProduct = true,
                 PurchaseFrequency = 1
             };
         }
