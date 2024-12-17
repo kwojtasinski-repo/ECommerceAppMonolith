@@ -28,8 +28,9 @@ namespace ECommerce.Modules.Currencies.Core
             services.AddScoped<ICurrencyRateRepository, CurrencyRateRepository>();
             services.AddScoped<ICurrencyService, CurrencyService>();
             services.AddScoped<ICurrencyRateService, CurrencyRateService>();
+            services.AddScoped<ICurrencyRateDownloader, CurrencyRateDownloader>();
 
-            services.AddCronJob<ISchedulerTask<CurrencyRateDownloader>, CurrencyRateDownloader>(options =>
+            services.AddCronJob<ISchedulerTask<CurrencyRateScheduler>, CurrencyRateScheduler>(options =>
             {
                 options.TimeZoneInfo = TimeZoneInfo.Local;
                 options.CronExpression = @"15 12 * * *";// https://crontab.guru/ info

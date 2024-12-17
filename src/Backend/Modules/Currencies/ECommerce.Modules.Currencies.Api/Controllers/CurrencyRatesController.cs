@@ -1,5 +1,6 @@
 ﻿using ECommerce.Modules.Currencies.Core.DTO;
 using ECommerce.Modules.Currencies.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Modules.Currencies.Api.Controllers
@@ -7,10 +8,12 @@ namespace ECommerce.Modules.Currencies.Api.Controllers
     internal class CurrencyRatesController : BaseController
     {
         private readonly ICurrencyRateService _currencyRateService;
+        private readonly ICurrencyRateDownloader _currencyRateDownloader;
 
-        public CurrencyRatesController(ICurrencyRateService currencyRateService)
+        public CurrencyRatesController(ICurrencyRateService currencyRateService, ICurrencyRateDownloader currencyRateDownloader)
         {
             _currencyRateService = currencyRateService;
+            _currencyRateDownloader = currencyRateDownloader;
         }
 
         [HttpGet("{currencyId:guid}")]
@@ -39,6 +42,15 @@ namespace ECommerce.Modules.Currencies.Api.Controllers
         {
             var currencyRates = await _currencyRateService.GetLatestRatesAsync();
             return Ok(currencyRates);
+        }
+
+        [Authorize("currencies")]
+        [HttpGet("refresh")]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult> RefreshCurrencies()
+        {
+            await _currencyRateDownloader.Download();
+            return Ok();
         }
     }
 }

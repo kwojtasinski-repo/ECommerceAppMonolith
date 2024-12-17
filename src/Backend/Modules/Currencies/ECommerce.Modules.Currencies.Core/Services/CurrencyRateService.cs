@@ -56,14 +56,14 @@ namespace ECommerce.Modules.Currencies.Core.Services
             return dtos;
         }
 
-        public async Task<CurrencyRateDto> GetAsync(Guid id)
+        public async Task<CurrencyRateDto?> GetAsync(Guid id)
         {
             var currencyRate = await _currencyRateRepository.GetAsync(id);
             var dto = currencyRate?.AsDto();
             return dto;
         }
 
-        public async Task<CurrencyRateDto> GetCurrencyForDateAsync(Guid currencyId, DateOnly date)
+        public async Task<CurrencyRateDto?> GetCurrencyForDateAsync(Guid currencyId, DateOnly date)
         {
             var currency = await _currencyRepository.GetAsync(currencyId);
 
@@ -145,9 +145,8 @@ namespace ECommerce.Modules.Currencies.Core.Services
 
             var requestCount = 1;
             var dateStart = date;
-            ExchangeRate exchangeRate = null;
-            CurrencyRate currencyRate = null;
-
+            ExchangeRate? exchangeRate = null;
+            CurrencyRate? currencyRate;
             while (exchangeRate is null)
             {
                 currencyRate = await _currencyRateRepository.GetCurrencyRateForDateAsync(currencyId, dateStart);
