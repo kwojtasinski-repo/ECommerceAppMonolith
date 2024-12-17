@@ -3,6 +3,7 @@ using System;
 using ECommerce.Modules.Currencies.Core.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ECommerce.Modules.Currencies.Core.DAL.Migrations
 {
     [DbContext(typeof(CurrenciesDbContext))]
-    partial class CurrenciesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241217213829_AddedPlnCurrency")]
+    partial class AddedPlnCurrency
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
