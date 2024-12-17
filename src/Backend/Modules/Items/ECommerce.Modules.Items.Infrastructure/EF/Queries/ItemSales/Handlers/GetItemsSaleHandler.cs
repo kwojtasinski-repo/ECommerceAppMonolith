@@ -23,7 +23,7 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.Queries.ItemSales.Handlers
                                             .AsNoTracking()
                                             .Where(i => i.Active != null && i.Active.Value)
                                             .ToListAsync();
-            return itemsSale?.Select(i => i.AsDto());
+            return itemsSale?.Select(i => i.AsDto()) ?? [];
         }
     }
 }
