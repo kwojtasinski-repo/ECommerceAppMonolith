@@ -5,6 +5,7 @@ import { mapToCurrencies } from "../../helpers/mapper";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import Popup, { Type } from "../../components/Popup/Popup";
 import { mapToMessage } from "../../helpers/validation";
+import LoadingButton from "../../components/UI/LoadingButton/LoadingButton";
 
 function Currencies(props) {
     const [loading, setLoading] = useState(true);
@@ -13,6 +14,7 @@ function Currencies(props) {
     const [isOpen, setIsOpen] = useState(false);
     const [currentId, setCurrentId] = useState();
     const [error, setError] = useState('');
+    const [ratePending, setRatePending] = useState(false);
 
     const getCurrencies = async () => {
         try {
@@ -67,6 +69,11 @@ function Currencies(props) {
         }
     }, [refresh]);
 
+    const refreshRates = () => {
+        setRatePending(true);
+        setTimeout(() => setRatePending(false), 250);
+    }
+
     return (
         <>
             {loading ? <LoadingIcon /> : (
@@ -75,6 +82,14 @@ function Currencies(props) {
                         <NavLink className="btn btn-primary" end to="add" >
                             Dodaj walutę
                         </NavLink>
+
+                        
+                        <LoadingButton className="ms-2 btn btn-primary" 
+                                        type="button"
+                                        onClick={refreshRates}
+                                        loading={ratePending}>
+                                            Odśwież waluty
+                        </LoadingButton>
                     </div>
 
                     {error ? (
