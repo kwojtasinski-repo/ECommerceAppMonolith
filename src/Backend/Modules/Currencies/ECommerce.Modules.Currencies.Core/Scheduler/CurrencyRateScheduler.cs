@@ -25,6 +25,7 @@ namespace ECommerce.Modules.Currencies.Core.Scheduler
             catch (Exception ex)
             {
                 _logger.LogError(ex, "CurrencyRateScheduler.DoWork: There was an error");
+                throw;
             }
         }
     }

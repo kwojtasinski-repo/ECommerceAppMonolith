@@ -1,6 +1,5 @@
 ﻿using ECommerce.Modules.Currencies.Core.Clients.External;
 using ECommerce.Modules.Currencies.Core.DTO;
-using ECommerce.Modules.Currencies.Core.Scheduler;
 using ECommerce.Modules.Currencies.Core.Services;
 using ECommerce.Shared.Abstractions.Time;
 using Microsoft.Extensions.Logging;
@@ -28,7 +27,7 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.SchedulerJobs
                 .Returns(new List<CurrencyRateDto> {
                     new CurrencyRateDto { Id = Guid.NewGuid(), CurrencyDate = DateOnly.FromDateTime(DateTime.UtcNow), CurrencyId = new Guid(), Rate = 1 } });
 
-            await _rateDownloader.DoWork(token);
+            await _rateDownloader.Download(token);
 
             await _currencyRateService.Received(2).AddAsync(Arg.Any<CurrencyRateDto>());
         }
@@ -45,7 +44,7 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.SchedulerJobs
                 .Returns(new List<CurrencyRateDto> {
                     new CurrencyRateDto { Id = Guid.NewGuid(), CurrencyDate = DateOnly.FromDateTime(DateTime.UtcNow), CurrencyId = new Guid(), Rate = 1.2M } });
 
-            await _rateDownloader.DoWork(token);
+            await _rateDownloader.Download(token);
 
             await _currencyRateService.Received(2).AddAsync(Arg.Any<CurrencyRateDto>());
             await _currencyRateService.Received(1).UpdateAsync(Arg.Any<CurrencyRateDto>());
@@ -65,17 +64,19 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.SchedulerJobs
                     new CurrencyRateDto { Id = Guid.NewGuid(), CurrencyDate = DateOnly.FromDateTime(DateTime.UtcNow), CurrencyId = currencies.Where(c => c.Code == "EUR").FirstOrDefault().Id, Rate = 5.2M },
                     new CurrencyRateDto { Id = Guid.NewGuid(), CurrencyDate = DateOnly.FromDateTime(DateTime.UtcNow), CurrencyId = currencies.Where(c => c.Code == "USD").FirstOrDefault().Id, Rate = 4.2M }});
 
-            await _rateDownloader.DoWork(token);
+            await _rateDownloader.Download(token);
 
             await _currencyRateService.Received(3).UpdateAsync(Arg.Any<CurrencyRateDto>());
         }
         
         private List<CurrencyDto> GetAllCurrencies()
         {
-            var currencies = new List<CurrencyDto>();
-            currencies.Add(new CurrencyDto() { Id = Guid.NewGuid(), Code = "EUR", Description = "Euro" });
-            currencies.Add(new CurrencyDto() { Id = Guid.NewGuid(), Code = "USD", Description = "Dolar" });
-            currencies.Add(new CurrencyDto() { Id = new Guid(), Code = "PLN", Description = "Polski zloty" });
+            var currencies = new List<CurrencyDto>
+            {
+                new() { Id = Guid.NewGuid(), Code = "EUR", Description = "Euro" },
+                new() { Id = Guid.NewGuid(), Code = "USD", Description = "Dolar" },
+                new() { Id = new Guid(), Code = "PLN", Description = "Polski zloty" }
+            };
             return currencies;
         }
 
@@ -86,14 +87,14 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.SchedulerJobs
                 EffectiveDate = DateTime.UtcNow,
                 No = "Nr 1234",
                 Table = "A",
-                Rates = new System.Collections.Generic.List<RateTable>
-                {
-                    new RateTable { Code = "EUR", Currency = "Euro", Mid = 4M },
-                    new RateTable { Code = "USD", Currency = "Dolar", Mid = 2M }
-                }
+                Rates =
+                [
+                    new() { Code = "EUR", Currency = "Euro", Mid = 4M },
+                    new() { Code = "USD", Currency = "Dolar", Mid = 2M }
+                ]
             };
 
-            return new List<ExchangeRateTable> { exchangeRateTable };
+            return [exchangeRateTable];
         }
 
         private readonly CurrencyRateDownloader _rateDownloader;
@@ -111,8 +112,8 @@ namespace ECommerce.Modules.Currencies.Tests.Unit.SchedulerJobs
             _nbpClient = Substitute.For<INbpClient>();
             _clock = Substitute.For<IClock>();
             _clock.CurrentDate().Returns(DateTime.UtcNow);
-            _rateDownloader = new CurrencyRateDownloader(_logger, _currencyService, _currencyRateService,
-                                        _nbpClient, _clock);
+            _rateDownloader = new CurrencyRateDownloader(_logger, _nbpClient, _currencyService, 
+                                _currencyRateService, _clock);
         }
     }
 }

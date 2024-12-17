@@ -1,7 +1,6 @@
 ﻿using ECommerce.Modules.Currencies.Core.Scheduler;
 using ECommerce.Modules.Currencies.Tests.Integration.Common;
 using ECommerce.Shared.Abstractions.SchedulerJobs;
-using ECommerce.Shared.Tests;
 using Flurl.Http;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
