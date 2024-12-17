@@ -6,6 +6,7 @@ import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import Popup, { Type } from "../../components/Popup/Popup";
 import { mapToMessage } from "../../helpers/validation";
 import LoadingButton from "../../components/UI/LoadingButton/LoadingButton";
+import { getRates } from "../../helpers/getRates";
 
 function Currencies(props) {
     const [loading, setLoading] = useState(true);
@@ -69,9 +70,26 @@ function Currencies(props) {
         }
     }, [refresh]);
 
-    const refreshRates = () => {
+    const refreshRates = async () => {
         setRatePending(true);
-        setTimeout(() => setRatePending(false), 250);
+
+        try {
+            await axios.get(`/currencies-module/currency-rates/refresh`);
+            await getRates(true);
+        } catch(exception) {
+            let errorMessage = '';
+            const status = exception.response.status;
+            const errors = exception.response.data.errors;
+            
+            for(const errMsg in errors) {
+                errorMessage += mapToMessage(errors[errMsg].code, status) + '\n';
+            }
+            
+            setError(errorMessage);
+        }
+        finally {
+            setRatePending(false);
+        }
     }
 
     return (
