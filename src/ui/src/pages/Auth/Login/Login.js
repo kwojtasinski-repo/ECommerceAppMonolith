@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
 import useAuth from "../../../hooks/useAuth";
 import axios from '../../../axios-setup';
-import { mapToMessage } from "../../../helpers/validation";
 import useNotification from "../../../hooks/useNotification";
 import { Color } from "../../../components/Notification/Notification";
 
@@ -73,12 +72,14 @@ function Login() {
                 </div>
 
                 {valid === false ? (
-                    <div className="alert alert-danger">
+                    <div className="alert alert-danger mb-2 mt-2">
                         Niepoprawne dane logowania
                     </div>
                 ) : null}
 
-                <LoadingButton loading={loading} >Zaloguj</LoadingButton>
+                <div className="mt-2">
+                    <LoadingButton loading={loading} >Zaloguj</LoadingButton>
+                </div>
             </form>
         </div>
     )
