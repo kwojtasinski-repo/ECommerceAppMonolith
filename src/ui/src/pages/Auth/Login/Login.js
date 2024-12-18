@@ -5,6 +5,7 @@ import useAuth from "../../../hooks/useAuth";
 import axios from '../../../axios-setup';
 import useNotification from "../../../hooks/useNotification";
 import { Color } from "../../../components/Notification/Notification";
+import { mapCodeToMessage } from "../../../helpers/errorCodeMapper";
 
 function Login() {
     const [auth, setAuth] = useAuth();
@@ -73,7 +74,7 @@ function Login() {
 
                 {valid === false ? (
                     <div className="alert alert-danger mb-2 mt-2">
-                        Niepoprawne dane logowania
+                        {mapCodeToMessage('invalid_credentials')}
                     </div>
                 ) : null}
 
