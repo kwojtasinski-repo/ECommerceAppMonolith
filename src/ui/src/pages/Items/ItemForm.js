@@ -101,9 +101,26 @@ function ItemForm(props) {
         return errors;
     }
 
+    const clearErrors = (form) => {
+        for(let field in form) {
+            if (!form[field]?.showError || !form[field]?.error) {
+                continue;
+            }
+
+            form[field] = {
+                ...form[field],
+                showError: false,
+                error: ''
+            };
+        }
+
+        return form;
+    }
+
     const submit = async (event) => {
         event.preventDefault();
         setLoading(true);
+        clearErrors(form);
         const itemErrors = validateBeforeSend(form, setForm);
         if (!isEmpty(itemErrors)) {
             setLoading(false);
