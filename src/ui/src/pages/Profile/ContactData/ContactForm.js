@@ -118,29 +118,54 @@ function ContactForm(props) {
     }
 
     const validateBeforeSend = (form, setForm) => {
+        const errors = [];
+        const formToUpdate = {...form};
         for(let field in form) {
             const error = validate(form[field].rules, form[field].value);
 
             if (error) {
-                setForm({...form, 
-                    [field]: {
-                        ...form[field],
-                        showError: true,
-                        error
-                    }});
-                setLoading(false);
-                return error;
+                formToUpdate[field] = {
+                    ...form[field],
+                    showError: true,
+                    error
+                };
+                errors.push({ field, error });
             }
         }
+        
+        if (!isEmpty(errors)) {
+            setForm(formToUpdate);
+        }
+
+        return errors;
+    }
+
+    const clearErrors = (form) => {
+        for(let field in form) {
+            if (!form[field]?.showError || !form[field]?.error) {
+                continue;
+            }
+
+            form[field] = {
+                ...form[field],
+                showError: false,
+                error: ''
+            };
+        }
+
+        return form;
     }
 
     const submit = async (event) => {
         event.preventDefault();
+        debugger
         setLoading(true);
-        const errorCustomer = validateBeforeSend(customerForm, setCustomerForm);
-        const errorAddress = validateBeforeSend(addressForm, setAddressForm);
+        clearErrors(customerForm);
+        clearErrors(addressForm);
+        const errorCustomers = validateBeforeSend(customerForm, setCustomerForm);
+        const errorAddresses = validateBeforeSend(addressForm, setAddressForm);
 
-        if (!isEmpty(errorCustomer) || !isEmpty(errorAddress)) {
+        if (!isEmpty(errorCustomers) || !isEmpty(errorAddresses)) {
             setLoading(false);
             return;
         }
@@ -158,6 +183,8 @@ function ContactForm(props) {
 
     const companyHandler = (value) => {
         setIsCompany(value);
+        clearErrors(customerForm);
+        clearErrors(addressForm);
         const rulesCompany = setIsRequiredRule(value, 'companyName', customerForm);
         const rulesNip = setIsRequiredRule(value, 'nip', customerForm);
         setCustomerForm({
