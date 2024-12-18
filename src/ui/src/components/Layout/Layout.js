@@ -4,7 +4,7 @@ function Layout(props) {
             <div>{props.header}</div>
             <div className="container">{props.menu}</div>
             <div className="container">{props.content}</div>
-            <div className="mt-6">{props.footer}</div>
+            <div className="py-5">{props.footer}</div>
         </>
     );
 }

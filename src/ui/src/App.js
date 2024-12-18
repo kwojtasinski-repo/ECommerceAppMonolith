@@ -79,59 +79,70 @@ function App() {
   const content = (
     <Suspense fallback={<p>Ładowanie...</p>} >
       <Routes>
-        <Route path="/users/edit/:id" element = { <RequireAuth> <EditUser /> </RequireAuth> }/>
-        <Route path="/users" element = { <RequireAuth> <Users /> </RequireAuth> }/>
-        <Route path='/brands' element = { <RequireAuth> <Brands /> </RequireAuth> } >
-          <Route path='edit/:id' element = { <RequireAuth> <EditBrand /> </RequireAuth> } />
-          <Route path='add' element = { <RequireAuth> <AddBrand /> </RequireAuth> } />
-        </Route>
-        <Route path='/types' element = { <RequireAuth> <Types /> </RequireAuth> } >
-          <Route path='edit/:id' element = { <RequireAuth> <TypeEdit /> </RequireAuth> } />
-          <Route path='add' element = { <RequireAuth> <TypeAdd /> </RequireAuth> } />
-        </Route>
-        <Route path='/payments/add/:id' element = { <RequireAuth> <AddPayment /> </RequireAuth> } >
-          <Route path='change-currency' element = { <RequireAuth> <ChangeCurrency/> </RequireAuth> } />
-        </Route>
-        <Route path='/orders/add' element = { <RequireAuth> <AddOrder /> </RequireAuth> } >
-          <Route path='add-contact' element = {<RequireAuth><AddOrderContact /></RequireAuth>} />
-          <Route path='edit-contact/:id' element = {<RequireAuth><EditOrderContact /></RequireAuth>} />
-        </Route>
-        <Route path='/orders/edit/:id' element = { <RequireAuth> <EditOrder /> </RequireAuth> } />
-        <Route path='/orders/:id' element = { <RequireAuth> <Order/> </RequireAuth> }/>
-        <Route path='/orders' element = {<RequireAuth> <MyOrders/> </RequireAuth>} />
-        <Route path='/archive/items/:id' element = { <RequireAuth> <OrderItemArchive /> </RequireAuth>} />
-        <Route path='/items/sale/edit/:id' element = { <RequireAuth> <ItemForSaleEdit /> </RequireAuth> } />
-        <Route path='/items/sale' element = { <RequireAuth> <ItemsForSale /> </RequireAuth> } >
-          <Route path=':term' element = { <RequireAuth> <ItemsForSale /> </RequireAuth> }/>
-          <Route path='' element = { <RequireAuth> <ItemsForSale /> </RequireAuth> }/>
-        </Route>
-        <Route path='/items/details/:id' element = { <RequireAuth> <ItemDetails /> </RequireAuth>} />
-        <Route path='/items/for-sale/:id' element = { <RequireAuth> <PutItemForSale /> </RequireAuth>} />
-        <Route path='/items/edit/:id' element = { <RequireAuth> <EditItem /> </RequireAuth>} />
-        <Route path='/items/add' element = { <RequireAuth> <AddItem /> </RequireAuth>} />
-        <Route path='/items/:id' element = {  <Item />} />
+        <Route path='/items/:id' element = {<Item />} />
         <Route path='/search' element = {<Search />} >  
           <Route path=":term" element = {<Search />} />
           <Route path="" element = {<Search />} />
         </Route>
-        <Route path="profile" element = {
-                                          <RequireAuth>
-                                            <Profile/>
-                                          </RequireAuth>
-                                        }  >
-          
-          <Route path="contact-data" element = { <RequireAuth> <ContactData /> </RequireAuth> } >
-            <Route path="add" element = {<RequireAuth><AddContact /></RequireAuth>} />
-            <Route path="edit/:id" element = {<RequireAuth><EditContact /></RequireAuth>} />
+
+        <Route element = {<RequireAuth />}>
+          <Route path="/users/edit/:id" element = {<EditUser />}/>
+          <Route path="/users" element = {<Users />}/>
+
+          <Route path='/brands' element = {<Brands />} >
+            <Route path='edit/:id' element = {<EditBrand />} />
+            <Route path='add' element = {<AddBrand />} />
           </Route>
-          <Route path="" element = {<RequireAuth><ProfileDetails/></RequireAuth>} />
+
+          <Route path='/types' element = {<Types />} >
+            <Route path='edit/:id' element = {<TypeEdit />} />
+            <Route path='add' element = {<TypeAdd />} />
+          </Route>
+
+          <Route path='/payments/add/:id' element = {<AddPayment />} >
+            <Route path='change-currency' element = {<ChangeCurrency/>} />
+          </Route>
+
+          <Route path='/orders/add' element = {<AddOrder />} >
+            <Route path='add-contact' element = {<AddOrderContact />} />
+            <Route path='edit-contact/:id' element = {<EditOrderContact />} />
+          </Route>
+
+          <Route path='/orders/edit/:id' element = {<EditOrder />} />
+          <Route path='/orders/:id' element = {<Order/>}/>
+          <Route path='/orders' element = {<MyOrders/>} />
+          <Route path='/archive/items/:id' element = {<OrderItemArchive /> } />
+          <Route path='/items/sale/edit/:id' element = {<ItemForSaleEdit />  } />
+
+          <Route path='/items/sale' element = {<ItemsForSale />  } >
+            <Route path=':term' element = {<ItemsForSale />  }/>
+            <Route path='' element = {<ItemsForSale />  }/>
+          </Route>
+
+          <Route path='/items/details/:id' element = {<ItemDetails /> } />
+          <Route path='/items/for-sale/:id' element = {<PutItemForSale /> } />
+          <Route path='/items/edit/:id' element = {<EditItem /> } />
+          <Route path='/items/add' element = {<AddItem />}/>
+
+          <Route path="profile" element = {<Profile/>}  >
+            <Route path="contact-data" element = {  <ContactData /> } >
+              <Route path="add" element = { <AddContact />} />
+              <Route path="edit/:id" element = { <EditContact />} />
+            </Route>
+            <Route path="" element = { <ProfileDetails/>} />
+          </Route>
+          
+          <Route path='/cart/summary' element = {<CartSummary/>} />
+
+          <Route path='/currencies' element = {<Currencies />} >
+            <Route path='edit/:id' element = {<EditCurrency />} />
+            <Route path='add' element = {<AddCurrency />} />
+          </Route>
+
+          <Route path='/items' element = {<Items />} />
         </Route>
-        <Route path='/cart/summary' element = { <RequireAuth> <CartSummary/> </RequireAuth> } />
-        <Route path='/currencies' element = { <RequireAuth> <Currencies /> </RequireAuth>} >
-          <Route path='edit/:id' element = { <RequireAuth> <EditCurrency /> </RequireAuth> } />
-          <Route path='add' element = { <RequireAuth> <AddCurrency /> </RequireAuth> } />
-        </Route>
-        <Route path='/items' element = { <RequireAuth> <Items /> </RequireAuth>} />
+
+
         <Route path='/cart' element = { <Cart /> } />
         <Route path='/login' element = {<Login />} />
         <Route path='/register' element = {<Register />} />
