@@ -6,7 +6,6 @@ import Popup, { Type } from "../../components/Popup/Popup";
 import LoadingButton from "../../components/UI/LoadingButton/LoadingButton";
 import { mapToMessage, validate } from "../../helpers/validation";
 import useNotification from "../../hooks/useNotification";
-import FilesUploadComponent from "../../components/FilesUpload/FilesUploadComponent";
 import Tags from "../../components/Tags/Tags";
 import PropTypes from 'prop-types';
 import { isEmpty } from "../../helpers/stringExtensions";
