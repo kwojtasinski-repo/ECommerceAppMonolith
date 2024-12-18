@@ -158,7 +158,6 @@ function ContactForm(props) {
 
     const submit = async (event) => {
         event.preventDefault();
-        debugger
         setLoading(true);
         clearErrors(customerForm);
         clearErrors(addressForm);
