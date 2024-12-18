@@ -125,7 +125,7 @@ function ContactForm(props) {
 
             if (error) {
                 formToUpdate[field] = {
-                    ...form[field],
+                    ...formToUpdate[field],
                     showError: true,
                     error
                 };

@@ -79,27 +79,34 @@ function ItemForm(props) {
     };
 
     const validateBeforeSend = (form, setForm) => {
+        const errors = [];
+        const formToUpdate = {...form};
         for(let field in form) {
             const error = validate(form[field].rules, form[field].value);
-
-            if (error) {
-                setForm({...form, 
-                    [field]: {
-                        ...form[field],
-                        showError: true,
-                        error
-                    }});
-                setLoading(false);
-                return error;
+            if (!error) {
+                continue;
             }
+
+            formToUpdate[field] = {
+                ...formToUpdate[field],
+                showError: true,
+                error
+            };
+            errors.push({ field, error});
         }
+
+        if (!isEmpty(errors)) {
+            setForm(formToUpdate);
+        }
+
+        return errors;
     }
 
     const submit = async (event) => {
         event.preventDefault();
         setLoading(true);
-        const errorItem = validateBeforeSend(form, setForm);
-        if (!isEmpty(errorItem)) {
+        const itemErrors = validateBeforeSend(form, setForm);
+        if (!isEmpty(itemErrors)) {
             setLoading(false);
             return;
         }
