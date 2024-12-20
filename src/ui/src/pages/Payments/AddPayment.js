@@ -11,7 +11,7 @@ function AddPayment(props) {
     const { id } = useParams();
     const [order, setOrder] = useState();
     const [loading, setLoading] = useState(true);
-    const [notifications, addNotification] = useNotification();
+    const addNotification = useNotification().addNotification;
     const navigate = useNavigate();
     const [actions, setActions] = useState([]);
     const [error, setError] = useState('');

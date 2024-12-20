@@ -14,5 +14,9 @@ export default function useNotification(props) {
         notificationContext.deleteNotification(id);
     }
 
-    return [notifications, addNotification, deleteNotification];
+    return {
+        notifications,
+        addNotification,
+        deleteNotification
+    };
 };

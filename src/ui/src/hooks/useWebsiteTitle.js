@@ -1,15 +1,15 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 export default function useWebsiteTitle(title) {
-    const setTitle = (newTitle) => {
+    const setTitle = useCallback((newTitle) => {
         document.title = newTitle;
-    }
+    }, []);
 
     useEffect(() => {
         if (title) {
             setTitle(title);
         }
-    }, [title]);
+    }, [title, setTitle]);
 
     return setTitle;
 }

@@ -11,7 +11,7 @@ function TypeEdit(props) {
     const { id } = useParams();
     const [type, setType] = useState(null);
     const navigate = useNavigate();
-    const [notifications, addNotification] = useNotification();
+    const addNotification = useNotification().addNotification;
     const { addAction } = useOutletContext();
     const [error, setError] = useState('');
 

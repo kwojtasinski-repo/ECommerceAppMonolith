@@ -11,7 +11,7 @@ function EditCurrency(props) {
     const { id } = useParams();
     const [currency, setCurrency] = useState(null);
     const navigate = useNavigate();
-    const [notifications, addNotification] = useNotification();
+    const addNotification = useNotification().addNotification;
     const { setRefresh } = useOutletContext();
     const [error, setError] = useState('');
 

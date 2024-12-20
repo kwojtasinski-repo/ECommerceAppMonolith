@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { mapToItems } from "../../helpers/mapper";
 import axios from '../../axios-setup';
 import Items from "../../components/Items/Items";
@@ -8,13 +8,14 @@ import { calculateItems } from "../../helpers/calculationCost";
 import { getRates } from "../../helpers/getRates";
 import { mapToMessage } from "../../helpers/validation";
 
-function Home(props) {
+function Home() {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const setTitle = useWebsiteTitle();
     const [error, setError] = useState('');
+    const homeTabName = process.env.REACT_APP_HOME_TAB_NAME;
 
-    const fetchItems = async () => {
+    const fetchItems = useCallback(async () => {
         try {
             const rates = await getRates();
             const response = await axios.get(`/items-module/item-sales`);
@@ -30,12 +31,12 @@ function Home(props) {
             setError(errorMessage);
         }
         setLoading(false);
-        setTitle('ECommerceApp');
-    };
+        setTitle(homeTabName);
+    }, [homeTabName, setTitle]);
   
     useEffect(() => {
         fetchItems();
-    }, []);
+    }, [fetchItems]);
 
     return loading ? <LoadingIcon /> : (
         <>

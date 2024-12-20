@@ -7,7 +7,7 @@ import NotFound from "../pages/404/NotFound";
 
 const RequireAuth = ({ children }) => {
     const [auth, setAuth] = useAuth();
-    const [notifications, addNotification] = useNotification();
+    const addNotification = useNotification().addNotification;
     const policies = policiesAuthentication(children);
     const currentDate = new Date();
 

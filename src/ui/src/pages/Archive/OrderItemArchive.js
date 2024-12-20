@@ -1,5 +1,5 @@
 import axios from "../../axios-setup";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styles from './OrderItemArchive.module.css';
 import Gallery from "../../components/Gallery/Gallery";
@@ -8,18 +8,18 @@ import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import useWebsiteTitle from "../../hooks/useWebsiteTitle";
 import { mapToMessage } from "../../helpers/validation";
 
-function OrderItemArchive(props) {
+function OrderItemArchive() {
     const { id } = useParams();
     const [item, setItem] = useState(null);
     const [loading, setLoading] = useState(true);
     const setTitle = useWebsiteTitle();
     const [error, setError] = useState('');
+    const homeTabName = process.env.REACT_APP_HOME_TAB_NAME;
 
-    const fetchItem = async () => {
+    const fetchItem = useCallback(async () => {
         try {
             const response = await axios.get(`/sales-module/order-items/${id}`);
             setItem(mapToOrderItem(response.data));
-            setTitle(`Przedmiot - ${response.data.itemCart.itemName}`);
         } catch (exception) {
             console.log(exception);
             let errorMessage = '';
@@ -30,11 +30,21 @@ function OrderItemArchive(props) {
         }
 
         setLoading(false);
-    }
+    }, [id])
+
+    useEffect(() => {
+        if (item) {
+            setTitle(`Przedmiot - ${item.itemName}`);
+        }
+
+        return () => {
+            setTitle(homeTabName);
+        }
+    }, [item, setTitle, homeTabName])
 
     useEffect(() => {
         fetchItem();
-    }, []);
+    }, [fetchItem]);
 
     return (
         <>

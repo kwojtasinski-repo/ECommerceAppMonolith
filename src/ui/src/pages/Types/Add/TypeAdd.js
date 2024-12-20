@@ -6,7 +6,7 @@ import TypeForm from "../TypeForm";
 
 function TypeAdd(props) {
     const navigate = useNavigate();
-    const [notifications, addNotification] = useNotification();
+    const addNotification = useNotification().addNotification;
     const { addAction } = useOutletContext();
 
     const submit = async form => {

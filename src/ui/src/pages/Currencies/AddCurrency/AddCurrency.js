@@ -6,7 +6,7 @@ import { Color } from "../../../components/Notification/Notification";
 
 function AddCurrency(props) {
     const navigate = useNavigate();
-    const [notifications, addNotification] = useNotification();
+    const addNotification = useNotification().addNotification;
     const { setRefresh } = useOutletContext();
 
     const submit = async form => {

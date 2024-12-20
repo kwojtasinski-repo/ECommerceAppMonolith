@@ -4,7 +4,7 @@ import ItemForm from "../ItemForm";
 import { mapToBrands, mapToTypes } from "../../../helpers/mapper";
 import { useNavigate } from "react-router-dom";
 
-function AddItem(props) {
+function AddItem() {
     const [brands, setBrands] = useState([]);
     const [types, setTypes] = useState([]);
     let id = '';

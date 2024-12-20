@@ -14,7 +14,7 @@ function Login() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [valid, setValid] = useState(null);
-    const [notifications, addNotification] = useNotification();
+    const addNotification = useNotification().addNotification;
 
     const submit = async (event) => {
         event.preventDefault();
@@ -47,7 +47,7 @@ function Login() {
         if (auth) {
             navigate('/');
         }
-    }, []);
+    }, [auth, navigate]);
 
     return (
         <div>

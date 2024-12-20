@@ -12,7 +12,7 @@ import { createGuid } from '../../helpers/createGuid';
 
 function Menu() {
     const [auth, setAuth] = useAuth();
-    const [notifications, addNotification] = useNotification();
+    const addNotification = useNotification().addNotification;
     const [cart] = useCart();
     const [itemsInCart, setItemsInCart] = useState(0);
     const context = useContext(ReducerContext);

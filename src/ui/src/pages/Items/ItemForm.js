@@ -62,7 +62,7 @@ function ItemForm(props) {
             rules: [] // optional
         },
     });
-    const notification = useNotification();
+    const addNotification = useNotification().addNotification;
 
     const changeHandler = useCallback((value, fieldName) => {
         setForm(prevFom => {
@@ -169,7 +169,7 @@ function ItemForm(props) {
     const handleAddImages = () => {
         if ((form.imagesUrl.value.length + 1) >= limitImages) {
             const notificationError = { color: Color.error, id: new Date().getTime(), text: `Przekroczono dozwolony limit (${limitImages})`, timeToClose: 5000 };
-            notification[1](notificationError);
+            addNotification(notificationError);
         } else {
             setIsOpen(true);
         }

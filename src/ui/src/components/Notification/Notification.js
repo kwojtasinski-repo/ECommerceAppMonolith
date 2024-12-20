@@ -11,7 +11,7 @@ let timeToClose = 3000;
 const container = createContainer();
 
 function Notification(props) {
-    const [notificationsContext, addNotification, deleteNotification] = useNotification();
+    const deleteNotification = useNotification().deleteNotification;
     const [id, setId] = useState(props.id);
 
     const onDelete = (event) => {

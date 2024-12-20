@@ -21,7 +21,7 @@ function ProfileDetails(props) {
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
-    const [notifications, addNotification] = useNotification();
+    const addNotification = useNotification().addNotification;
 
     const buttonDisabled = Object.values(errors).filter(x => x).length;
 
