@@ -7,8 +7,8 @@ import axios from '../../axios-setup';
 import { mapToMessage } from "../../helpers/validation";
 import ReducerContext from "../../context/ReducerContext";
 
-function Cart(props) {
-    const [items, addItem, removeItem, clear] = useCart();
+function Cart() {
+    const [items, , removeItem, clear] = useCart();
     const [loading, setLoading] = useState(false);
     const disabledButton = items.length > 0 ? false : true;
     const navigate = useNavigate();
@@ -60,7 +60,8 @@ function Cart(props) {
 
     const removeItemHandler = (id) => {
         removeItem(id);
-        navigate(0); // refresh page
+        // TODO: refactor to use store
+        context.dispatch({ type: "modifiedState", currentEvent: 'removeItemCart' });
     }
 
     return (

@@ -99,7 +99,7 @@ function Register() {
         if (auth) {
             navigate('/');
         }
-    }, []);
+    }, [auth, navigate]);
 
     return (
         <div className="card">

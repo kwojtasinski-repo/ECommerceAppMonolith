@@ -1,9 +1,8 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import Brands from "./Brands";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import axios from "../../axios-setup";
 import { getSampleBrands } from "../../helpers/testFixtures";
-import AddBrand from "./Add/AddBrand";
 
 jest.mock('axios', () => {
     return {

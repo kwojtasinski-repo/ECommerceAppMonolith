@@ -6,7 +6,7 @@ import { mapToOrderItems } from "../../../helpers/mapper";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import { mapToMessage } from "../../../helpers/validation";
 
-function CartSummary(props) {
+function CartSummary() {
     const [items, setItems] = useState(null);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);

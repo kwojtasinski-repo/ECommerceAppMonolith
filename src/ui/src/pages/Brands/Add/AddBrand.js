@@ -4,7 +4,7 @@ import { Color } from "../../../components/Notification/Notification";
 import useNotification from "../../../hooks/useNotification";
 import BrandForm from "../BrandForm";
 
-function AddBrand(props) {
+function AddBrand() {
     const navigate = useNavigate();
     const addNotification = useNotification().addNotification;
     const { addAction } = useOutletContext();

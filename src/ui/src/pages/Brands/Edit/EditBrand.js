@@ -1,5 +1,5 @@
 import axios from "../../../axios-setup";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { mapToBrand } from "../../../helpers/mapper";
 import { mapToMessage } from "../../../helpers/validation";
@@ -7,7 +7,7 @@ import useNotification from "../../../hooks/useNotification";
 import { Color } from "../../../components/Notification/Notification";
 import BrandForm from "../BrandForm";
 
-function EditBrand(props) {
+function EditBrand() {
     const { id } = useParams();
     const [type, setType] = useState(null);
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ function EditBrand(props) {
     const { addAction } = useOutletContext();
     const [error, setError] = useState('');
 
-    const fetchBrand = async () => {
+    const fetchBrand = useCallback(async () => {
         try {
             const response = await axios.get(`/items-module/brands/${id}`);
             setType(mapToBrand(response.data));
@@ -27,7 +27,7 @@ function EditBrand(props) {
             errorMessage += mapToMessage(errors, status) + '\n';
             setError(errorMessage);
         }
-    }
+    }, [id])
 
     const submit = async form => {
         await axios.put(`/items-module/brands/${id}`, form);
@@ -39,7 +39,7 @@ function EditBrand(props) {
 
     useEffect(() => {
         fetchBrand();
-    }, []);
+    }, [fetchBrand]);
 
     return (
         <div className="card">

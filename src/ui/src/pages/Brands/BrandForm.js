@@ -59,12 +59,13 @@ function BrandForm(props) {
     };
 
     useEffect(() => {
-        const newForm = {...form};
-        for (const key in props.brand) {
-            newForm[key].value = props.brand[key];
-        }
-
-        setForm(newForm);
+        setForm(prevForm => {
+            for (const key in props.brand) {
+                prevForm[key].value = props.brand[key];
+            }
+            
+            return prevForm;
+        });
     }, [props.brand]);
 
     return (
