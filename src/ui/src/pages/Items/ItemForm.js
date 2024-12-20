@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Input from "../../components/Input/Input";
 import { Color } from "../../components/Notification/Notification";
@@ -17,7 +17,7 @@ function ItemForm(props) {
     const [loading, setLoading] = useState(false);
     const [loadingImages, setLoadingImages] = useState(false);
     const [shareImages, setShareImages] = useState([]);
-    const [limitImages, setLimitImages] = useState(Number(process.env.REACT_APP_ALLOWED_MAX_IMAGES));
+    const limitImages = Number(process.env.REACT_APP_ALLOWED_MAX_IMAGES);
     const [brands, setBrands] = useState(props.brands);
     const [types, setTypes] = useState(props.types);
     const [error, setError] = useState('');
@@ -64,18 +64,20 @@ function ItemForm(props) {
     });
     const notification = useNotification();
 
-    const changeHandler = (value, fieldName) => {
-        const error = validate(form[fieldName].rules, value);
-        setForm({
-            ...form, 
-            [fieldName]: {
-                ...form[fieldName],
-                value,
-                showError: true,
-                error: error
-            } 
+    const changeHandler = useCallback((value, fieldName) => {
+        setForm(prevFom => {
+            const error = validate(prevFom[fieldName].rules, value);
+            return {
+                ...prevFom, 
+                [fieldName]: {
+                    ...prevFom[fieldName],
+                    value,
+                    showError: true,
+                    error: error
+                }
+            };
         });
-    };
+    }, []);
 
     const validateBeforeSend = (form, setForm) => {
         const errors = [];
@@ -158,7 +160,6 @@ function ItemForm(props) {
         setIsOpen(false);
         const imagesToUpdate = [...form.imagesUrl.value, ...shareImages];
         changeHandler(imagesToUpdate, 'imagesUrl');
-        setLimitImages(limitImages - shareImages.length);
     }
 
     const handleClosePopup = () => {
@@ -166,8 +167,8 @@ function ItemForm(props) {
     }
 
     const handleAddImages = () => {
-        if (limitImages <= 0) {
-            const notificationError = { color: Color.error, id: new Date().getTime(), text: `Przekroczono dozwolony limit (${process.env.REACT_APP_ALLOWED_MAX_IMAGES})`, timeToClose: 5000 };
+        if ((form.imagesUrl.value.length + 1) >= limitImages) {
+            const notificationError = { color: Color.error, id: new Date().getTime(), text: `Przekroczono dozwolony limit (${limitImages})`, timeToClose: 5000 };
             notification[1](notificationError);
         } else {
             setIsOpen(true);
@@ -181,7 +182,6 @@ function ItemForm(props) {
     const handleDeleteImage = (value) => {
         const imagesDeleted = form.imagesUrl.value.filter(i => i !== value);
         changeHandler(imagesDeleted, 'imagesUrl');
-        setLimitImages(limitImages + 1);
     }
 
     const setMainImage = (image) => {
@@ -203,27 +203,31 @@ function ItemForm(props) {
     }
 
     useEffect(() => {
-        const brand = props.brands.find(b => true);
-        setBrands(props.brands);
-
-        if (brand) {
-            changeHandler(brand.id, 'brandId');
+        if (!props.brands || props.brands.length === 0) {
+            setTypes([]);
+            changeHandler('', 'brandId');
+            return;
         }
-    }, [props.brands]);
+
+        setBrands(props.brands);
+        changeHandler(props.brands[0].id, 'brandId');
+    }, [props.brands, changeHandler]);
 
     useEffect(() => {
-        const type = props.types.find(t => true);
-        setTypes(props.types);
-        
-        if (type) {
-            changeHandler(type.id, 'typeId');
+        if (!props.types || props.types.length === 0) {
+            setTypes([]);
+            changeHandler('', 'typeId');
+            return;
         }
-    }, [props.types])
+
+        setTypes(props.types);
+        changeHandler(props.types[0].id, 'typeId');
+    }, [props.types, changeHandler])
 
     useEffect(() => {
         if (props.item) {
-            setForm({
-                ...form,
+            setForm(prevFom => ({
+                ...prevFom,
                 id: {
                     value: props.item.id
                 },
@@ -244,8 +248,7 @@ function ItemForm(props) {
                 },
                 imagesUrl: {
                     value: props.item.imagesUrl
-                }});
-            setLimitImages(limitImages - props.item.imagesUrl.length);
+                }}));
         }
     }, [props.item])
 
@@ -306,7 +309,7 @@ function ItemForm(props) {
                        })} 
                        onChange = {val => changeHandler(val, 'typeId')} />
 
-                <Tags tags = {form.tags.value} setShareTags = {setShareTags} />
+                <Tags tags = {form.tags.value} setShareTags = {setShareTags} canEdit = {true} />
 
                 <button type="button" className="btn btn-primary mt-2" onClick={handleAddImages}>
                     Dodaj obrazki

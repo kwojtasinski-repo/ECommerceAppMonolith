@@ -21,7 +21,7 @@ export default function Images(props) {
     return (
         <>
             {images.map(i => (
-                <Image key={new Date().getTime() + Math.random()} image={i} setMainImage={markAsMainImage}  deleteImage={deleteImage} />
+                <Image key={new Date().getTime() + Math.random() * 1000} image={i} setMainImage={markAsMainImage}  deleteImage={deleteImage} />
             ))}
         </>
     )
