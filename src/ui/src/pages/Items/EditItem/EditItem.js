@@ -1,12 +1,12 @@
 import axios from "../../../axios-setup";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { mapToBrands, mapToItemDetails, mapToTypes } from "../../../helpers/mapper";
 import ItemForm from "../ItemForm";
 import { mapToMessage } from "../../../helpers/validation";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 
-function EditItem(props) {
+function EditItem() {
     const [brands, setBrands] = useState([]);
     const [types, setTypes] = useState([]);
     const { id } = useParams();
@@ -16,7 +16,6 @@ function EditItem(props) {
     const [loading, setLoading] = useState(true);
 
     const onSubmit = async (form) => {
-        console.log(form);
         await axios.put(`/items-module/items/${id}`, form);
     }
 
@@ -54,7 +53,7 @@ function EditItem(props) {
         setLoading(false);
     }
 
-    const fetchItem = async () => {
+    const fetchItem = useCallback(async () => {
         try {
             const response = await axios.get(`/items-module/items/${id}`);
             const itemLocal = mapToItemDetails(response.data);
@@ -69,13 +68,13 @@ function EditItem(props) {
         }
         
         setLoading(false);
-    }
+    }, [id]);
 
     useEffect(() => {
         fetchBrands();
         fetchTypes();
         fetchItem();
-    }, []);
+    }, [fetchItem]);
 
     return (
         <>
