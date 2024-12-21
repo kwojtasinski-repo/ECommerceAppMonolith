@@ -158,9 +158,10 @@ function EditOrder() {
                                             <td>
                                                 {c.company ? (
                                                         <input type="checkbox" 
-                                                                class="custom-control-input text-primary ms-1" 
-                                                                onclick="return false;" 
-                                                                checked />
+                                                                className="custom-control-input text-primary ms-1" 
+                                                                onClick={() => false}
+                                                                onChange={() => {}}
+                                                                checked={true} />
                                                 )
                                                 : null}
                                             </td>

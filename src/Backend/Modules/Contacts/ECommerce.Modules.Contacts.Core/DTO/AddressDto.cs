@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce.Modules.Contacts.Core.DTO
 {
@@ -11,15 +6,15 @@ namespace ECommerce.Modules.Contacts.Core.DTO
     {
         public Guid Id { get; set; }
         [Required]
-        public string CityName { get; set; }
+        public string CityName { get; set; } = null!;
         [Required]
-        public string StreetName { get; set; }
+        public string StreetName { get; set; } = null!;
         [Required]
-        public string CountryName { get; set; }
+        public string CountryName { get; set; } = null!;
         [Required]
-        public string ZipCode { get; set; }
+        public string ZipCode { get; set; } = null!;
         [Required]
-        public string BuildingNumber { get; set; }
+        public string BuildingNumber { get; set; } = null!;
         public string? LocaleNumber { get; set; }
         [Required]
         public Guid CustomerId { get; set; }

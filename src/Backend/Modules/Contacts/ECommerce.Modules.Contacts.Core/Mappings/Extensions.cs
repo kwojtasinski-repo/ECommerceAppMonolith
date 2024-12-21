@@ -1,10 +1,5 @@
 ﻿using ECommerce.Modules.Contacts.Core.DTO;
 using ECommerce.Modules.Contacts.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Contacts.Core.Mappings
 {
@@ -19,7 +14,7 @@ namespace ECommerce.Modules.Contacts.Core.Mappings
                 CityName = dto.CityName,
                 CountryName = dto.CountryName,
                 CustomerId = dto.CustomerId,
-                LocaleNumber = dto.LocaleNumber,
+                LocaleNumber = string.IsNullOrWhiteSpace(dto.LocaleNumber) ? null : dto.LocaleNumber,
                 StreetName = dto.StreetName,
                 ZipCode = dto.ZipCode,
             };
@@ -51,8 +46,8 @@ namespace ECommerce.Modules.Contacts.Core.Mappings
                 LastName = dto.LastName,
                 PhoneNumber = dto.PhoneNumber,
                 Company = dto.Company,
-                CompanyName = dto.CompanyName,
-                NIP = dto.NIP,
+                CompanyName = dto.Company ? dto.CompanyName : null,
+                NIP = dto.Company ? dto.NIP : null,
                 UserId = dto.UserId
             };
             return customer;

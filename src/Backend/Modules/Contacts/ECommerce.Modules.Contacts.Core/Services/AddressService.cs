@@ -45,7 +45,7 @@ namespace ECommerce.Modules.Contacts.Core.Services
             address.StreetName = dto.StreetName;
             address.ZipCode = dto.ZipCode;
             address.BuildingNumber = dto.BuildingNumber;
-            address.LocaleNumber = dto.LocaleNumber;
+            address.LocaleNumber = string.IsNullOrWhiteSpace(dto.LocaleNumber) ? null : dto.LocaleNumber;
             await _addressRepository.UpdateAsync(address);
         }
     }

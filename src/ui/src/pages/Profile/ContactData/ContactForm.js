@@ -31,13 +31,13 @@ function ContactForm(props) {
             rules: []
         },
         companyName: {
-            value: undefined,
+            value: '',
             error: '',
             showError: false,
             rules: [{ rule: 'requiredIf', isRequired: isCompany, rules: [{ rule: 'min', length: 3 }] }]
         },
         nip: {
-            value: undefined,
+            value: '',
             error: '',
             showError: false,
             rules: [{ rule: 'requiredIf', isRequired: isCompany, rules: [{ rule: 'only', length: 10 }] }]
@@ -88,7 +88,7 @@ function ContactForm(props) {
             rules: ['required']
         },
         localeNumber: {
-            value: undefined,
+            value: '',
             error: '',
             showError: false,
             rules: []
@@ -194,14 +194,14 @@ function ContactForm(props) {
                 },
                 companyName: {
                     ...customerForm.companyName,
-                    value: null,
+                    value: customerForm.companyName.value ?? '',
                     rules: [
                         rulesCompany
                     ]
                 },
                 nip: {
                     ...customerForm.nip,
-                    value: null,
+                    value: customerForm.nip.value ?? '',
                     rules: [
                         rulesNip
                     ]
@@ -228,7 +228,7 @@ function ContactForm(props) {
             setCustomerForm(prevCustomer => {
                 const newCustomerForm = {...prevCustomer};
                 for (const key in props.contact.customer) {
-                    newCustomerForm[key].value = props.contact.customer[key];
+                    newCustomerForm[key].value = props.contact.customer[key] ?? '';
                     
                     if (key === "company") {
                         setIsCompany(props.contact.customer[key]);

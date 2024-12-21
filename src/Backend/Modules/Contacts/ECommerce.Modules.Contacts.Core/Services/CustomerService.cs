@@ -67,8 +67,8 @@ namespace ECommerce.Modules.Contacts.Core.Services
             customer.FirstName = dto.FirstName;
             customer.LastName = dto.LastName;
             customer.Company = dto.Company;
-            customer.CompanyName = dto.CompanyName;
-            customer.NIP = dto.NIP;
+            customer.CompanyName = dto.Company ? dto.CompanyName : null;
+            customer.NIP = dto.Company ? dto.NIP : null;
             customer.PhoneNumber = dto.PhoneNumber;
 
             await _customerRepository.UpdateAsync(customer);
