@@ -3,5 +3,5 @@ using ECommerce.Shared.Abstractions.Queries;
 
 namespace ECommerce.Modules.Items.Application.Queries.ItemSales
 {
-    public record GetAllFilteredByName(string Name) : IQuery<IEnumerable<ItemSaleDto>>;
+    public record GetAllFilteredByName(string? Name) : IQuery<IEnumerable<ItemSaleDto>>;
 }

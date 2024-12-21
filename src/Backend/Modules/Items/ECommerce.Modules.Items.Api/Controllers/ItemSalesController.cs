@@ -35,7 +35,7 @@ namespace ECommerce.Modules.Items.Api.Controllers
         [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<IEnumerable<ItemSaleDto>>> GetAllFilteredByNameAsync([FromQuery] string name)
+        public async Task<ActionResult<IEnumerable<ItemSaleDto>>> GetAllFilteredByNameAsync([FromQuery] string? name)
         {
             var itemsSale = await _queryDispatcher.QueryAsync(new GetAllFilteredByName(name));
             return Ok(itemsSale);

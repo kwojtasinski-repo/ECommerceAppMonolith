@@ -24,12 +24,17 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.Queries.ItemSales.Handlers
 
         public async Task<IEnumerable<ItemSaleDto>> HandleAsync(GetAllFilteredByName query)
         {
+            if (string.IsNullOrWhiteSpace(query.Name))
+            {
+                return [];
+            }
+
             var itemsSale = await _itemsSale.Include(i => i.Item)
                                             .AsNoTracking()
                                             .Where(i => i.Active != null && i.Active.Value)
                                             .Where(i => i.Item.ItemName.ToLower().StartsWith(query.Name.ToLower()))
                                             .ToListAsync();
-            return itemsSale?.Select(i => i.AsDto());
+            return itemsSale?.Select(i => i.AsDto()) ?? [];
         }
     }
 }

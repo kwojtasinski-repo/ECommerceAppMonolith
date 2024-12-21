@@ -12,7 +12,7 @@ function Search() {
 
     const searchHandler = useCallback(async () => {
         try {
-            const response = await axios.get(`/items-module/item-sales/search?name=${term}`);
+            const response = await axios.get(`/items-module/item-sales/search?name=${term ?? ''}`);
             setItems(mapToItems(response.data));
         } catch (exception) {
             console.log(exception);
