@@ -6,7 +6,7 @@ import axios from "../../../axios-setup";
 import useNotification from "../../../hooks/useNotification";
 import { Color } from "../../../components/Notification/Notification";
 
-function ProfileDetails(props) {
+function ProfileDetails() {
     const [auth, setAuth] = useAuth();
     const [email, setEmail] = useState(auth.email);
     const [password, setPassword] = useState('');
@@ -76,56 +76,43 @@ function ProfileDetails(props) {
     
     useEffect(() => {
         if (validateEmail(email)) {
-            setErrors({...errors, email: ""});
+            setErrors(prevErrors => ({...prevErrors, email: ""}));
         } else {
-            setErrors({...errors, email: "Niepoprawny email"});
+            setErrors(prevErrors => ({...prevErrors, email: "Niepoprawny email"}));
         }
 
     }, [email])
 
     useEffect(() => {
+        if (!newPassword && !newPasswordConfirm) {
+            return;
+        }
+
         let validNewPassword = '';
         let validNewPasswordConfirm = '';
+        const passwordNotSame ='Hasła nie są identyczne';
 
-        if (newPassword !== newPasswordConfirm) {
-            validNewPassword = 'Hasła nie są identyczne';
-            validNewPasswordConfirm = 'Hasła nie są identyczne';
-        } else {
-            validNewPassword = '';
-            validNewPasswordConfirm = '';
+        if (newPassword) {
+            if (!validatePassword(newPassword)) {
+                validNewPassword = 'Hasło powinno zawierać przynajmniej 8 znaków, w tym jedną dużą literę i jedną liczbę';
+            }
         }
 
-        if (!newPassword.length || validatePassword(newPassword)) {
-            validNewPassword = '';
-        }
-        else {
-            validNewPassword = 'Hasło powinno zawierać przynajmniej 8 znaków, w tym jedną dużą literę i jedną liczbę';
-        }
-
-        setErrors({...errors, newPassword: validNewPassword,  newPasswordConfirm: validNewPasswordConfirm});
-    }, [newPassword])
-
-    useEffect(() => {
-        let validNewPassword = '';
-        let validNewPasswordConfirm = '';
-
-        if (newPassword !== newPasswordConfirm) {
-            validNewPassword = 'Hasła nie są identyczne';
-            validNewPasswordConfirm = 'Hasła nie są identyczne';
-        } else {
-            validNewPassword = '';
-            validNewPasswordConfirm = '';
-        }
-        
-        if (!newPasswordConfirm.length || validatePassword(newPasswordConfirm)) {
-            validNewPasswordConfirm = '';
-        }
-        else {
-            validNewPasswordConfirm = 'Hasło powinno zawierać przynajmniej 8 znaków, w tym jedną dużą literę i jedną liczbę';
+        if (newPasswordConfirm) {
+            if (!validatePassword(newPasswordConfirm)) {
+                validNewPasswordConfirm = 'Hasło powinno zawierać przynajmniej 8 znaków, w tym jedną dużą literę i jedną liczbę';
+            }
         }
 
-        setErrors({...errors, newPassword: validNewPassword,  newPasswordConfirm: validNewPasswordConfirm});
-    }, [newPasswordConfirm])
+        if (!validNewPassword && !validNewPasswordConfirm) {
+            if (newPassword !== newPasswordConfirm) {
+                validNewPassword = passwordNotSame;
+                validNewPasswordConfirm = passwordNotSame;
+            }
+        }
+
+        setErrors(prevErrors => ({...prevErrors, newPassword: validNewPassword,  newPasswordConfirm: validNewPasswordConfirm}));
+    }, [newPassword, newPasswordConfirm])
 
     return (
         <>
@@ -165,7 +152,7 @@ function ProfileDetails(props) {
                         {errors.newPassword}
                     </div>
                 </div>
-                <div className="form-group">
+                <div className="form-group mb-2">
                     <label>Nowe hasło</label>
                     <input name="password" 
                            onChange={event => setNewPasswordConfirm(event.target.value)} 
@@ -177,7 +164,7 @@ function ProfileDetails(props) {
                 </div>
                 
                 {error ? (
-                    <div className="alert alert-danger">{error}</div>
+                    <div className="alert alert-danger mb-2">{error}</div>
                 ) : null}
 
                 <LoadingButton loading={loading}

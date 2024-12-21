@@ -6,7 +6,7 @@ import { isEmpty } from "../../helpers/stringExtensions";
 import { mapToMessage, validate } from "../../helpers/validation";
 
 function ItemSaleForm(props) {
-    const [currencies, setCurrencies] = useState(props.currencies);
+    const [currencies, setCurrencies] = useState([]);
     const [loadingButton, setLoadingButton] = useState(false);
     const [form, setForm] = useState({
         itemSaleId: {
@@ -44,10 +44,14 @@ function ItemSaleForm(props) {
     };
 
     useEffect(() => {
+        setCurrencies(props.currencies)
+    }, [props.currencies])
+
+    useEffect(() => {
         if (props.itemSale && props.currencies && props.currencies.length > 0) {
-            const currency = isEmpty(props.itemSale.code) ?  props.currencies.find(c => true).code : props.itemSale.code;
-            setForm({
-                ...form,
+            const currency = isEmpty(props.itemSale.code) ? props.currencies[0].code : props.itemSale.code;
+            setForm(prevForm => ({
+                ...prevForm,
                 itemSaleId: {
                     value: props.itemSale.id
                 },
@@ -55,14 +59,14 @@ function ItemSaleForm(props) {
                     value: props.itemSale.itemId
                 },
                 itemCost: {
-                    ...form.itemCost,
+                    ...prevForm.itemCost,
                     value: props.itemSale.cost
                 },
                 currencyCode: {
-                    ...form.currencyCode,
+                    ...prevForm.currencyCode,
                     value: currency
                 }
-            })
+            }))
         }
     }, [props.itemSale, props.currencies])
 

@@ -1,5 +1,5 @@
 import axios from "../../axios-setup";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import { mapToOrder } from "../../helpers/mapper";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
@@ -7,7 +7,7 @@ import useNotification from "../../hooks/useNotification";
 import { Color } from "../../components/Notification/Notification";
 import { mapToMessage } from "../../helpers/validation";
 
-function AddPayment(props) {
+function AddPayment() {
     const { id } = useParams();
     const [order, setOrder] = useState();
     const [loading, setLoading] = useState(true);
@@ -29,7 +29,7 @@ function AddPayment(props) {
         setActions(newActions);
     }
 
-    const fetchOrder = async () => {
+    const fetchOrder = useCallback(async () => {
         try {
             const response = await axios.get(`/sales-module/orders/${id}`);
             setOrder(mapToOrder(response.data));
@@ -43,7 +43,7 @@ function AddPayment(props) {
         }
 
         setLoading(false);
-    }
+    }, [id])
 
     const clickHandler = async () => {
         await axios.post('/sales-module/payments', {
@@ -56,7 +56,7 @@ function AddPayment(props) {
 
     useEffect(() => {
         fetchOrder();
-    }, [actions]);
+    }, [actions, fetchOrder]);
 
     return (
         <>

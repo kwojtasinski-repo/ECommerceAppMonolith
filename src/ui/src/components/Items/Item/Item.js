@@ -5,7 +5,7 @@ import ReducerContext from '../../../context/ReducerContext';
 import { useContext } from 'react';
 
 function Item(props) {
-    const [itemsInCart, addItem] = useCart();
+    const addItem = useCart().addItem;
     const context = useContext(ReducerContext);
 
     const onClickHandler = (item) => {

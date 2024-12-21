@@ -5,7 +5,7 @@ import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import { mapToUsers } from "../../helpers/mapper";
 import { mapToMessage } from "../../helpers/validation";
 
-function Users(props) {
+function Users() {
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
     const [error, setError] = useState('');

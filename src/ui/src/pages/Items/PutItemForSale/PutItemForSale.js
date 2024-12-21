@@ -1,5 +1,5 @@
 import axios from "../../../axios-setup";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { mapToCurrencies, mapToItemDetails } from "../../../helpers/mapper";
 import { mapToMessage } from "../../../helpers/validation";
@@ -8,7 +8,7 @@ import Gallery from "../../../components/Gallery/Gallery";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import ItemSaleForm from "../ItemSaleForm";
 
-function PutItemForSale(props) {
+function PutItemForSale() {
     const { id } = useParams();
     const [item, setItem] = useState(null);
     const [currencies, setCurrencies] = useState([]);
@@ -16,7 +16,7 @@ function PutItemForSale(props) {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const fetchItem = async () => {
+    const fetchItem = useCallback(async () => {
         try {
             const response = await axios.get(`/items-module/items/${id}`);
             const itemLocal = mapToItemDetails(response.data);
@@ -29,7 +29,7 @@ function PutItemForSale(props) {
             errorMessage += mapToMessage(errors, status) + '\n';            
             setError(errorMessage);
         }
-    }
+    }, [id])
 
     const fetchCurrencies = async () => {
         try {
@@ -46,14 +46,14 @@ function PutItemForSale(props) {
         }        
     }
 
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         await fetchItem();
         await fetchCurrencies();
-    }
+    }, [fetchItem])
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [fetchData]);
 
     useEffect(() => {
         if (item && currencies.length > 0) {

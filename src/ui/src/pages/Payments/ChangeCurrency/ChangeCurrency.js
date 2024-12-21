@@ -8,7 +8,7 @@ import Input from "../../../components/Input/Input";
 import style from "./ChangeCurrency.module.css"
 
 
-function ChangeCurrency(props) {
+function ChangeCurrency() {
     const order = useOutletContext();
     const [currencies, setCurrencies] = useState([]);
     const [loading, setLoading] = useState(true);

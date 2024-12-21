@@ -65,12 +65,13 @@ function CurrencyForm(props) {
     };
 
     useEffect(() => {
-        const newForm = {...form};
-        for (const key in props.currency) {
-            newForm[key].value = props.currency[key];
-        }
-
-        setForm(newForm);
+        setForm(prevForm => {
+            const newForm = {...prevForm};
+            for (const key in props.currency) {
+                newForm[key].value = props.currency[key];
+            }
+            return newForm;
+        });
     }, [props.currency]);
 
     return (

@@ -1,11 +1,11 @@
 import axios from "../../../axios-setup";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { mapToCustomers, mapToOrder } from "../../../helpers/mapper";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import { mapToMessage } from "../../../helpers/validation";
 
-function EditOrder(props) {
+function EditOrder() {
     const { id } =  useParams();
     const [order, setOrder] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -13,7 +13,7 @@ function EditOrder(props) {
     const [customer, setCustomer] = useState(null);
     const [error, setError] = useState('');
 
-    const fetchOrder = async () => {
+    const fetchOrder = useCallback(async () => {
         try {
             const response = await axios.get(`/sales-module/orders/${id}`);
             setOrder(mapToOrder(response.data));
@@ -25,7 +25,7 @@ function EditOrder(props) {
             errorMessage += mapToMessage(error, status) + '\n';
             setError(errorMessage);
         }
-    }
+    }, [id])
 
     const fetchContacts = async () => {
         try {
@@ -41,15 +41,15 @@ function EditOrder(props) {
         }
     }
 
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         await fetchOrder();
         await fetchContacts();
         setLoading(false);
-    }
+    }, [fetchOrder])
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [fetchData]);
 
     useEffect(() => {
         setCustomer(customers.find(c => c.id === order.customerId));

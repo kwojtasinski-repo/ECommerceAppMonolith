@@ -5,7 +5,7 @@ import Contacts from "../Contact/Contacts";
 import { useNavigate } from "react-router-dom";
 import { mapToMessage } from "../../../helpers/validation";
 
-function AddOrder(props) {
+function AddOrder() {
     const [customer, setCustomer] = useState(null);
     const disabledButton = customer === null;
     const navigate = useNavigate();

@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import EditContactForm from "../../Profile/ContactData/EditContactForm";
 
-function EditOrderContact(props) {
+function EditOrderContact() {
     const { id } = useParams();
 
     return (

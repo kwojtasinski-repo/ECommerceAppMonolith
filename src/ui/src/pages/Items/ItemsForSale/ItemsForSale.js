@@ -1,5 +1,5 @@
 import axios from "../../../axios-setup";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { mapToItems } from "../../../helpers/mapper";
 import { mapToMessage } from "../../../helpers/validation";
@@ -7,7 +7,7 @@ import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import style from "./ItemsForSale.module.css";
 import Popup, { Type } from "../../../components/Popup/Popup";
 
-function ItemsForSale(props) {
+function ItemsForSale() {
     const { term } = useParams();
     const [termSearch, setTermSearch] = useState(term);
     const [searchString, setSearchString] = useState(term);
@@ -29,7 +29,7 @@ function ItemsForSale(props) {
         setTermSearch(searchString);
     }
 
-    const searchHandler = async () => {
+    const searchHandler = useCallback(async () => {
         try {
             const url = term ? `/items-module/item-sales/search?name=${term}` : '/items-module/item-sales';
             const response = await axios.get(url);
@@ -44,11 +44,11 @@ function ItemsForSale(props) {
         }
 
         setLoading(false);
-    }
+    }, [term])
 
     useEffect(() => {
         searchHandler();
-    }, [termSearch, actions])
+    }, [termSearch, actions, searchHandler])
 
     const clickHandler = (id) => {
         setCurrentId(id);

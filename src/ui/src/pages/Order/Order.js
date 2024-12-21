@@ -1,5 +1,5 @@
 import axios from "../../axios-setup";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { mapToCustomer, mapToOrder } from "../../helpers/mapper";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
@@ -7,7 +7,7 @@ import styles from "./Order.module.css"
 import useAuth from "../../hooks/useAuth";
 import { mapToMessage } from "../../helpers/validation";
 
-function Order(props) {
+function Order() {
     const { id } = useParams();
     const [order, setOrder] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -16,7 +16,7 @@ function Order(props) {
     const [paymentDisabled, setPaymentDisabled] = useState(true);
     const [error, setError] = useState('');
 
-    const fetchOrder = async () => {
+    const fetchOrder = useCallback(async () => {
         try {
             const response = await axios.get(`/sales-module/orders/${id}`);
             setOrder(mapToOrder(response.data));
@@ -29,9 +29,9 @@ function Order(props) {
             setError(errorMessage);
         }
         setLoading(false);
-    }
+    }, [id])
 
-    const fetchCustomer = async () => {
+    const fetchCustomer = useCallback(async () => {
         try {
             const response = await axios.get(`/contacts-module/customers/${order.customerId}`);
             setCustomer(mapToCustomer(response.data));
@@ -47,17 +47,17 @@ function Order(props) {
             }
             setPaymentDisabled(true);
         }
-    }
+    }, [order])
 
     useEffect(() => {
         fetchOrder();
-    }, [])
+    }, [fetchOrder])
 
     useEffect(() => {
         if(order !== null) {
             fetchCustomer();
         }
-    }, [order]);
+    }, [order, fetchCustomer]);
 
     return (
         <>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import axios from "../../../axios-setup";
 import { Color } from "../../../components/Notification/Notification";
@@ -7,7 +7,7 @@ import { mapToMessage } from "../../../helpers/validation";
 import useNotification from "../../../hooks/useNotification";
 import CurrencyForm from "../CurrencyForm";
 
-function EditCurrency(props) {
+function EditCurrency() {
     const { id } = useParams();
     const [currency, setCurrency] = useState(null);
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ function EditCurrency(props) {
     const { setRefresh } = useOutletContext();
     const [error, setError] = useState('');
 
-    const fetchCurrency = async () => {
+    const fetchCurrency = useCallback(async () => {
         try {
             const response = await axios.get(`/currencies-module/currencies/${id}`);
             setCurrency(mapToCurrency(response.data));
@@ -27,7 +27,7 @@ function EditCurrency(props) {
             errorMessage += mapToMessage(errors, status) + '\n';
             setError(errorMessage);
         }
-    }
+    }, [id])
 
     const submit = async form => {
         await axios.put(`/currencies-module/currencies/${id}`, form);
@@ -39,7 +39,7 @@ function EditCurrency(props) {
 
     useEffect(() => {
         fetchCurrency();
-    }, []);
+    }, [fetchCurrency]);
 
     return (
         <div className="card">

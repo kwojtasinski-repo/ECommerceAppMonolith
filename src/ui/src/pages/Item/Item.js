@@ -1,5 +1,5 @@
 import axios from "../../axios-setup";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styles from './Item.module.css';
 import Gallery from "../../components/Gallery/Gallery";
@@ -12,16 +12,17 @@ import ReducerContext from "../../context/ReducerContext";
 import { calculateItem } from "../../helpers/calculationCost";
 import { getRates } from "../../helpers/getRates";
 
-function Item(props) {
+function Item() {
     const { id } = useParams();
     const [item, setItem] = useState(null);
     const [loading, setLoading] = useState(true);
     const setTitle = useWebsiteTitle();
     const [error, setError] = useState('');
-    const [itemsInCart, addItem] = useCart();
+    const addItem = useCart().addItem;
     const context = useContext(ReducerContext);
+    const homeTabName = process.env.REACT_APP_HOME_TAB_NAME;
 
-    const fetchItem = async () => {
+    const fetchItem = useCallback(async () => {
         try {  
             const rates = await getRates();
             const response = await axios.get(`/items-module/item-sales/${id}`);
@@ -38,11 +39,14 @@ function Item(props) {
             setError(errorMessage);
         }
         setLoading(false);
-    }
+    }, [id, setTitle])
 
     useEffect(() => {
         fetchItem();
-    }, []);
+        return () => {
+            setTitle(homeTabName);
+        }
+    }, [fetchItem, setTitle, homeTabName]);
 
     const onClickHandler = (item) => {
         addItem({

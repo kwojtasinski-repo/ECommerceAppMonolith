@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import axios from "../../../axios-setup";
 import { mapToCustomer } from "../../../helpers/mapper";
@@ -12,7 +12,7 @@ function EditContactForm(props) {
     const { addAction } = useOutletContext();
     const [error, setError] = useState('');
 
-    const fetchCustomer = async () => {
+    const fetchCustomer = useCallback(async () => {
         try {
             const response = await axios.get(`/contacts-module/customers/${id}`);
             let customer = mapToCustomer(response.data);
@@ -27,7 +27,7 @@ function EditContactForm(props) {
             errorMessage += mapToMessage(errors, status) + '\n';
             setError(errorMessage);
         }
-    }
+    }, [id])
     
     const submit = async (form) => {
         try {
@@ -52,8 +52,12 @@ function EditContactForm(props) {
     }
 
     useEffect(() => {
+        setId(props.id);
+    }, [props.id])
+
+    useEffect(() => {
         fetchCustomer();
-    }, []);
+    }, [fetchCustomer]);
 
     return (
         <div className="card">

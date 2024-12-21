@@ -5,7 +5,7 @@ import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import { NavLink } from "react-router-dom";
 import { mapToMessage } from "../../../helpers/validation";
 
-function MyOrders(props) {
+function MyOrders() {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');

@@ -13,7 +13,7 @@ import { createGuid } from '../../helpers/createGuid';
 function Menu() {
     const [auth, setAuth] = useAuth();
     const addNotification = useNotification().addNotification;
-    const [cart] = useCart();
+    const cart = useCart().cart;
     const [itemsInCart, setItemsInCart] = useState(0);
     const context = useContext(ReducerContext);
     const [menuOpened, setMenuOpened] = useState(false);

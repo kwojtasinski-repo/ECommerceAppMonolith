@@ -6,7 +6,7 @@ import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import { NavLink, Outlet } from "react-router-dom";
 import Popup, { Type } from "../../components/Popup/Popup";
 
-function Brands(props) {
+function Brands() {
     const [loading, setLoading] = useState(true);
     const [brands, setBrands] = useState([]);
     const [actions, setActions] = useState([]);

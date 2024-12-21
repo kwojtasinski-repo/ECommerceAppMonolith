@@ -8,7 +8,7 @@ import { mapToMessage } from "../../helpers/validation";
 import ReducerContext from "../../context/ReducerContext";
 
 function Cart() {
-    const [items, , removeItem, clear] = useCart();
+    const { cart, items = [...cart], removeItem, clear } = useCart();
     const [loading, setLoading] = useState(false);
     const disabledButton = items.length > 0 ? false : true;
     const navigate = useNavigate();

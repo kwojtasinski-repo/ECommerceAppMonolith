@@ -8,7 +8,7 @@ import { mapToMessage } from "../../helpers/validation";
 import LoadingButton from "../../components/UI/LoadingButton/LoadingButton";
 import { getRates } from "../../helpers/getRates";
 
-function Currencies(props) {
+function Currencies() {
     const [loading, setLoading] = useState(true);
     const [currencies, setCurrencies] = useState([]);
     const [refresh, setRefresh] = useState(false);

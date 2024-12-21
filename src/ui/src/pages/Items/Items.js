@@ -7,7 +7,7 @@ import style from "./Items.module.css";
 import { mapToMessage } from "../../helpers/validation";
 import Popup, { Type } from "../../components/Popup/Popup";
 
-function Items(props) {
+function Items() {
     const [loading, setLoading] = useState(true);
     const [items, setItems] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
@@ -29,10 +29,6 @@ function Items(props) {
         }
         setLoading(false);
     }
-
-    useEffect(() => {
-        fetchItems();
-    }, []);
 
     useEffect(() => {
         fetchItems();

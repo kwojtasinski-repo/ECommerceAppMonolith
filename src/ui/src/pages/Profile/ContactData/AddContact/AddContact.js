@@ -1,6 +1,6 @@
 import AddContactForm from "../AddContactForm";
 
-function AddContact(props) {
+function AddContact() {
     return (
         <div className="card">
             <AddContactForm

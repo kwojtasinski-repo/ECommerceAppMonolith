@@ -225,26 +225,30 @@ function ContactForm(props) {
 
     useEffect(() => {
         if (props.contact) {
-            const newCustomerForm = {...customerForm};
-            for (const key in props.contact.customer) {
-                newCustomerForm[key].value = props.contact.customer[key];
-                
-                if (key === "company") {
-                    setIsCompany(props.contact.customer[key]);
+            setCustomerForm(prevCustomer => {
+                const newCustomerForm = {...prevCustomer};
+                for (const key in props.contact.customer) {
+                    newCustomerForm[key].value = props.contact.customer[key];
+                    
+                    if (key === "company") {
+                        setIsCompany(props.contact.customer[key]);
+                    }
+    
+                    if (key === "companyName" || key === "nip") {
+                        newCustomerForm[key].rules[0].isRequired = props.contact.customer.company;
+                    }
+                }
+    
+                return newCustomerForm;
+            });
+            setAddressForm(prevAddress => {
+                const newAddressForm = {...prevAddress};
+                for (const key in props.contact.address) {
+                    newAddressForm[key].value = props.contact.address[key];
                 }
 
-                if (key === "companyName" || key === "nip") {
-                    newCustomerForm[key].rules[0].isRequired = props.contact.customer.company;
-                }
-            }
-
-            const newAddressForm = {...addressForm};
-            for (const key in props.contact.address) {
-                newAddressForm[key].value = props.contact.address[key];
-            }
-
-            setCustomerForm(newCustomerForm);
-            setAddressForm(newAddressForm);
+                return newAddressForm;
+            });
         }
     }, [props.contact]);
 

@@ -6,7 +6,7 @@ import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import { mapToCustomers } from "../../../helpers/mapper";
 import { mapToMessage } from "../../../helpers/validation";
 
-function ContactData(props) {
+function ContactData() {
     const [loading, setLoading] = useState(true);
     const [customers, setCustomers] = useState([]);
     const [currentId, setCurrentId] = useState();

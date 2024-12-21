@@ -59,12 +59,14 @@ function TypeForm(props) {
     };
 
     useEffect(() => {
-        const newForm = {...form};
-        for (const key in props.type) {
-            newForm[key].value = props.type[key];
-        }
+        setForm(prevForm => {
+            const newForm = {...prevForm};
+            for (const key in props.type) {
+                newForm[key].value = props.type[key];
+            }
 
-        setForm(newForm);
+            return newForm
+        });
     }, [props.type]);
 
     return (

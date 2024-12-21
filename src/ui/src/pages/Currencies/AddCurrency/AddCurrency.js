@@ -4,7 +4,7 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import useNotification from "../../../hooks/useNotification";
 import { Color } from "../../../components/Notification/Notification";
 
-function AddCurrency(props) {
+function AddCurrency() {
     const navigate = useNavigate();
     const addNotification = useNotification().addNotification;
     const { setRefresh } = useOutletContext();

@@ -1,6 +1,6 @@
 import axios from "../../../axios-setup";
 import { NavLink, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { mapToItemDetails } from "../../../helpers/mapper";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import Gallery from "../../../components/Gallery/Gallery";
@@ -8,14 +8,14 @@ import styles from "./ItemDetails.module.css";
 import { mapToMessage } from "../../../helpers/validation";
 import Tags from "../../../components/Tags/Tags";
 
-function ItemDetails(props) {
+function ItemDetails() {
     const { id } = useParams();
     const [item, setItem] = useState(null);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
     const [mainImage, setMainImage] = useState(null);
 
-    const fetchItem = async () => {
+    const fetchItem = useCallback(async () => {
         try {
             const response = await axios.get(`/items-module/items/${id}`);
             const itemLocal = mapToItemDetails(response.data);
@@ -35,11 +35,11 @@ function ItemDetails(props) {
         }
         
         setLoading(false);
-    }
+    }, [id])
 
     useEffect(() => {
         fetchItem();
-    }, []);
+    }, [fetchItem]);
 
     return (
         <>

@@ -1,13 +1,13 @@
 import axios from "../../../axios-setup";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { mapToUser } from "../../../helpers/mapper";
 import { mapToMessage, validate } from "../../../helpers/validation";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import Input from "../../../components/Input/Input";
 import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
 
-function EditUser(props) {
+function EditUser() {
     const { id } = useParams();
     const [user, setUser] = useState(null);
     const [error, setError] = useState('');
@@ -49,25 +49,25 @@ function EditUser(props) {
         }
     });
 
-    const fetchUser = async () => {
+    const fetchUser = useCallback(async () => {
         try {
             const response = await axios.get(`/users-module/accounts/${id}`);
             const userLocal = mapToUser(response.data);
             setUser(userLocal);
-            setForm({
-                ...form,
+            setForm(prevForm => ({
+                ...prevForm,
                 id: {
                     value: userLocal.id
                 },
                 role: {
-                    ...form.role,
+                    ...prevForm.role,
                     value: userLocal.role
                 },
                 claims: {
-                    ...form.claims,
+                    ...prevForm.claims,
                     value: userLocal.claims.permissions
                 }
-            })
+            }));
         } catch (exception) {
             console.log(exception);
             let errorMessage = '';
@@ -78,7 +78,7 @@ function EditUser(props) {
         }
 
         setLoading(false);
-    }
+    }, [id])
 
     const changeHandler = (value, fieldName) => {
         const error = validate(form[fieldName].rules, value);
@@ -95,7 +95,7 @@ function EditUser(props) {
 
     useEffect(() => {
         fetchUser();
-    }, []);
+    }, [fetchUser]);
 
     const onSubmit = async (event) => {
         event.preventDefault();

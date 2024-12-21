@@ -1,5 +1,5 @@
 import axios from "../../../../axios-setup";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Gallery from "../../../../components/Gallery/Gallery";
 import Tags from "../../../../components/Tags/Tags";
@@ -8,7 +8,7 @@ import { mapToCurrencies, mapToItem } from "../../../../helpers/mapper";
 import { mapToMessage } from "../../../../helpers/validation";
 import ItemSaleForm from "../../ItemSaleForm";
 
-function ItemForSaleEdit(props) {
+function ItemForSaleEdit() {
     const { id } = useParams();
     const [item, setItem] = useState(null);
     const [currencies, setCurrencies] = useState([]);
@@ -16,7 +16,7 @@ function ItemForSaleEdit(props) {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const fetchItem = async () => {
+    const fetchItem = useCallback(async () => {
         try {
             const response = await axios.get(`/items-module/item-sales/${id}`);
             const itemLocal = mapToItem(response.data);
@@ -31,7 +31,7 @@ function ItemForSaleEdit(props) {
         }
         
         setLoading(false);
-    }
+    }, [id])
 
     const fetchCurrencies = async () => {
         try {
@@ -51,7 +51,7 @@ function ItemForSaleEdit(props) {
     useEffect(() => {
         fetchItem();
         fetchCurrencies();        
-    }, []);
+    }, [fetchItem]);
 
     const submit = async (form) => {
         await axios.post('/items-module/item-sales', form);

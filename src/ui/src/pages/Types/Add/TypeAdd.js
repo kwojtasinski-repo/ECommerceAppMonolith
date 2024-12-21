@@ -4,7 +4,7 @@ import { Color } from "../../../components/Notification/Notification";
 import useNotification from "../../../hooks/useNotification";
 import TypeForm from "../TypeForm";
 
-function TypeAdd(props) {
+function TypeAdd() {
     const navigate = useNavigate();
     const addNotification = useNotification().addNotification;
     const { addAction } = useOutletContext();

@@ -1,10 +1,15 @@
 export default function useCart(props) {
-    let cart = null;
+    let cart = [];
     let addItem = (item) => {};
     let removeItem = (item) => {};
     let clear = () => {};
     [cart, addItem, removeItem, clear] = localCart();
-    return [cart, addItem, removeItem, clear];
+    return {
+        cart,
+        addItem,
+        removeItem,
+        clear
+    };
 };
 
 const key = 'item-cart';

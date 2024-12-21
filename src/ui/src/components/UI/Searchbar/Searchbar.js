@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Searchbar() {
     const [term, setTerm] = useState('');
-    const inputRef = useRef(null);
+    const inputRef = useRef('');
     const navigate = useNavigate();
 
     const onKeyDownHandler = event => {
