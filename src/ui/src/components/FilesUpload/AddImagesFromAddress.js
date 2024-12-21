@@ -20,10 +20,18 @@ export default function AddImagesFromAddresses(props) {
     };
 
     useEffect(()=> {
+        if (!props.setShareImages) {
+            return;
+        }
+
+        if (!images.image.url) {
+            return;
+        }
+
         props.setShareImages([{
             ...images.image
         }])
-    }, [images]);
+    }, [images, props]);
 
     return (
         <div>

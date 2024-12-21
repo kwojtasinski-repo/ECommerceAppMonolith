@@ -31,9 +31,19 @@ export default function AddImages(props) {
                     </button>
                 </div>
                 </>
-            ) : (imageAddSource === 'addresses' ? 
+            ) : (
+                <>
+                    {imageAddSource === 'addresses' ? 
                         <AddImagesFromAddresses setShareImages = {props.setShareImages}/> : 
-                        <AddImagesFromFiles limit = {props.limitImages} setShareImages = {props.setShareImages} setLoadingImages = {props.setLoadingImages} />) }
+                        <AddImagesFromFiles limit = {props.limitImages} setShareImages = {props.setShareImages} setLoadingImages = {props.setLoadingImages} />}
+                        {props.imageError ?
+                            <div className="alert alert-danger mt-2 mb-2">
+                                <span>{props.imageError}</span>
+                            </div>
+                            : null
+                        }
+                </>)
+            }
         </div>
     )   
 }

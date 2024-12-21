@@ -13,7 +13,7 @@ function Gallery(props) {
             ));
             setItems(itemArrays);
         }
-    }, []);
+    }, [props.items]);
 
     const handleShowDialog = (event) => {
         if (!isOpen) {

@@ -63,6 +63,7 @@ function ItemForm(props) {
         },
     });
     const addNotification = useNotification().addNotification;
+    const [imageError, setImageError] = useState('');
 
     const changeHandler = useCallback((value, fieldName) => {
         setForm(prevFom => {
@@ -157,6 +158,12 @@ function ItemForm(props) {
     }
 
     const handleSendImages = () => {
+        if (isEmpty(shareImages) || shareImages.find(i => !i.url)) {
+            setImageError('Obrazki nie mogą mieć pustego adresu');
+            return;
+        }
+        setImageError('');
+
         setIsOpen(false);
         const imagesToUpdate = [...form.imagesUrl.value, ...shareImages];
         changeHandler(imagesToUpdate, 'imagesUrl');
@@ -164,6 +171,7 @@ function ItemForm(props) {
 
     const handleClosePopup = () => {
         setIsOpen(false);
+        setImageError('');
     }
 
     const handleAddImages = () => {
@@ -265,7 +273,7 @@ function ItemForm(props) {
                                   type = {Type.info}
                                   loading = {loadingImages}
                                   content = {<>
-                                        <AddImages setShareImages = {setShareImages} limit = {limitImages} setLoadingImages = {setLoadingImages}  /> 
+                                        <AddImages setShareImages = {setShareImages} limit = {limitImages} setLoadingImages = {setLoadingImages} imageError = {imageError} /> 
                                       </>}
                     /> }
             <form onSubmit={submit} >

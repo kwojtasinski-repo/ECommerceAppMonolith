@@ -19,10 +19,14 @@ export default function AddImagesFromFiles(props) {
     }
     
     useEffect(()=> {
+        if (!props.setShareImages) {
+            return;
+        }
+
         props.setShareImages([
             ...images
         ])
-    }, [images]);
+    }, [images, props]);
 
     return (
         <div>
