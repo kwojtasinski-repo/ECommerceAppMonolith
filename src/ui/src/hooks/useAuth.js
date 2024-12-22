@@ -3,7 +3,7 @@ import AuthContext from "../context/AuthContext";
 
 export default function useAuth() {
     const authContext = useContext(AuthContext);
-    const auth = authContext.user ? authContext.user : JSON.parse(window.localStorage.getItem('token-data'));
+    const auth = authContext.user ? authContext.user : parseTokenData();
     
     const setAuth = (user) => {
         if (user) {
@@ -20,3 +20,11 @@ export default function useAuth() {
 
     return [auth, setAuth];
 };
+
+const parseTokenData = () => {
+    try {
+        return JSON.parse(window.localStorage.getItem('token-data'));
+    } catch {
+        return null;
+    }
+}

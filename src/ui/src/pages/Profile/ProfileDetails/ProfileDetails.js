@@ -8,7 +8,7 @@ import { Color } from "../../../components/Notification/Notification";
 
 function ProfileDetails() {
     const [auth, setAuth] = useAuth();
-    const [email, setEmail] = useState(auth.email);
+    const [email, setEmail] = useState(auth?.email ?? '');
     const [password, setPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [newPasswordConfirm, setNewPasswordConfirm] = useState('');

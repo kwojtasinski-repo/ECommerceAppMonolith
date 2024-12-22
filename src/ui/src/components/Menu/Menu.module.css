@@ -29,7 +29,11 @@
     text-decoration: underline;
 }
 
-.onHover {
+.link {
+    transition: filter 0.3s ease;
+}
+
+.link:hover {
     filter: brightness(150%);
 }
 

@@ -116,16 +116,8 @@ function Menu() {
 }
 
 function Link(props) {
-    const [onHover, setOnHover] = useState('');
-
-    const onMouseEnter = () => {
-        setOnHover(style.onHover)
-    };
-
-    const onMouseLeave = () => setOnHover('');
-
     return (
-        <NavLink onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} to={props.to} className={`${props.className} ${onHover}`} onClick={props.onClick} >
+        <NavLink to={props.to} className={`${props.className} ${style.link}`} onClick={props.onClick} >
             {props.children}
         </NavLink>
     )
