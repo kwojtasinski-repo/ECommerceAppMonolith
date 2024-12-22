@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import ReducerContext from '../../context/ReducerContext';
 import useAuth from '../../hooks/useAuth';
@@ -132,24 +132,26 @@ function Link(props) {
 }
 
 export function DropdownMenu(props) {
-    const [id, setId] = useState(createGuid('N'));
+    const id = useState(() => createGuid('N'))[0];
     const [menuOpened, setMenuOpened] = useState(false);
 
     const clickMenuHandler = () => {
-        setMenuOpened(!menuOpened);
-    }
-    
-    const onClick = (event) => {
-        setMenuOpened(false);
-    }
+        setMenuOpened((prev) => !prev);
+    };
+
+    const onClickOutside = useCallback((event) => {
+        if (event.target.id !== id) {
+            setMenuOpened(false);
+        }
+    }, [id]);
 
     useEffect(() => {
-        document.body.addEventListener('click', function(e) {
-            if (e.target.id !== id) {
-                onClick(e);
-            }
-        });
-    }, [])
+        document.body.addEventListener('click', onClickOutside);
+
+        return () => {
+            document.body.removeEventListener('click', onClickOutside);
+        };
+    }, [id, onClickOutside]);
     
     return (
         <Nav className={props.classNameMenu}
