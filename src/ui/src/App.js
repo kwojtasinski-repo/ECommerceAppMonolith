@@ -53,6 +53,7 @@ import EditBrand from './pages/Brands/Edit/EditBrand';
 import AddBrand from './pages/Brands/Add/AddBrand';
 import Users from './pages/Users/Users';
 import EditUser from './pages/Users/EditUser/EditUser';
+import RequirePermission from './hoc/RequirePermission';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -86,18 +87,45 @@ function App() {
         </Route>
 
         <Route element = {<RequireAuth />}>
-          <Route path="/users/edit/:id" element = {<EditUser />}/>
-          <Route path="/users" element = {<Users />}/>
 
-          <Route path='/brands' element = {<Brands />} >
-            <Route path='edit/:id' element = {<EditBrand />} />
-            <Route path='add' element = {<AddBrand />} />
+          <Route element = {<RequirePermission policies = {['items']} /> }>
+            <Route path='/brands' element = {<Brands />} >
+              <Route path='edit/:id' element = {<EditBrand />} />
+              <Route path='add' element = {<AddBrand />} />
+            </Route>
+
+            <Route path='/types' element = {<Types />} >
+              <Route path='edit/:id' element = {<TypeEdit />} />
+              <Route path='add' element = {<TypeAdd />} />
+            </Route>
+
+            <Route path='/items' element = {<Items />} />
+            <Route path='/items/edit/:id' element = {<EditItem /> } />
+            <Route path='/items/add' element = {<AddItem />}/>
+            <Route path='/items/details/:id' element = {<ItemDetails /> } />
           </Route>
 
-          <Route path='/types' element = {<Types />} >
-            <Route path='edit/:id' element = {<TypeEdit />} />
-            <Route path='add' element = {<TypeAdd />} />
+          <Route element = {<RequirePermission policies = {['items', 'item-sale']} /> }>
+            <Route path='/items/sale/edit/:id' element = {<ItemForSaleEdit />  } />
+            <Route path='/items/for-sale/:id' element = {<PutItemForSale /> } />
+            <Route path='/items/sale' element = {<ItemsForSale />  } >
+              <Route path=':term' element = {<ItemsForSale />  }/>
+              <Route path='' element = {<ItemsForSale />  }/>
+            </Route>
           </Route>
+
+          <Route element = {<RequirePermission policies = {['currencies']} /> }>
+            <Route path='/currencies' element = {<Currencies />} >
+              <Route path='edit/:id' element = {<EditCurrency />} />
+              <Route path='add' element = {<AddCurrency />} />
+            </Route>
+          </Route>
+
+          <Route element = {<RequirePermission policies = {['users']} /> }>
+            <Route path="/users/edit/:id" element = {<EditUser />}/>
+            <Route path="/users" element = {<Users />}/>
+          </Route>
+
 
           <Route path='/payments/add/:id' element = {<AddPayment />} >
             <Route path='change-currency' element = {<ChangeCurrency/>} />
@@ -112,17 +140,6 @@ function App() {
           <Route path='/orders/:id' element = {<Order/>}/>
           <Route path='/orders' element = {<MyOrders/>} />
           <Route path='/archive/items/:id' element = {<OrderItemArchive /> } />
-          <Route path='/items/sale/edit/:id' element = {<ItemForSaleEdit />  } />
-
-          <Route path='/items/sale' element = {<ItemsForSale />  } >
-            <Route path=':term' element = {<ItemsForSale />  }/>
-            <Route path='' element = {<ItemsForSale />  }/>
-          </Route>
-
-          <Route path='/items/details/:id' element = {<ItemDetails /> } />
-          <Route path='/items/for-sale/:id' element = {<PutItemForSale /> } />
-          <Route path='/items/edit/:id' element = {<EditItem /> } />
-          <Route path='/items/add' element = {<AddItem />}/>
 
           <Route path="profile" element = {<Profile/>}  >
             <Route path="contact-data" element = {  <ContactData /> } >
@@ -133,13 +150,6 @@ function App() {
           </Route>
           
           <Route path='/cart/summary' element = {<CartSummary/>} />
-
-          <Route path='/currencies' element = {<Currencies />} >
-            <Route path='edit/:id' element = {<EditCurrency />} />
-            <Route path='add' element = {<AddCurrency />} />
-          </Route>
-
-          <Route path='/items' element = {<Items />} />
         </Route>
 
 
