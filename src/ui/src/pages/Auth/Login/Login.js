@@ -60,7 +60,8 @@ function Login() {
                         value={email} 
                         onChange={event => setEmail(event.target.value)} 
                         type="email" 
-                        className="form-control" />
+                        className="form-control" 
+                        autoComplete="off" />
                 </div>
                 <div className="form-group">
                     <label htmlFor="password-input">Hasło</label>
@@ -69,7 +70,8 @@ function Login() {
                         value={password} 
                         onChange={event => setPassword(event.target.value)} 
                         type="password" 
-                        className="form-control" />
+                        className="form-control"
+                        autoComplete="off" />
                 </div>
 
                 {valid === false ? (

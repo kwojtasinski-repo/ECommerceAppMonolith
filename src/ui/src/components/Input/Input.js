@@ -11,7 +11,8 @@ const InputTextArea = props => {
                 value={props.value}
                 onChange={event => props.onChange(event.target.value)}
                 type={props.type}
-                className={`form-control ${props.error && props.showError ? 'is-invalid' : ''}`}  />
+                className={`form-control ${props.error && props.showError ? 'is-invalid' : ''}`} 
+                autoComplete={props.autoComplete} />
             <div className="invalid-feedback">
                 {props.error}
             </div>
@@ -29,7 +30,8 @@ const InputText = props => {
                 type = {props.type}
                 value = {props.value}
                 className = {`form-control ${props.error && props.showError ? 'is-invalid' : ''}`}
-                onChange = { event => props.onChange(event.target.value) } />
+                onChange = { event => props.onChange(event.target.value) }
+                autoComplete={props.autoComplete} />
             <div className="invalid-feedback">
                 {props.error}
             </div>
@@ -77,7 +79,8 @@ const InputZipCode = props => {
                 onKeyPress = { keyPress }
                 onKeyUp = { keyUp }
                 onChange = { event => props.onChange(event.target.value) } 
-                pattern = { props.pattern } />
+                pattern = { props.pattern }
+                autoComplete={props.autoComplete} />
             <div className="invalid-feedback">
                 {props.error}
             </div>
@@ -94,7 +97,8 @@ const InputSelect = props => {
                 id={htmlFor}
                 value={props.value} 
                 onChange={event => props.onChange(event.target.value)}
-                className={`form-control ${props.error && props.showError ? 'is-invalid' : ''}`}>
+                className={`form-control ${props.error && props.showError ? 'is-invalid' : ''}`}
+                autoComplete={props.autoComplete}>
                     {props.options.map(option => 
                     <option value={option.value} key={option.value}>{option.label}</option>
                     )}
@@ -131,7 +135,8 @@ const InputCheckBox = props => {
                         value={option.value}
                         checked={props.value.find(o => o === option.value)}
                         onChange={changeFeatureHandler}
-                        id={option.value} />
+                        id={option.value}
+                        autoComplete={props.autoComplete} />
                     <label className="custom-control-label" htmlFor={option.value} >{option.label}</label>
                 </div>
             ))}
@@ -154,7 +159,8 @@ const InputInteger = props => {
                    value = {props.value}
                    className = {`form-control ${props.error && props.showError ? 'is-invalid' : ''}`}
                    onChange = { event => props.onChange(event.target.value) } 
-                   onInput = {event => onInput(event.target.value)} />
+                   onInput = {event => onInput(event.target.value)}
+                   autoComplete={props.autoComplete} />
             <div className="invalid-feedback">
                 {props.error}
             </div>

@@ -115,7 +115,8 @@ function Register() {
                         value = {form.email.value}
                         onChange = {val => changeHandler(val, 'email')}
                         error = {form.email.error}
-                        showError = {form.email.showError} />
+                        showError = {form.email.showError}
+                        autoComplete="off" />
 
                     <Input
                         label = "Hasło"                    
@@ -123,13 +124,14 @@ function Register() {
                         value = {form.password.value}
                         onChange = {val => changeHandler(val, 'password')}
                         error = {form.password.error}
-                        showError = {form.password.showError} />
+                        showError = {form.password.showError}
+                        autoComplete="off" />
 
                     {error ? (
-                        <div className="alert alert-danger">{error}</div>
+                        <div className="alert alert-danger mt-2">{error}</div>
                     ) : null}
 
-                    <div className="text-end">
+                    <div className="text-end mt-2">
                         <LoadingButton
                             loading={loading} 
                             disabled={!valid} >
