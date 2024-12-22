@@ -137,7 +137,8 @@ function ProfileDetails() {
                     <input name="password" 
                            onChange={event => setPassword(event.target.value)} 
                            type="password" 
-                           className={`form-control ${errors.password ? 'is-invalid' : ''}`} />
+                           className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                           autoComplete="off" />
                     <div className="invalid-feedback">
                         {errors.password}
                     </div>
@@ -147,7 +148,8 @@ function ProfileDetails() {
                     <input name="password" 
                            onChange={event => setNewPassword(event.target.value)} 
                            type="password" 
-                           className={`form-control ${errors.newPassword ? 'is-invalid' : ''}`} />
+                           className={`form-control ${errors.newPassword ? 'is-invalid' : ''}`}
+                           autoComplete="off" />
                     <div className="invalid-feedback">
                         {errors.newPassword}
                     </div>
@@ -157,7 +159,8 @@ function ProfileDetails() {
                     <input name="password" 
                            onChange={event => setNewPasswordConfirm(event.target.value)} 
                            type="password" 
-                           className={`form-control ${errors.newPasswordConfirm ? 'is-invalid' : ''}`} />
+                           className={`form-control ${errors.newPasswordConfirm ? 'is-invalid' : ''}`}
+                           autoComplete="off" />
                     <div className="invalid-feedback">
                         {errors.newPasswordConfirm}
                     </div>

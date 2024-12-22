@@ -2,7 +2,7 @@ import { mapCodeToMessage } from "./errorCodeMapper";
 import { isEmpty } from "./stringExtensions"
 
 export function validateEmail(text) {
-    const pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}(\.[0-9]{1,3}){3}])|(([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}))$/;
     return pattern.test(text);
 }
 
@@ -76,19 +76,19 @@ export function mapToMessage(code, status) {
         return "Coś poszło nie tak";
     }
 
-    if (status == 401) {
+    if (status === 401) {
         return "Brak autoryzacji, spróbuj zalogować się";
     }
 
-    if (status == 403) {
+    if (status === 403) {
         return "Brak dostępu do zasobu";
     }
 
-    if (status == 404) {
+    if (status === 404) {
         return "Sprawdź podany url";
     }
 
-    if (status == 400) {
+    if (status === 400) {
         return mapCodeToMessage(code);
     }
 }
