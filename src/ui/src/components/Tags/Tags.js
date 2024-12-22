@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import style from "./Tags.module.css"
 import { isEmpty } from "../../helpers/stringExtensions";
@@ -43,6 +43,8 @@ function Tags(props) {
         const tagsFiltered = props.tags.filter(t => t !== tagText);
         props.setShareTags(tagsFiltered);
     }
+
+    useEffect(() => setCanEdit(props.canEdit), [props.canEdit])
 
     return (
         <div className={style.container}>

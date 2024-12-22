@@ -2,12 +2,12 @@ import PropTypes from "prop-types";
 import styles from "./Notification.module.css";
 import { ReactComponent as Times } from "./times.svg";
 import cn from "classnames";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useNotification from "../../hooks/useNotification";
 import createContainer from "./createContainer/createContainer";
 import { createPortal } from "react-dom";
 
-let timeToClose = 3000;
+const timeToClose = 3000;
 const container = createContainer();
 
 function Notification(props) {
@@ -18,16 +18,29 @@ function Notification(props) {
         event.preventDefault();
         deleteNotification(id);
     };
+    
+    const autoCloseNotification = useCallback((timeToClose) => {
+        if (!timeToClose) {
+            return undefined;
+        }
+
+        return setTimeout(() => {
+            deleteNotification(id);
+        }, timeToClose);
+    }, [id, deleteNotification])
+
+    useEffect(() => setId(props.id), [props.id])
 
     useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            deleteNotification(id);
-        }, props.timeToClose);
-        
+        if (!props.timeToClose) {
+            return;
+        }
+
+        const timeoutId = autoCloseNotification(props.timeToClose);
         return () => {
             clearTimeout(timeoutId);
         }
-    }, []);
+    }, [autoCloseNotification, props.timeToClose]);
 
     return createPortal(
         <div className={cn([styles.notification, styles[props.color]])}>
