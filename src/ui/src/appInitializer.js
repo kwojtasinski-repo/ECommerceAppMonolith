@@ -1,12 +1,13 @@
 import axios from "./axios-setup";
+import { tokenData } from "./constants";
 
 const getUser = async () => {
-    const tokenData = window.localStorage.getItem('token-data');
-    if (!tokenData) {
+    const tokenDataFromStorage = window.localStorage.getItem(tokenData);
+    if (!tokenDataFromStorage) {
         return null;
     }
 
-    const parsedToken = parseTokenData(tokenData);
+    const parsedToken = parseTokenData(tokenDataFromStorage);
     if (!parsedToken) {
         return null;
     }

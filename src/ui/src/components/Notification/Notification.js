@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import styles from "./Notification.module.css";
 import { ReactComponent as Times } from "./times.svg";
-import cn from "classnames";
 import { useCallback, useEffect, useState } from "react";
 import useNotification from "../../hooks/useNotification";
 import createContainer from "./createContainer/createContainer";
@@ -43,7 +42,7 @@ function Notification(props) {
     }, [autoCloseNotification, props.timeToClose]);
 
     return createPortal(
-        <div className={cn([styles.notification, styles[props.color]])}>
+        <div className={`${styles.notification} ${styles[props.color]}`}>
             {props.text}
             <button onClick={onDelete} className={styles.closeButton}>
                 <Times height={16} />
