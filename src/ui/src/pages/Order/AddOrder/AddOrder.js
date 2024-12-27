@@ -2,7 +2,7 @@ import axios from "../../../axios-setup";
 import { useState } from "react";
 import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
 import Contacts from "../Contact/Contacts";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { mapToMessage } from "../../../helpers/validation";
 
 function AddOrder() {

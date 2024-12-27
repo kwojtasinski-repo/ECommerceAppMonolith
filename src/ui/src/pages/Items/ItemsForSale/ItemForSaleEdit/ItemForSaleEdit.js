@@ -1,6 +1,6 @@
 import axios from "../../../../axios-setup";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 import Gallery from "../../../../components/Gallery/Gallery";
 import Tags from "../../../../components/Tags/Tags";
 import LoadingIcon from "../../../../components/UI/LoadingIcon/LoadingIcon";

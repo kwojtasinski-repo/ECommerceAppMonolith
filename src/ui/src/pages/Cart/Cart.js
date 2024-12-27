@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router";
 import LoadingButton from "../../components/UI/LoadingButton/LoadingButton";
 import useCart from "../../hooks/useCart";
 import styles from "./Cart.module.css";

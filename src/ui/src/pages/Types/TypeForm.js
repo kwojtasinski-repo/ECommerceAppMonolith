@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 import Input from "../../components/Input/Input";
 import LoadingButton from "../../components/UI/LoadingButton/LoadingButton";
 import { mapToMessage, validate } from "../../helpers/validation";
@@ -62,7 +62,12 @@ function TypeForm(props) {
         setForm(prevForm => {
             const newForm = {...prevForm};
             for (const key in props.type) {
-                newForm[key].value = props.type[key];
+                if (newForm[key]) {
+                    newForm[key] = {
+                        ...newForm[key],
+                        value: props.type[key],
+                    };
+                }
             }
 
             return newForm

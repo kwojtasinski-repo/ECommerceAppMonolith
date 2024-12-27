@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import Items from "../../components/Items/Items";
 import axios from "../../axios-setup";
 import { mapToItems } from "../../helpers/mapper";

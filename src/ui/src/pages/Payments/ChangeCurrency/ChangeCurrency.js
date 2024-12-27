@@ -1,6 +1,6 @@
 import axios from "../../../axios-setup";
 import { useEffect, useState } from "react";
-import { NavLink, useNavigate, useOutletContext } from "react-router-dom";
+import { NavLink, useNavigate, useOutletContext } from "react-router";
 import { mapToCurrencies } from "../../../helpers/mapper";
 import { mapToMessage } from "../../../helpers/validation";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";

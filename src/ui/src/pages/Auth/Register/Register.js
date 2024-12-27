@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import Input from "../../../components/Input/Input";
 import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
 import { mapToMessage, validate } from "../../../helpers/validation";

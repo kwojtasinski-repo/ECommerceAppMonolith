@@ -1,6 +1,6 @@
 import axios from "../../axios-setup";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import styles from './Item.module.css';
 import Gallery from "../../components/Gallery/Gallery";
 import { mapToItem } from "../../helpers/mapper";

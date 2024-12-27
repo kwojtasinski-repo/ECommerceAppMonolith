@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router';
 import useAuth from '../hooks/useAuth';
 
 const RequirePermission = ({ children, policies = [], matchAny = false }) => {

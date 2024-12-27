@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { mapToCustomers } from "../../../helpers/mapper";
 import { mapToMessage } from "../../../helpers/validation";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router";
 import Popup, { Type } from "../../../components/Popup/Popup";
 
 function Contacts(props) {

@@ -1,5 +1,5 @@
 import axios from "../../../axios-setup";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router";
 import { useCallback, useEffect, useState } from "react";
 import { mapToUser } from "../../../helpers/mapper";
 import { mapToMessage, validate } from "../../../helpers/validation";

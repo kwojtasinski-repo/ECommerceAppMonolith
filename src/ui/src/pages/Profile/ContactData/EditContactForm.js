@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router";
 import axios from "../../../axios-setup";
 import { mapToCustomer } from "../../../helpers/mapper";
 import { mapToMessage } from "../../../helpers/validation";

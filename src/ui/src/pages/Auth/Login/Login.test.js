@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Login from "./Login";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router";
 import axios from "../../../axios-setup";
 import { mapCodeToMessage } from "../../../helpers/errorCodeMapper";
 

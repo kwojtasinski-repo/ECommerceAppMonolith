@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router";
 import styles from './CartSummary.module.css'
 import axios from "../../../axios-setup";
 import { mapToOrderItems } from "../../../helpers/mapper";

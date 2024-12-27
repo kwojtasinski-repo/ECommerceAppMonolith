@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 import Input from "../../components/Input/Input";
 import { Color } from "../../components/Notification/Notification";
 import Popup, { Type } from "../../components/Popup/Popup";

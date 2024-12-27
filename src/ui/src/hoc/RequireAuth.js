@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router";
 import { Color } from "../components/Notification/Notification";
 import useAuth from "../hooks/useAuth";
 import useNotification from "../hooks/useNotification";
@@ -11,6 +11,7 @@ const RequireAuth = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        debugger
         if (!auth || !auth.token) {
             setAuth();
             navigate('/login');

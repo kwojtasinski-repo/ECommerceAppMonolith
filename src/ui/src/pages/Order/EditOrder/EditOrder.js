@@ -1,6 +1,6 @@
 import axios from "../../../axios-setup";
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import { mapToCustomers, mapToOrder } from "../../../helpers/mapper";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import { mapToMessage } from "../../../helpers/validation";

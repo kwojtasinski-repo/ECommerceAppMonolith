@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import Brands from "./Brands";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router";
 import axios from "../../axios-setup";
 import { getSampleBrands } from "../../helpers/testFixtures";
 

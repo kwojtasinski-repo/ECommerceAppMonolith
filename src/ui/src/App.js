@@ -1,11 +1,11 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Routes, } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, } from 'react-router';
 import Layout from './components/Layout/Layout';
 import Header from './components/Header/Header';
 import Menu from './components/Menu/Menu';
 import Footer from './components/Footer/Footer';
 import Searchbar from './components/UI/Searchbar/Searchbar';
-import { Suspense, useReducer, useState } from 'react';
+import { Suspense, useEffect, useReducer, useState } from 'react';
 import ErrorBoundary from './hoc/ErrorBoundary';
 import { initialState, reducer } from './reducer';
 import AuthContext from './context/AuthContext';
@@ -54,10 +54,12 @@ import AddBrand from './pages/Brands/Add/AddBrand';
 import Users from './pages/Users/Users';
 import EditUser from './pages/Users/EditUser/EditUser';
 import RequirePermission from './hoc/RequirePermission';
+import axios from "./axios-setup";
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [notifications, setNotifications] = useState([]);
+  debugger
   
   const addNotification = (notification) => {
     const newNotification = [...notifications, notification]
@@ -66,6 +68,31 @@ function App() {
   const deleteNotification = (id) => {
     setNotifications(notifications.filter(n => n.id !== id));
   };
+
+  debugger
+
+  useEffect(() => {
+    debugger
+    initialize()
+      .then(response => {
+        if (!response) {
+          return;
+        }
+
+        debugger
+        dispatch({ type: "login", user: {
+          email: response.data.email,
+          userId: response.data.id,
+          claims: response.data.claims,
+          token: response.data.accessToken,
+          tokenExpiresDate: response.data.tokenExpiresDate
+        }})
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
 
   const header = (
     <Header >
@@ -170,7 +197,7 @@ function App() {
     <Router>
       <AuthContext.Provider value = {{
           user: state.user,
-          login: (user) => dispatch({ type: "login", user }),
+          login: (user) => { debugger; dispatch({ type: "login", user })},
           logout: () => dispatch({ type: "logout" })
       }}>
         <ReducerContext.Provider value={{
@@ -202,3 +229,54 @@ function App() {
 }
 
 export default App;
+
+const initialize = () => {
+  debugger
+  const tokenData = window.localStorage.getItem('token-data');
+  if (!tokenData) {
+    return Promise.resolve(null);
+  }
+
+  const parsedToken = parseTokenData(tokenData);
+  if (!parsedToken) {
+    return Promise.resolve(null);
+  }
+
+  const token = parsedToken.token;
+  if (!token) {
+    Promise.resolve(null);
+  }
+
+  const jwt = parseJwt(token);
+  debugger
+  return axios.get('/users-module/account')
+    .then(response => {
+      return Promise.resolve({
+        ...response,
+        data: {
+          ...response.data,
+          accessToken: token,
+          tokenExpiresDate: jwt.exp ?? 0
+        }
+       });
+    })
+    .catch((err) => Promise.reject(err));
+}
+
+const parseTokenData = (tokenData) => {
+  try {
+    return JSON.parse(tokenData);
+  } catch {
+    return null
+  }
+}
+
+function parseJwt (token) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
+}

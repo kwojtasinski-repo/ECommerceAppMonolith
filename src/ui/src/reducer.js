@@ -1,4 +1,5 @@
 export const reducer = (state, action) => {
+    debugger
     switch(action.type) {
         case 'login' :
             return { ...state, user: action.user }

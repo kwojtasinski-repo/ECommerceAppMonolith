@@ -1,6 +1,6 @@
 import axios from "../../../axios-setup";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 import { mapToBrands, mapToItemDetails, mapToTypes } from "../../../helpers/mapper";
 import ItemForm from "../ItemForm";
 import { mapToMessage } from "../../../helpers/validation";

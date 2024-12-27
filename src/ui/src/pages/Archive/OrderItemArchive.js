@@ -1,6 +1,6 @@
 import axios from "../../axios-setup";
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import styles from './OrderItemArchive.module.css';
 import Gallery from "../../components/Gallery/Gallery";
 import { mapToOrderItem } from "../../helpers/mapper";

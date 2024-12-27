@@ -1,5 +1,5 @@
 import axios from "../../../axios-setup";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router";
 import { useCallback, useEffect, useState } from "react";
 import { mapToItemDetails } from "../../../helpers/mapper";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 import Input from "../../components/Input/Input";
 import LoadingButton from "../../components/UI/LoadingButton/LoadingButton";
 import { mapToMessage, validate } from "../../helpers/validation";
@@ -60,11 +60,16 @@ function BrandForm(props) {
 
     useEffect(() => {
         setForm(prevForm => {
+            const updatedForm = { ...prevForm };
             for (const key in props.brand) {
-                prevForm[key].value = props.brand[key];
+                if (updatedForm[key]) {
+                    updatedForm[key] = {
+                        ...updatedForm[key],
+                        value: props.brand[key],
+                    };
+                }
             }
-            
-            return prevForm;
+            return updatedForm;
         });
     }, [props.brand]);
 

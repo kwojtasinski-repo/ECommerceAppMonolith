@@ -1,6 +1,6 @@
 import { render, waitFor } from "@testing-library/react";
 import CartSummary from "./CartSummary";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router";
 import axios from "../../../axios-setup";
 import { getSampleOrderItems } from "../../../helpers/testFixtures";
 

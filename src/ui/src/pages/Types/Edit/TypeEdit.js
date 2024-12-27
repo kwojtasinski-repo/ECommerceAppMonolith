@@ -1,6 +1,6 @@
 import axios from "../../../axios-setup";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router";
 import { Color } from "../../../components/Notification/Notification";
 import { mapToType } from "../../../helpers/mapper";
 import { mapToMessage } from "../../../helpers/validation";

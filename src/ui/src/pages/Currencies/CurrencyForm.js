@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { mapToMessage, validate } from "../../helpers/validation";
 import Input from "../../components/Input/Input";
 import LoadingButton from "../../components/UI/LoadingButton/LoadingButton";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 
 function CurrencyForm(props) {
     const [loading, setLoading] = useState(false);
@@ -68,7 +68,12 @@ function CurrencyForm(props) {
         setForm(prevForm => {
             const newForm = {...prevForm};
             for (const key in props.currency) {
-                newForm[key].value = props.currency[key];
+                if (newForm[key]) {
+                    newForm[key] = {
+                        ...newForm[key],
+                        value: props.currency[key],
+                    };
+                }
             }
             return newForm;
         });

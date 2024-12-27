@@ -2,7 +2,7 @@ import axios from "../../../axios-setup";
 import { useEffect, useState } from "react";
 import { mapToOrders } from "../../../helpers/mapper";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 import { mapToMessage } from "../../../helpers/validation";
 
 function MyOrders() {

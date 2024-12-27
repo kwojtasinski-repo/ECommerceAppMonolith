@@ -1,5 +1,5 @@
 import styles from './Item.module.css'
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import useCart from '../../../hooks/useCart';
 import ReducerContext from '../../../context/ReducerContext';
 import { useContext } from 'react';

@@ -1,6 +1,6 @@
 import CurrencyForm from "../CurrencyForm";
 import axios from "../../../axios-setup";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router";
 import useNotification from "../../../hooks/useNotification";
 import { Color } from "../../../components/Notification/Notification";
 

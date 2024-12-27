@@ -2,7 +2,7 @@ import axios from "../../../axios-setup";
 import { useEffect, useState } from "react";
 import ItemForm from "../ItemForm";
 import { mapToBrands, mapToTypes } from "../../../helpers/mapper";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 function AddItem() {
     const [brands, setBrands] = useState([]);

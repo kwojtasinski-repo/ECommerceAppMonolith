@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import { useNavigate, useOutletContext, useParams } from 'react-router';
 import axios from "../../../axios-setup";
 import { Color } from "../../../components/Notification/Notification";
 import { mapToCurrency } from "../../../helpers/mapper";
