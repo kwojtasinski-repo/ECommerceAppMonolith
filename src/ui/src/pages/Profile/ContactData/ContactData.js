@@ -7,6 +7,7 @@ import { mapToCustomers } from "../../../helpers/mapper";
 import { mapToMessage } from "../../../helpers/validation";
 
 function ContactData() {
+    const showDataId = 'show-data';
     const [loading, setLoading] = useState(true);
     const [customers, setCustomers] = useState([]);
     const [currentId, setCurrentId] = useState();
@@ -41,6 +42,10 @@ function ContactData() {
         }
 
         setLoading(false);
+    }
+
+    const scrollToContactData = () => {
+        document.getElementById(showDataId).scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     const clickHandler = (id) => {
@@ -81,6 +86,8 @@ function ContactData() {
                     <div>
                         <NavLink to = "add" className="btn btn-primary mb-2" >Dodaj nowy kontakt</NavLink>
                     </div>
+
+                    <div id={showDataId}></div>
 
                     {error ? (
                         <div className="alert alert-danger">{error}</div>
@@ -130,7 +137,7 @@ function ContactData() {
                                         <td>{c.nip}</td>
                                         <td>{c.phoneNumber}</td>
                                         <td>
-                                            <NavLink className="btn btn-warning" end to={`edit/${c.id}`} >Edytuj</NavLink>
+                                            <NavLink className="btn btn-warning" end to={`edit/${c.id}`} onClick={() => scrollToContactData()}>Edytuj</NavLink>
                                         </td>
                                         <td>
                                             <button className="btn btn-danger" onClick={() => clickHandler(c.id)}>Usuń</button>
