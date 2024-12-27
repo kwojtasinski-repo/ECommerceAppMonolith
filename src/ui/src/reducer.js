@@ -14,7 +14,7 @@ export const reducer = (state, action) => {
             events.push(action.currentEvent);
             return { ...state, events: events }
         case 'initialized' :
-            return { ...state, initializing: false }
+            return { ...state, user: action?.user ?? null, initializing: false }
         default :
             throw new Error(`Action ${action.type} doesnt exists.`);
     }

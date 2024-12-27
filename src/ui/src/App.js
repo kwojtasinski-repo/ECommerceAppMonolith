@@ -54,7 +54,7 @@ import AddBrand from './pages/Brands/Add/AddBrand';
 import Users from './pages/Users/Users';
 import EditUser from './pages/Users/EditUser/EditUser';
 import RequirePermission from './hoc/RequirePermission';
-import axios from "./axios-setup";
+import initializeApp from './appInitializer';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -68,30 +68,21 @@ function App() {
     setNotifications(notifications.filter(n => n.id !== id));
   };
 
+  const intialize = async () => {
+    try {
+      const app = await initializeApp()
+      dispatch({ type: 'initialized', user: app.user });
+    } catch {
+      dispatch('initialized');
+    }
+  };
+
   useEffect(() => {
     if (!state.initializing) {
       return;
     }
 
-    initialize()
-      .then(response => {
-        if (!response) {
-          return;
-        }
-
-        dispatch({ type: "login", user: {
-          email: response.data.email,
-          userId: response.data.id,
-          claims: response.data.claims,
-          token: response.data.accessToken,
-          tokenExpiresDate: response.data.tokenExpiresDate
-        }});
-        dispatch({ type: "initialized" });
-      })
-      .catch((err) => {
-        console.error(err);
-        dispatch({ type: "initialized" });
-      });
+    intialize();
   }, [state.initializing]);
 
   const header = (
@@ -230,52 +221,3 @@ function App() {
 }
 
 export default App;
-
-const initialize = () => {
-  const tokenData = window.localStorage.getItem('token-data');
-  if (!tokenData) {
-    return Promise.resolve(null);
-  }
-
-  const parsedToken = parseTokenData(tokenData);
-  if (!parsedToken) {
-    return Promise.resolve(null);
-  }
-
-  const token = parsedToken.token;
-  if (!token) {
-    Promise.resolve(null);
-  }
-
-  const jwt = parseJwt(token);
-  return axios.get('/users-module/account')
-    .then(response => {
-      return Promise.resolve({
-        ...response,
-        data: {
-          ...response.data,
-          accessToken: token,
-          tokenExpiresDate: (jwt.exp ?? 0) * 1000
-        }
-       });
-    })
-    .catch((err) => Promise.reject(err));
-}
-
-const parseTokenData = (tokenData) => {
-  try {
-    return JSON.parse(tokenData);
-  } catch {
-    return null
-  }
-}
-
-function parseJwt (token) {
-  var base64Url = token.split('.')[1];
-  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
-
-  return JSON.parse(jsonPayload);
-}
