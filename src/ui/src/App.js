@@ -59,7 +59,6 @@ import axios from "./axios-setup";
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [notifications, setNotifications] = useState([]);
-  debugger
   
   const addNotification = (notification) => {
     const newNotification = [...notifications, notification]
@@ -69,30 +68,31 @@ function App() {
     setNotifications(notifications.filter(n => n.id !== id));
   };
 
-  debugger
-
   useEffect(() => {
-    debugger
+    if (!state.initializing) {
+      return;
+    }
+
     initialize()
       .then(response => {
         if (!response) {
           return;
         }
 
-        debugger
         dispatch({ type: "login", user: {
           email: response.data.email,
           userId: response.data.id,
           claims: response.data.claims,
           token: response.data.accessToken,
           tokenExpiresDate: response.data.tokenExpiresDate
-        }})
+        }});
+        dispatch({ type: "initialized" });
       })
       .catch((err) => {
         console.error(err);
+        dispatch({ type: "initialized" });
       });
-  }, []);
-
+  }, [state.initializing]);
 
   const header = (
     <Header >
@@ -197,8 +197,9 @@ function App() {
     <Router>
       <AuthContext.Provider value = {{
           user: state.user,
-          login: (user) => { debugger; dispatch({ type: "login", user })},
-          logout: () => dispatch({ type: "logout" })
+          login: (user) => dispatch({ type: "login", user }),
+          logout: () => dispatch({ type: "logout" }),
+          intializing: state.initializing
       }}>
         <ReducerContext.Provider value={{
           state: state,
@@ -231,7 +232,6 @@ function App() {
 export default App;
 
 const initialize = () => {
-  debugger
   const tokenData = window.localStorage.getItem('token-data');
   if (!tokenData) {
     return Promise.resolve(null);
@@ -248,7 +248,6 @@ const initialize = () => {
   }
 
   const jwt = parseJwt(token);
-  debugger
   return axios.get('/users-module/account')
     .then(response => {
       return Promise.resolve({
@@ -256,7 +255,7 @@ const initialize = () => {
         data: {
           ...response.data,
           accessToken: token,
-          tokenExpiresDate: jwt.exp ?? 0
+          tokenExpiresDate: (jwt.exp ?? 0) * 1000
         }
        });
     })

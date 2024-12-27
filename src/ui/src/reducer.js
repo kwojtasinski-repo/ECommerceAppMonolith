@@ -1,5 +1,4 @@
 export const reducer = (state, action) => {
-    debugger
     switch(action.type) {
         case 'login' :
             return { ...state, user: action.user }
@@ -14,6 +13,8 @@ export const reducer = (state, action) => {
 
             events.push(action.currentEvent);
             return { ...state, events: events }
+        case 'initialized' :
+            return { ...state, initializing: false }
         default :
             throw new Error(`Action ${action.type} doesnt exists.`);
     }
@@ -22,5 +23,6 @@ export const reducer = (state, action) => {
 export const initialState = {
     user: null,
     currentEvent: '',
-    events: []
+    events: [],
+    initializing: true
 };

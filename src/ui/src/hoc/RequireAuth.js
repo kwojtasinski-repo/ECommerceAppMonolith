@@ -4,16 +4,14 @@ import useAuth from "../hooks/useAuth";
 import useNotification from "../hooks/useNotification";
 import { useEffect, useState } from "react";
 
-const RequireAuth = ({ children }) => {
+const RequireAuth = () => {
     const [auth, setAuth] = useAuth();
     const addNotification = useNotification().addNotification;
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        debugger
         if (!auth || !auth.token) {
-            setAuth();
             navigate('/login');
             setLoading(false);
             return;

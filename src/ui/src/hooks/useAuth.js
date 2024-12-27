@@ -1,12 +1,11 @@
-import { useCallback, useContext } from "react";
+import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
 export default function useAuth() {
     const authContext = useContext(AuthContext);
     const auth = authContext.user;
     
-    const setAuth = useCallback((user) => {
-        debugger
+    const setAuth = (user) => {
         if (user) {
             //login
             authContext.login(user);
@@ -17,7 +16,7 @@ export default function useAuth() {
             console.log('logout');
             window.localStorage.removeItem('token-data');
         }
-    }, [authContext]);
+    };
 
     return [auth, setAuth];
 };
