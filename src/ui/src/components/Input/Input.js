@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createGuid } from "../../helpers/createGuid";
 import { isEmpty } from "../../helpers/stringExtensions";
 
@@ -40,33 +41,44 @@ const InputText = props => {
 }
 
 const InputZipCode = props => {
+    const [value, setValue] = useState(props.value || '');
     const htmlFor = replacePolishCharacters(props.label) + '-input';
+    const pattern="^\\d{1,2}(?:\\-\\d{0,3})?$";
+    const regex = new RegExp(pattern);
 
-    const keyPress = event => {
-        const regex = new RegExp(pattern);
-        const key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-        const newValue = event.target.value + key;
-        
-        if (!regex.test(newValue)) {
-            event.preventDefault ? event.preventDefault() : event.returnValue = false;
-        }
-    }
+    const handleSetNextValue = (nextValue) => {  
+        setValue(nextValue);
+        props.onChange(nextValue);
+    };
 
-    const keyUp = event => {
-        var key = event.keyCode;
-
-        if (key === 8 || key === 46) {
+    const keyDown = event => {
+        if (event.key === 'Backspace' || event.key === 'Delete') {
             return;
         }
 
-        let value = event.target.value;
-        
-        if (value.length === 2) {
+        if (event.key === '-') {
+            event.preventDefault();
+            return;
+        }
+
+        const key = event.key;
+        let nextValue = event.target.value;
+        if (nextValue.length === 2) {
             event.target.value += '-';
+            nextValue += '-';
+        }
+        nextValue += key;
+        
+        if (!regex.test(nextValue)) {
+            event.preventDefault();
+            return;
         }
     }
 
-    const pattern="^\\d{1,2}(?:\\-\\d{0,3})?$";
+    const handleChange = event => {
+        let nextValue = event.target.value;
+        handleSetNextValue(nextValue);
+    };
 
     return (
         <div className="form-group">
@@ -74,11 +86,10 @@ const InputZipCode = props => {
             <input 
                 id={htmlFor}
                 type = {props.type}
-                value = {props.value}
+                value={value}
                 className = {`form-control ${props.error && props.showError ? 'is-invalid' : ''}`}
-                onKeyPress = { keyPress }
-                onKeyUp = { keyUp }
-                onChange = { event => props.onChange(event.target.value) } 
+                onKeyDown= { keyDown }
+                onChange = { event => handleChange(event) } 
                 pattern = { props.pattern }
                 autoComplete={props.autoComplete} />
             <div className="invalid-feedback">
