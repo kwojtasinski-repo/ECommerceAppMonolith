@@ -1,3 +1,4 @@
+import logging
 import numpy as np
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import Model
@@ -5,6 +6,7 @@ from tensorflow.keras.layers import Embedding, LSTM, Dense, Concatenate, Input, 
 from typing import List, Dict
 from app.schemas import PredictionRequest, PredictionResult, PredictionResponse
 
+logger = logging.getLogger(__name__)
 
 # Main function that orchestrates the prediction
 async def predict_purchase(request: PredictionRequest) -> PredictionResponse:
@@ -78,7 +80,7 @@ def adjust_frequency_data(purchase_history: List[List[int]], product_frequencies
 # Function to create the optimized model
 def create_optimized_model(input_dim: int, output_dim: int, max_seq_len: int) -> Model:
     product_input = Input(shape=(max_seq_len,), dtype='int32', name='product_input')
-    product_embedding = Embedding(input_dim=input_dim, output_dim=32, input_length=max_seq_len)(product_input)
+    product_embedding = Embedding(input_dim=input_dim, output_dim=32)(product_input)
     lstm_out = Bidirectional(LSTM(64, return_sequences=False))(product_embedding)
     
     frequency_input = Input(shape=(max_seq_len,), dtype='float32', name='frequency_input')
@@ -100,8 +102,8 @@ def trainModel(model, padded_X: np.ndarray, padded_frequencies: np.ndarray, labe
     loss, accuracy = model.evaluate(
         [padded_X, padded_frequencies], 
         labels)
-    print(f"Test Loss: {loss}")
-    print(f"Test Accuracy: {accuracy}")
+    logger.info(f"Test Loss: {loss}")
+    logger.info(f"Test Accuracy: {accuracy}")
 
 # Generate predictions (mock predictions for now)
 def generate_predictions(model: Model, padded_X: np.ndarray, padded_frequencies: np.ndarray, top_k: int) -> List[List[int]]:
@@ -115,6 +117,7 @@ def format_predictions(top_predictions: np.ndarray, index_to_product: Dict[int, 
     results = []
     for i, pred in enumerate(top_predictions):
         product_predictions = [index_to_product.get(idx, -1) for idx in pred if idx is not None]
+        # if -1 not include in request
         if latest:
             results = [PredictionResult(week=len(purchase_history), predictions=product_predictions)]
         else:
