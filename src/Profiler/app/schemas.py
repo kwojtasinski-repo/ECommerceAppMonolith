@@ -10,8 +10,9 @@ class Item(BaseModel):
 class PredictionRequest(BaseModel):
     purchase_history: List[List[int]]
     product_frequencies: List[Dict[int, int]]
-    top_k: Optional[int] = 3  # Default is 3 predictions
+    top_k: Optional[int] = 1  # Default is 1 predictions
     latest: Optional[bool] = True  # Default is to show the latest predictions
+    labels: List[int]
 
 class PredictionResult(BaseModel):
     week: int

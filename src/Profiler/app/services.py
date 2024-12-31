@@ -3,11 +3,11 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Embedding, LSTM, Dense, Concatenate, Input, Bidirectional, Dropout
 from typing import List, Dict
-from app.schemas import PredictionRequest
+from app.schemas import PredictionRequest, PredictionResult, PredictionResponse
 
 
 # Main function that orchestrates the prediction
-async def predict_purchase(request: PredictionRequest) -> Dict:
+async def predict_purchase(request: PredictionRequest) -> PredictionResponse:
     purchase_history = request.purchase_history
     product_frequencies = request.product_frequencies
     top_k = request.top_k
@@ -17,12 +17,14 @@ async def predict_purchase(request: PredictionRequest) -> Dict:
     product_to_index, index_to_product = generate_product_mappings(purchase_history)
     max_seq_len = calculate_max_sequence_length(purchase_history)
     
+    labels = [product_to_index.get(label, product_to_index['PAD']) for label in request.labels]
     padded_X, padded_frequencies = preprocess_data(purchase_history, product_frequencies, product_to_index, max_seq_len)
     
     # Step 2: Create the model
     input_dim = len(product_to_index)
     output_dim = len(product_to_index)  # Number of unique products
     model = create_optimized_model(input_dim, output_dim, max_seq_len)
+    trainModel(model, padded_X, padded_frequencies, np.array(labels), 1, 20)
     
     # Step 3: Generate predictions
     top_predictions = generate_predictions(model, padded_X, padded_frequencies, top_k)
@@ -30,7 +32,7 @@ async def predict_purchase(request: PredictionRequest) -> Dict:
     # Step 4: Format the response
     results = format_predictions(top_predictions, index_to_product, purchase_history, latest)
     
-    return {"predictions": results}
+    return PredictionResponse(predictions=results)
 
 
 # Helper function to create product-to-index and index-to-product mappings
@@ -89,22 +91,32 @@ def create_optimized_model(input_dim: int, output_dim: int, max_seq_len: int) ->
     model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     return model
 
+# Train model
+def trainModel(model, padded_X: np.ndarray, padded_frequencies: np.ndarray, labels: np.ndarray, batch_size: int = 1, epochs: int = 20):
+    model.fit(
+        [padded_X, padded_frequencies],  # Inputs: product indices and frequencies
+        labels,  # Target labels
+        batch_size, epochs)
+    loss, accuracy = model.evaluate(
+        [padded_X, padded_frequencies], 
+        labels)
+    print(f"Test Loss: {loss}")
+    print(f"Test Accuracy: {accuracy}")
 
 # Generate predictions (mock predictions for now)
 def generate_predictions(model: Model, padded_X: np.ndarray, padded_frequencies: np.ndarray, top_k: int) -> List[List[int]]:
-    # Mock predictions (replace with model.predict in a real setup)
-    mock_predictions = np.random.rand(len(padded_X), model.output_shape[1])
-    top_predictions = np.argsort(mock_predictions, axis=1)[:, -top_k:][:, ::-1]
+    predictions = model.predict([padded_X, padded_frequencies])
+    top_predictions = np.argsort(predictions, axis=1)[:, -top_k:][:, ::-1]  # Top top_k predictions for each input
     return top_predictions
 
 
 # Format the predictions into the response format
-def format_predictions(top_predictions: np.ndarray, index_to_product: Dict[int, int], purchase_history: List[List[int]], latest: bool) -> List[Dict]:
+def format_predictions(top_predictions: np.ndarray, index_to_product: Dict[int, int], purchase_history: List[List[int]], latest: bool) -> List[PredictionResult]:
     results = []
     for i, pred in enumerate(top_predictions):
-        product_predictions = [index_to_product.get(idx) for idx in pred]
+        product_predictions = [index_to_product.get(idx, -1) for idx in pred if idx is not None]
         if latest:
-            results = [{"week": len(purchase_history), "predictions": product_predictions}]
+            results = [PredictionResult(week=len(purchase_history), predictions=product_predictions)]
         else:
-            results.append({"week": i + 1, "predictions": product_predictions})
+            results.append(PredictionResult(week=i + 1, predictions=product_predictions))
     return results
