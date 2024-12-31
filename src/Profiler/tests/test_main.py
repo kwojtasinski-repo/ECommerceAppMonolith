@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 from app.main import app
+from app.schemas import PredictionRequest, PredictionResponse
 
 client = TestClient(app)
 

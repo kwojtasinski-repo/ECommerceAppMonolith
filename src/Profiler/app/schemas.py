@@ -12,3 +12,10 @@ class PredictionRequest(BaseModel):
     product_frequencies: List[Dict[int, int]]
     top_k: Optional[int] = 3  # Default is 3 predictions
     latest: Optional[bool] = True  # Default is to show the latest predictions
+
+class PredictionResult(BaseModel):
+    week: int
+    predictions: Optional[List[int]]
+
+class PredictionResponse(BaseModel):
+    predictions: List[PredictionResult]
