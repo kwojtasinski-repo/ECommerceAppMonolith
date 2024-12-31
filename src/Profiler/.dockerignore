@@ -1,0 +1,35 @@
+# Exclude Python bytecode files
+*.pyc
+*.pyo
+__pycache__
+
+# Exclude virtual environments
+venv/
+env/
+
+# Exclude IDE/editor configuration files
+.vscode/
+.idea/
+
+# Exclude test directories and files
+tests/
+*.test.py
+*.spec.py
+
+# Exclude Docker-related files
+.dockerignore
+Dockerfile
+
+# Exclude .env files for environment variables
+.env
+*.env
+
+# Exclude version control directories (e.g., Git)
+.git/
+.gitignore
+
+# Exclude logs and temporary files
+*.log
+*.tmp
+
+profiler.egg-info/

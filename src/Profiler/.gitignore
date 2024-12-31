@@ -1,0 +1,73 @@
+# Python specific
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+*.venv
+*.egg
+*.egg-info/
+dist/
+build/
+*.so
+
+# Virtual environments
+env/
+venv/
+ENV/
+.env/
+.venv/
+.Python
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+*.tmp
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# pytest cache
+.cache/
+.pytest_cache/
+
+# FastAPI auto-generated files (if applicable)
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs and temporary files
+*.log
+*.out
+*.pid
+*.seed
+*.old
+
+# Test coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+*.cover
+coverage.*
+.cache
+
+# Dependency files
+*.lock
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Docker
+docker-compose.override.yml
+**
+
+profiler.egg-info/
