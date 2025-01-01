@@ -19,11 +19,6 @@ def test_read_root():
     assert response.status_code == 200
     assert response.json() == {"message": "Welcome to my Profiler API project!"}
 
-def test_read_item():
-    response = client.get("/items/42?q=test")
-    assert response.status_code == 200
-    assert response.json() == {"item_id": 42, "query": "test"}
-
 
 def test_predict(mock_request_data):
     response = client.post("/predict/", json=mock_request_data)

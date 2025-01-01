@@ -28,8 +28,19 @@ class PredictionRequest(BaseModel):
         top_k = values.top_k
         product_frequencies = values.product_frequencies
 
-        if labels and top_k != -1 and top_k > len(labels):
-            raise ValueError(f"top_k cannot exceed the number of labels ({len(labels)}).")
+        if purchase_history and top_k != -1:
+            if top_k <= 0:
+                raise ValueError(
+                    f"top_k should be greater than 0."
+                )
+
+            distinct_items = {item for sublist in purchase_history for item in sublist}
+            distinct_count = len(distinct_items)
+
+            if top_k > distinct_count:
+                raise ValueError(
+                    f"top_k cannot exceed the number of distinct items in purchase_history ({distinct_count})."
+                )
         if labels and purchase_history and len(labels) != len(purchase_history):
             raise ValueError("The number of labels should have the same length like purchase_history.")
         if len(product_frequencies) != len(purchase_history):
