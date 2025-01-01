@@ -108,6 +108,9 @@ def trainModel(model, padded_X: np.ndarray, padded_frequencies: np.ndarray, labe
 # Generate predictions (mock predictions for now)
 def generate_predictions(model: Model, padded_X: np.ndarray, padded_frequencies: np.ndarray, top_k: int) -> List[List[int]]:
     predictions = model.predict([padded_X, padded_frequencies])
+    if top_k == -1:
+        return predictions
+
     top_predictions = np.argsort(predictions, axis=1)[:, -top_k:][:, ::-1]  # Top top_k predictions for each input
     return top_predictions
 
@@ -117,7 +120,8 @@ def format_predictions(top_predictions: np.ndarray, index_to_product: Dict[int, 
     results = []
     for i, pred in enumerate(top_predictions):
         product_predictions = [index_to_product.get(idx, -1) for idx in pred if idx is not None]
-        # if -1 not include in request
+        product_predictions = [p for p in product_predictions if p != -1]  # Skip -1 values
+
         if latest:
             results = [PredictionResult(week=len(purchase_history), predictions=product_predictions)]
         else:
