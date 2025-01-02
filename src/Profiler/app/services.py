@@ -3,8 +3,8 @@ import numpy as np
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Embedding, LSTM, Dense, Concatenate, Input, Bidirectional, Dropout
-from typing import List, Dict
-from app.schemas import PredictionRequest, PredictionResult, PredictionResponse
+from typing import List, Dict, Tuple
+from app.schemas import PredictionRequest, PredictionResult, PredictionResponse, PredictionValue
 
 logger = logging.getLogger(__name__)
 
@@ -36,20 +36,17 @@ async def predict_purchase(request: PredictionRequest) -> PredictionResponse:
     
     return PredictionResponse(predictions=results)
 
-
 # Helper function to create product-to-index and index-to-product mappings
 def generate_product_mappings(purchase_history: List[List[int]]) -> (Dict[int, int], Dict[int, int]):
-    unique_products = set([product for week in purchase_history for product in week])
+    unique_products = set([product for purchase_group in purchase_history for product in purchase_group])
     product_to_index = {product: idx for idx, product in enumerate(unique_products)}
     product_to_index['PAD'] = -1  # Padding token
     index_to_product = {idx: product for product, idx in product_to_index.items()}
     return product_to_index, index_to_product
 
-
 # Helper function to calculate the maximum sequence length
 def calculate_max_sequence_length(purchase_history: List[List[int]]) -> int:
-    return max(len(week) for week in purchase_history) + 1
-
+    return max(len(purchase_group) for purchase_group in purchase_history) + 1
 
 # Preprocessing data - Adjust purchase history and frequency data, then pad sequences
 def preprocess_data(purchase_history: List[List[int]], product_frequencies: List[Dict[int, int]],
@@ -62,20 +59,17 @@ def preprocess_data(purchase_history: List[List[int]], product_frequencies: List
     
     return padded_X, padded_frequencies
 
-
 # Helper function to adjust purchase history by replacing product IDs with indices
 def adjust_purchase_history(purchase_history: List[List[int]], product_to_index: Dict[int, int]) -> List[List[int]]:
     return [
-        [product_to_index.get(product, product_to_index['PAD']) for product in week] for week in purchase_history
+        [product_to_index.get(product, product_to_index['PAD']) for product in purchase_group] for purchase_group in purchase_history
     ]
-
 
 # Helper function to adjust frequency data based on purchase history
 def adjust_frequency_data(purchase_history: List[List[int]], product_frequencies: List[Dict[int, int]]) -> List[List[int]]:
     return [
-        [product_frequencies[week_idx].get(product, 0) for product in week] for week_idx, week in enumerate(purchase_history)
+        [product_frequencies[purchase_group_idx].get(product, 0) for product in purchase_group] for purchase_group_idx, purchase_group in enumerate(purchase_history)
     ]
-
 
 # Function to create the optimized model
 def create_optimized_model(input_dim: int, output_dim: int, max_seq_len: int) -> Model:
@@ -108,22 +102,55 @@ def trainModel(model, padded_X: np.ndarray, padded_frequencies: np.ndarray, labe
 # Generate predictions (mock predictions for now)
 def generate_predictions(model: Model, padded_X: np.ndarray, padded_frequencies: np.ndarray, top_k: int) -> List[List[int]]:
     predictions = model.predict([padded_X, padded_frequencies])
+    return get_top_predictions_with_probabilities(predictions, top_k)
+
+# Return the top-k products with their probabilities for each sample
+def get_top_predictions_with_probabilities(predictions: np.ndarray, top_k: int) -> List[List[Tuple[int, float]]]:
+    """
+    Given the prediction probabilities, return the top-k products with their probabilities for each sample.
+    If top_k is -1, return all products sorted by probability.
+    """
     if top_k == -1:
-        return predictions
+        # If top_k is -1, return all products sorted by probability
+        sorted_indices = np.argsort(predictions, axis=1)[:, ::-1]  # Sort by descending probability
+        sorted_probabilities = np.take_along_axis(predictions, sorted_indices, axis=1)
+        return create_predictions_with_probabilities(sorted_indices, sorted_probabilities)
 
-    top_predictions = np.argsort(predictions, axis=1)[:, -top_k:][:, ::-1]  # Top top_k predictions for each input
-    return top_predictions
+    else:
+        # If top_k is > 0, return the top-k predictions for each sample
+        top_k_indices = np.argsort(predictions, axis=1)[:, -top_k:][:, ::-1]  # Top-k indices sorted by probability
+        top_k_probabilities = np.take_along_axis(predictions, top_k_indices, axis=1)
+        return create_predictions_with_probabilities(top_k_indices, top_k_probabilities)
 
+def create_predictions_with_probabilities(predictions: np.ndarray, probabilities: np.ndarray) -> List[List[Tuple[int, float]]]:
+    all_predictions = []
+    for i in range(len(predictions)):
+        sample_predictions = [(idx, probabilities[i][rank]) for rank, idx in enumerate(predictions[i])]
+        all_predictions.append(sample_predictions)
+
+    return all_predictions
 
 # Format the predictions into the response format
 def format_predictions(top_predictions: np.ndarray, index_to_product: Dict[int, int], purchase_history: List[List[int]], latest: bool) -> List[PredictionResult]:
+    """
+    Format the predictions with their product ids and probabilities into the desired response format.
+
+    Args:
+        top_predictions: List of top predictions (product_id, probability) for each sample.
+        index_to_product: Mapping from product index to product id.
+        purchase_history: Purchase history for each customer.
+        latest: Boolean flag to include only the most recent prediction.
+
+    Returns:
+        List of PredictionResult objects with the predictions formatted for each sample.
+    """
     results = []
     for i, pred in enumerate(top_predictions):
-        product_predictions = [index_to_product.get(idx, -1) for idx in pred if idx is not None]
-        product_predictions = [p for p in product_predictions if p != -1]  # Skip -1 values
+        product_predictions = [(index_to_product.get(idx, -1), prob) for idx, prob in pred if idx is not None]
+        product_predictions = [(p, prob) for p, prob in product_predictions if p != -1]  # Skip invalid products
 
         if latest:
-            results = [PredictionResult(week=len(purchase_history), predictions=product_predictions)]
+            results = [PredictionResult(purchase_group=len(purchase_history), predictions=[PredictionValue(productId=prod_id, probability=prob) for prod_id, prob in product_predictions])]
         else:
-            results.append(PredictionResult(week=i + 1, predictions=product_predictions))
+            results.append(PredictionResult(purchase_group=i + 1, predictions=[PredictionValue(productId=prod_id, probability=prob) for prod_id, prob in product_predictions]))
     return results

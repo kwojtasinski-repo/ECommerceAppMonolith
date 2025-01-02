@@ -60,9 +60,13 @@ class PredictionRequest(BaseModel):
 
         return values
 
+class PredictionValue(BaseModel):
+    productId: int
+    probability: float
+
 class PredictionResult(BaseModel):
-    week: int
-    predictions: Optional[List[int]]
+    purchase_group: int
+    predictions: List[PredictionValue]
 
 class PredictionResponse(BaseModel):
     predictions: List[PredictionResult]
