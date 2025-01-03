@@ -11,7 +11,9 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
         public IArangoDBClient DbClient { get; }
         Task<T?> GetByKeyAsync(string key);
         Task<T> AddAsync(T entity);
+        Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entity);
         Task<T?> UpdateAsync(T entity);
         Task<bool> DeleteAsync(string key);
+        ArangoPaginationCollection<T> GetPaginatedResults(int pageSize);
     }
 }

@@ -51,5 +51,10 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
             var cursorResult = await genericRepository.DbClient.Cursor.PostCursorAsync<User>(query, bindVars, batchSize: 1);
             return cursorResult.Result.FirstOrDefault();
         }
+
+        public ArangoPaginationCollection<User> GetPaginatedUsers(int pageSize)
+        {
+            return genericRepository.GetPaginatedResults(pageSize);
+        }
     }
 }

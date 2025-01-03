@@ -20,10 +20,8 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
 
         public async Task<T> AddAsync(T entity)
         {
-            var response = await DbClient.Document.PostDocumentAsync(CollectionName, entity);
-            entity.Key = response._key;
-            entity.Id = response._id;
-            return entity;
+            var response = await DbClient.Document.PostDocumentAsync(CollectionName, entity, new ArangoDBNetStandard.DocumentApi.Models.PostDocumentsQuery { ReturnNew = true });
+            return response.New;
         }
 
         public async Task<bool> DeleteAsync(string key)
@@ -78,6 +76,42 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
                 logger.LogError(exception, "There was an error while deleting entity with key '{key}', error status code '{statusCode}', message: {message}", entity.Key, exception.ApiError.ErrorNum, exception.ApiError.ErrorMessage);
                 throw;
             }
+        }
+
+        public ArangoPaginationCollection<T> GetPaginatedResults(int pageSize)
+        {
+            return new ArangoPaginationCollection<T>(
+                GetPaginatedResults,
+                pageSize
+            );
+        }
+
+        private async Task<List<T>> GetPaginatedResults(int offset, int count)
+        {
+            var query = $@"
+                FOR doc IN {CollectionName} 
+                LIMIT @offset, @count 
+                RETURN doc";
+
+            var bindVars = new Dictionary<string, object>
+            {
+                { "offset", offset },
+                { "count", count }
+            };
+
+            var result = await dbClient.Cursor.PostCursorAsync<T>(query, bindVars);
+            return result.Result.ToList();
+        }
+
+        public async Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities)
+        {
+            var result = await dbClient.Document.PostDocumentsAsync(
+                CollectionName,
+                entities,
+                new ArangoDBNetStandard.DocumentApi.Models.PostDocumentsQuery { ReturnNew = true }
+            );
+            return result.Where(entity => entity is not null && entity.New is not null)
+                  .Select(entity => entity.New);
         }
     }
 }

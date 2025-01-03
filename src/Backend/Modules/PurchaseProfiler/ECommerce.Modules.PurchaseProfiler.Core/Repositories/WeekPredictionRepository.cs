@@ -20,10 +20,18 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
             return await genericRepository.DeleteAsync(key);
         }
 
-        public async Task<WeekPrediction?> GetByUserIdAsync(Guid userId)
+        public async Task<List<WeekPrediction>> GetByUserIdAsync(Guid userId)
         {
-            var query = string.Format("FOR um IN {0} FILTER um.UserId == @userId RETURN um", _collectionName);
+            var query = string.Format("FOR wp IN {0} FILTER wp.UserId == @userId RETURN wp", _collectionName);
             var bindVars = new Dictionary<string, object> { { "userId", userId } };
+            var result = await genericRepository.DbClient.Cursor.PostCursorAsync<WeekPrediction>(query, bindVars);
+            return result.Result.ToList();
+        }
+
+        public async Task<WeekPrediction?> GetByYearWeekNumberAndUserIdAsync(int year, int week, Guid userId)
+        {
+            var query = string.Format("FOR wp IN {0} FILTER wp.Year == @year AND wp.WeekNumber == @week AND wp.UserId == @userId RETURN wp", _collectionName);
+            var bindVars = new Dictionary<string, object> { { "year", year }, { "week", week }, { "userId", userId } };
             var result = await genericRepository.DbClient.Cursor.PostCursorAsync<WeekPrediction>(query, bindVars);
             return result.Result.FirstOrDefault();
         }
