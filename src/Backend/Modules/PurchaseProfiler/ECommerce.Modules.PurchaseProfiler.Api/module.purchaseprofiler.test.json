@@ -1,7 +1,7 @@
 {
   "purchaseprofiler": {
     "module": {
-      "name": "Purchase Profiler [development]",
+      "name": "Purchase Profiler [test]",
       "enabled": true
     }
   },
