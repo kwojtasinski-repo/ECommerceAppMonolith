@@ -1,11 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ECommerce.Shared.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using ECommerce.Modules.Currencies.Core.Exceptions;
 
 namespace ECommerce.Modules.Currencies.Core.Clients.External
@@ -54,20 +48,6 @@ namespace ECommerce.Modules.Currencies.Core.Clients.External
             {
                 throw new ClientOptionsBaseUrlCannotBeEmpty();
             }
-        }
-
-        public static T GetOptions<T>(this IServiceCollection services, string sectionName) where T : new()
-        {
-            using var serviceProvider = services.BuildServiceProvider();
-            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-            return configuration.GetOptions<T>(sectionName);
-        }
-
-        public static T GetOptions<T>(this IConfiguration configuration, string sectionName) where T : new()
-        {
-            var options = new T();
-            configuration.GetSection(sectionName).Bind(options);
-            return options;
         }
     }
 }

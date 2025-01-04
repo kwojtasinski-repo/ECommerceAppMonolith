@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using ECommerce.Shared.Abstractions.SchedulerJobs;
+using ECommerce.Shared.Infrastructure.SchedulerJobs;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ECommerce.Modules.PurchaseProfiler.Core.Services
 {
@@ -8,6 +10,13 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
         {
             services.AddScoped<IFastTreePurchaseProfilerModel, FastTreePurchaseProfilerModel>();
             services.AddScoped<IRecommendationService, RecommendationService>();
+            services.AddCronJob<ISchedulerTask<PredictionScheduler>, PredictionScheduler>(options =>
+            {
+                options.TimeZoneInfo = TimeZoneInfo.Local;
+                // At minute 0 past every 2nd hour 
+                options.CronExpression = @"* */2 * * *";// https://crontab.guru/ info
+            });
+            services.AddHostedService<ComputePredictionCheckerService>();
             return services;
         }
     }

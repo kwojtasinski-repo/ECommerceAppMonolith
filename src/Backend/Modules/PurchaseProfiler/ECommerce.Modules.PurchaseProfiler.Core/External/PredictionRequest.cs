@@ -14,7 +14,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.External
 
         public bool Latest { get; set; } = true;
 
-        public int? TopK { get; set; }
+        public int? TopK { get; set; } = -1;
     }
 
     internal class ProductFrequency

@@ -61,7 +61,7 @@ class PredictionRequest(BaseModel):
         return values
 
 class PredictionValue(BaseModel):
-    productId: int
+    product_id: int
     probability: float
 
 class PredictionResult(BaseModel):

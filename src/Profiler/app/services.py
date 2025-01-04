@@ -150,7 +150,7 @@ def format_predictions(top_predictions: np.ndarray, index_to_product: Dict[int, 
         product_predictions = [(p, prob) for p, prob in product_predictions if p != -1]  # Skip invalid products
 
         if latest:
-            results = [PredictionResult(purchase_group=len(purchase_history), predictions=[PredictionValue(productId=prod_id, probability=prob) for prod_id, prob in product_predictions])]
+            results = [PredictionResult(purchase_group=len(purchase_history), predictions=[PredictionValue(product_id=prod_id, probability=prob) for prod_id, prob in product_predictions])]
         else:
-            results.append(PredictionResult(purchase_group=i + 1, predictions=[PredictionValue(productId=prod_id, probability=prob) for prod_id, prob in product_predictions]))
+            results.append(PredictionResult(purchase_group=i + 1, predictions=[PredictionValue(product_id=prod_id, probability=prob) for prod_id, prob in product_predictions]))
     return results

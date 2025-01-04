@@ -6,12 +6,16 @@
     }
   },
   "arangoDB": {
-    "url": "http://localhost:8529",
+    "url": "http://arangoDB",
     "database": "ECommerceApp.PurchaseProfiler",
-    "userName": "root",
-    "password": "P4SSW0Rd!1",
+    "userName": "userName",
+    "password": "pass",
     "initializeDatabaseOnStart": true,
-    "rootUserName": "root",
-    "rootPassword": "P4SSW0Rd!1"
+    "rootUserName": "userNameRoot",
+    "rootPassword": "rootPass"
+  },
+  "profilerClient": {
+    "apiUrl": "http://profiler",
+    "timeout": 100
   }
 }

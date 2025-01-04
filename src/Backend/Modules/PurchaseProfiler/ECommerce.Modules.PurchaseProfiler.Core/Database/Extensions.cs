@@ -1,9 +1,9 @@
 ﻿using ArangoDBNetStandard;
 using ArangoDBNetStandard.Transport.Http;
 using ECommerce.Modules.PurchaseProfiler.Core.Entities;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using ECommerce.Shared.Infrastructure;
 
 namespace ECommerce.Modules.PurchaseProfiler.Core.Database
 {
@@ -56,20 +56,6 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Database
             }));
             services.AddHostedService<DbInitializer>();
             return services;
-        }
-
-        private static T GetOptions<T>(this IServiceCollection services, string sectionName) where T : new()
-        {
-            using var serviceProvider = services.BuildServiceProvider();
-            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-            return configuration.GetOptions<T>(sectionName);
-        }
-
-        private static T GetOptions<T>(this IConfiguration configuration, string sectionName) where T : new()
-        {
-            var options = new T();
-            configuration.GetSection(sectionName).Bind(options);
-            return options;
         }
 
         private static KeyGenerationTypeAttribute? GetKeyGenerationTypeAttribute(Type type)

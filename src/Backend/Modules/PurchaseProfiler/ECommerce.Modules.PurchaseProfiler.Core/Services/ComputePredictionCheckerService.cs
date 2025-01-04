@@ -59,13 +59,24 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
                 foreach (var computePrediction in computePredictions)
                 {
                     // 24 weeks back
+                    logger.LogInformation("ComputePredictionCheckerService, {methodName} generating dates for 24 weeks back for year '{year}' and week '{week}'", nameof(ProcessComputePredictions), computePrediction.Year, computePrediction.WeekNumber);
                     var weeks = GenerateDatesFor24Weeks(computePrediction.Year, computePrediction.WeekNumber);
                     var startDate = weeks.LastOrDefault().StartOfWeek;
                     var endDate = weeks.FirstOrDefault().EndOfWeek;
 
+                    logger.LogInformation("ComputePredictionCheckerService, {methodName} getting orders for user with id '{userId}' and from date range '{startDate}' to '{endDate}'", nameof(ProcessComputePredictions), computePrediction.UserId, startDate, endDate);
                     var orders = await orderRepository.GetOrdersByUserIdAndOrderDateRangeAsync(computePrediction.UserId, startDate, endDate);
+                    logger.LogInformation("ComputePredictionCheckerService, {methodName} extracting purchase products", nameof(ProcessComputePredictions));
                     var predictionData = ExtractPurchaseProducts(orders, weeks);
 
+                    if (!predictionData.Any())
+                    {
+                        logger.LogInformation("ComputePredictionCheckerService, {methodName} prediction data is empty skipping prediciton request for user '{userId}', year '{year}' and week '{week}'", nameof(ProcessComputePredictions), computePrediction.UserId, computePrediction.Year, computePrediction.WeekNumber);
+                        await computePredictionRepository.DeleteAsync(computePrediction.Key!);
+                        continue;
+                    }
+
+                    logger.LogInformation("ComputePredictionCheckerService, {methodName} sending prediction request using {profilerClient}", nameof(ProcessComputePredictions), nameof(IProfilerClient));
                     var response = await profilerClient.PredictPurchases(new PredictionRequest
                     {
                         PurchaseHistory = predictionData.Select(p => p.Keys.ToList()).ToList(),
@@ -83,6 +94,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
 
                     if (response is not null)
                     {
+                        logger.LogInformation("ComputePredictionCheckerService, {methodName} received prediction results and saving into database for user '{userId}', year '{year}' and week '{week}'", nameof(ProcessComputePredictions), computePrediction.UserId, computePrediction.Year, computePrediction.WeekNumber);
                         await weekPredictionRepository.AddAsync(new WeekPrediction
                         {
                             PredictedPurchases = response.Predictions?.FirstOrDefault()?
@@ -103,7 +115,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
 
         private IEnumerable<Dictionary<long, int>> ExtractPurchaseProducts(IEnumerable<Order> orders, IEnumerable<(DateTime StartOfWeek, DateTime EndOfWeek)> weeks)
         {
-            if (orders is null || !weeks.Any())
+            if (orders is null || !orders.Any() || !weeks.Any())
             {
                 return [];
             }
@@ -113,6 +125,10 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
             foreach (var (startOfWeek, endOfWeek) in weeks)
             {
                 var ordersInWeek = orders.Where(o => o.OrderDate >= startOfWeek && o.OrderDate <= endOfWeek);
+                if (!ordersInWeek.Any())
+                {
+                    continue;
+                }
 
                 var productsInWeek = ordersInWeek
                     .SelectMany(o => o.Items)
@@ -137,7 +153,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
             for (int i = 0; i < 24; i++)
             {
                 DateTime startOfWeek = FirstDateOfWeekISO8601(year, week);
-                DateTime endOfWeek = startOfWeek.AddDays(6);
+                DateTime endOfWeek = startOfWeek.AddDays(6).AddHours(23).AddMinutes(59).AddSeconds(59).AddMilliseconds(999);
                 result.Add((startOfWeek, endOfWeek));
 
                 week--;

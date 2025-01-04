@@ -42,7 +42,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
 
         public async Task<List<Order>> GetOrdersByUserIdAndOrderDateRangeAsync(Guid userId, DateTime orderDateStart, DateTime orderDateEnd)
         {
-            var query = string.Format("FOR order IN {0} FILTER order.UserId == @userId AND order.OrderDate BETWEEN @orderDateStart AND @orderDateEnd RETURN order", _collectionName);
+            var query = string.Format("FOR order IN {0} FILTER order.UserId == @userId AND order.OrderDate >= @orderDateStart AND order.OrderDate <= @orderDateEnd RETURN order", _collectionName);
             var bindVars = new Dictionary<string, object> { { "userId", userId }, { "orderDateStart", orderDateStart }, { "orderDateEnd", orderDateEnd } };
             var response = await genericRepository.DbClient.Cursor.PostCursorAsync<Order>(query, bindVars);
             if (response is null || response.Error)
