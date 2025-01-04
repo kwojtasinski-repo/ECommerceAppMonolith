@@ -1,5 +1,6 @@
 ﻿using ECommerce.Modules.PurchaseProfiler.Core.Entities;
 using ECommerce.Modules.PurchaseProfiler.Core.Repositories;
+using Microsoft.Extensions.Configuration;
 using Microsoft.ML;
 using System.Globalization;
 
@@ -9,11 +10,15 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
         (
             IFastTreePurchaseProfilerModel fastTreePurchaseProfilerModel,
             IUserRepository userRepository,
-            IOrderRepository orderRepository
+            IOrderRepository orderRepository,
+            IWeekPredictionRepository weekPredictionRepository,
+            IProductRepository productRepository,
+            IConfiguration configuration
         )
         : IRecommendationService
     {
         private readonly MLContext _mlContext = new();
+        private readonly decimal _minProbabilityForRecommandationProducts = configuration.GetValue<decimal>("recommendations:minProbabilityForProducts");
 
         public async Task<List<Dictionary<string, object>>> GetRecommendations(Guid userId)
         {
@@ -44,6 +49,21 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
                     { "predictions", ExtractPredictedResults(predictedResults, inputData, itemsMap) }
                 }
             ];
+        }
+
+        public async Task<List<Guid>> GetRecommendationOnCurrentWeek(Guid userId)
+        {
+            var currentDate = DateTime.UtcNow;
+            var weekPredictions = await weekPredictionRepository.GetByYearWeekNumberAndUserIdAsync(currentDate.Year, ISOWeek.GetWeekOfYear(currentDate), userId);
+            var predictedProducts = weekPredictions?.PredictedPurchases
+                .Where(p => p.Probability * 100 > _minProbabilityForRecommandationProducts)?
+                .Select(p => p.ProductId)?.ToList() ?? [];
+            if (predictedProducts.Count == 0)
+            {
+                return [];
+            }
+
+            return await productRepository.GetProductsIdsByKeysAsync(predictedProducts);
         }
 
         private List<Dictionary<string, object>> CreateEmptyRecommendationResult()

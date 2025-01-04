@@ -9,12 +9,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Api.Controllers
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetRecommendations(Guid userId)
         {
-            var recommendations = await recommendationService.GetRecommendations(userId);
-            if (recommendations == null || recommendations.Count == 0)
-            {
-                return NotFound("No recommendations found.");
-            }
-
+            var recommendations = await recommendationService.GetRecommendationOnCurrentWeek(userId);
             return Ok(recommendations);
         }
     }

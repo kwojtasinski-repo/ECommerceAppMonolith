@@ -20,8 +20,8 @@ namespace ECommerce.Shared.Infrastructure.SchedulerJobs
 
         public override async Task RunJob(CancellationToken cancellationToken)
         {
-            var type = typeof(T);
-            _logger.LogInformation($"Cron '{type.Name}' is working.");
+            var type = typeof(U);
+            _logger.LogInformation("Cron '{cronJobTypeName}' is working.", type.Name);
             using var scope = _serviceProvider.CreateScope();
             var cronService = scope.ServiceProvider.GetRequiredService<T>();
             await cronService.DoWork(cancellationToken);
@@ -29,15 +29,15 @@ namespace ECommerce.Shared.Infrastructure.SchedulerJobs
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            var type = typeof(T);
-            _logger.LogInformation($"Cron '{type.Name}' starts.");
+            var type = typeof(U);
+            _logger.LogInformation("Cron '{cronJobTypeName}' starts.", type.Name);
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            var type = typeof(T);
-            _logger.LogInformation($"Cron '{type.Name}' starts.");
+            var type = typeof(U);
+            _logger.LogInformation("Cron '{cronJobTypeName}' starts.", type.Name);
             return base.StopAsync(cancellationToken);
         }
     }

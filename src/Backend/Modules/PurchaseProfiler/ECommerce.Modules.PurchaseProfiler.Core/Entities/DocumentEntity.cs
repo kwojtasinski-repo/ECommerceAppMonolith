@@ -6,6 +6,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Entities
     [KeyGenerationType(KeyGenerationType.Autoincrement)]
     public abstract class DocumentEntity : IDocumentEntity<long>
     {
+        [JsonIgnore]
         public abstract string CollectionName { get; }
 
         [JsonProperty("_id")]

@@ -10,5 +10,6 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
         Task<Product?> UpdateAsync(Product product);
         Task<bool> DeleteAsync(string key);
         Task<List<Product>> GetProductsByItemsIdsAsync(IEnumerable<Guid> itemsId);
+        Task<List<Guid>> GetProductsIdsByKeysAsync(IEnumerable<long> predictedProductsKeys);
     }
 }

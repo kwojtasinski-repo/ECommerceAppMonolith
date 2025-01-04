@@ -7,6 +7,7 @@
         public int Year { get; set; }
         public int WeekNumber { get; set; }
         public List<PurchasePrediction> PredictedPurchases { get; set; } = [];
+        public Guid UserId { get; set; }
     }
 
     public class PurchasePrediction

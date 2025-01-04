@@ -14,7 +14,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
             {
                 options.TimeZoneInfo = TimeZoneInfo.Local;
                 // At minute 0 past every 2nd hour 
-                options.CronExpression = @"* */2 * * *";// https://crontab.guru/ info
+                options.CronExpression = @"0 */2 * * *";// https://crontab.guru/ info
             });
             services.AddHostedService<ComputePredictionCheckerService>();
             return services;

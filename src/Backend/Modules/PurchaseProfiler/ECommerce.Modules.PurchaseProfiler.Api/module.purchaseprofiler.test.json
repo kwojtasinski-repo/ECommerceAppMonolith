@@ -7,7 +7,7 @@
   },
   "arangoDB": {
     "url": "http://localhost:8529",
-    "database": "ECommerceApp.PurchaseProfiler",
+    "database": "ECommerceApp.PurchaseProfiler.Test",
     "userName": "root",
     "password": "P4SSW0Rd!1",
     "initializeDatabaseOnStart": true,
