@@ -40,6 +40,19 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
             return response.Result.FirstOrDefault();
         }
 
+        public async Task<List<Order>> GetOrdersByUserIdAndOrderDateRangeAsync(Guid userId, DateTime orderDateStart, DateTime orderDateEnd)
+        {
+            var query = string.Format("FOR order IN {0} FILTER order.UserId == @userId AND order.OrderDate BETWEEN @orderDateStart AND @orderDateEnd RETURN order", _collectionName);
+            var bindVars = new Dictionary<string, object> { { "userId", userId }, { "orderDateStart", orderDateStart }, { "orderDateEnd", orderDateEnd } };
+            var response = await genericRepository.DbClient.Cursor.PostCursorAsync<Order>(query, bindVars);
+            if (response is null || response.Error)
+            {
+                logger.LogError("There was an error while getting collections '{collection}' with userId '{userId}' and orderDateStart '{orderDateStart}' orderDateEnd '{orderDateEnd}', status code: '{statusCode}'", _collectionName, userId, (int)(response?.Code ?? 0), orderDateStart, orderDateEnd);
+                return [];
+            }
+            return response.Result.ToList();
+        }
+
         public async Task<List<Order>> GetOrdersByUserIdAsync(Guid userId)
         {
             var query = string.Format("FOR order IN {0} FILTER order.UserId == @userId RETURN order", _collectionName);

@@ -10,5 +10,6 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Repositories
         Task<Order?> UpdateAsync(Order order);
         Task<bool> DeleteAsync(string key);
         Task<List<Order>> GetOrdersByUserIdAsync(Guid userId);
+        Task<List<Order>> GetOrdersByUserIdAndOrderDateRangeAsync(Guid userId, DateTime orderDateStart, DateTime orderDateEnd);
     }
 }
