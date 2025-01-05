@@ -1,0 +1,21 @@
+{
+  "purchaseprofiler": {
+    "module": {
+      "name": "Purchase Profiler",
+      "enabled": true
+    }
+  },
+  "arangoDB": {
+    "url": "http://arangodb:8529",
+    "database": "ECommerceApp.PurchaseProfiler",
+    "userName": "root",
+    "password": "P4SSW0Rd!1",
+    "initializeDatabaseOnStart": true,
+    "rootUserName": "root",
+    "rootPassword": "P4SSW0Rd!1"
+  },
+  "profilerClient": {
+    "apiUrl": "http://profiler-service:8000",
+    "timeout": 100
+  }
+}

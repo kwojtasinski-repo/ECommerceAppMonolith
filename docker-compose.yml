@@ -14,7 +14,30 @@ services:
             - 5432:5432
         networks:
           - ecommerce
-    
+
+    arangodb:
+        image: arangodb
+        container_name: arangodb
+        restart: always
+        environment:
+          - ARANGO_ROOT_PASSWORD=P4SSW0Rd!1
+        volumes:
+          - arangodb-data:/var/lib/arangodb3
+        ports:
+          - 8529:8529
+        networks:
+          - ecommerce
+
+    profiler-service:
+        build:
+            context: ./src/Profiler
+            dockerfile: Dockerfile
+        container_name: profiler-service
+        ports:
+          - 8000:8000
+        networks:
+          - ecommerce
+
     backend-service:
         build:
             context: .
@@ -24,9 +47,10 @@ services:
           - 5010:80
         depends_on:
             - db
+            - arangodb
         networks:
           - ecommerce
-          
+
     gateway-service:
         build:
             context: .
@@ -38,7 +62,7 @@ services:
             - backend-service
         networks:
           - ecommerce
-          
+
     frontend-service:
         build:
             context: .
@@ -59,6 +83,7 @@ services:
 
 volumes:
   dbdata:
+  arangodb-data:
 
 networks:
   ecommerce:
