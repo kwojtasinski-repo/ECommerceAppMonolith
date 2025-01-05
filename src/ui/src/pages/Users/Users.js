@@ -4,6 +4,7 @@ import axios from "../../axios-setup";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import { mapToUsers } from "../../helpers/mapper";
 import { mapToMessage } from "../../helpers/validation";
+import { requestPath } from "../../constants";
 
 function Users() {
     const [loading, setLoading] = useState(true);
@@ -12,7 +13,7 @@ function Users() {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('/users-module/accounts');
+            const response = await axios.get(requestPath.usersModule.accounts);
             setUsers(mapToUsers(response.data));
         } catch (exception) {
             console.log(exception);

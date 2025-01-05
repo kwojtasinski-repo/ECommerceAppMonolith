@@ -1,5 +1,5 @@
 import axios from "./axios-setup";
-import { tokenData } from "./constants";
+import { tokenData, requestPath } from "./constants";
 import { getRecommendationProducts } from "./recommendation-products";
 
 const getUser = async () => {
@@ -19,7 +19,7 @@ const getUser = async () => {
     }
 
     const jwt = parseJwt(token);
-    const response = await axios.get('/users-module/account');
+    const response = await axios.get(requestPath.usersModule.account);
     return {
         ...response,
         data: {
@@ -70,6 +70,10 @@ const initializeApp = async () => {
         }
     } catch(err) {
         console.error(err);
+        if (err.status === 401) {
+            window.localStorage.removeItem(tokenData);            
+        }
+
         return {
             user: null
         };

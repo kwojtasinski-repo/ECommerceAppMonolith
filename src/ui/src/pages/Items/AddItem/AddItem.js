@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import ItemForm from "../ItemForm";
 import { mapToBrands, mapToTypes } from "../../../helpers/mapper";
 import { useNavigate } from "react-router";
+import { requestPath } from "../../../constants";
 
 function AddItem() {
     const [brands, setBrands] = useState([]);
@@ -11,7 +12,8 @@ function AddItem() {
     const navigate = useNavigate();
 
     const onSubmit = async (form) => {
-        const response = await axios.post('/items-module/items', form);
+        const response = await axios.post(requestPath.itemsModule.addItem, form);
+        // TODO: I think it is better to also add the itemId as payload
         const itemId = response.headers.location.split('/items-module/items/')[1];
         id = itemId;
     }
@@ -21,12 +23,12 @@ function AddItem() {
     }
 
     const fetchBrands = async () => {
-        const response = await axios.get('/items-module/brands');
+        const response = await axios.get(requestPath.itemsModule.brands);
         setBrands(mapToBrands(response.data));
     }
 
     const fetchTypes = async () => {
-        const response = await axios.get('/items-module/types');
+        const response = await axios.get(requestPath.itemsModule.types);
         setTypes(mapToTypes(response.data));
     }
 

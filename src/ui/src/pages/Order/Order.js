@@ -6,6 +6,7 @@ import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import styles from "./Order.module.css"
 import useAuth from "../../hooks/useAuth";
 import { mapToMessage } from "../../helpers/validation";
+import { requestPath } from "../../constants";
 
 function Order() {
     const { id } = useParams();
@@ -18,7 +19,7 @@ function Order() {
 
     const fetchOrder = useCallback(async () => {
         try {
-            const response = await axios.get(`/sales-module/orders/${id}`);
+            const response = await axios.get(requestPath.salesModule.getOrder(id));
             setOrder(mapToOrder(response.data));
         } catch (exception) {
             console.log(exception);
@@ -33,7 +34,7 @@ function Order() {
 
     const fetchCustomer = useCallback(async () => {
         try {
-            const response = await axios.get(`/contacts-module/customers/${order.customerId}`);
+            const response = await axios.get(requestPath.contactsModule.getCustomer(order.customerId));
             setCustomer(mapToCustomer(response.data));
             setPaymentDisabled(false);
         } catch (exception) {

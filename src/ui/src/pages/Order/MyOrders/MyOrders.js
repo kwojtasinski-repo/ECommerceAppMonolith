@@ -4,6 +4,7 @@ import { mapToOrders } from "../../../helpers/mapper";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import { NavLink } from "react-router";
 import { mapToMessage } from "../../../helpers/validation";
+import { requestPath } from "../../../constants";
 
 function MyOrders() {
     const [orders, setOrders] = useState([]);
@@ -12,7 +13,7 @@ function MyOrders() {
 
     const fetchOrders = async () => {
         try {
-            const response = await axios.get(`/sales-module/orders/me`);
+            const response = await axios.get(requestPath.salesModule.getMyOrders);
             setOrders(mapToOrders(response.data));
             setLoading(false);
         } catch (exception) {

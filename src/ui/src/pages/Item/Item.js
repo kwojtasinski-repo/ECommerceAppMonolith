@@ -11,6 +11,7 @@ import useCart from "../../hooks/useCart";
 import ReducerContext from "../../context/ReducerContext";
 import { calculateItem } from "../../helpers/calculationCost";
 import { getRates } from "../../helpers/getRates";
+import { requestPath } from "../../constants";
 
 function Item() {
     const { id } = useParams();
@@ -25,7 +26,7 @@ function Item() {
     const fetchItem = useCallback(async () => {
         try {  
             const rates = await getRates();
-            const response = await axios.get(`/items-module/item-sales/${id}`);
+            const response = await axios.get(requestPath.itemsModule.getItemForSale(id));
             let item = mapToItem(response.data);
             calculateItem(item, rates);
             setItem(item);

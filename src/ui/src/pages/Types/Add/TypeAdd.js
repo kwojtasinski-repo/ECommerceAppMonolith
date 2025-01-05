@@ -3,6 +3,7 @@ import { useNavigate, useOutletContext } from "react-router";
 import { Color } from "../../../components/Notification/Notification";
 import useNotification from "../../../hooks/useNotification";
 import TypeForm from "../TypeForm";
+import { requestPath } from "../../../constants";
 
 function TypeAdd() {
     const navigate = useNavigate();
@@ -10,7 +11,7 @@ function TypeAdd() {
     const { addAction } = useOutletContext();
 
     const submit = async form => {
-        await axios.post("/items-module/types", form);
+        await axios.post(requestPath.itemsModule.addType, form);
         const notification = { color: Color.success, id: new Date().getTime(), text: `Pomyślnie dodano typ ${form.name}`, timeToClose: 5000 };
         addNotification(notification);
         addAction('added-new-type');

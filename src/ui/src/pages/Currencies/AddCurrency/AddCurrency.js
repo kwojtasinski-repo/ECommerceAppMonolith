@@ -3,6 +3,7 @@ import axios from "../../../axios-setup";
 import { useNavigate, useOutletContext } from "react-router";
 import useNotification from "../../../hooks/useNotification";
 import { Color } from "../../../components/Notification/Notification";
+import { requestPath } from "../../../constants";
 
 function AddCurrency() {
     const navigate = useNavigate();
@@ -10,7 +11,7 @@ function AddCurrency() {
     const { setRefresh } = useOutletContext();
 
     const submit = async form => {
-        await axios.post("/currencies-module/currencies", form);
+        await axios.post(requestPath.currenciesModule.addCurrency, form);
         const notification = { color: Color.success, id: new Date().getTime(), text: `Pomyślnie dodano walutę ${form.code}`, timeToClose: 5000 };
         addNotification(notification);
         setRefresh(true);

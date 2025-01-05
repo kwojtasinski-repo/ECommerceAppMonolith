@@ -7,6 +7,7 @@ import Popup, { Type } from "../../components/Popup/Popup";
 import { mapToMessage } from "../../helpers/validation";
 import LoadingButton from "../../components/UI/LoadingButton/LoadingButton";
 import { getRates } from "../../helpers/getRates";
+import { requestPath } from "../../constants";
 
 function Currencies() {
     const [loading, setLoading] = useState(true);
@@ -19,7 +20,7 @@ function Currencies() {
 
     const getCurrencies = async () => {
         try {
-            const response = await axios.get("/currencies-module/currencies");
+            const response = await axios.get(requestPath.currenciesModule.currencies);
             setCurrencies(mapToCurrencies(response.data));
         } catch (exception) {
             console.log(exception);
@@ -42,11 +43,11 @@ function Currencies() {
         setIsOpen(!isOpen);
     }
 
-    const handleDeleteCurrency = () => {
+    const handleDeleteCurrency = async () => {
         setIsOpen(!isOpen);
 
         try {
-            axios.delete(`/currencies-module/currencies/${currentId}`);
+            await axios.delete(requestPath.currenciesModule.deleteCurrency(currentId));
         } catch(exception) {
             let errorMessage = '';
             const status = exception.response.status;
@@ -74,7 +75,7 @@ function Currencies() {
         setRatePending(true);
 
         try {
-            await axios.get(`/currencies-module/currency-rates/refresh`);
+            await axios.get(requestPath.currenciesModule.refreshRates);
             await getRates(true);
         } catch(exception) {
             let errorMessage = '';

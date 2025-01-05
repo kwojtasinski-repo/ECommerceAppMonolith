@@ -6,6 +6,7 @@ import { mapToMessage } from "../../../helpers/validation";
 import useNotification from "../../../hooks/useNotification";
 import { Color } from "../../../components/Notification/Notification";
 import BrandForm from "../BrandForm";
+import { requestPath } from "../../../constants";
 
 function EditBrand() {
     const { id } = useParams();
@@ -17,7 +18,7 @@ function EditBrand() {
 
     const fetchBrand = useCallback(async () => {
         try {
-            const response = await axios.get(`/items-module/brands/${id}`);
+            const response = await axios.get(requestPath.itemsModule.getBrand(id));
             setType(mapToBrand(response.data));
         } catch (exception) {
             console.log(exception);
@@ -30,7 +31,7 @@ function EditBrand() {
     }, [id])
 
     const submit = async form => {
-        await axios.put(`/items-module/brands/${id}`, form);
+        await axios.put(requestPath.itemsModule.updateBrand(id), form);
         const notification = { color: Color.success, id: new Date().getTime(), text: 'Pomyślnie zaaktualizowano', timeToClose: 5000 };
         addNotification(notification);
         addAction(`Updated-brand-${id}`);

@@ -6,6 +6,7 @@ import { mapToCurrency } from "../../../helpers/mapper";
 import { mapToMessage } from "../../../helpers/validation";
 import useNotification from "../../../hooks/useNotification";
 import CurrencyForm from "../CurrencyForm";
+import { requestPath } from "../../../constants";
 
 function EditCurrency() {
     const { id } = useParams();
@@ -17,7 +18,7 @@ function EditCurrency() {
 
     const fetchCurrency = useCallback(async () => {
         try {
-            const response = await axios.get(`/currencies-module/currencies/${id}`);
+            const response = await axios.get(requestPath.currenciesModule.getCurrency(id));
             setCurrency(mapToCurrency(response.data));
         } catch (exception) {
             console.log(exception);
@@ -30,7 +31,7 @@ function EditCurrency() {
     }, [id])
 
     const submit = async form => {
-        await axios.put(`/currencies-module/currencies/${id}`, form);
+        await axios.put(requestPath.currenciesModule.updateCurrency(id), form);
         const notification = { color: Color.success, id: new Date().getTime(), text: 'Pomyślnie zaaktualizowano', timeToClose: 5000 };
         addNotification(notification);
         setRefresh(true);

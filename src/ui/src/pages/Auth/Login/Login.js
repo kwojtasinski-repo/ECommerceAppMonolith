@@ -7,6 +7,7 @@ import useNotification from "../../../hooks/useNotification";
 import { Color } from "../../../components/Notification/Notification";
 import { mapCodeToMessage } from "../../../helpers/errorCodeMapper";
 import { getRecommendationProducts } from "../../../recommendation-products";
+import { requestPath } from "../../../constants";
 
 function Login() {
     const [auth, setAuth] = useAuth();
@@ -23,7 +24,7 @@ function Login() {
         setLoading(true);
         
         try {
-            const response = await axios.post('users-module/account/sign-in', {
+            const response = await axios.post(requestPath.usersModule.login, {
                 email,
                 password
             });

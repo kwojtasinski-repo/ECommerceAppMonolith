@@ -5,6 +5,7 @@ import { mapToBrands, mapToItemDetails, mapToTypes } from "../../../helpers/mapp
 import ItemForm from "../ItemForm";
 import { mapToMessage } from "../../../helpers/validation";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
+import { requestPath } from "../../../constants";
 
 function EditItem() {
     const [brands, setBrands] = useState([]);
@@ -16,7 +17,7 @@ function EditItem() {
     const [loading, setLoading] = useState(true);
 
     const onSubmit = async (form) => {
-        await axios.put(`/items-module/items/${id}`, form);
+        await axios.put(requestPath.itemsModule.updateItem(id), form);
     }
 
     const redirectAfterSuccess = () => {
@@ -25,7 +26,7 @@ function EditItem() {
 
     const fetchBrands = async () => {
         try {
-            const response = await axios.get('/items-module/brands');
+            const response = await axios.get(requestPath.itemsModule.brands);
             setBrands(mapToBrands(response.data));
         } catch (exception) {
             console.log(exception);
@@ -40,7 +41,7 @@ function EditItem() {
 
     const fetchTypes = async () => {
         try {
-            const response = await axios.get('/items-module/types');
+            const response = await axios.get(requestPath.itemsModule.types);
             setTypes(mapToTypes(response.data));
         } catch (exception) {
             console.log(exception);
@@ -55,7 +56,7 @@ function EditItem() {
 
     const fetchItem = useCallback(async () => {
         try {
-            const response = await axios.get(`/items-module/items/${id}`);
+            const response = await axios.get(requestPath.itemsModule.getItem(id));
             const itemLocal = mapToItemDetails(response.data);
             setItem(itemLocal);
         } catch (exception) {

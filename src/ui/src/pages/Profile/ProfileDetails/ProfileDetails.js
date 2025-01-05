@@ -5,6 +5,7 @@ import useAuth from "../../../hooks/useAuth";
 import axios from "../../../axios-setup";
 import useNotification from "../../../hooks/useNotification";
 import { Color } from "../../../components/Notification/Notification";
+import { requestPath } from "../../../constants";
 
 function ProfileDetails() {
     const [auth, setAuth] = useAuth();
@@ -42,7 +43,7 @@ function ProfileDetails() {
                 data.password = password;
             }
 
-            const response = await axios.post('users-module/account/change-credentials', data);
+            const response = await axios.post(requestPath.usersModule.changeCredentials, data);
 
             if (response.data) {
                 setAuth({

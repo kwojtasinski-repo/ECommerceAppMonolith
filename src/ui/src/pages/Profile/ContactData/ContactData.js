@@ -5,6 +5,7 @@ import Popup, { Type }  from "../../../components/Popup/Popup";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import { mapToCustomers } from "../../../helpers/mapper";
 import { mapToMessage } from "../../../helpers/validation";
+import { requestPath } from "../../../constants";
 
 function ContactData() {
     const showDataId = 'show-data';
@@ -30,7 +31,7 @@ function ContactData() {
 
     const fetchContacts = async () => {
         try {
-            const response = await axios.get("/contacts-module/customers/me");
+            const response = await axios.get(requestPath.contactsModule.getMyCustomers);
             setCustomers(mapToCustomers(response.data));
         } catch (exception) {
             console.log(exception);
@@ -53,10 +54,10 @@ function ContactData() {
         setIsOpen(!isOpen);
     }
 
-    const handleDeleteContact = () => {
+    const handleDeleteContact = async () => {
         setIsOpen(!isOpen);
         try {
-            axios.delete(`/contacts-module/customers/${currentId}`);
+            await axios.delete(requestPath.contactsModule.deleteCustomer(currentId));
         } catch(exception) {
             let errorMessage = '';
             const status = exception.response.status;

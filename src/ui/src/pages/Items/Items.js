@@ -6,6 +6,7 @@ import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import style from "./Items.module.css";
 import { mapToMessage } from "../../helpers/validation";
 import Popup, { Type } from "../../components/Popup/Popup";
+import { requestPath } from "../../constants";
 
 function Items() {
     const [loading, setLoading] = useState(true);
@@ -17,7 +18,7 @@ function Items() {
 
     const fetchItems = async () => {
         try {
-            const response = await axios.get('/items-module/items/not-put-up-for-sale');
+            const response = await axios.get(requestPath.itemsModule.getItemsNotPutUpForSale);
             setItems(mapToItemsDetails(response.data));
         } catch (exception) {
             console.log(exception);
@@ -43,7 +44,7 @@ function Items() {
         setIsOpen(!isOpen);
 
         try {
-            await axios.delete(`/items-module/items/${currentId}`);
+            await axios.delete(requestPath.itemsModule.deleteItem(currentId));
         } catch(exception) {
             let errorMessage = '';
             const status = exception.response.status;

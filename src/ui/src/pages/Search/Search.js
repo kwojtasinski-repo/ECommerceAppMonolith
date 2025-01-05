@@ -4,6 +4,7 @@ import Items from "../../components/Items/Items";
 import axios from "../../axios-setup";
 import { mapToItems } from "../../helpers/mapper";
 import { mapToMessage } from "../../helpers/validation";
+import { requestPath } from "../../constants";
 
 function Search() {
     const { term } = useParams('');
@@ -12,7 +13,7 @@ function Search() {
 
     const searchHandler = useCallback(async () => {
         try {
-            const response = await axios.get(`/items-module/item-sales/search?name=${term ?? ''}`);
+            const response = await axios.get(requestPath.itemsModule.searchItemForSale(term ?? ''));
             setItems(mapToItems(response.data));
         } catch (exception) {
             console.log(exception);

@@ -7,6 +7,7 @@ import Gallery from "../../../components/Gallery/Gallery";
 import styles from "./ItemDetails.module.css";
 import { mapToMessage } from "../../../helpers/validation";
 import Tags from "../../../components/Tags/Tags";
+import { requestPath } from "../../../constants";
 
 function ItemDetails() {
     const { id } = useParams();
@@ -17,7 +18,7 @@ function ItemDetails() {
 
     const fetchItem = useCallback(async () => {
         try {
-            const response = await axios.get(`/items-module/items/${id}`);
+            const response = await axios.get(requestPath.itemsModule.getItem(id));
             const itemLocal = mapToItemDetails(response.data);
             setItem(itemLocal);
             const imageMain = itemLocal.imagesUrl?.find(im => im.mainImage)?.url;

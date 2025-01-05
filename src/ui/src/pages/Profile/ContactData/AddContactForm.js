@@ -3,6 +3,7 @@ import { useNavigate, useOutletContext } from "react-router";
 import axios from "../../../axios-setup";
 import { mapToMessage } from "../../../helpers/validation";
 import { useState } from "react";
+import { requestPath } from "../../../constants";
 
 function AddContactForm(props) {
     const navigate = useNavigate();
@@ -12,11 +13,11 @@ function AddContactForm(props) {
     const submit = async (form) => {
         try {
             delete form.customer.id;
-            const responseCustomer = await axios.post('/contacts-module/customers', form.customer);
+            const responseCustomer = await axios.post(requestPath.contactsModule.addCustomer, form.customer);
             const customerId = responseCustomer.headers.location.split('/contacts-module/customers/')[1];
             delete form.address.id;
             form.address.customerId = customerId;
-            await axios.post('/contacts-module/addresses', form.address);
+            await axios.post(requestPath.contactsModule.addAddress, form.address);
             addAction('addContact');
             navigate(props.navigateAfterSend);
         } catch (exception) {

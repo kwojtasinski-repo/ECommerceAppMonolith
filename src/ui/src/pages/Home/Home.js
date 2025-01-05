@@ -7,6 +7,7 @@ import useWebsiteTitle from "../../hooks/useWebsiteTitle";
 import { calculateItems } from "../../helpers/calculationCost";
 import { getRates } from "../../helpers/getRates";
 import { mapToMessage } from "../../helpers/validation";
+import { requestPath } from "../../constants";
 
 function Home() {
     const [items, setItems] = useState([]);
@@ -18,7 +19,7 @@ function Home() {
     const fetchItems = useCallback(async () => {
         try {
             const rates = await getRates();
-            const response = await axios.get(`/items-module/item-sales`);
+            const response = await axios.get(requestPath.itemsModule.itemsForSale);
             const items = mapToItems(response.data);
             calculateItems(items, rates);
             setItems(items);

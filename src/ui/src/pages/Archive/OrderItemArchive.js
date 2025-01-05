@@ -7,6 +7,7 @@ import { mapToOrderItem } from "../../helpers/mapper";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import useWebsiteTitle from "../../hooks/useWebsiteTitle";
 import { mapToMessage } from "../../helpers/validation";
+import { requestPath } from "../../constants";
 
 function OrderItemArchive() {
     const { id } = useParams();
@@ -18,7 +19,7 @@ function OrderItemArchive() {
 
     const fetchItem = useCallback(async () => {
         try {
-            const response = await axios.get(`/sales-module/order-items/${id}`);
+            const response = await axios.get(requestPath.salesModule.getArchivePosition(id));
             setItem(mapToOrderItem(response.data));
         } catch (exception) {
             console.log(exception);

@@ -19,7 +19,6 @@ const RequireAuth = () => {
 
         const currentDate = new Date();
         let tokenExpiresDate = new Date(auth.tokenExpiresDate);
-        debugger
         if (tokenExpiresDate < currentDate) {
             setAuth();
             const notification = { color: Color.error, id: new Date().getTime(), text: 'Poświadczenie wygasło. Zaloguj się ponownie', timeToClose: 5000 };

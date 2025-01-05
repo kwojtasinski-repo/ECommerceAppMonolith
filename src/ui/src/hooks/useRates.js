@@ -1,29 +1,16 @@
 import { useEffect, useState } from 'react';
-import axios from '../axios-setup';
-import { convertSecondsToLong } from '../helpers/dateHelper';
-import { mapToCurrencyRates } from '../helpers/mapper';
-import { getWithExpiry, setWithExpiry } from '../helpers/storage';
+import { getWithExpiry } from '../helpers/storage';
+import { currencyRateKey, getRates } from '../helpers/getRates';
 
 export default function useRates() {
-    const [rates, setRates] = useState(getWithExpiry(key));
-
-    const getRates = async () => {
-        const response = await axios.get('currencies-module/currency-rates/latest');
-        const ratesLocal = mapToCurrencyRates(response.data);
-        const seconds = process.env.REACT_APP_EXPIRY_CURRENCY_RATES;
-        const time = convertSecondsToLong(seconds);
-        setWithExpiry(key, ratesLocal, time);
-        setRates(ratesLocal);
-    }
+    const [rates, setRates] = useState(getWithExpiry(currencyRateKey));
 
     useEffect(() => {
         if (rates === null) {
-            getRates();
+            setRates(getRates());
         }
 
     }, [rates])
 
     return rates;
 }
-
-const key = 'curreny-rates';

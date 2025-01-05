@@ -6,6 +6,7 @@ import { mapToMessage, validate } from "../../../helpers/validation";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import Input from "../../../components/Input/Input";
 import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
+import { requestPath } from "../../../constants";
 
 function EditUser() {
     const { id } = useParams();
@@ -51,7 +52,7 @@ function EditUser() {
 
     const fetchUser = useCallback(async () => {
         try {
-            const response = await axios.get(`/users-module/accounts/${id}`);
+            const response = await axios.get(requestPath.usersModule.userAccount(id));
             const userLocal = mapToUser(response.data);
             setUser(userLocal);
             setForm(prevForm => ({
@@ -102,7 +103,7 @@ function EditUser() {
         setLoadingButton(true);
 
         try {
-            await axios.put(`/users-module/accounts/${id}/policies`, {
+            await axios.put(requestPath.usersModule.updateUserPolicies(id), {
                 userId: id,
                 role: form.role.value,
                 claims: form.claims.value
@@ -125,7 +126,7 @@ function EditUser() {
 
     const changeActive = async (active) => {
         try {
-            await axios.patch(`/users-module/accounts/${id}/active`, {
+            await axios.patch(requestPath.usersModule.activeUser(id), {
                 userId: id,
                 active
             });

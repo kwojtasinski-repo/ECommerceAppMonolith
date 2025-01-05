@@ -6,6 +6,7 @@ import styles from "./Cart.module.css";
 import axios from '../../axios-setup';
 import { mapToMessage } from "../../helpers/validation";
 import ReducerContext from "../../context/ReducerContext";
+import { requestPath } from "../../constants";
 
 function Cart() {
     const { cart, items = [...cart], removeItem, clear } = useCart();
@@ -20,7 +21,7 @@ function Cart() {
         const itemSaleIds = mapItemsToSend(items);
 
         try {
-            await axios.post('sales-module/order-items/multi', {
+            await axios.post(requestPath.salesModule.acceptCart, {
                 itemSaleIds: itemSaleIds,
                 currencyCode: "PLN"
             });

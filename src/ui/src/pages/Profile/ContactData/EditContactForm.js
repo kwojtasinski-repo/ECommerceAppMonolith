@@ -4,6 +4,7 @@ import axios from "../../../axios-setup";
 import { mapToCustomer } from "../../../helpers/mapper";
 import { mapToMessage } from "../../../helpers/validation";
 import ContactForm from "./ContactForm";
+import { requestPath } from "../../../constants";
 
 function EditContactForm(props) {
     const [id, setId] = useState(props.id);
@@ -14,7 +15,7 @@ function EditContactForm(props) {
 
     const fetchCustomer = useCallback(async () => {
         try {
-            const response = await axios.get(`/contacts-module/customers/${id}`);
+            const response = await axios.get(requestPath.contactsModule.getCustomer(id));
             let customer = mapToCustomer(response.data);
             const address = {...customer.address};
             delete customer.address;
@@ -32,8 +33,8 @@ function EditContactForm(props) {
     const submit = async (form) => {
         try {
             await Promise.all([
-                axios.put(`/contacts-module/customers/${form.customer.id}`, form.customer),
-                axios.put(`/contacts-module/addresses/${form.address.id}`, form.address)
+                axios.put(requestPath.contactsModule.updateAddress(form.customer.id), form.customer),
+                axios.put(requestPath.contactsModule.updateAddress(form.address.id), form.address)
             ]);
             addAction('editContact');
             navigate(props.navigateAfterSend);

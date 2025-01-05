@@ -6,6 +6,7 @@ import { mapToMessage } from "../../../helpers/validation";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import Input from "../../../components/Input/Input";
 import style from "./ChangeCurrency.module.css"
+import { requestPath } from "../../../constants";
 
 
 function ChangeCurrency() {
@@ -18,7 +19,7 @@ function ChangeCurrency() {
 
     const fetchCurrencies = async () => {
         try {
-            const response = await axios.get("/currencies-module/currencies");
+            const response = await axios.get(requestPath.currenciesModule.currencies);
             setCurrencies(mapToCurrencies(response.data));
         } catch (exception) {
             console.log(exception);
@@ -45,7 +46,7 @@ function ChangeCurrency() {
         setLoading(true);
         
         try {
-            await axios.patch(`/sales-module/orders/${order.orderId}/currency/change`, {
+            await axios.patch(requestPath.salesModule.changeCurrencyOnOrder(order.orderId), {
                 orderId: order.orderId, 
                 currencyCode: currency
             });

@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { mapToCustomers, mapToOrder } from "../../../helpers/mapper";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import { mapToMessage } from "../../../helpers/validation";
+import { requestPath } from "../../../constants";
 
 function EditOrder() {
     const { id } =  useParams();
@@ -15,7 +16,7 @@ function EditOrder() {
 
     const fetchOrder = useCallback(async () => {
         try {
-            const response = await axios.get(`/sales-module/orders/${id}`);
+            const response = await axios.get(requestPath.salesModule.getOrder(id));
             setOrder(mapToOrder(response.data));
         } catch (exception) {
             console.log(exception);
@@ -29,8 +30,8 @@ function EditOrder() {
 
     const fetchContacts = async () => {
         try {
-            const response = await axios.get("/contacts-module/customers/me");
-        setCustomers(mapToCustomers(response.data));
+            const response = await axios.get(requestPath.contactsModule.getMyCustomers);
+            setCustomers(mapToCustomers(response.data));
         } catch (exception) {
             console.log(exception);
             let errorMessage = 'Dane kontaktowe: ';
@@ -64,7 +65,7 @@ function EditOrder() {
 
     const changeConcactData = async () => {
         try {
-            await axios.patch(`/sales-module/orders/${order.id}/customer/change`, {
+            await axios.patch(requestPath.salesModule.changeCustomerOnOrder(order.id), {
                 orderId: order.id,
                 customerId: order.customerId
             });

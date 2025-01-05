@@ -6,6 +6,7 @@ import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import useNotification from "../../hooks/useNotification";
 import { Color } from "../../components/Notification/Notification";
 import { mapToMessage } from "../../helpers/validation";
+import { requestPath } from "../../constants";
 
 function AddPayment() {
     const { id } = useParams();
@@ -31,7 +32,7 @@ function AddPayment() {
 
     const fetchOrder = useCallback(async () => {
         try {
-            const response = await axios.get(`/sales-module/orders/${id}`);
+            const response = await axios.get(requestPath.salesModule.getOrder(id));
             setOrder(mapToOrder(response.data));
         } catch (exception) {
             console.log(exception);
@@ -46,7 +47,7 @@ function AddPayment() {
     }, [id])
 
     const clickHandler = async () => {
-        await axios.post('/sales-module/payments', {
+        await axios.post(requestPath.salesModule.addPayment, {
             orderId: order.id
         });
         const notification = { color: Color.success, id: new Date().getTime(), text: 'Opłacono zamówienie', timeToClose: 5000 };

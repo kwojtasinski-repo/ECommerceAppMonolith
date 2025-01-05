@@ -5,6 +5,7 @@ import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
 import { mapToMessage, validate } from "../../../helpers/validation";
 import useAuth from "../../../hooks/useAuth";
 import axios from '../../../axios-setup';
+import { requestPath } from "../../../constants";
 
 function Register() {
     const navigate = useNavigate();
@@ -58,7 +59,7 @@ function Register() {
         setLoading(true);
 
         try {
-            await axios.post('users-module/account/sign-up', {
+            await axios.post(requestPath.usersModule.register, {
                 email: form.email.value,
                 password: form.password.value,
                 claims: {

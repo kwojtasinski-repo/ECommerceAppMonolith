@@ -4,6 +4,7 @@ import LoadingButton from "../../../components/UI/LoadingButton/LoadingButton";
 import Contacts from "../Contact/Contacts";
 import { useNavigate } from "react-router";
 import { mapToMessage } from "../../../helpers/validation";
+import { requestPath } from "../../../constants";
 
 function AddOrder() {
     const [customer, setCustomer] = useState(null);
@@ -15,7 +16,7 @@ function AddOrder() {
     const submit = async () => {
         setLoading(true);
         try {
-            const response = await axios.post('/sales-module/orders', {
+            const response = await axios.post(requestPath.salesModule.orders, {
                 customerId: customer.id, 
                 currencyCode: "PLN"
             });        

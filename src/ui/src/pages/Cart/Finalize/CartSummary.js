@@ -5,6 +5,7 @@ import axios from "../../../axios-setup";
 import { mapToOrderItems } from "../../../helpers/mapper";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import { mapToMessage } from "../../../helpers/validation";
+import { requestPath } from "../../../constants";
 
 function CartSummary() {
     const [items, setItems] = useState(null);
@@ -14,7 +15,7 @@ function CartSummary() {
 
     const fetchCart = async () => {
         try {
-            const response = await axios.get('sales-module/cart/me');
+            const response = await axios.get(requestPath.salesModule.getMyCart);
             const orderItems = mapToOrderItems(response.data);
             setItems(orderItems);
         } catch (exception) {
@@ -30,7 +31,8 @@ function CartSummary() {
 
     const removeItemHandler = async (id) => {
         try {
-            await axios.delete(`sales-module/order-items/${id}`);
+            await axios.delete(requestPath.salesModule.removePositionFromCart(id));
+            // TODO: refactor every navigate(0)
             navigate(0); // refresh page
         } catch (exception) {
             console.log(exception);

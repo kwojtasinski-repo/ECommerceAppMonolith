@@ -5,6 +5,7 @@ import { mapToMessage } from "../../helpers/validation";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import { NavLink, Outlet } from "react-router";
 import Popup, { Type } from "../../components/Popup/Popup";
+import { requestPath } from "../../constants";
 
 function Brands() {
     const [loading, setLoading] = useState(true);
@@ -16,7 +17,7 @@ function Brands() {
 
     const getBrands = async () => {
         try {
-            const response = await axios.get("/items-module/brands");
+            const response = await axios.get(requestPath.itemsModule.brands);
             setBrands(mapToBrands(response.data));
         } catch (exception) {
             console.log(exception);
@@ -43,7 +44,7 @@ function Brands() {
         setIsOpen(!isOpen);
 
         try {
-            await axios.delete(`/items-module/brands/${currentId}`);
+            await axios.delete(requestPath.itemsModule.deleteBrand(currentId));
         } catch(exception) {
             let errorMessage = '';
             const status = exception.response.status;

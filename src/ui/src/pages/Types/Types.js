@@ -5,6 +5,7 @@ import { mapToMessage } from "../../helpers/validation";
 import LoadingIcon from "../../components/UI/LoadingIcon/LoadingIcon";
 import { NavLink, Outlet } from "react-router";
 import Popup, { Type } from "../../components/Popup/Popup";
+import { requestPath } from "../../constants";
 
 function Types() {
     const [loading, setLoading] = useState(true);
@@ -16,7 +17,7 @@ function Types() {
 
     const getTypes = async () => {
         try {
-            const response = await axios.get("/items-module/types");
+            const response = await axios.get(requestPath.itemsModule.types);
             setTypes(mapToTypes(response.data));
         } catch (exception) {
             console.log(exception);
@@ -43,7 +44,7 @@ function Types() {
         setIsOpen(!isOpen);
 
         try {
-            await axios.delete(`/items-module/types/${currentId}`);
+            await axios.delete(requestPath.itemsModule.deleteType(currentId));
         } catch(exception) {
             let errorMessage = '';
             const status = exception.response.status;

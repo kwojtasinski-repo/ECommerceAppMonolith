@@ -6,6 +6,7 @@ import { mapToMessage } from "../../../helpers/validation";
 import LoadingIcon from "../../../components/UI/LoadingIcon/LoadingIcon";
 import style from "./ItemsForSale.module.css";
 import Popup, { Type } from "../../../components/Popup/Popup";
+import { requestPath } from "../../../constants";
 
 function ItemsForSale() {
     const { term } = useParams();
@@ -31,7 +32,7 @@ function ItemsForSale() {
 
     const searchHandler = useCallback(async () => {
         try {
-            const url = term ? `/items-module/item-sales/search?name=${term}` : '/items-module/item-sales';
+            const url = term ? requestPath.itemsModule.searchItemForSale(term) : requestPath.itemsModule.itemsForSale;
             const response = await axios.get(url);
             setItems(mapToItems(response.data));
         } catch (exception) {
@@ -59,7 +60,7 @@ function ItemsForSale() {
         setIsOpen(!isOpen);
 
         try {
-            await axios.delete(`/items-module/item-sales/${currentId}`);
+            await axios.delete(requestPath.itemsModule.deleteItemForSale(currentId));
         } catch(exception) {
             let errorMessage = '';
             const status = exception.response.status;

@@ -6,6 +6,7 @@ import { mapToType } from "../../../helpers/mapper";
 import { mapToMessage } from "../../../helpers/validation";
 import useNotification from "../../../hooks/useNotification";
 import TypeForm from "../TypeForm";
+import { requestPath } from "../../../constants";
 
 function TypeEdit() {
     const { id } = useParams();
@@ -17,7 +18,7 @@ function TypeEdit() {
 
     const fetchType = useCallback(async () => {
         try {
-            const response = await axios.get(`/items-module/types/${id}`);
+            const response = await axios.get(requestPath.itemsModule.getType(id));
             setType(mapToType(response.data));
         } catch (exception) {
             console.log(exception);
@@ -30,7 +31,7 @@ function TypeEdit() {
     }, [id])
 
     const submit = async form => {
-        await axios.put(`/items-module/types/${id}`, form);
+        await axios.put(requestPath.itemsModule.updateType(id), form);
         const notification = { color: Color.success, id: new Date().getTime(), text: 'Pomyślnie zaaktualizowano', timeToClose: 5000 };
         addNotification(notification);
         addAction(`Updated-type-${id}`);

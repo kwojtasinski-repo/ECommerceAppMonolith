@@ -7,6 +7,7 @@ import LoadingIcon from "../../../../components/UI/LoadingIcon/LoadingIcon";
 import { mapToCurrencies, mapToItem } from "../../../../helpers/mapper";
 import { mapToMessage } from "../../../../helpers/validation";
 import ItemSaleForm from "../../ItemSaleForm";
+import { requestPath } from "../../../../constants";
 
 function ItemForSaleEdit() {
     const { id } = useParams();
@@ -18,7 +19,7 @@ function ItemForSaleEdit() {
 
     const fetchItem = useCallback(async () => {
         try {
-            const response = await axios.get(`/items-module/item-sales/${id}`);
+            const response = await axios.get(requestPath.itemsModule.getItemForSale(id));
             const itemLocal = mapToItem(response.data);
             setItem(itemLocal);
         } catch (exception) {
@@ -35,7 +36,7 @@ function ItemForSaleEdit() {
 
     const fetchCurrencies = async () => {
         try {
-            const response = await axios.get(`/currencies-module/currencies`);
+            const response = await axios.get(requestPath.currenciesModule.currencies);
             const currenciesLocal = mapToCurrencies(response.data);
             setCurrencies(currenciesLocal);
         } catch (exception) {
@@ -54,7 +55,7 @@ function ItemForSaleEdit() {
     }, [fetchItem]);
 
     const submit = async (form) => {
-        await axios.post('/items-module/item-sales', form);
+        await axios.post(requestPath.itemsModule.addItemForSale, form);
         navigate('/items');
     }
 
