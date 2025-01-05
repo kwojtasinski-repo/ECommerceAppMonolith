@@ -1,5 +1,6 @@
 import axios from "./axios-setup";
 import { tokenData } from "./constants";
+import { getRecommendationProducts } from "./recommendation-products";
 
 const getUser = async () => {
     const tokenDataFromStorage = window.localStorage.getItem(tokenData);
@@ -45,7 +46,7 @@ function parseJwt (token) {
     }).join(''));
   
     return JSON.parse(jsonPayload);
-}  
+}
 
 const initializeApp = async () => {
     try {
@@ -56,6 +57,7 @@ const initializeApp = async () => {
           };
         }
 
+        const recommendationProducts = await getRecommendationProducts();
         return {
             user: {
                 email: response.data.email,
@@ -63,11 +65,12 @@ const initializeApp = async () => {
                 claims: response.data.claims,
                 token: response.data.accessToken,
                 tokenExpiresDate: response.data.tokenExpiresDate
-            }
+            },
+            recommendationProducts
         }
     } catch(err) {
         console.error(err);
-        return{
+        return {
             user: null
         };
     }

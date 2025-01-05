@@ -6,6 +6,7 @@ import axios from '../../../axios-setup';
 import useNotification from "../../../hooks/useNotification";
 import { Color } from "../../../components/Notification/Notification";
 import { mapCodeToMessage } from "../../../helpers/errorCodeMapper";
+import { getRecommendationProducts } from "../../../recommendation-products";
 
 function Login() {
     const [auth, setAuth] = useAuth();
@@ -35,6 +36,7 @@ function Login() {
             });
             const notification = { color: Color.success, id: new Date().getTime(), text: 'Pomyślnie zalogowano', timeToClose: 5000 };
             addNotification(notification);
+            await getRecommendationProducts();
             navigate('/');
         } catch (exception) {
             console.log(exception);

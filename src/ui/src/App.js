@@ -71,7 +71,7 @@ function App() {
   const intialize = async () => {
     try {
       const app = await initializeApp()
-      dispatch({ type: 'initialized', user: app.user });
+      dispatch({ type: 'initialized', app });
     } catch {
       dispatch('initialized');
     }
