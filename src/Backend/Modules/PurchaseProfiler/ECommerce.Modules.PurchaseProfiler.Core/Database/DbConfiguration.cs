@@ -8,7 +8,7 @@
         public string GetCollectionName(Type type)
         {
             return Collections.FirstOrDefault(c => c.CollectionType == type)
-                              ?.CollectionName  ?? string.Empty;
+                              ?.CollectionName ?? string.Empty;
         }
     }
 }

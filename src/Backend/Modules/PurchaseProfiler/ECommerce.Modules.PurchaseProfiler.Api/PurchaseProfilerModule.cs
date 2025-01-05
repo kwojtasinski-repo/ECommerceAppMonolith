@@ -1,5 +1,4 @@
-﻿using ECommerce.Modules.PurchaseProfiler.Api.Profiler;
-using ECommerce.Modules.PurchaseProfiler.Core;
+﻿using ECommerce.Modules.PurchaseProfiler.Core;
 using ECommerce.Shared.Abstractions.Modules;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +16,6 @@ namespace ECommerce.Modules.PurchaseProfiler.Api
 
         public void Register(IServiceCollection services)
         {
-            services.AddTransient<RecommendationService>();
             services.AddCore();
         }
 

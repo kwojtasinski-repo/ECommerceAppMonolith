@@ -1,5 +1,4 @@
-﻿
-using ECommerce.Shared.Abstractions.Modules;
+﻿using ECommerce.Shared.Abstractions.Modules;
 
 namespace ECommerce.Modules.PurchaseProfiler.Core.Clients
 {

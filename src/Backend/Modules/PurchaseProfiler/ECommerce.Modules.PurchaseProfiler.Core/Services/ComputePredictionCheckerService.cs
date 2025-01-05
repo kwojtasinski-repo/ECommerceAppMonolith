@@ -1,5 +1,5 @@
-﻿using ECommerce.Modules.PurchaseProfiler.Core.Entities;
-using ECommerce.Modules.PurchaseProfiler.Core.External;
+﻿using ECommerce.Modules.PurchaseProfiler.Core.Clients.External;
+using ECommerce.Modules.PurchaseProfiler.Core.Entities;
 using ECommerce.Modules.PurchaseProfiler.Core.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

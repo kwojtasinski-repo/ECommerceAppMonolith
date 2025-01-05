@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using ECommerce.Modules.PurchaseProfiler.Core.Clients.External;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ECommerce.Modules.PurchaseProfiler.Core.Clients
 {
@@ -8,6 +9,7 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Clients
         {
             services.AddScoped<IUserApiClient, UserApiClient>();
             services.AddScoped<IProductApiClient, ProductApiClient>();
+            services.AddExternalClients();
             return services;
         }
     }

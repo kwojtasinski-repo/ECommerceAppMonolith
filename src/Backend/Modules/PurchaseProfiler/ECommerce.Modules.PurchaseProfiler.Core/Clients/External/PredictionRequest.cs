@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace ECommerce.Modules.PurchaseProfiler.Core.External
+namespace ECommerce.Modules.PurchaseProfiler.Core.Clients.External
 {
     internal class PredictionRequest
     {

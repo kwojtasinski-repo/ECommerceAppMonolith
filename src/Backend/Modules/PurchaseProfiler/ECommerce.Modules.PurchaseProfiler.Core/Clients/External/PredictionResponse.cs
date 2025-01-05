@@ -1,4 +1,4 @@
-﻿namespace ECommerce.Modules.PurchaseProfiler.Core.External
+﻿namespace ECommerce.Modules.PurchaseProfiler.Core.Clients.External
 {
     internal class PredictionResponse
     {

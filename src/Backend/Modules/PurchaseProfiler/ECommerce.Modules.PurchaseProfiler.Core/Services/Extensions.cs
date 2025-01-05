@@ -8,7 +8,6 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddScoped<IFastTreePurchaseProfilerModel, FastTreePurchaseProfilerModel>();
             services.AddScoped<IRecommendationService, RecommendationService>();
             services.AddCronJob<ISchedulerTask<PredictionScheduler>, PredictionScheduler>(options =>
             {

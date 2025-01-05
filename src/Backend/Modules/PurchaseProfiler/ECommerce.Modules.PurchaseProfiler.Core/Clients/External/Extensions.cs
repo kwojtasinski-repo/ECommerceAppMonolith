@@ -2,11 +2,17 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace ECommerce.Modules.PurchaseProfiler.Core.External
+namespace ECommerce.Modules.PurchaseProfiler.Core.Clients.External
 {
     internal static class Extensions
     {
-        public static IServiceCollection AddProfilerClient(this IServiceCollection services)
+        public static IServiceCollection AddExternalClients(this IServiceCollection services)
+        {
+            services.AddProfilerClient();
+            return services;
+        }
+
+        private static IServiceCollection AddProfilerClient(this IServiceCollection services)
         {
             var options = services.GetOptions<ProfilerClientOptions>("profilerClient");
             services.Configure<ProfilerClientOptions>(config =>

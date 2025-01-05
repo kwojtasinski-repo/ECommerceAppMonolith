@@ -2,7 +2,6 @@
 using ECommerce.Modules.Sales.Application.Items.Events.External;
 using ECommerce.Shared.Abstractions.Events;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Text.Json;
 
 namespace ECommerce.Modules.PurchaseProfiler.Core.Events.External.Handlers

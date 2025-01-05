@@ -14,19 +14,17 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Events.External.Handlers
         private readonly IOrderRepository _orderRepository;
         private readonly IUserRepository _userRepository;
         private readonly IProductRepository _productRepository;
-        private readonly IUserCustomerMapRepository _userCustomerMapRepository;
         private readonly IUserApiClient _userApiClient;
         private readonly IProductApiClient _productApiClient;
 
         public OrderPaidHandler(ILogger<OrderPaidHandler> logger, IOrderRepository orderRepository,
-            IUserRepository userRepository, IProductRepository productRepository, IUserCustomerMapRepository userCustomerMapRepository,
+            IUserRepository userRepository, IProductRepository productRepository,
             IUserApiClient userApiClient, IProductApiClient productApiClient)
         {
             _logger = logger;
             _orderRepository = orderRepository;
             _userRepository = userRepository;
             _productRepository = productRepository;
-            _userCustomerMapRepository = userCustomerMapRepository;
             _userApiClient = userApiClient;
             _productApiClient = productApiClient;
         }
@@ -43,10 +41,6 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Events.External.Handlers
                     return;
                 }
 
-                var userCustomersMap = await _userCustomerMapRepository.GetAllByUserIdAsync(@event.UserId);
-                var userCustomerMap = userCustomersMap.FirstOrDefault(u => u.CustomerId == @event.CustomerId);
-                userCustomerMap ??= await _userCustomerMapRepository.AddAsync(new UserCustomersMap { CustomerId = @event.CustomerId, UserId = @event.UserId });
-
                 var boughtItemsId = @event.OrderItems.Select(oi => oi.ItemId).Distinct().ToList();
                 var boughtItems = await GetProducts(boughtItemsId);
 
@@ -56,7 +50,6 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Events.External.Handlers
                     TotalCost = @event.Price,
                     OrderDate = @event.PaymentDate,
                     CustomerId = @event.CustomerId,
-                    CustomerKey = userCustomerMap.KeyValue,
                     UserId = @event.UserId,
                     Items = @event.OrderItems.Select(oi => new OrderItem
                     {
