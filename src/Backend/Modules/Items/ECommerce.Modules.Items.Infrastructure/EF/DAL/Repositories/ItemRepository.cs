@@ -50,6 +50,33 @@ namespace ECommerce.Modules.Items.Infrastructure.EF.DAL.Repositories
                                              .FirstOrDefaultAsync(i => i.Id == id);
         }
 
+        public async Task<IReadOnlyList<Item>> GetProductsDataDetailsAsync(IEnumerable<Guid> productIds)
+        {
+            // chunks divided into 50
+            var productsIdsChunks = productIds.Select((item, index) => new { item, index })
+                                              .GroupBy(i => i.index / 50)
+                                              .Select(group => group.Select(i => i.item).ToList())
+                                              .ToList();
+            var query = _dbContext.Items.Include(b => b.Brand)
+                                        .Include(t => t.Type)
+                                        .Include(i => i.ItemSale);
+
+            var tasks = new List<Task<List<Item>>>();
+            foreach (var productsIds in productsIdsChunks)
+            {
+                tasks.Add(query.Where(i => productIds.Contains(i.Id)).ToListAsync());
+            }
+
+            await Task.WhenAll(tasks);
+            var items = new List<Item>();
+            foreach(var task in tasks)
+            {
+                items.AddRange(await task);
+            }
+
+            return items;
+        }
+
         public async Task UpdateAsync(Item item)
         {
             _dbContext.Items.Update(item);

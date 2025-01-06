@@ -116,5 +116,13 @@ namespace ECommerce.Modules.Items.Application.Mappings
             return new ProductDataDto(item.Id, item.ItemSale?.Id ?? Guid.Empty,
                             item.ItemSale?.Cost ?? decimal.Zero, item.ItemSale?.Active.GetValueOrDefault() ?? false);
         }
+
+        public static ProductsDetailsDto AsProductsDataDetailsDto(this Item item)
+        {
+            return new ProductsDetailsDto(item.Id, item.ItemSale?.Id ?? Guid.Empty,
+                            item.ItemSale?.Cost ?? decimal.Zero, item.ItemSale?.Active.GetValueOrDefault() ?? false,
+                            item.ItemName, item.Description ?? string.Empty, item.Brand.Name, item.Type.Name,
+                            item.ImagesUrl?.ToImagesEnumerable()?.Where(i => i.MainImage == true)?.FirstOrDefault()?.Url ?? string.Empty);
+        }
     }
 }

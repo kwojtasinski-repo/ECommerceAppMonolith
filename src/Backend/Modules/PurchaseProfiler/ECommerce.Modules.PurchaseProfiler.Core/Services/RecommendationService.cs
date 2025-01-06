@@ -1,4 +1,6 @@
-﻿using ECommerce.Modules.PurchaseProfiler.Core.Repositories;
+﻿using ECommerce.Modules.PurchaseProfiler.Core.Clients;
+using ECommerce.Modules.PurchaseProfiler.Core.DTO;
+using ECommerce.Modules.PurchaseProfiler.Core.Repositories;
 using Microsoft.Extensions.Configuration;
 using System.Globalization;
 
@@ -8,13 +10,14 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
         (
             IWeekPredictionRepository weekPredictionRepository,
             IProductRepository productRepository,
-            IConfiguration configuration
+            IConfiguration configuration,
+            IProductApiClient productApiClient
         )
         : IRecommendationService
     {
         private readonly decimal _minProbabilityForRecommandationProducts = configuration.GetValue<decimal>("recommendations:minProbabilityForProducts");
 
-        public async Task<List<Guid>> GetRecommendationOnCurrentWeek(Guid userId)
+        public async Task<List<ProductsDetailsDTO>> GetRecommendationOnCurrentWeek(Guid userId)
         {
             var currentDate = DateTime.UtcNow;
             var weekPredictions = await weekPredictionRepository.GetByYearWeekNumberAndUserIdAsync(currentDate.Year, ISOWeek.GetWeekOfYear(currentDate), userId);
@@ -26,7 +29,11 @@ namespace ECommerce.Modules.PurchaseProfiler.Core.Services
                 return [];
             }
 
-            return await productRepository.GetProductsIdsByKeysAsync(predictedProducts);
+            return (
+                (await productApiClient.GetProductsDetails(
+                    (await productRepository.GetProductsIdsByKeysAsync(predictedProducts)) ?? []
+                ))?.Products ?? []
+            );
         }
     }
 }

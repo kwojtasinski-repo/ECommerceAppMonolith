@@ -35,6 +35,9 @@ namespace ECommerce.Modules.Items.Api
             app.UseModuleRequests()
                 .Subscribe<GetProductData, ProductDataDto>("/products/get", (command, sp) =>
                     sp.GetRequiredService<ICommandDispatcher>().SendAsync<ProductDataDto?>(command)
+                )
+                .Subscribe<GetProductsDataDetails, ProductsDataDetailsDto>("/products/get/details", (command, sp) =>
+                    sp.GetRequiredService<ICommandDispatcher>().SendAsync<ProductsDataDetailsDto?>(command)
                 );
         }
     }

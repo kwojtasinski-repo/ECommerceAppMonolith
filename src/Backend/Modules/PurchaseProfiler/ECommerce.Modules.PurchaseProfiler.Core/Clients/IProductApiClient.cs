@@ -3,5 +3,6 @@
     internal interface IProductApiClient
     {
         Task<GetProductResponse?> GetProduct(Guid productId);
+        Task<GetProductsDataDetailsResponse> GetProductsDetails(IEnumerable<Guid> productIds);
     }
 }

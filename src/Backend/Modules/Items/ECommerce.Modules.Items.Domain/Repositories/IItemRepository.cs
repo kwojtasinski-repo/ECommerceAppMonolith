@@ -1,9 +1,4 @@
 ﻿using ECommerce.Modules.Items.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Modules.Items.Domain.Repositories
 {
@@ -15,5 +10,6 @@ namespace ECommerce.Modules.Items.Domain.Repositories
         Task UpdateAsync(Item item);
         Task DeleteAsync(Item item);
         Task<Item?> GetProductDataAsync(Guid id);
+        Task<IReadOnlyList<Item>> GetProductsDataDetailsAsync(IEnumerable<Guid> productIds);
     }
 }

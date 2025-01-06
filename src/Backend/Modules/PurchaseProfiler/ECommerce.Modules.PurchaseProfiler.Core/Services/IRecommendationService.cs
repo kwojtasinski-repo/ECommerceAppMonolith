@@ -1,7 +1,10 @@
-﻿namespace ECommerce.Modules.PurchaseProfiler.Core.Services
+﻿using ECommerce.Modules.PurchaseProfiler.Core.Clients;
+using ECommerce.Modules.PurchaseProfiler.Core.DTO;
+
+namespace ECommerce.Modules.PurchaseProfiler.Core.Services
 {
     public interface IRecommendationService
     {
-        Task<List<Guid>> GetRecommendationOnCurrentWeek(Guid userId);
+        Task<List<ProductsDetailsDTO>> GetRecommendationOnCurrentWeek(Guid userId);
     }
 }
