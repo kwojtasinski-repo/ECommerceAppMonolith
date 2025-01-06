@@ -3,7 +3,7 @@ export const reducer = (state, action) => {
         case 'login' :
             return { ...state, user: action.user }
         case 'logout' : 
-            return { ...state, user: null }
+            return { ...state, user: null, recommendationProducts: [] }
         case 'modifiedState' :
             let events = state.events;
             

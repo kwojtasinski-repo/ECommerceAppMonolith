@@ -55,6 +55,7 @@ import Users from './pages/Users/Users';
 import EditUser from './pages/Users/EditUser/EditUser';
 import RequirePermission from './hoc/RequirePermission';
 import initializeApp from './appInitializer';
+import RecommendedCarousel from './components/RecommendCarousel/RecommendCarousel';
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -94,9 +95,13 @@ function App() {
   const menu = (
     <Menu />
   )
-
+  const showRecommendationItems = window._env_?.REACT_APP_SHOW_RECOMMEND_ITEMS ? window._env_.REACT_APP_SHOW_RECOMMEND_ITEMS : process.env.REACT_APP_SHOW_RECOMMEND_ITEMS;
   const content = (
     <Suspense fallback={<p>Ładowanie...</p>} >
+      {showRecommendationItems ?
+        <div className="container"><RecommendedCarousel /></div>
+        : null
+      }
       <Routes>
         <Route path='/items/:id' element = {<Item />} />
         <Route path='/search' element = {<Search />} >  
