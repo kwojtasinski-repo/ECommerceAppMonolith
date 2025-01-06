@@ -1,19 +1,18 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
 COPY src/APIGateway .
 RUN dotnet publish ECommerce.APIGateway -c release -o out
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
 COPY --from=build /app/out .
 ENV ASPNETCORE_URLS http://*:80
 ENV ASPNETCORE_ENVIRONMENT docker
 
-RUN groupadd -g 10001 app && \
-    useradd -u 10000 -g app app \
-    && chown -R app:app ./
-RUN chmod -R 0500 ./
-RUN chmod -R 0700 *.dll # if the dll's are not writeable, it won't start
-USER app:app
+RUN getent group app || groupadd -g 10001 app && \
+    id -u app || useradd -u 10000 -g app app && \
+    chown -R app:app ./ \
+    && chmod -R 0500 ./ \
+    && chmod -R 0700 *.dll # Ensure .dll files are writable
 
 ENTRYPOINT dotnet ECommerce.APIGateway.dll
